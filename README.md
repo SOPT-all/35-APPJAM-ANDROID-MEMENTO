@@ -1,0 +1,2 @@
+# 35-APPJAM-ANDROID-MEMENTO
+메멘토 안드 레포지롱

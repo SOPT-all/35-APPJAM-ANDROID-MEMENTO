@@ -1,6 +1,6 @@
 ---
-name: "[Feat/#] "
-about: 새로 생성하는 파일의 이슈 템플릿입니다.
+name: Issue Template
+about: 기능, 작업 요구사항을 적는 이슈 템플릿 입니다
 title: "[Feat]"
 labels: ''
 assignees: ''

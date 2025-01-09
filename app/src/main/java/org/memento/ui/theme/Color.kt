@@ -47,6 +47,10 @@ val High15 = Color(0xFFFF5035)
 val Medium15 = Color(0xFFDDA153)
 val Low15 = Color(0xFF00AC34)
 
+// Gradient
+val TodoNowStart = Color(0xFF181925)
+val TodoNowEnd = Color(0xFF424565)
+
 // Memento color scheme class
 @Immutable
 data class DarkModeColors(
@@ -89,6 +93,9 @@ data class MementoColors(
     val medium15: Color,
     val low: Color,
     val low15: Color,
+    // Gradient
+    val todoNowStart: Color,
+    val todoNowEnd: Color,
 ) : MementoColorScheme()
 
 @Immutable
@@ -135,6 +142,9 @@ val mementoColors = MementoColors(
     medium15 = Medium15,
     low = Low,
     low15 = Low15,
+    // Gradient
+    todoNowStart = TodoNowStart,
+    todoNowEnd = TodoNowEnd,
 )
 
 val lightModeColors = LightModelColors(

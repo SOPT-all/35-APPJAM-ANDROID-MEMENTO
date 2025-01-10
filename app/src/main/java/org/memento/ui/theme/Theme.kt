@@ -20,17 +20,23 @@ object MementoTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalMementoColors.current
+    val typography: MementoTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTypo.current
 }
 
 @Composable
 fun ProvideMementoColorsAndTypography(
     modeColors: MementoColorScheme,
     mementoColors: MementoColors,
+    typography: MementoTypography,
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalModeColors provides modeColors,
         LocalMementoColors provides mementoColors,
+        LocalTypo provides typography,
         content = content,
     )
 }
@@ -49,7 +55,8 @@ fun MEMENTOTheme(
 
     ProvideMementoColorsAndTypography(
         modeColors = colors,
-        mementoColors = mementoColors
+        mementoColors = mementoColors,
+        typography = defaultMementoTypography
     ) {
         val view = LocalView.current
         if (!view.isInEditMode) {

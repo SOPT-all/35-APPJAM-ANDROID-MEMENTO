@@ -10,13 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun TodoScreen(){
+fun TodoScreen() {
     Box(
-        modifier = Modifier.fillMaxSize().background(color = Color.Gray),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = Color.Gray),
+        contentAlignment = Alignment.Center,
     ) {
         Text(text = "TODO Screen")
     }
 }
-
-

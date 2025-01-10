@@ -1,6 +1,5 @@
 package org.memento.domain.model
 
-
 data class Reqres(
     val avatar: String,
     val email: String,

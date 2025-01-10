@@ -44,9 +44,10 @@ fun MainScreen() {
             )
 
             BottomNavigationBar(
-                currentNaviBarItemSelected = BottomNavigationType.entries.firstOrNull {
-                    it.route == navController.currentBackStackEntry?.destination?.route
-                },
+                currentNaviBarItemSelected =
+                    BottomNavigationType.entries.firstOrNull {
+                        it.route == navController.currentBackStackEntry?.destination?.route
+                    },
                 onBottomNaviBarItemSelected = { navItem ->
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.startDestinationId) { saveState = true }
@@ -59,14 +60,15 @@ fun MainScreen() {
                         scaffoldState.bottomSheetState.expand()
                     }
                 },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .navigationBarsPadding() // 소프트키 영역 고려
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        // 소프트키 영역 고려
+                        .navigationBarsPadding(),
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

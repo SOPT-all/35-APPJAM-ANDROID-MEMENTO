@@ -24,7 +24,6 @@ import org.memento.ui.theme.MEMENTOTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             var isDarkMode by remember { mutableStateOf(true) }
             MEMENTOTheme(

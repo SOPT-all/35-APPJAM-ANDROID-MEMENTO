@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberImagePainter
 import org.memento.core.util.UiState
 import org.memento.domain.model.Reqres
+import org.memento.ui.theme.MementoTheme
 
 @Composable
 fun ReqresScreen(
@@ -80,8 +81,10 @@ fun ReqresItem(reqres: Reqres) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(text = "${reqres.firstName} ${reqres.lastName}")
-            Text(text = reqres.email)
+            Text(text = "${reqres.firstName} ${reqres.lastName}",
+                style = MementoTheme.typography.title_b_24)
+            Text(text = reqres.email,
+                style = MementoTheme.typography.body_b_16)
         }
     }
 }

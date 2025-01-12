@@ -111,62 +111,67 @@ data class LightModelColors(
     val white: Color,
 ) : MementoColorScheme()
 
-val darkModeColors = DarkModeColors(
-    // Gray Scale
-    white = White,
-    gray01 = Gray01,
-    gray02 = Gray02,
-    gray03 = Gray03,
-    gray04 = Gray04,
-    gray05 = Gray05,
-    gray06 = Gray06,
-    gray07 = Gray07,
-    gray08 = Gray08,
-    gray09 = Gray09,
-    gray10 = Gray10,
-    black = Black,
-    // Main Color
-    green = Green,
-    navy = Navy,
-)
+val darkModeColors =
+    DarkModeColors(
+        // Gray Scale
+        white = White,
+        gray01 = Gray01,
+        gray02 = Gray02,
+        gray03 = Gray03,
+        gray04 = Gray04,
+        gray05 = Gray05,
+        gray06 = Gray06,
+        gray07 = Gray07,
+        gray08 = Gray08,
+        gray09 = Gray09,
+        gray10 = Gray10,
+        black = Black,
+        // Main Color
+        green = Green,
+        navy = Navy,
+    )
 
-val mementoColors = MementoColors(
-    // Colors
-    red = Red,
-    pink = Pink,
-    orange = Orange,
-    yellow = Yellow,
-    lightGreen = LightGreen,
-    mint = Mint,
-    cyan = Cyan,
-    blue = Blue,
-    purple = Purple,
-    // Labels
-    immediate = Immediate,
-    immediate15 = Immediate15,
-    high = High,
-    high15 = High15,
-    medium = Medium,
-    medium15 = Medium15,
-    low = Low,
-    low15 = Low15,
-    // Gradient
-    todoNowStart = TodoNowStart,
-    todoNowEnd = TodoNowEnd,
-    progressBar = ProgressBar,
-    scrollBox = ScrollBox,
-    brainDumpExStart = BrainDumpExStart,
-    brainDumpExEnd = BrainDumpExEnd,
-)
+val mementoColors =
+    MementoColors(
+        // Colors
+        red = Red,
+        pink = Pink,
+        orange = Orange,
+        yellow = Yellow,
+        lightGreen = LightGreen,
+        mint = Mint,
+        cyan = Cyan,
+        blue = Blue,
+        purple = Purple,
+        // Labels
+        immediate = Immediate,
+        immediate15 = Immediate15,
+        high = High,
+        high15 = High15,
+        medium = Medium,
+        medium15 = Medium15,
+        low = Low,
+        low15 = Low15,
+        // Gradient
+        todoNowStart = TodoNowStart,
+        todoNowEnd = TodoNowEnd,
+        progressBar = ProgressBar,
+        scrollBox = ScrollBox,
+        brainDumpExStart = BrainDumpExStart,
+        brainDumpExEnd = BrainDumpExEnd,
+    )
 
-val lightModeColors = LightModelColors(
-    white = White,
-)
+val lightModeColors =
+    LightModelColors(
+        white = White,
+    )
 
 // Local Colors
-val LocalModeColors = staticCompositionLocalOf<MementoColorScheme> {
-    error("No DarkColorScheme provided")
-}
-val LocalMementoColors = staticCompositionLocalOf<MementoColors> {
-    error("No ColorsColorScheme provided")
-}
+val LocalModeColors =
+    staticCompositionLocalOf<MementoColorScheme> {
+        error("No DarkColorScheme provided")
+    }
+val LocalMementoColors =
+    staticCompositionLocalOf<MementoColors> {
+        error("No ColorsColorScheme provided")
+    }

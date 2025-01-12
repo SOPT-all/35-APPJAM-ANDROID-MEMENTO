@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,9 +27,7 @@ import org.memento.domain.model.Reqres
 import org.memento.ui.theme.MementoTheme
 
 @Composable
-fun ReqresScreen(
-    viewModel: ReqresViewModel = hiltViewModel()
-) {
+fun ReqresScreen(viewModel: ReqresViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -41,9 +37,10 @@ fun ReqresScreen(
     when (uiState) {
         is UiState.Loading -> {
             Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(top = 20.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier.fillMaxSize()
+                        .padding(top = 20.dp),
+                contentAlignment = Alignment.Center,
             ) {
             }
         }
@@ -58,7 +55,7 @@ fun ReqresScreen(
         is UiState.Failure -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text("데이터를 불러오는 데 실패했습니다.")
             }
@@ -66,25 +63,29 @@ fun ReqresScreen(
     }
 }
 
-
 @Composable
 fun ReqresItem(reqres: Reqres) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
     ) {
         Image(
             painter = rememberImagePainter(reqres.avatar),
             contentDescription = null,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(48.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(text = "${reqres.firstName} ${reqres.lastName}",
-                style = MementoTheme.typography.title_b_24)
-            Text(text = reqres.email,
-                style = MementoTheme.typography.body_b_16)
+            Text(
+                text = "${reqres.firstName} ${reqres.lastName}",
+                style = MementoTheme.typography.title_b_24,
+            )
+            Text(
+                text = reqres.email,
+                style = MementoTheme.typography.body_b_16,
+            )
         }
     }
 }

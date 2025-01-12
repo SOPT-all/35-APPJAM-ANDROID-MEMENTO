@@ -9,9 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun TodayScreen(
-    navigateToReqres: () -> Unit
-) {
+fun TodayScreen(navigateToReqres: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Button(onClick = navigateToReqres) {
             Text("Go to Reqres Screen")

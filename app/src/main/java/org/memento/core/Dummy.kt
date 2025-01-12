@@ -1,4 +1,3 @@
 package org.memento.core
 
-class Dummy {
-}
+class Dummy

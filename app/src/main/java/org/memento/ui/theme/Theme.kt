@@ -44,19 +44,20 @@ fun ProvideMementoColorsAndTypography(
 @Composable
 fun MEMENTOTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colors = if (darkTheme) {
-        darkModeColors
-    } else {
-        lightModeColors
-    }
+    val colors =
+        if (darkTheme) {
+            darkModeColors
+        } else {
+            lightModeColors
+        }
     val mementoColors = mementoColors
 
     ProvideMementoColorsAndTypography(
         modeColors = colors,
         mementoColors = mementoColors,
-        typography = defaultMementoTypography
+        typography = defaultMementoTypography,
     ) {
         val view = LocalView.current
         if (!view.isInEditMode) {

@@ -131,34 +131,35 @@ val darkModeColors =
         navy = Navy,
     )
 
-val mementoColors = MementoColors(
-    // Colors
-    red = Red,
-    pink = Pink,
-    orange = Orange,
-    yellow = Yellow,
-    lightGreen = LightGreen,
-    mint = Mint,
-    cyan = Cyan,
-    blue = Blue,
-    purple = Purple,
-    // Labels
-    immediate = Immediate,
-    immediate15 = Immediate15,
-    high = High,
-    high15 = High15,
-    medium = Medium,
-    medium15 = Medium15,
-    low = Low,
-    low15 = Low15,
-    // Gradient
-    todoNowStart = TodoNowStart,
-    todoNowEnd = TodoNowEnd,
-    progressBar = ProgressBar,
-    scrollBox = ScrollBox,
-    brainDumpExStart = BrainDumpExStart,
-    brainDumpExEnd = BrainDumpExEnd,
-)
+val mementoColors =
+    MementoColors(
+        // Colors
+        red = Red,
+        pink = Pink,
+        orange = Orange,
+        yellow = Yellow,
+        lightGreen = LightGreen,
+        mint = Mint,
+        cyan = Cyan,
+        blue = Blue,
+        purple = Purple,
+        // Labels
+        immediate = Immediate,
+        immediate15 = Immediate15,
+        high = High,
+        high15 = High15,
+        medium = Medium,
+        medium15 = Medium15,
+        low = Low,
+        low15 = Low15,
+        // Gradient
+        todoNowStart = TodoNowStart,
+        todoNowEnd = TodoNowEnd,
+        progressBar = ProgressBar,
+        scrollBox = ScrollBox,
+        brainDumpExStart = BrainDumpExStart,
+        brainDumpExEnd = BrainDumpExEnd,
+    )
 
 val lightModeColors =
     LightModelColors(

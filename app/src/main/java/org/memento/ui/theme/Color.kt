@@ -50,6 +50,10 @@ val Low15 = Color(0xFF00AC34)
 // Gradient
 val TodoNowStart = Color(0xFF181925)
 val TodoNowEnd = Color(0xFF424565)
+val ProgressBar = Color(0xFFADB3BA)
+val ScrollBox = Color(0xFF010211)
+val BrainDumpExStart = Color(0xFF222531)
+val BrainDumpExEnd = Color(0xFF161B2D)
 
 // Memento color scheme class
 @Immutable
@@ -96,6 +100,10 @@ data class MementoColors(
     // Gradient
     val todoNowStart: Color,
     val todoNowEnd: Color,
+    val progressBar: Color,
+    val scrollBox: Color,
+    val brainDumpExStart: Color,
+    val brainDumpExEnd: Color,
 ) : MementoColorScheme()
 
 @Immutable
@@ -123,31 +131,34 @@ val darkModeColors =
         navy = Navy,
     )
 
-val mementoColors =
-    MementoColors(
-        // Colors
-        red = Red,
-        pink = Pink,
-        orange = Orange,
-        yellow = Yellow,
-        lightGreen = LightGreen,
-        mint = Mint,
-        cyan = Cyan,
-        blue = Blue,
-        purple = Purple,
-        // Labels
-        immediate = Immediate,
-        immediate15 = Immediate15,
-        high = High,
-        high15 = High15,
-        medium = Medium,
-        medium15 = Medium15,
-        low = Low,
-        low15 = Low15,
-        // Gradient
-        todoNowStart = TodoNowStart,
-        todoNowEnd = TodoNowEnd,
-    )
+val mementoColors = MementoColors(
+    // Colors
+    red = Red,
+    pink = Pink,
+    orange = Orange,
+    yellow = Yellow,
+    lightGreen = LightGreen,
+    mint = Mint,
+    cyan = Cyan,
+    blue = Blue,
+    purple = Purple,
+    // Labels
+    immediate = Immediate,
+    immediate15 = Immediate15,
+    high = High,
+    high15 = High15,
+    medium = Medium,
+    medium15 = Medium15,
+    low = Low,
+    low15 = Low15,
+    // Gradient
+    todoNowStart = TodoNowStart,
+    todoNowEnd = TodoNowEnd,
+    progressBar = ProgressBar,
+    scrollBox = ScrollBox,
+    brainDumpExStart = BrainDumpExStart,
+    brainDumpExEnd = BrainDumpExEnd,
+)
 
 val lightModeColors =
     LightModelColors(

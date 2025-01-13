@@ -9,4 +9,17 @@
     <!--    calendar-->
     <string name="calendar">calendar</string>
 
+    <!--    schedule-->
+    <string name="priority_tag_immediate">Immediate</string>
+    <string name="priority_tag_high">High</string>
+    <string name="priority_tag_medium">Medium</string>
+    <string name="priority_tag_low">Low</string>
+    <string name="priority_tag_none">None</string>
+
+    <string name="priority_tag_immediate_text">Important O\nUrgent O</string>
+    <string name="priority_tag_high_text">Important O\nUrgent X</string>
+    <string name="priority_tag_medium_text">Important X\nUrgent O</string>
+    <string name="priority_tag_low_text">Important X\nUrgent X</string>
+    <string name="priority_tag_none_text">None</string>
+
 </resources>

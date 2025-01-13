@@ -112,6 +112,9 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.timber)
     implementation(libs.process.phoenix)
+
+    implementation("com.google.accompanist:accompanist-pager:0.30.1")
+
 }
 
 ktlint {

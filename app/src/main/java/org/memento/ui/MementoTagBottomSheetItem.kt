@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.memento.domain.type.TagData
-import org.memento.presentation.util.hexToColor
+import org.memento.domain.type.ColorTagData
+import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -83,7 +83,7 @@ fun TagSelectorContent(
             isActive = activeIndex == index,
             activeBgColor = darkModeColors.gray08,
             activeContentColor = darkModeColors.gray02,
-            tagColor = hexToColor(option.color),
+            tagColor = changeHexToColor(option.color),
             onClick = {
                 if (activeIndex != index) {
                     activeIndex = index
@@ -94,12 +94,12 @@ fun TagSelectorContent(
     }
 }
 
-fun getDummyTagData(): List<TagData> {
+fun getDummyTagData(): List<ColorTagData> {
     return listOf(
-        TagData("Untitled", "#FF5733"),
-        TagData("SOPT", "#33FF57"),
-        TagData("Fitness", "#3357FF"),
-        TagData("Project", "#FFD700"),
+        ColorTagData("Untitled", "#FF5733"),
+        ColorTagData("SOPT", "#33FF57"),
+        ColorTagData("Fitness", "#3357FF"),
+        ColorTagData("Project", "#FFD700"),
     )
 }
 

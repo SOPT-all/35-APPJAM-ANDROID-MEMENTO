@@ -22,8 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.formatDate
-import org.memento.presentation.util.hexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.DeadLineSelectorContent
 import org.memento.ui.MementoBottomSheet
@@ -103,7 +103,7 @@ fun TodoScreen() {
                         .size(12.dp)
                         .background(
                             color =
-                                hexToColor(
+                                changeHexToColor(
                                     hex = selectedColor,
                                 ),
                             shape = RoundedCornerShape(100.dp),

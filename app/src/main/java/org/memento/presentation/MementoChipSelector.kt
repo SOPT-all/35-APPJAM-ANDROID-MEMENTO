@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.memento.R
@@ -51,7 +52,7 @@ fun MementoChipSelector(
         when (selectorType) {
             SelectorType.TIMESELECTOR -> {
                 Text(
-                    text = R.string.time_example.toString(),
+                    text = stringResource(id = R.string.time_example),
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
@@ -69,7 +70,7 @@ fun MementoChipSelector(
 
             SelectorType.DATESELECTOR -> {
                 Text(
-                    text = R.string.date_example.toString(),
+                    text = stringResource(id = R.string.date_example),
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
@@ -107,7 +108,7 @@ fun MementoChipSelector(
                             modifier = Modifier.padding(end = 5.dp),
                         )
                         Text(
-                            text = R.string.Today.toString(),
+                            text = stringResource(id = R.string.Today),
                             style = selectorType.textStyle,
                             color = Color.Transparent,
                         )
@@ -121,7 +122,7 @@ fun MementoChipSelector(
                         tagColor?.let { changeHexToColor(hex = it) }?.let {
                             Icon(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_tag),
-                                contentDescription = R.string.tag_icon.toString(),
+                                contentDescription = stringResource(id = R.string.tag_icon),
                                 tint = it,
                                 modifier = Modifier.padding(end = 5.dp),
                             )
@@ -147,7 +148,7 @@ fun MementoChipSelector(
                 ) {
                     Image(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_deadline),
-                        contentDescription = R.string.deadline_icon.toString(),
+                        contentDescription = stringResource(id = R.string.deadline_icon),
                         modifier = Modifier.padding(end = 5.dp),
                     )
                     Text(
@@ -160,7 +161,7 @@ fun MementoChipSelector(
 
             SelectorType.BASIC -> {
                 Text(
-                    text = R.string.Today.toString(),
+                    text = stringResource(id = R.string.Today),
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =

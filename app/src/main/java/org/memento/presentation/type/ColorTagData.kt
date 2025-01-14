@@ -1,4 +1,4 @@
-package org.memento.domain.type
+package org.memento.presentation.type
 
 data class ColorTagData(
     val text: String,

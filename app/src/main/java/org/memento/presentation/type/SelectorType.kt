@@ -1,4 +1,4 @@
-package org.memento.domain.type
+package org.memento.presentation.type
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle

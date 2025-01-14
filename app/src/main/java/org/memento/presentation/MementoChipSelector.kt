@@ -36,16 +36,17 @@ fun MementoChipSelector(
     var clicked by remember { mutableStateOf(isClicked) }
 
     Box(
-        modifier = Modifier
-            .then(modifier)
-            .clip(RoundedCornerShape(selectorType.cornerRadius))
-            .background(color = if (clicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
-            .noRippleClickable {
-                // Todo : Selector 호출하고 그에 따라 컬러 체인지 로직
-                clicked = !clicked
-                onClickedChange(clicked)
-            },
-        Alignment.Center
+        modifier =
+            Modifier
+                .then(modifier)
+                .clip(RoundedCornerShape(selectorType.cornerRadius))
+                .background(color = if (clicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
+                .noRippleClickable {
+                    // Todo : Selector 호출하고 그에 따라 컬러 체인지 로직
+                    clicked = !clicked
+                    onClickedChange(clicked)
+                },
+        Alignment.Center,
     ) {
         when (selectorType) {
             SelectorType.TIMESELECTOR -> {
@@ -53,10 +54,11 @@ fun MementoChipSelector(
                     text = "00:00 AM",
                     style = selectorType.textStyle,
                     color = Color.Transparent,
-                    modifier = Modifier.padding(
-                        horizontal = selectorType.paddingHorizontal,
-                        vertical = selectorType.paddingVertical
-                    )
+                    modifier =
+                        Modifier.padding(
+                            horizontal = selectorType.paddingHorizontal,
+                            vertical = selectorType.paddingVertical,
+                        ),
                 )
                 Text(
                     text = content,
@@ -70,8 +72,9 @@ fun MementoChipSelector(
                     text = "Jan 30, 2025",
                     style = selectorType.textStyle,
                     color = Color.Transparent,
-                    modifier = Modifier
-                        .padding(horizontal = selectorType.paddingHorizontal, vertical = selectorType.paddingVertical)
+                    modifier =
+                        Modifier
+                            .padding(horizontal = selectorType.paddingHorizontal, vertical = selectorType.paddingVertical),
                 )
                 Text(
                     text = content,
@@ -83,21 +86,23 @@ fun MementoChipSelector(
             SelectorType.TAG -> {
                 // TODO : 서버에서 HEXCODE 받아 적용하는 로직 -> 색상을 받으면 원안에 그 색을 넣자
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.Center)
+                    modifier =
+                        Modifier
+                            .align(Alignment.Center),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .padding(
-                                horizontal = selectorType.paddingHorizontal,
-                                vertical = selectorType.paddingVertical
-                            ),
+                        modifier =
+                            Modifier
+                                .padding(
+                                    horizontal = selectorType.paddingHorizontal,
+                                    vertical = selectorType.paddingVertical,
+                                ),
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_tag),
                             contentDescription = "null",
                             tint = Color.Transparent,
-                            modifier = Modifier.padding(end = 5.dp)
+                            modifier = Modifier.padding(end = 5.dp),
                         )
                         Text(
                             text = "Today",
@@ -106,15 +111,16 @@ fun MementoChipSelector(
                         )
                     }
                     Row(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .align(Alignment.Center),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_tag),
                             contentDescription = "Tag Icon",
                             tint = tagColor,
-                            modifier = Modifier.padding(end = 5.dp)
+                            modifier = Modifier.padding(end = 5.dp),
                         )
                         Text(
                             text = content,
@@ -127,17 +133,18 @@ fun MementoChipSelector(
 
             SelectorType.DEADLINE -> {
                 Row(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_deadline),
                         contentDescription = "Deadline Icon",
-                        modifier = Modifier.padding(end = 5.dp)
+                        modifier = Modifier.padding(end = 5.dp),
                     )
                     Text(
                         text = content,
@@ -152,8 +159,9 @@ fun MementoChipSelector(
                     text = "Today",
                     style = selectorType.textStyle,
                     color = Color.Transparent,
-                    modifier = Modifier
-                        .padding(horizontal = selectorType.paddingHorizontal, vertical = selectorType.paddingVertical)
+                    modifier =
+                        Modifier
+                            .padding(horizontal = selectorType.paddingHorizontal, vertical = selectorType.paddingVertical),
                 )
                 Text(
                     text = content,
@@ -162,7 +170,5 @@ fun MementoChipSelector(
                 )
             }
         }
-
     }
 }
-

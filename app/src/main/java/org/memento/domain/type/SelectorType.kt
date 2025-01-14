@@ -72,5 +72,5 @@ enum class SelectorType(
         unClickedBackgroundColor = darkModeColors.gray09,
         textColor = darkModeColors.gray02,
         textStyle = defaultMementoTypography.body_r_14,
-    )
+    ),
 }

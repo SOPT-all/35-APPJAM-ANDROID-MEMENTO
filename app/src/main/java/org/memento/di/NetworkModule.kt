@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     private const val CONTENT_TYPE = "application/json"
     private val BASE_URL = BuildConfig.BASE_URL
 
@@ -43,9 +42,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient {
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
         return builder.build()
@@ -53,7 +50,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        json: Json,
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)

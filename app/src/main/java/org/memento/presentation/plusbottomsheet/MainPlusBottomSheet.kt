@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainPlusBottomSheet() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     ) {
         Text(text = "바텀시트 내용")
         Spacer(modifier = Modifier.height(100.dp))
-
     }
 }

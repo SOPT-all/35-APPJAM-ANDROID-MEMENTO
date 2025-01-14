@@ -1,4 +1,3 @@
 package org.memento.data.dto
 
-class Dummy {
-}
+class Dummy

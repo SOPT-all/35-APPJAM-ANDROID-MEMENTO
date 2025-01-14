@@ -13,6 +13,5 @@ import javax.inject.Singleton
 internal object ServiceModule {
     @Provides
     @Singleton
-    fun provideReqresService(retrofit: Retrofit): ReqresService =
-        retrofit.create(ReqresService::class.java)
+    fun provideReqresService(retrofit: Retrofit): ReqresService = retrofit.create(ReqresService::class.java)
 }

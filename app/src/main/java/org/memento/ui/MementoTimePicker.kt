@@ -19,7 +19,7 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MementoTimePicker(
-    onTimeSelected : (String) -> Unit
+    onTimeSelected: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -28,9 +28,26 @@ fun MementoTimePicker(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val hourState = rememberFWheelPickerState(initialIndex = 0)
+        val minuteState = rememberFWheelPickerState(initialIndex = 0)
+        val periodState = rememberFWheelPickerState(initialIndex = 0)
+
+        val minuteValues = listOf(0, 30)
+        val periods = listOf("AM", "PM")
+
+        fun getFormattedTime(): String {
+            val hour = hourState.currentIndex
+            val minuteIndex = minuteState.currentIndex.takeIf { it in minuteValues.indices } ?: 0
+            val periodIndex = periodState.currentIndex.takeIf { it in periods.indices } ?: 0
+
+            val minute = minuteValues[minuteIndex]
+            val period = periods[periodIndex]
+
+            return "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} $period"
+        }
+
         FVerticalWheelPicker(
             modifier = Modifier.weight(1f),
-            count = 11,
+            count = 12,
             state = hourState,
             focus = {
                 FWheelPickerFocusVertical(
@@ -39,10 +56,7 @@ fun MementoTimePicker(
                 )
             }
         ) { index ->
-            val hour = if (index == 0) 12 else index
-            onTimeSelected(
-                "${hour.toString().padStart(2, '0')}:00 AM"
-            )
+            onTimeSelected(getFormattedTime())
             Text(
                 text = index.toString().padStart(2, '0'),
                 style = MementoTheme.typography.body_b_18.copy(
@@ -53,8 +67,6 @@ fun MementoTimePicker(
 
         Spacer(modifier = Modifier.width(20.dp))
 
-        val minuteState = rememberFWheelPickerState(initialIndex = 0)
-        val minuteValues = listOf(0, 30)
         FVerticalWheelPicker(
             modifier = Modifier.weight(1f),
             count = minuteValues.size,
@@ -66,6 +78,7 @@ fun MementoTimePicker(
                 )
             }
         ) { index ->
+            onTimeSelected(getFormattedTime())
             Text(
                 text = minuteValues[index].toString().padStart(2, '0'),
                 style = MementoTheme.typography.body_b_18.copy(
@@ -76,8 +89,6 @@ fun MementoTimePicker(
 
         Spacer(modifier = Modifier.width(20.dp))
 
-        val periodState = rememberFWheelPickerState(initialIndex = 0)
-        val periods = listOf("AM", "PM")
         FVerticalWheelPicker(
             modifier = Modifier.weight(1f),
             count = periods.size,
@@ -89,6 +100,7 @@ fun MementoTimePicker(
                 )
             }
         ) { index ->
+            onTimeSelected(getFormattedTime())
             Text(
                 text = periods[index],
                 style = MementoTheme.typography.body_b_18.copy(

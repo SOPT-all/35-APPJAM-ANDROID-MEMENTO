@@ -6,11 +6,13 @@ import org.memento.domain.model.Reqres
 import org.memento.domain.repository.ReqresRepository
 import javax.inject.Inject
 
-class ReqresRepositoryImpl @Inject constructor(
-    private val reqresDataSource: ReqresDataSource
-) : ReqresRepository {
-    override suspend fun getReqresLists(page: Int): Result<List<Reqres>> =
-        runCatching {
-            reqresDataSource.getReqresLists(page).toReqres()
-        }
-}
+class ReqresRepositoryImpl
+    @Inject
+    constructor(
+        private val reqresDataSource: ReqresDataSource,
+    ) : ReqresRepository {
+        override suspend fun getReqresLists(page: Int): Result<List<Reqres>> =
+            runCatching {
+                reqresDataSource.getReqresLists(page).toReqres()
+            }
+    }

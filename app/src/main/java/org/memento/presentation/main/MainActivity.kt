@@ -3,7 +3,6 @@ package org.memento.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.memento.presentation.StartDummyScreen
-import org.memento.presentation.navigation.Routes.Routes
+import org.memento.presentation.navigation.routes.Route
 import org.memento.ui.theme.MEMENTOTheme
 
 @AndroidEntryPoint
@@ -32,18 +31,18 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.Dummy1.route
+                    startDestination = Route.Dummy1.route,
                 ) {
-                    composable(Routes.Dummy1.route) {
+                    composable(Route.Dummy1.route) {
                         StartDummyScreen(
                             navigateToMain = {
-                                navController.navigate(Routes.Main.route) {
-                                    popUpTo(Routes.Dummy1.route) { inclusive = true }
+                                navController.navigate(Route.Main.route) {
+                                    popUpTo(Route.Dummy1.route) { inclusive = true }
                                 }
-                            }
+                            },
                         )
                     }
-                    composable(Routes.Main.route) {
+                    composable(Route.Main.route) {
                         MainScreen()
                     }
                 }
@@ -53,7 +52,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "Hello $name!",
         modifier = modifier,

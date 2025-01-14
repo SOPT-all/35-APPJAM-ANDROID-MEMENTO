@@ -23,8 +23,8 @@ fun MementoTimePicker(
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth(),
+            Modifier
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -61,9 +61,9 @@ fun MementoTimePicker(
             Text(
                 text = index.toString().padStart(2, '0'),
                 style =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
 
@@ -84,9 +84,9 @@ fun MementoTimePicker(
             Text(
                 text = minuteValues[index].toString().padStart(2, '0'),
                 style =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
 
@@ -107,9 +107,9 @@ fun MementoTimePicker(
             Text(
                 text = periods[index],
                 style =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
     }

@@ -57,33 +57,33 @@ fun MementoBottomSheet(
         ) {
             Column(
                 modifier =
-                modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 16.dp)
-                    .background(darkModeColors.gray09),
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 16.dp)
+                        .background(darkModeColors.gray09),
             ) {
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 22.dp, vertical = 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 22.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.End,
                 ) {
                     Text(
                         text = "OK",
                         style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                            MementoTheme.typography.body_r_14.copy(
+                                color = darkModeColors.gray02,
+                            ),
                         modifier =
-                        Modifier
-                            .noRippleClickable {
-                                coroutineScope.launch {
-                                    sheetState.hide()
-                                    onDismissRequest()
-                                }
-                            },
+                            Modifier
+                                .noRippleClickable {
+                                    coroutineScope.launch {
+                                        sheetState.hide()
+                                        onDismissRequest()
+                                    }
+                                },
                     )
                 }
                 content()
@@ -98,10 +98,10 @@ fun MementoBottomSheet(
 fun MementoDateSelectorPreview() {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(space = 50.dp),
     ) {
         val sheetRepeatState = rememberModalBottomSheetState()
@@ -123,49 +123,49 @@ fun MementoDateSelectorPreview() {
         Text(
             text = selectedRepeatText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showRepeatBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showRepeatBottomSheet = true
+                    },
         )
 
         Text(
             text = selectedDateText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showDeadLineBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showDeadLineBottomSheet = true
+                    },
         )
 
         Text(
             text = "Tag",
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showTagBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTagBottomSheet = true
+                    },
         )
 
         Text(
             text = selectedTimeText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showTimePickerBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTimePickerBottomSheet = true
+                    },
         )
 
         MementoBottomSheet(

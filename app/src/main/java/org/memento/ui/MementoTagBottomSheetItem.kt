@@ -1,12 +1,15 @@
-package org.memento.presentation.todo
+package org.memento.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,31 +21,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.memento.domain.type.DeadLineType
-import org.memento.domain.type.RepeatType
+import org.memento.domain.type.TagData
+import org.memento.presentation.util.hexToColor
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
 @Composable
-fun MementoTextBottomSheetItem(
+fun MementoTagBottomSheetItem(
     option: String,
     isActive: Boolean,
     activeBgColor: Color,
     activeContentColor: Color,
+    tagColor: Color,
     onClick: () -> Unit,
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(
                 color = if (isActive) activeBgColor else darkModeColors.gray09
             )
-            .clickableWithoutRipple {
+            .noRippleClickable {
                 onClick()
             }
             .padding(vertical = 7.dp, horizontal = 12.dp),
-        contentAlignment = Alignment.Center
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        Box(
+            modifier = Modifier
+                .size(10.dp)
+                .background(
+                    color = tagColor,
+                    shape = CircleShape
+                )
+        )
         Text(
             text = option,
             style = MementoTheme.typography.body_r_16.copy(
@@ -53,53 +67,52 @@ fun MementoTextBottomSheetItem(
 }
 
 @Composable
-fun DeadLineSelectorContent() {
+fun TagSelectorContent(
+    onTagSelected: (String, String) -> Unit
+) {
     var activeIndex by remember { mutableIntStateOf(0) }
 
-    val options = DeadLineType.entries.toTypedArray()
+    val options = getDummyTagData()
 
     options.forEachIndexed { index, option ->
-        MementoTextBottomSheetItem(
+        MementoTagBottomSheetItem(
             option = option.text,
             isActive = activeIndex == index,
             activeBgColor = darkModeColors.gray08,
             activeContentColor = darkModeColors.gray02,
+            tagColor = hexToColor(option.color),
             onClick = {
-                activeIndex = if (activeIndex == index) -1 else index
+                if (activeIndex != index) {
+                    activeIndex = index
+                    onTagSelected(option.color, option.text)
+                }
             }
         )
     }
 }
 
-@Composable
-fun RepeatSelectorContent() {
-    var activeIndex by remember { mutableIntStateOf(0) }
-
-    val options = RepeatType.entries.toTypedArray()
-
-    options.forEachIndexed { index, option ->
-        MementoTextBottomSheetItem(
-            option = option.text,
-            isActive = activeIndex == index,
-            activeBgColor = darkModeColors.gray08,
-            activeContentColor = darkModeColors.gray02,
-            onClick = {
-                activeIndex = if (activeIndex == index) -1 else index
-            }
-        )
-    }
+fun getDummyTagData(): List<TagData> {
+    return listOf(
+        TagData("Untitled", "#FF5733"),
+        TagData("SOPT", "#33FF57"),
+        TagData("Fitness", "#3357FF"),
+        TagData("Project", "#FFD700")
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun MementoSelectContentPreview() {
+fun MementoTagBottomSheetItemPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(space = 5.dp)
     ) {
-        DeadLineSelectorContent()
-        RepeatSelectorContent()
+        TagSelectorContent(
+            onTagSelected = { color, tag ->
+
+            }
+        )
     }
 }

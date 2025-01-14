@@ -37,38 +37,41 @@ fun MementoTagBottomSheetItem(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isActive) activeBgColor else darkModeColors.gray09
-            )
-            .noRippleClickable {
-                onClick()
-            }
-            .padding(vertical = 7.dp, horizontal = 12.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = if (isActive) activeBgColor else darkModeColors.gray09,
+                )
+                .noRippleClickable {
+                    onClick()
+                }
+                .padding(vertical = 7.dp, horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Box(
-            modifier = Modifier
-                .size(10.dp)
-                .background(
-                    color = tagColor,
-                    shape = CircleShape
-                )
+            modifier =
+                Modifier
+                    .size(10.dp)
+                    .background(
+                        color = tagColor,
+                        shape = CircleShape,
+                    ),
         )
         Text(
             text = option,
-            style = MementoTheme.typography.body_r_16.copy(
-                color = if (isActive) activeContentColor else darkModeColors.gray07
-            )
+            style =
+                MementoTheme.typography.body_r_16.copy(
+                    color = if (isActive) activeContentColor else darkModeColors.gray07,
+                ),
         )
     }
 }
 
 @Composable
 fun TagSelectorContent(
-    onTagSelected: (String, String) -> Unit
+    onTagSelected: (String, String) -> Unit,
 ) {
     var activeIndex by remember { mutableIntStateOf(0) }
 
@@ -86,7 +89,7 @@ fun TagSelectorContent(
                     activeIndex = index
                     onTagSelected(option.color, option.text)
                 }
-            }
+            },
         )
     }
 }
@@ -96,7 +99,7 @@ fun getDummyTagData(): List<TagData> {
         TagData("Untitled", "#FF5733"),
         TagData("SOPT", "#33FF57"),
         TagData("Fitness", "#3357FF"),
-        TagData("Project", "#FFD700")
+        TagData("Project", "#FFD700"),
     )
 }
 
@@ -104,15 +107,15 @@ fun getDummyTagData(): List<TagData> {
 @Composable
 fun MementoTagBottomSheetItemPreview() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 5.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 5.dp),
     ) {
         TagSelectorContent(
             onTagSelected = { color, tag ->
-
-            }
+            },
         )
     }
 }

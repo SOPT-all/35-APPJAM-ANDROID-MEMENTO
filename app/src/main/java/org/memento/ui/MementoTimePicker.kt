@@ -19,13 +19,14 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MementoTimePicker(
-    onTimeSelected: (String) -> Unit
+    onTimeSelected: (String) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         val hourState = rememberFWheelPickerState(initialIndex = 0)
         val minuteState = rememberFWheelPickerState(initialIndex = 0)
@@ -52,16 +53,17 @@ fun MementoTimePicker(
             focus = {
                 FWheelPickerFocusVertical(
                     dividerColor = darkModeColors.gray06,
-                    dividerSize = 1.dp
+                    dividerSize = 1.dp,
                 )
-            }
+            },
         ) { index ->
             onTimeSelected(getFormattedTime())
             Text(
                 text = index.toString().padStart(2, '0'),
-                style = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white
-                )
+                style =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
 
@@ -74,16 +76,17 @@ fun MementoTimePicker(
             focus = {
                 FWheelPickerFocusVertical(
                     dividerColor = darkModeColors.gray06,
-                    dividerSize = 1.dp
+                    dividerSize = 1.dp,
                 )
-            }
+            },
         ) { index ->
             onTimeSelected(getFormattedTime())
             Text(
                 text = minuteValues[index].toString().padStart(2, '0'),
-                style = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white
-                )
+                style =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
 
@@ -96,16 +99,17 @@ fun MementoTimePicker(
             focus = {
                 FWheelPickerFocusVertical(
                     dividerColor = darkModeColors.gray06,
-                    dividerSize = 1.dp
+                    dividerSize = 1.dp,
                 )
-            }
+            },
         ) { index ->
             onTimeSelected(getFormattedTime())
             Text(
                 text = periods[index],
-                style = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white
-                )
+                style =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
     }
@@ -115,6 +119,6 @@ fun MementoTimePicker(
 @Composable
 fun MementoTimePickerPreview() {
     MementoTimePicker(
-        onTimeSelected = { }
+        onTimeSelected = { },
     )
 }

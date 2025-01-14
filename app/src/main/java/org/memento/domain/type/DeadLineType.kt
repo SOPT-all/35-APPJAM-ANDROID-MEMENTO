@@ -1,12 +1,12 @@
 package org.memento.domain.type
 
-enum class DeadLineType (
+enum class DeadLineType(
     val text: String,
-){
+) {
     TODAY(
-        text = "Today"
+        text = "Today",
     ),
     CUSTOM_DATE(
-        text = "Custom Date"
-    )
+        text = "Custom Date",
+    ),
 }

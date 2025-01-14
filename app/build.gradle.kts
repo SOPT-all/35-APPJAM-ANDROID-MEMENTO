@@ -113,8 +113,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.process.phoenix)
 
-    implementation (libs.compose.wheel.picker)
-
+    implementation(libs.compose.wheel.picker)
 }
 
 ktlint {

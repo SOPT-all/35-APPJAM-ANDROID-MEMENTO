@@ -42,29 +42,31 @@ fun MementoTextBottomSheetItem(
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isActive) activeBgColor else darkModeColors.gray09
-            )
-            .noRippleClickable {
-                onClick()
-            }
-            .padding(vertical = 7.dp, horizontal = 12.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = if (isActive) activeBgColor else darkModeColors.gray09,
+                )
+                .noRippleClickable {
+                    onClick()
+                }
+                .padding(vertical = 7.dp, horizontal = 12.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = option,
-            style = MementoTheme.typography.body_r_16.copy(
-                color = if (isActive) activeContentColor else darkModeColors.gray07
-            )
+            style =
+                MementoTheme.typography.body_r_16.copy(
+                    color = if (isActive) activeContentColor else darkModeColors.gray07,
+                ),
         )
     }
 }
 
 @Composable
 fun DeadLineSelectorContent(
-    onDateSelected: (Long?) -> Unit
+    onDateSelected: (Long?) -> Unit,
 ) {
     var activeIndex by remember { mutableIntStateOf(0) }
     var isCalendarVisible by remember { mutableStateOf(false) }
@@ -81,7 +83,7 @@ fun DeadLineSelectorContent(
                 onClick = {
                     activeIndex = if (activeIndex == index) -1 else index
                     isCalendarVisible = (option == DeadLineType.CUSTOM_DATE && activeIndex == index)
-                }
+                },
             )
         }
 
@@ -92,7 +94,7 @@ fun DeadLineSelectorContent(
                 },
                 onDismiss = {
                     isCalendarVisible = false
-                }
+                },
             )
         }
     }
@@ -102,52 +104,60 @@ fun DeadLineSelectorContent(
 @Composable
 fun DatePickerModal(
     onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val datePickerState = rememberDatePickerState()
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
-        colors = DatePickerDefaults.colors(
-            containerColor = darkModeColors.gray08
-        ),
+        colors =
+            DatePickerDefaults.colors(
+                containerColor = darkModeColors.gray08,
+            ),
         confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            },
+            TextButton(
+                onClick = {
+                    onDateSelected(datePickerState.selectedDateMillis)
+                    onDismiss()
+                },
             ) {
-                Text(text = stringResource(R.string.dialog_button_ok),
-                    color = darkModeColors.green)
+                Text(
+                    text = stringResource(R.string.dialog_button_ok),
+                    color = darkModeColors.green,
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = stringResource(R.string.dialog_button_cancel),
-                    color = darkModeColors.green)
+                Text(
+                    text = stringResource(R.string.dialog_button_cancel),
+                    color = darkModeColors.green,
+                )
             }
-        }
+        },
     ) {
-        DatePicker(state = datePickerState,
-            colors = DatePickerDefaults.colors(
-                containerColor = darkModeColors.gray08,
-                titleContentColor = darkModeColors.white,
-                headlineContentColor = darkModeColors.white,
-                weekdayContentColor = darkModeColors.white,
-                subheadContentColor = darkModeColors.gray06,
-                dayContentColor = darkModeColors.white,
-                selectedDayContentColor = darkModeColors.black,
-                selectedDayContainerColor = darkModeColors.green,
-                todayContentColor = darkModeColors.green,
-                todayDateBorderColor = darkModeColors.green
-            )
+        DatePicker(
+            state = datePickerState,
+            colors =
+                DatePickerDefaults.colors(
+                    containerColor = darkModeColors.gray08,
+                    titleContentColor = darkModeColors.white,
+                    headlineContentColor = darkModeColors.white,
+                    weekdayContentColor = darkModeColors.white,
+                    subheadContentColor = darkModeColors.gray06,
+                    dayContentColor = darkModeColors.white,
+                    selectedDayContentColor = darkModeColors.black,
+                    selectedDayContainerColor = darkModeColors.green,
+                    todayContentColor = darkModeColors.green,
+                    todayDateBorderColor = darkModeColors.green,
+                ),
         )
     }
 }
 
 @Composable
 fun RepeatSelectorContent(
-    onRepeatSelected: (String) -> Unit
+    onRepeatSelected: (String) -> Unit,
 ) {
     var activeIndex by remember { mutableIntStateOf(0) }
 
@@ -164,7 +174,7 @@ fun RepeatSelectorContent(
                     activeIndex = index
                     onRepeatSelected(option.text)
                 }
-            }
+            },
         )
     }
 }
@@ -173,16 +183,17 @@ fun RepeatSelectorContent(
 @Composable
 fun MementoSelectContentPreview() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 5.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 5.dp),
     ) {
         DeadLineSelectorContent(
-            onDateSelected = { }
+            onDateSelected = { },
         )
         RepeatSelectorContent(
-            onRepeatSelected = { }
+            onRepeatSelected = { },
         )
     }
 }

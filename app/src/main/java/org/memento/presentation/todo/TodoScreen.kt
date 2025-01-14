@@ -36,11 +36,12 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun TodoScreen() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 50.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 50.dp),
     ) {
         val sheetRepeatState = rememberModalBottomSheetState()
         var showRepeatBottomSheet by remember { mutableStateOf(false) }
@@ -63,45 +64,50 @@ fun TodoScreen() {
 
         Text(
             text = selectedRepeatText,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showRepeatBottomSheet = true
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showRepeatBottomSheet = true
+                    },
         )
 
         Text(
             text = selectedDateText,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showDeadLineBottomSheet = true
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showDeadLineBottomSheet = true
+                    },
         )
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .background(darkModeColors.gray04)
-            .padding(10.dp)
-            .noRippleClickable {
-                showTagBottomSheet = true
-            },
-            verticalAlignment = Alignment.CenterVertically
-        )
-        {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTagBottomSheet = true
+                    },
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Box(
-                modifier = Modifier
-                    .size(12.dp)
-                    .background(
-                        color = hexToColor(
-                            hex = selectedColor
+                modifier =
+                    Modifier
+                        .size(12.dp)
+                        .background(
+                            color =
+                                hexToColor(
+                                    hex = selectedColor,
+                                ),
+                            shape = RoundedCornerShape(100.dp),
                         ),
-                        shape = RoundedCornerShape(100.dp)
-                    )
             )
             Text(
                 text = selectedTag,
@@ -110,13 +116,14 @@ fun TodoScreen() {
 
         Text(
             text = selectedTimeText,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showTimePickerBottomSheet = true
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTimePickerBottomSheet = true
+                    },
         )
 
         MementoBottomSheet(
@@ -125,13 +132,13 @@ fun TodoScreen() {
                 RepeatSelectorContent(
                     onRepeatSelected = { selectedRepeat ->
                         selectedRepeatText = selectedRepeat
-                    }
+                    },
                 )
             },
             sheetState = sheetRepeatState,
             onDismissRequest = {
                 showRepeatBottomSheet = false
-            }
+            },
         )
 
         MementoBottomSheet(
@@ -144,13 +151,13 @@ fun TodoScreen() {
                             selectedDateText = formattedDate
                         }
                         showDeadLineBottomSheet = false
-                    }
+                    },
                 )
             },
             sheetState = sheetDeadLineState,
             onDismissRequest = {
                 showDeadLineBottomSheet = false
-            }
+            },
         )
 
         MementoBottomSheet(
@@ -160,13 +167,13 @@ fun TodoScreen() {
                     onTagSelected = { color, tag ->
                         selectedColor = color
                         selectedTag = tag
-                    }
+                    },
                 )
             },
             sheetState = sheetTagState,
             onDismissRequest = {
                 showTagBottomSheet = false
-            }
+            },
         )
 
         MementoBottomSheet(
@@ -175,13 +182,13 @@ fun TodoScreen() {
                 MementoTimePicker(
                     onTimeSelected = { selectedTime ->
                         selectedTimeText = selectedTime
-                    }
+                    },
                 )
             },
             sheetState = sheetTimePickerState,
             onDismissRequest = {
                 showTimePickerBottomSheet = false
-            }
+            },
         )
     }
 }

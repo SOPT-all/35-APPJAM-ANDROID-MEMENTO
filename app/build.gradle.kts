@@ -112,4 +112,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.timber)
     implementation(libs.process.phoenix)
+
+    implementation (libs.compose.wheel.picker)
+
 }

@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +29,10 @@ import org.memento.domain.model.Reqres
 import org.memento.ui.theme.MementoTheme
 
 @Composable
-fun ReqresScreen(viewModel: ReqresViewModel = hiltViewModel()) {
+fun ReqresScreen(
+    onBack: () -> Unit,
+    viewModel: ReqresViewModel = hiltViewModel(),
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -36,13 +41,6 @@ fun ReqresScreen(viewModel: ReqresViewModel = hiltViewModel()) {
 
     when (uiState) {
         is UiState.Loading -> {
-            Box(
-                modifier =
-                    Modifier.fillMaxSize()
-                        .padding(top = 20.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-            }
         }
         is UiState.Success -> {
             val data = (uiState as UiState.Success<List<Reqres>>).data
@@ -50,6 +48,11 @@ fun ReqresScreen(viewModel: ReqresViewModel = hiltViewModel()) {
                 items(data) { reqres ->
                     ReqresItem(reqres = reqres)
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = onBack) {
+                Text(text = "Go Back")
             }
         }
         is UiState.Failure -> {

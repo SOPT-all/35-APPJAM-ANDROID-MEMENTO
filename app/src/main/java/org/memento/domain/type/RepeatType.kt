@@ -3,9 +3,6 @@ package org.memento.domain.type
 enum class RepeatType (
     val text: String,
 ){
-    NONE(
-        text = "None"
-    ),
     EVERY_DAY(
         text = "Every Day"
     ),
@@ -14,5 +11,8 @@ enum class RepeatType (
     ),
     EVERY_MONTH(
         text = "Every Month"
+    ),
+    EVERY_YEAR(
+        text = "Every Year"
     )
 }

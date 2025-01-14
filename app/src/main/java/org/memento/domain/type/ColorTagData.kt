@@ -1,6 +1,6 @@
 package org.memento.domain.type
 
-data class TagData(
+data class ColorTagData(
     val text: String,
     val color: String,
 )

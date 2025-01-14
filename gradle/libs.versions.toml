@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.2"
 
+composeWheelPicker = "1.0.0-rc01"
 lifecycleRuntimeKtx = "2.8.7"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -92,6 +93,8 @@ lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", versio
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 process-phoenix = { group = "com.jakewharton", name = "process-phoenix", version.ref = "phoenix" }
 
+## Wheel Picker
+compose-wheel-picker = { module = "com.github.zj565061763:compose-wheel-picker", version.ref = "composeWheelPicker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

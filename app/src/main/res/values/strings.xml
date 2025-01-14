@@ -9,4 +9,8 @@
     <!--    calendar-->
     <string name="calendar">calendar</string>
 
+    <!--    bottom Sheet-->
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+
 </resources>

@@ -22,3 +22,7 @@ fun NavGraphBuilder.onboardingNavGraph(
         OnboardingScreen2(navigateToMainScreen = navigateToMainScreen)
     }
 }
+
+object OnboardingRoute {
+    const val ROUTE = "OnboardingScreen1"
+}

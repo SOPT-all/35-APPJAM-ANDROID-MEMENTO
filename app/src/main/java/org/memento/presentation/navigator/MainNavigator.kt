@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
+import org.memento.presentation.onboarding.navigation.OnboardingRoute
 import org.memento.presentation.onboarding.navigation.navigationOnboarding2
 import org.memento.presentation.plusbottomsheet.navigation.navigationBottomSheet
 import org.memento.presentation.reqres.navigation.navigationReqres
@@ -21,7 +22,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = "OnboardingScreen1"
+    val startDestination = OnboardingRoute.ROUTE
 
     val currentMainNavigationBarItem: BottomNavigationType?
         @Composable get() =

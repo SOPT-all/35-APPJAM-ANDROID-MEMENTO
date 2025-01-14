@@ -1,6 +1,5 @@
 package org.memento.domain.type
 
-import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp

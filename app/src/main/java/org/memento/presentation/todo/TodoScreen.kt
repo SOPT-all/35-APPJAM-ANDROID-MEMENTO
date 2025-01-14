@@ -22,14 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.component.DeadLineSelectorContent
+import org.memento.presentation.component.MementoBottomSheet
+import org.memento.presentation.component.MementoTimePicker
+import org.memento.presentation.component.RepeatSelectorContent
+import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.DeadLineSelectorContent
-import org.memento.ui.MementoBottomSheet
-import org.memento.ui.MementoTimePicker
-import org.memento.ui.RepeatSelectorContent
-import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.darkModeColors
 
 @OptIn(ExperimentalMaterial3Api::class)

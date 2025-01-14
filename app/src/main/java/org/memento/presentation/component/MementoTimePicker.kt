@@ -1,4 +1,4 @@
-package org.memento.ui
+package org.memento.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

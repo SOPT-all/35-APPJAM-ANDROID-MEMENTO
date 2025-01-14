@@ -1,4 +1,4 @@
-package org.memento.ui
+package org.memento.presentation.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

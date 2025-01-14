@@ -1,4 +1,4 @@
-package org.memento.presentation
+package org.memento.presentation.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

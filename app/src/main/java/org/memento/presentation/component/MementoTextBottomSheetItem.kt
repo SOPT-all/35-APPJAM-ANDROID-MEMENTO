@@ -1,4 +1,4 @@
-package org.memento.ui
+package org.memento.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
-import org.memento.domain.type.DeadLineType
-import org.memento.domain.type.RepeatType
+import org.memento.presentation.type.DeadLineType
+import org.memento.presentation.type.RepeatType
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -43,23 +43,23 @@ fun MementoTextBottomSheetItem(
 ) {
     Box(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(
-                    color = if (isActive) activeBgColor else darkModeColors.gray09,
-                )
-                .noRippleClickable {
-                    onClick()
-                }
-                .padding(vertical = 7.dp, horizontal = 12.dp),
+        Modifier
+            .fillMaxWidth()
+            .background(
+                color = if (isActive) activeBgColor else darkModeColors.gray09,
+            )
+            .noRippleClickable {
+                onClick()
+            }
+            .padding(vertical = 7.dp, horizontal = 12.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = option,
             style =
-                MementoTheme.typography.body_r_16.copy(
-                    color = if (isActive) activeContentColor else darkModeColors.gray07,
-                ),
+            MementoTheme.typography.body_r_16.copy(
+                color = if (isActive) activeContentColor else darkModeColors.gray07,
+            ),
         )
     }
 }
@@ -111,9 +111,9 @@ fun DatePickerModal(
     DatePickerDialog(
         onDismissRequest = onDismiss,
         colors =
-            DatePickerDefaults.colors(
-                containerColor = darkModeColors.gray08,
-            ),
+        DatePickerDefaults.colors(
+            containerColor = darkModeColors.gray08,
+        ),
         confirmButton = {
             TextButton(
                 onClick = {
@@ -139,18 +139,18 @@ fun DatePickerModal(
         DatePicker(
             state = datePickerState,
             colors =
-                DatePickerDefaults.colors(
-                    containerColor = darkModeColors.gray08,
-                    titleContentColor = darkModeColors.white,
-                    headlineContentColor = darkModeColors.white,
-                    weekdayContentColor = darkModeColors.white,
-                    subheadContentColor = darkModeColors.gray06,
-                    dayContentColor = darkModeColors.white,
-                    selectedDayContentColor = darkModeColors.black,
-                    selectedDayContainerColor = darkModeColors.green,
-                    todayContentColor = darkModeColors.green,
-                    todayDateBorderColor = darkModeColors.green,
-                ),
+            DatePickerDefaults.colors(
+                containerColor = darkModeColors.gray08,
+                titleContentColor = darkModeColors.white,
+                headlineContentColor = darkModeColors.white,
+                weekdayContentColor = darkModeColors.white,
+                subheadContentColor = darkModeColors.gray06,
+                dayContentColor = darkModeColors.white,
+                selectedDayContentColor = darkModeColors.black,
+                selectedDayContainerColor = darkModeColors.green,
+                todayContentColor = darkModeColors.green,
+                todayDateBorderColor = darkModeColors.green,
+            ),
         )
     }
 }
@@ -184,9 +184,9 @@ fun RepeatSelectorContent(
 fun MementoSelectContentPreview() {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(space = 5.dp),
     ) {
         DeadLineSelectorContent(

@@ -1,6 +1,5 @@
 package org.memento.domain.type
 
-import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -41,4 +40,37 @@ enum class SelectorType(
         textColor = darkModeColors.gray02,
         textStyle = defaultMementoTypography.body_r_14,
     ),
+    TAG(
+        width = 200.dp,
+        height = 36.dp,
+        paddingHorizontal = 67.dp,
+        paddingVertical = 8.dp,
+        cornerRadius = 2.dp,
+        clickedBackgroundColor = darkModeColors.gray07,
+        unClickedBackgroundColor = darkModeColors.gray09,
+        textColor = darkModeColors.gray02,
+        textStyle = defaultMementoTypography.body_r_14,
+    ),
+    DEADLINE(
+        width = 200.dp,
+        height = 36.dp,
+        paddingHorizontal = 70.dp,
+        paddingVertical = 8.dp,
+        cornerRadius = 2.dp,
+        clickedBackgroundColor = darkModeColors.gray07,
+        unClickedBackgroundColor = darkModeColors.gray09,
+        textColor = darkModeColors.gray02,
+        textStyle = defaultMementoTypography.body_r_14,
+    ),
+    BASIC(
+        width = 200.dp,
+        height = 36.dp,
+        paddingHorizontal = 81.dp,
+        paddingVertical = 8.dp,
+        cornerRadius = 2.dp,
+        clickedBackgroundColor = darkModeColors.gray07,
+        unClickedBackgroundColor = darkModeColors.gray09,
+        textColor = darkModeColors.gray02,
+        textStyle = defaultMementoTypography.body_r_14,
+    )
 }

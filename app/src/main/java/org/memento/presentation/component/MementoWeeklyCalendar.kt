@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
+import org.memento.ui.theme.darkModeColors
 import java.time.LocalDate
 
 @Composable
@@ -38,21 +40,36 @@ fun MementoWeeklyCalendar(
         pageCount = { Int.MAX_VALUE }
     )
 
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = darkModeColors.black)
+            .padding(horizontal = 20.dp)
+    ) {
+        val daysOfWeek = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .background(color = darkModeColors.black)
+                .padding(top = 2.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // SUN ~ SAT
-            listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT").forEach { day ->
+            daysOfWeek.forEachIndexed { index, day ->
+                val startOfWeek = today.minusDays(today.dayOfWeek.value.toLong() % 7)
+                    .plusWeeks((pagerState.currentPage - 5000).toLong())
+                val endOfWeek = startOfWeek.plusDays(6)
+
+                val isWithinCurrentPage = selectedDate.value in startOfWeek..endOfWeek
+                val isSelectedDay = isWithinCurrentPage &&
+                        selectedDate.value.dayOfWeek.value % 7 == index
+
                 Text(
                     text = day,
                     style = MementoTheme.typography.detail_b_12,
-                    color = Color.Gray,
-                    modifier = Modifier.weight(1f, fill = true),
+                    color = if (isSelectedDay) Color.White else darkModeColors.gray08,
+                    modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
             }
@@ -60,8 +77,11 @@ fun MementoWeeklyCalendar(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth(),
-            pageSpacing = 16.dp
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.black)
+                .padding(vertical = 10.dp),
+            pageSpacing = 16.dp,
         ) { page ->
             val startOfWeek = today.minusDays(today.dayOfWeek.value.toLong() % 7)
                 .plusWeeks((page - 5000).toLong())
@@ -80,7 +100,7 @@ fun MementoWeeklyCalendar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         modifier = Modifier
-                            .weight(1f, fill = true)
+                            .weight(1f)
                             .noRippleClickable {
                                 selectedDate.value = currentDate
                                 onDateClick(currentDate)
@@ -106,7 +126,7 @@ fun MementoWeeklyCalendar(
                                     isSelected && currentDate == today -> Color.Black
                                     isSelected -> Color.Black
                                     isToday -> Color.Green
-                                    else -> Color.Gray
+                                    else -> darkModeColors.gray06
                                 },
                                 textAlign = TextAlign.Center
                             )
@@ -121,13 +141,20 @@ fun MementoWeeklyCalendar(
 
 @Preview(showBackground = true, backgroundColor = 0xFF0F0F1E)
 @Composable
-fun WeekCalendarPreview() {
-    MementoWeeklyCalendar(
-        onDateClick = { clickedDate ->
-            println("Clicked date: $clickedDate")
-        },
+private fun WeekCalendarPreview() {
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+
+        MementoWeeklyCalendar(
+            onDateClick = { clickedDate ->
+                println("Clicked date: $clickedDate")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
 }

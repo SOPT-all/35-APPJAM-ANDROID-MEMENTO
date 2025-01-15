@@ -2,13 +2,11 @@ package org.memento.presentation.onboarding.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -27,7 +25,6 @@ import org.memento.R
 import org.memento.presentation.type.YesNoButtonType
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
-import java.lang.StackWalker.Option
 
 @Composable
 fun OnboardingQuestionBox(
@@ -37,16 +34,18 @@ fun OnboardingQuestionBox(
     var selectedOption by remember { mutableStateOf<YesNoButtonType?>(null) }
 
     Box(
-        modifier = Modifier
-            .then(modifier)
-            .background(
-                color = darkModeColors.gray10,
-                shape = RoundedCornerShape(2.dp)
-            )
+        modifier =
+            Modifier
+                .then(modifier)
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(2.dp),
+                ),
     ) {
         Column(
-            modifier = Modifier
-                .padding(horizontal = 13.dp, vertical = 14.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 13.dp, vertical = 14.dp),
         ) {
             Text(
                 text = stringResource(id = question),
@@ -55,7 +54,7 @@ fun OnboardingQuestionBox(
             )
             Spacer(Modifier.height(22.dp))
             Row(
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 OnboardingYesNoButton(
                     content = stringResource(id = R.string.onboarding_yes),
@@ -63,8 +62,9 @@ fun OnboardingQuestionBox(
                     onSelected = {
                         selectedOption = YesNoButtonType.YES
                     },
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier =
+                        Modifier
+                            .weight(1f),
                 )
                 Spacer(Modifier.width(10.dp))
                 OnboardingYesNoButton(
@@ -73,8 +73,9 @@ fun OnboardingQuestionBox(
                     onSelected = {
                         selectedOption = YesNoButtonType.NO
                     },
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier =
+                        Modifier
+                            .weight(1f),
                 )
             }
         }
@@ -85,12 +86,13 @@ fun OnboardingQuestionBox(
 @Composable
 fun OnboardingQuestionBoxPreview() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         OnboardingQuestionBox(
             question = R.string.onboarding3_q1,
-            modifier = Modifier.padding(horizontal = 30.dp)
+            modifier = Modifier.padding(horizontal = 30.dp),
         )
     }
 }

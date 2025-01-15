@@ -15,13 +15,14 @@ import org.memento.R
 @Composable
 fun SplashScreen() {
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize(),
+        Alignment.Center,
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.logo_memento_green),
-            contentDescription = stringResource(id = R.string.onboarding_logo)
+            contentDescription = stringResource(id = R.string.onboarding_logo),
         )
     }
 }

@@ -24,32 +24,34 @@ fun SocialLoginButton(
     @DrawableRes icon: Int,
     content: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .background(color = darkModeColors.gray10)
-            .noRippleClickable {
-                onClick()
-            },
-        Alignment.Center
+        modifier =
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .background(color = darkModeColors.gray10)
+                .noRippleClickable {
+                    onClick()
+                },
+        Alignment.Center,
     ) {
         Row(
-            modifier = Modifier
-                .padding(vertical = 11.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = stringResource(id = R.string.onboarding_google_login),
-                Modifier.padding(end = 8.dp)
+                Modifier.padding(end = 8.dp),
             )
             Text(
                 text = content,
                 style = defaultMementoTypography.body_r_16,
-                color = darkModeColors.white
+                color = darkModeColors.white,
             )
         }
     }

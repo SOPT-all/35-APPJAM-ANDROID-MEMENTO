@@ -32,6 +32,7 @@
     <string name="onboarding_no">No</string>
     <string name="onboarding_start">Start MEMENTO</string>
     <string name="onboarding_back">back</string>
+    <string name="onboarding_logo">logo</string>
 
     <!--    Onboarding/Login-->
     <string name="onboarding_login_title">Less Noise, \nMore Progress.</string>

@@ -21,25 +21,27 @@ import org.memento.ui.theme.defaultMementoTypography
 @Composable
 fun OnboardingTopBar() {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.btn_back),
-            contentDescription = stringResource(id = R.string.onboarding_back)
+            contentDescription = stringResource(id = R.string.onboarding_back),
         )
         Text(
             text = stringResource(id = R.string.onboarding_skip),
             style = defaultMementoTypography.body_b_14,
             color = darkModeColors.gray06,
-            modifier = Modifier
-                .padding(
-                    horizontal = 16.dp, vertical = 14.dp
-                )
-                .align(Alignment.CenterEnd)
-                .noRippleClickable {
-
-                }
+            modifier =
+                Modifier
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 14.dp,
+                    )
+                    .align(Alignment.CenterEnd)
+                    .noRippleClickable {
+                    },
         )
     }
 }

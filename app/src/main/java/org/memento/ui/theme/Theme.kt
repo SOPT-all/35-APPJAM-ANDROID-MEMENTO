@@ -1,12 +1,16 @@
 package org.memento.ui.theme
 
 import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -73,6 +77,12 @@ fun MEMENTOTheme(
                 }
             }
         }
-        MaterialTheme(content = content)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(darkModeColors.black)
+        ) {
+            MaterialTheme(content = content)
+        }
     }
 }

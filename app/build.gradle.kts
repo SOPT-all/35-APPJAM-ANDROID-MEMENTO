@@ -115,7 +115,6 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
 
-
     implementation(libs.compose.wheel.picker)
 }
 

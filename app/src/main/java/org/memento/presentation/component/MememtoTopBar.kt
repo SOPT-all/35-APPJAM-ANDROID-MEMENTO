@@ -26,23 +26,25 @@ fun MementoTopBar(
     year: String,
     onDateClick: () -> Unit,
     onIconClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.black)
-            .padding(start = 22.dp, end = 33.dp)
-            .padding(vertical = 10.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.black)
+                .padding(start = 22.dp, end = 33.dp)
+                .padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = date,
             style = MementoTheme.typography.body_b_20,
             color = darkModeColors.white,
-            modifier = Modifier
-                .noRippleClickable { onDateClick() }
+            modifier =
+                Modifier
+                    .noRippleClickable { onDateClick() },
         )
 
         Row(verticalAlignment = Alignment.Top) {
@@ -56,8 +58,9 @@ fun MementoTopBar(
                 painter = painterResource(id = R.drawable.ic_settings_26),
                 contentDescription = "Settings",
                 tint = Color.Unspecified,
-                modifier = Modifier
-                    .noRippleClickable { onIconClick() }
+                modifier =
+                    Modifier
+                        .noRippleClickable { onIconClick() },
             )
         }
     }
@@ -70,6 +73,6 @@ fun TopBarComponentPreview() {
         date = "Jan 3",
         year = "2025",
         onDateClick = {},
-        onIconClick = {}
+        onIconClick = {},
     )
 }

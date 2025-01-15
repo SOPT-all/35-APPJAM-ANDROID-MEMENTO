@@ -23,22 +23,23 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun MementoAiFloatingButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var isClicked by remember { mutableStateOf(false) }
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .background(
-                color = if (isClicked) Color.Green else darkModeColors.gray09,
-                shape = CircleShape
-            )
-            .noRippleClickable {
-                isClicked = !isClicked
-                onClick()
-            }
-            .padding(12.dp)
+        modifier =
+            modifier
+                .background(
+                    color = if (isClicked) Color.Green else darkModeColors.gray09,
+                    shape = CircleShape,
+                )
+                .noRippleClickable {
+                    isClicked = !isClicked
+                    onClick()
+                }
+                .padding(12.dp),
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_sparkle_29),
@@ -52,6 +53,6 @@ fun MementoAiFloatingButton(
 @Composable
 fun CustomFloatingButtonPreview() {
     MementoAiFloatingButton(
-        onClick = {  }
+        onClick = { },
     )
 }

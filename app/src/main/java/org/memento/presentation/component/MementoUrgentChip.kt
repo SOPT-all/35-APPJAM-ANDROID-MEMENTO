@@ -21,23 +21,23 @@ fun MementoUrgentChip(
     selectedType: PriorityTagType,
 ) {
     Row(
-        modifier = Modifier
-            .background(
-                color = selectedType.backgroundColor,
-                shape = RoundedCornerShape(2.dp)
-            )
-            .border(
-                width = 0.3.dp,
-                color = selectedType.outlineColor,
-                shape = RoundedCornerShape(2.dp)
-            )
-
+        modifier =
+            Modifier
+                .background(
+                    color = selectedType.backgroundColor,
+                    shape = RoundedCornerShape(2.dp),
+                )
+                .border(
+                    width = 0.3.dp,
+                    color = selectedType.outlineColor,
+                    shape = RoundedCornerShape(2.dp),
+                ),
     ) {
         Text(
             modifier = Modifier.padding(vertical = 2.dp, horizontal = 6.dp),
             text = stringResource(id = selectedType.chipName),
             color = selectedType.textColor,
-            style = MementoTheme.typography.detail_b_12
+            style = MementoTheme.typography.detail_b_12,
         )
     }
 }

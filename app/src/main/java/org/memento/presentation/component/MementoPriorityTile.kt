@@ -22,52 +22,58 @@ import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-
 @SuppressLint("ResourceAsColor")
 @Composable
 fun TagSelectionGrid(
     selectedType: PriorityTagType,
     onTypeSelected: (PriorityTagType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val types = persistentListOf(
-        PriorityTagType.Immediate,
-        PriorityTagType.High,
-        PriorityTagType.Medium,
-        PriorityTagType.Low,
-        PriorityTagType.None
-    )
+    val types =
+        persistentListOf(
+            PriorityTagType.Immediate,
+            PriorityTagType.High,
+            PriorityTagType.Medium,
+            PriorityTagType.Low,
+            PriorityTagType.None,
+        )
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (row in 0 until 2) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 for (col in 0 until 2) {
                     val type = types[row * 2 + col]
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(155f / 132f)
-                            .background(
-                                if (selectedType == type) type.backgroundColor
-                                else darkModeColors.gray09
-                            )
-                            .clickable { onTypeSelected(type) }
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .aspectRatio(155f / 132f)
+                                .background(
+                                    if (selectedType == type) {
+                                        type.backgroundColor
+                                    } else {
+                                        darkModeColors.gray09
+                                    },
+                                )
+                                .clickable { onTypeSelected(type) },
                     ) {
                         Text(
                             text = stringResource(id = type.chipDiscription),
-                            style = MementoTheme.typography.detail_r_12.copy(
-                                color = if (selectedType == type) darkModeColors.gray06 else darkModeColors.gray07,
-                                textAlign = TextAlign.Center,
-                            )
+                            style =
+                                MementoTheme.typography.detail_r_12.copy(
+                                    color = if (selectedType == type) darkModeColors.gray06 else darkModeColors.gray07,
+                                    textAlign = TextAlign.Center,
+                                ),
                         )
                     }
                 }
@@ -75,6 +81,3 @@ fun TagSelectionGrid(
         }
     }
 }
-
-
-

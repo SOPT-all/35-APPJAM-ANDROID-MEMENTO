@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import org.memento.R
 
+val suiteExtraBold = FontFamily(Font(R.font.suite_extrabold))
 val suiteBold = FontFamily(Font(R.font.suite_bold))
 val suiteRegular = FontFamily(Font(R.font.suite_regular))
 val suiteMedium = FontFamily(Font(R.font.suite_medium))
@@ -24,6 +25,7 @@ val lineHeightStyle =
 data class MementoTypography(
     // head
     val head_b_40: TextStyle,
+    val head_eb_32: TextStyle,
     // title
     val title_b_24: TextStyle,
     val title_b_22: TextStyle,
@@ -54,6 +56,14 @@ val defaultMementoTypography =
             TextStyle(
                 fontFamily = suiteBold,
                 fontSize = 40.sp,
+                fontWeight = FontWeight(700),
+                lineHeight = 50.sp,
+                lineHeightStyle = lineHeightStyle,
+            ),
+        head_eb_32 =
+            TextStyle(
+                fontFamily = suiteExtraBold,
+                fontSize = 32.sp,
                 fontWeight = FontWeight(700),
                 lineHeight = 50.sp,
                 lineHeightStyle = lineHeightStyle,

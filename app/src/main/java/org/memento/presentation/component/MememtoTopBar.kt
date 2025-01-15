@@ -30,11 +30,11 @@ fun MementoTopBar(
 ) {
     Row(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.black)
-            .padding(start = 22.dp, end = 33.dp)
-            .padding(vertical = 10.dp),
+            modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.black)
+                .padding(start = 22.dp, end = 33.dp)
+                .padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -43,8 +43,8 @@ fun MementoTopBar(
             style = MementoTheme.typography.head_eb_32,
             color = darkModeColors.white,
             modifier =
-            Modifier
-                .noRippleClickable { onDateClick() },
+                Modifier
+                    .noRippleClickable { onDateClick() },
         )
 
         Row(verticalAlignment = Alignment.Top) {
@@ -59,8 +59,8 @@ fun MementoTopBar(
                 contentDescription = "Settings",
                 tint = Color.Unspecified,
                 modifier =
-                Modifier
-                    .noRippleClickable { onIconClick() },
+                    Modifier
+                        .noRippleClickable { onIconClick() },
             )
         }
     }

@@ -42,10 +42,10 @@ val High = Color(0xFFFF5035)
 val Medium = Color(0xFFDDA153)
 val Low = Color(0xFF00AC34)
 
-val Immediate15 = Color(0xFFFF0D45)
-val High15 = Color(0xFFFF5035)
-val Medium15 = Color(0xFFDDA153)
-val Low15 = Color(0xFF00AC34)
+val Immediate15 = Color(0xFFFF0D45).copy(alpha = 0.15f)
+val High15 = Color(0xFFFF5035).copy(alpha = 0.15f)
+val Medium15 = Color(0xFFDDA153).copy(alpha = 0.15f)
+val Low15 = Color(0xFF00AC34).copy(alpha = 0.15f)
 
 // Gradient
 val TodoNowStart = Color(0xFF181925)

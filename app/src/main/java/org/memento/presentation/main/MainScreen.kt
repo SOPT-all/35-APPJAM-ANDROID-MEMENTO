@@ -1,73 +1,48 @@
 package org.memento.presentation.main
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.launch
-import org.memento.presentation.main.bottomnavigation.BottomNavGraph
-import org.memento.presentation.main.bottomnavigation.BottomNavigationType
-import org.memento.presentation.main.bottomnavigation.component.BottomNavigationBar
-import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
+import org.memento.presentation.navigator.MainNavigator
+import org.memento.presentation.navigator.component.BottomNavigationType
+import org.memento.presentation.navigator.component.MainBottomBar
+import org.memento.presentation.navigator.component.MainNavHost
+import org.memento.presentation.navigator.rememberMainNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    val scaffoldState = rememberBottomSheetScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
-    val navController = rememberNavController()
+fun MainScreen(
+    navigator: MainNavigator = rememberMainNavigator(),
+) {
+    MainScreenContent(
+        navigator = navigator,
+    )
+}
 
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetContent = {
-            MainPlusBottomSheet()
+@Composable
+fun MainScreenContent(
+    modifier: Modifier = Modifier,
+    navigator: MainNavigator,
+) {
+    Scaffold(
+        modifier = modifier,
+        content = { padding ->
+            MainNavHost(
+                navigator = navigator,
+                padding = padding,
+            )
         },
-        sheetPeekHeight = 0.dp,
-        sheetContainerColor = Color.DarkGray,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-    ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            BottomNavGraph(
-                navController = navController,
+        bottomBar = {
+            MainBottomBar(
+                isVisible = navigator.showBottomBar(),
+                navigationBarItems = BottomNavigationType.entries,
+                currentNavigationBarItem = navigator.currentMainNavigationBarItem,
+                onNavigationBarItemSelected = { navigator.navigateMainNavigation(it) },
+                onAddButtonClick = { navigator.navigateToBottomSheet() },
             )
-
-            BottomNavigationBar(
-                currentNaviBarItemSelected =
-                    BottomNavigationType.entries.firstOrNull {
-                        it.route == navController.currentBackStackEntry?.destination?.route
-                    },
-                onBottomNaviBarItemSelected = { navItem ->
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                onAddButtonClick = {
-                    coroutineScope.launch {
-                        scaffoldState.bottomSheetState.expand()
-                    }
-                },
-                modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter)
-                        // 소프트키 영역 고려
-                        .navigationBarsPadding(),
-            )
-        }
-    }
+        },
+    )
 }
 
 @Preview(showBackground = true)

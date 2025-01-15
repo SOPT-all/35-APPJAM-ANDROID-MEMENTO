@@ -114,6 +114,9 @@ dependencies {
     implementation(libs.process.phoenix)
 
     implementation(libs.compose.wheel.picker)
+
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
 }
 
 ktlint {

@@ -47,7 +47,7 @@ fun AddToDoScreen(
 ) {
     var selectedDateText by remember { mutableStateOf("Today") }
     var isCalendarVisible by remember { mutableStateOf(false) }
-    var addPlanText by remember { mutableStateOf("") }
+    var addToDoText by remember { mutableStateOf("") }
 
 
     val focusRequester = remember { FocusRequester() }
@@ -62,7 +62,6 @@ fun AddToDoScreen(
             .padding(horizontal = 23.dp, vertical = 5.dp)
     ) {
         Row(
-            // Image로 tab row 해야함
         ) {
             Text(
                 text = "Add to-do,",
@@ -97,8 +96,8 @@ fun AddToDoScreen(
         }
 
         BasicTextField(
-            value = addPlanText,
-            onValueChange = { addPlanText = it },
+            value = addToDoText,
+            onValueChange = { addToDoText = it },
             modifier = Modifier
                 .background(color = Color.Transparent)
                 .focusRequester(focusRequester)
@@ -136,7 +135,7 @@ fun AddToDoScreen(
                 Text(
                     text = deadLineText,
                     style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray06
+                        color = darkModeColors.gray02
                     )
                 )
             }
@@ -157,6 +156,23 @@ fun AddToDoScreen(
                             color = changeHexToColor(hex = tagColor),
                             shape = CircleShape,
                         ),
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier.background(
+                    shape = CircleShape,
+                    color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green
+                )
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_send),
+                    contentDescription = "전송 버튼",
+                    modifier = Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp)
                 )
             }
         }

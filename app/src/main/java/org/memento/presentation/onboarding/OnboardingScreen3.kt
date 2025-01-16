@@ -30,7 +30,7 @@ import org.memento.presentation.type.YesNoButtonType
 import org.memento.ui.theme.darkModeColors
 
 @Composable
-fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
+fun OnboardingScreen3() {
     val questionList =
         immutableListOf(
             R.string.onboarding3_q1,

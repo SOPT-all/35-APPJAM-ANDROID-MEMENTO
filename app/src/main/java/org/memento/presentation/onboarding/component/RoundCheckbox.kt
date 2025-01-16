@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 
 @Composable
@@ -39,18 +40,18 @@ fun RoundCheckbox(
     Box(
         contentAlignment = Alignment.Center,
         modifier =
-            modifier
-                .size(size)
-                .background(
-                    color = if (isChecked) checkedColor else Color.Transparent,
-                    shape = CircleShape,
-                )
-                .border(
-                    width = if (!isChecked) borderWidth else 0.dp,
-                    color = if (!isChecked) uncheckedBorderColor else Color.Transparent,
-                    shape = CircleShape,
-                )
-                .clickable { onCheckedChange(!isChecked) },
+        modifier
+            .size(size)
+            .background(
+                color = if (isChecked) checkedColor else Color.Transparent,
+                shape = CircleShape,
+            )
+            .border(
+                width = if (!isChecked) borderWidth else 0.dp,
+                color = if (!isChecked) uncheckedBorderColor else Color.Transparent,
+                shape = CircleShape,
+            )
+            .noRippleClickable { onCheckedChange(!isChecked) },
     ) {
         if (isChecked) {
             Icon(

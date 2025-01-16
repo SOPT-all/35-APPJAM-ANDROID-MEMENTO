@@ -1,11 +1,11 @@
 package org.memento.presentation.onboarding
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -43,51 +43,57 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboard
     var textFieldValue by remember { mutableStateOf("") }
     var isCheckedTextField by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier =
         Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
-        OnboardingTopAppBar(
-            type = OnboardingTopType.PAGE2,
-            onSkipClick = { navigateToOnboardingScreen4() },
-            onBackClick = { popBackStack() }
-        )
-        Spacer(Modifier.height(20.dp))
-        LazyColumn {
-            itemsIndexed(jobItems, key = { index, _ -> index }) { index, item ->
-                RoundCheckboxWithText(
-                    content = item,
-                    isChecked = selectedIndex == index,
-                    onCheckedChange = { isChecked ->
-                        selectedIndex = if (isChecked) index else null
-                        isCheckedTextField = false
-                    },
-                )
+        Column {
+            OnboardingTopAppBar(
+                type = OnboardingTopType.PAGE2,
+                onSkipClick = { navigateToOnboardingScreen4() },
+                onBackClick = { popBackStack() }
+            )
+            Spacer(Modifier.height(20.dp))
+            LazyColumn {
+                itemsIndexed(jobItems, key = { index, _ -> index }) { index, item ->
+                    RoundCheckboxWithText(
+                        content = item,
+                        isChecked = selectedIndex == index,
+                        onCheckedChange = { isChecked ->
+                            selectedIndex = if (isChecked) index else null
+                            isCheckedTextField = false
+                        },
+                    )
+                }
+                item(key = R.string.onboarding2_other) {
+                    CheckboxWithTextField(
+                        isChecked = isCheckedTextField,
+                        onCheckedChange = {
+                            isCheckedTextField = it
+                            if (it) selectedIndex = null
+                        },
+                        text = textFieldValue,
+                        onTextChange = { textFieldValue = it },
+                        placeholder = stringResource(id = R.string.onboarding2_placeholder),
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                    )
+                }
             }
-            item(key = R.string.onboarding2_other) {
-                CheckboxWithTextField(
-                    isChecked = isCheckedTextField,
-                    onCheckedChange = {
-                        isCheckedTextField = it
-                        if (it) selectedIndex = null
-                    },
-                    text = textFieldValue,
-                    onTextChange = { textFieldValue = it },
-                    placeholder = stringResource(id = R.string.onboarding2_placeholder),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                )
-            }
+            Spacer(Modifier.weight(1f))
         }
-        Spacer(Modifier.weight(1f))
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = selectedIndex != null || isCheckedTextField,
             onSelected = {
                 if (selectedIndex != null || isCheckedTextField) navigateToOnboardingScreen3()
             },
+            Modifier
+                .align(androidx.compose.ui.Alignment.BottomCenter)
+                .padding(bottom = 10.dp),
         )
+
     }
 }

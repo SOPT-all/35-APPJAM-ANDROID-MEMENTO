@@ -39,12 +39,13 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun AddToDoDeadLineScreen(
     onClose: () -> Unit,
-    onDone: (String) -> Unit
-    ) {
+    onDone: (String) -> Unit,
+) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.gray10)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.gray10),
     ) {
         val sheetRepeatState = rememberModalBottomSheetState()
         var showRepeatBottomSheet by remember { mutableStateOf(false) }
@@ -66,44 +67,48 @@ fun AddToDoDeadLineScreen(
         var repeatChecked by remember { mutableStateOf(false) }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_back),
-                contentDescription = "뒤로가기 버튼"
+                contentDescription = "뒤로가기 버튼",
             )
             Text(
                 text = "Done",
-                modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onDone(selectedDateText)
-                    },
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray07
-                )
+                modifier =
+                    Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onDone(selectedDateText)
+                        },
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
-
         }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Deadline",
-                    style = MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05
-                    )
+                    style =
+                        MementoTheme.typography.body_r_16.copy(
+                            color = darkModeColors.gray05,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -122,13 +127,14 @@ fun AddToDoDeadLineScreen(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Repeat",
-                    style = MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05
-                    )
+                    style =
+                        MementoTheme.typography.body_r_16.copy(
+                            color = darkModeColors.gray05,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -136,12 +142,13 @@ fun AddToDoDeadLineScreen(
                 Switch(
                     checked = repeatChecked,
                     onCheckedChange = { repeatChecked = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = darkModeColors.white,
-                        checkedTrackColor = darkModeColors.gray08,
-                        uncheckedThumbColor = darkModeColors.gray06,
-                        uncheckedTrackColor = darkModeColors.gray07,
-                    )
+                    colors =
+                        SwitchDefaults.colors(
+                            checkedThumbColor = darkModeColors.white,
+                            checkedTrackColor = darkModeColors.gray08,
+                            uncheckedThumbColor = darkModeColors.gray06,
+                            uncheckedTrackColor = darkModeColors.gray07,
+                        ),
                 )
             }
 
@@ -149,7 +156,7 @@ fun AddToDoDeadLineScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     MementoChipSelector(
                         selectorType = SelectorType.BASIC,
@@ -165,13 +172,14 @@ fun AddToDoDeadLineScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "End Repeat",
-                        style = MementoTheme.typography.body_r_16.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.body_r_16.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
 
                     Spacer(modifier = Modifier.weight(1f))

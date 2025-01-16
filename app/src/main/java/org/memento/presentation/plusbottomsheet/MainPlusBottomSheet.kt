@@ -27,45 +27,49 @@ fun MainPlusBottomSheet(
     tagColor: String,
     deadLineText: String,
     onNavigateDeadLineSetting: () -> Unit,
-    onNavigateTagSetting: () -> Unit
+    onNavigateTagSetting: () -> Unit,
 ) {
     val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab, R.drawable.ic_brain_tab)
-    val pagerState = rememberPagerState(
-        pageCount = { 3 }
-    )
+    val pagerState =
+        rememberPagerState(
+            pageCount = { 3 },
+        )
     val coroutineScope = rememberCoroutineScope()
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 13.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 13.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            modifier = Modifier
-                .background(
-                    color = darkModeColors.gray08,
-                    shape = CircleShape
-                )
-                .padding(all = 3.dp),
+            modifier =
+                Modifier
+                    .background(
+                        color = darkModeColors.gray08,
+                        shape = CircleShape,
+                    )
+                    .padding(all = 3.dp),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             pages.forEachIndexed { index, image ->
                 val isSelected = pagerState.currentPage == index
                 Box(
-                    modifier = Modifier
-                        .size(38.dp)
-                        .background(
-                            color = if (isSelected) darkModeColors.black else darkModeColors.gray08,
-                            shape = CircleShape
-                        )
-                        .noRippleClickable {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(38.dp)
+                            .background(
+                                color = if (isSelected) darkModeColors.black else darkModeColors.gray08,
+                                shape = CircleShape,
+                            )
+                            .noRippleClickable {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Image(
                         painter = painterResource(image),
@@ -80,21 +84,23 @@ fun MainPlusBottomSheet(
         state = pagerState,
     ) { page ->
         when (page) {
-            0 -> AddToDoScreen(
-                deadLineText = deadLineText,
-                tagColor = tagColor,
-                onNavigateDeadLineSetting = onNavigateDeadLineSetting,
-                onNavigateTagSetting = onNavigateTagSetting
-            )
+            0 ->
+                AddToDoScreen(
+                    deadLineText = deadLineText,
+                    tagColor = tagColor,
+                    onNavigateDeadLineSetting = onNavigateDeadLineSetting,
+                    onNavigateTagSetting = onNavigateTagSetting,
+                )
 
             1 -> AddPlanScreen()
             2 -> BrainDumpScreen()
-            else -> AddToDoScreen(
-                deadLineText = deadLineText,
-                tagColor = tagColor,
-                onNavigateDeadLineSetting = onNavigateDeadLineSetting,
-                onNavigateTagSetting = onNavigateTagSetting
-            )
+            else ->
+                AddToDoScreen(
+                    deadLineText = deadLineText,
+                    tagColor = tagColor,
+                    onNavigateDeadLineSetting = onNavigateDeadLineSetting,
+                    onNavigateTagSetting = onNavigateTagSetting,
+                )
         }
     }
 }

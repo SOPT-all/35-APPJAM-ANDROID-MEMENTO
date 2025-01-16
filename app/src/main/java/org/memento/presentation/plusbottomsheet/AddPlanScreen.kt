@@ -40,9 +40,7 @@ import org.memento.ui.theme.defaultMementoTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlanScreen(
-
-) {
+fun AddPlanScreen() {
     var eventText by remember { mutableStateOf("") }
 
     val sheetTimePickerState = rememberModalBottomSheetState()
@@ -78,56 +76,64 @@ fun AddPlanScreen(
     var isTagText by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
     ) {
         TextField(
             value = eventText,
             onValueChange = { eventText = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = darkModeColors.gray10),
-            textStyle = MementoTheme.typography.body_b_18.copy(
-                color = darkModeColors.white
-            ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.gray10),
+            textStyle =
+                MementoTheme.typography.body_b_18.copy(
+                    color = darkModeColors.white,
+                ),
             placeholder = {
                 Text(
                     text = "Add your event",
-                    style = MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.gray07
-                    )
+                    style =
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.gray07,
+                        ),
                 )
             },
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = darkModeColors.gray10,
-                unfocusedContainerColor = darkModeColors.gray10,
-                cursorColor = darkModeColors.white,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent
-            ),
-            singleLine = true
+            colors =
+                TextFieldDefaults.colors(
+                    focusedContainerColor = darkModeColors.gray10,
+                    unfocusedContainerColor = darkModeColors.gray10,
+                    cursorColor = darkModeColors.white,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                ),
+            singleLine = true,
         )
 
         HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray08),
-            thickness = 2.dp
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray08),
+            thickness = 2.dp,
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 31.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 31.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Starts",
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05
-                )
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -140,7 +146,7 @@ fun AddPlanScreen(
                 },
                 content = selectedStartDateText,
                 tagColor = null,
-                modifier = Modifier.padding(end = 10.dp)
+                modifier = Modifier.padding(end = 10.dp),
             )
 
             MementoChipSelector(
@@ -156,8 +162,9 @@ fun AddPlanScreen(
             if (isStartCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null)
+                        if (selectedDate != null) {
                             selectedStartDateText = formatDate(selectedDate)
+                        }
                     },
                     onDismiss = {
                         isStartCalendarVisible = false
@@ -167,17 +174,19 @@ fun AddPlanScreen(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 14.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Ends",
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05
-                )
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -190,7 +199,7 @@ fun AddPlanScreen(
                 },
                 content = selectedEndDateText,
                 tagColor = null,
-                modifier = Modifier.padding(end = 10.dp)
+                modifier = Modifier.padding(end = 10.dp),
             )
 
             MementoChipSelector(
@@ -206,8 +215,9 @@ fun AddPlanScreen(
             if (isEndCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null)
+                        if (selectedDate != null) {
                             selectedEndDateText = formatDate(selectedDate)
+                        }
                     },
                     onDismiss = {
                         isEndCalendarVisible = false
@@ -217,21 +227,23 @@ fun AddPlanScreen(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(
                 checked = isAllDayChecked,
                 onCheckedChange = {
                     isAllDayChecked = it
                 },
-                colors = CheckboxDefaults.colors(
-                    uncheckedColor = darkModeColors.gray05,
-                    checkedColor = darkModeColors.gray05,
-                    checkmarkColor = darkModeColors.black,
-                ),
+                colors =
+                    CheckboxDefaults.colors(
+                        uncheckedColor = darkModeColors.gray05,
+                        checkedColor = darkModeColors.gray05,
+                        checkmarkColor = darkModeColors.black,
+                    ),
             )
 
             Text(
@@ -242,17 +254,19 @@ fun AddPlanScreen(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 25.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Repeat",
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05
-                )
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -269,17 +283,19 @@ fun AddPlanScreen(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 14.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "End Repeat",
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05
-                )
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -297,8 +313,9 @@ fun AddPlanScreen(
             if (isEndRepeatCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null)
+                        if (selectedDate != null) {
                             selectedEndRepeatText = formatDate(selectedDate)
+                        }
                     },
                     onDismiss = {
                         isEndRepeatCalendarVisible = false
@@ -308,17 +325,19 @@ fun AddPlanScreen(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 14.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Tag",
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05
-                )
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Spacer(modifier = Modifier.weight(1f))

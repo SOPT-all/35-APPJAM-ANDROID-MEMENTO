@@ -57,47 +57,50 @@ fun MainScreenContent(
             sheetState = bottomSheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray10,
-            dragHandle = null
+            dragHandle = null,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f),
             ) {
                 when (currentBottomSheet) {
-                    BottomSheetType.MAIN -> MainPlusBottomSheet(
-                        tagColor = selectedTagColor,
-                        deadLineText = selectedDeadLine,
-                        onNavigateDeadLineSetting = {
-                            currentBottomSheet = BottomSheetType.DEADLINE
-                        },
-                        onNavigateTagSetting = {
-                            currentBottomSheet = BottomSheetType.TAG
+                    BottomSheetType.MAIN ->
+                        MainPlusBottomSheet(
+                            tagColor = selectedTagColor,
+                            deadLineText = selectedDeadLine,
+                            onNavigateDeadLineSetting = {
+                                currentBottomSheet = BottomSheetType.DEADLINE
+                            },
+                            onNavigateTagSetting = {
+                                currentBottomSheet = BottomSheetType.TAG
+                            },
+                        )
 
-                        }
-                    )
+                    BottomSheetType.DEADLINE ->
+                        AddToDoDeadLineScreen(
+                            onClose = { currentBottomSheet = null },
+                            onDone = { deadLine ->
+                                selectedDeadLine = deadLine
+                                currentBottomSheet = BottomSheetType.MAIN
+                            },
+                        )
 
-                    BottomSheetType.DEADLINE -> AddToDoDeadLineScreen(
-                        onClose = { currentBottomSheet = null },
-                        onDone = { deadLine ->
-                            selectedDeadLine = deadLine
-                            currentBottomSheet = BottomSheetType.MAIN
-                        }
-                    )
+                    BottomSheetType.TAG ->
+                        AddToDoTagScreen(
+                            onClose = { currentBottomSheet = null },
+                            onDone = { tagColor ->
+                                selectedTagColor = tagColor
+                                currentBottomSheet = BottomSheetType.MAIN
+                            },
+                        )
 
-
-                    BottomSheetType.TAG -> AddToDoTagScreen(
-                        onClose = { currentBottomSheet = null },
-                        onDone = { tagColor ->
-                            selectedTagColor = tagColor
-                            currentBottomSheet = BottomSheetType.MAIN
-                        }
-                    )
-
-                    BottomSheetType.URGENCY -> AddToDoDeadLineScreen(
-                        onClose = { currentBottomSheet = null },
-                        onDone = { }
-                    )
+                    BottomSheetType.URGENCY ->
+                        AddToDoDeadLineScreen(
+                            onClose = { currentBottomSheet = null },
+                            onDone = { },
+                        )
 
                     null -> {}
                 }
@@ -131,7 +134,10 @@ fun MainScreenContent(
 }
 
 enum class BottomSheetType {
-    MAIN, DEADLINE, TAG, URGENCY
+    MAIN,
+    DEADLINE,
+    TAG,
+    URGENCY,
 }
 
 @Preview(showBackground = true)

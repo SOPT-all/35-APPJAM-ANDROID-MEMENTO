@@ -41,33 +41,33 @@ fun MementoTagBottomSheetItem(
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isActive) activeBgColor else darkModeColors.gray09,
-            )
-            .noRippleClickable {
-                onClick()
-            }
-            .padding(vertical = 7.dp, horizontal = 12.dp),
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = if (isActive) activeBgColor else darkModeColors.gray09,
+                )
+                .noRippleClickable {
+                    onClick()
+                }
+                .padding(vertical = 7.dp, horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Box(
             modifier =
-            Modifier
-                .size(10.dp)
-                .background(
-                    color = tagColor,
-                    shape = CircleShape,
-                ),
+                Modifier
+                    .size(10.dp)
+                    .background(
+                        color = tagColor,
+                        shape = CircleShape,
+                    ),
         )
         Text(
             text = option,
             style =
-            MementoTheme.typography.body_r_16.copy(
-                color = if (isActive) activeContentColor else darkModeColors.gray07,
-            ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = if (isActive) activeContentColor else darkModeColors.gray07,
+                ),
         )
     }
 }
@@ -83,14 +83,14 @@ fun TagSelectorContent(
     var itemHeight by remember { mutableIntStateOf(0) }
     val maxHeight = if (itemHeight > 0) (itemHeight * 5.5).dp else 25.dp
 
-
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(maxHeight)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .heightIn(maxHeight),
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             itemsIndexed(options) { index, option ->
                 MementoTagBottomSheetItem(
@@ -109,7 +109,6 @@ fun TagSelectorContent(
             }
         }
     }
-
 }
 
 fun getDummyTagData(): List<ColorTagData> {
@@ -148,9 +147,9 @@ fun getDummyTagData(): List<ColorTagData> {
 fun MementoTagBottomSheetItemPreview() {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(space = 5.dp),
     ) {
         TagSelectorContent(

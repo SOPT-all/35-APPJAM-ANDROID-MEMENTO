@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -24,16 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.selects.select
 import org.memento.R
 import org.memento.domain.type.SelectorType
 import org.memento.presentation.MementoChipSelector
-import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.DeadLineSelectorContent
 import org.memento.ui.MementoBottomSheet
-import org.memento.ui.MementoTimePicker
-import org.memento.ui.RepeatSelectorContent
 import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -42,12 +35,13 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun AddToDoTagScreen(
     onClose: () -> Unit,
-    onDone: (String) -> Unit
+    onDone: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.gray10)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.gray10),
     ) {
         val sheetTagState = rememberModalBottomSheetState()
         var showTagBottomSheet by remember { mutableStateOf(false) }
@@ -56,44 +50,48 @@ fun AddToDoTagScreen(
         var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_back),
-                contentDescription = "뒤로가기 버튼"
+                contentDescription = "뒤로가기 버튼",
             )
             Text(
                 text = "Done",
-                modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onDone(selectedTagColor)
-                    },
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray07
-                )
+                modifier =
+                    Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onDone(selectedTagColor)
+                        },
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
-
         }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Deadline",
-                    style = MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05
-                    )
+                    style =
+                        MementoTheme.typography.body_r_16.copy(
+                            color = darkModeColors.gray05,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -108,7 +106,6 @@ fun AddToDoTagScreen(
                     tagColor = selectedTagColor,
                 )
             }
-
 
             MementoBottomSheet(
                 isOpenBottomSheet = showTagBottomSheet,
@@ -131,9 +128,9 @@ fun AddToDoTagScreen(
 
 @Preview
 @Composable
-fun AddToDoTagScreenPreview(){
+fun AddToDoTagScreenPreview() {
     AddToDoTagScreen(
         onClose = { },
-        onDone = { }
+        onDone = { },
     )
 }

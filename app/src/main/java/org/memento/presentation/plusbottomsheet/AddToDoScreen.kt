@@ -43,12 +43,11 @@ fun AddToDoScreen(
     tagColor: String,
     deadLineText: String,
     onNavigateDeadLineSetting: () -> Unit,
-    onNavigateTagSetting: () -> Unit
+    onNavigateTagSetting: () -> Unit,
 ) {
     var selectedDateText by remember { mutableStateOf("Today") }
     var isCalendarVisible by remember { mutableStateOf(false) }
     var addToDoText by remember { mutableStateOf("") }
-
 
     val focusRequester = remember { FocusRequester() }
 
@@ -57,36 +56,40 @@ fun AddToDoScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 23.dp, vertical = 5.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 23.dp, vertical = 5.dp),
     ) {
-        Row(
-        ) {
+        Row {
             Text(
                 text = "Add to-do,",
-                style = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.gray07
-                )
+                style =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
 
             Text(
                 text = selectedDateText,
-                modifier = Modifier
-                    .padding(start = 5.dp)
-                    .noRippleClickable {
-                        isCalendarVisible = true
-                    },
-                style = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white
-                )
+                modifier =
+                    Modifier
+                        .padding(start = 5.dp)
+                        .noRippleClickable {
+                            isCalendarVisible = true
+                        },
+                style =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
 
             if (isCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null)
+                        if (selectedDate != null) {
                             selectedDateText = formatDate(selectedDate)
+                        }
                     },
                     onDismiss = {
                         isCalendarVisible = false
@@ -98,19 +101,23 @@ fun AddToDoScreen(
         BasicTextField(
             value = addToDoText,
             onValueChange = { addToDoText = it },
-            modifier = Modifier
-                .background(color = Color.Transparent)
-                .focusRequester(focusRequester)
-                .padding(top = 16.dp),
-            textStyle = MementoTheme.typography.body_b_16.copy(
-                color = darkModeColors.white
-            ),
-            cursorBrush = Brush.verticalGradient(
-                listOf(darkModeColors.green, darkModeColors.green)
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
-            )
+            modifier =
+                Modifier
+                    .background(color = Color.Transparent)
+                    .focusRequester(focusRequester)
+                    .padding(top = 16.dp),
+            textStyle =
+                MementoTheme.typography.body_b_16.copy(
+                    color = darkModeColors.white,
+                ),
+            cursorBrush =
+                Brush.verticalGradient(
+                    listOf(darkModeColors.green, darkModeColors.green),
+                ),
+            keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -118,65 +125,70 @@ fun AddToDoScreen(
         Row(
             modifier = Modifier.padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(
-                modifier = Modifier
-                    .background(color = darkModeColors.gray09)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onNavigateDeadLineSetting()
-                    }
+                modifier =
+                    Modifier
+                        .background(color = darkModeColors.gray09)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onNavigateDeadLineSetting()
+                        },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_deadline),
-                    contentDescription = "마감 기한 아이콘"
+                    contentDescription = "마감 기한 아이콘",
                 )
                 Text(
                     text = deadLineText,
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray02
-                    )
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray02,
+                        ),
                 )
             }
 
             Box(
-                modifier = Modifier
-                    .background(color = darkModeColors.gray09)
-                    .align(alignment = Alignment.CenterVertically)
-                    .padding(all = 16.dp)
-                    .noRippleClickable {
-                        onNavigateTagSetting()
-                    },
+                modifier =
+                    Modifier
+                        .background(color = darkModeColors.gray09)
+                        .align(alignment = Alignment.CenterVertically)
+                        .padding(all = 16.dp)
+                        .noRippleClickable {
+                            onNavigateTagSetting()
+                        },
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(12.dp)
-                        .background(
-                            color = changeHexToColor(hex = tagColor),
-                            shape = CircleShape,
-                        ),
+                    modifier =
+                        Modifier
+                            .size(12.dp)
+                            .background(
+                                color = changeHexToColor(hex = tagColor),
+                                shape = CircleShape,
+                            ),
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Box(
-                modifier = Modifier.background(
-                    shape = CircleShape,
-                    color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green
-                )
+                modifier =
+                    Modifier.background(
+                        shape = CircleShape,
+                        color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                    ),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
-                    modifier = Modifier
-                        .padding(horizontal = 13.dp)
-                        .padding(top = 12.dp, bottom = 10.dp)
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 13.dp)
+                            .padding(top = 12.dp, bottom = 10.dp),
                 )
             }
         }
-
     }
 }
 
@@ -187,6 +199,6 @@ fun AddToDoScreenPreview() {
         tagColor = "",
         deadLineText = "",
         onNavigateDeadLineSetting = { },
-        onNavigateTagSetting = { }
+        onNavigateTagSetting = { },
     )
 }

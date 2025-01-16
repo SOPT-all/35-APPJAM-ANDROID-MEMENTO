@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,24 +31,26 @@ fun OnboardingTopAppBar(
 ) {
     Column(
         modifier =
-            modifier
-                .fillMaxWidth(),
+        modifier
+            .then(modifier)
+            .fillMaxWidth(),
     ) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth(),
+            Modifier
+                .fillMaxWidth(),
         ) {
             if (type.isBack) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.btn_back),
                     contentDescription = stringResource(id = R.string.onboarding_back),
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterStart)
-                            .noRippleClickable {
-                                onBackClick()
-                            },
+                    Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(top = 6.dp, bottom = 14.dp)
+                        .noRippleClickable {
+                            onBackClick()
+                        },
                 )
             }
 
@@ -57,11 +60,12 @@ fun OnboardingTopAppBar(
                     style = defaultMementoTypography.body_b_14,
                     color = darkModeColors.gray06,
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterEnd)
-                            .noRippleClickable {
-                                onSkipClick()
-                            },
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(top = 4.dp)
+                        .noRippleClickable {
+                            onSkipClick()
+                        },
                 )
             }
         }
@@ -72,7 +76,8 @@ fun OnboardingTopAppBar(
         )
         Spacer(Modifier.height(29.dp))
         Column(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(start = 4.dp),
         ) {
             Text(
                 text = type.pageNum.toString(),

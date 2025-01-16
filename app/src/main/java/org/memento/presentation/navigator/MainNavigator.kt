@@ -72,6 +72,10 @@ class MainNavigator(
         navHostController.navigationOnboarding4()
     }
 
+    fun popBackStack() {
+        navHostController.popBackStack()
+    }
+
     @Composable
     fun showBottomBar(): Boolean =
         BottomNavigationType.contains {

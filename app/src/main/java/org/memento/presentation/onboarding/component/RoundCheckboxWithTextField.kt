@@ -19,14 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
-
 
 @Composable
 fun CheckboxWithTextField(
@@ -40,8 +36,9 @@ fun CheckboxWithTextField(
     val isActive = text.isNotEmpty()
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .then(modifier),
+        modifier =
+            Modifier
+                .then(modifier),
     ) {
         RoundCheckbox(
             isChecked = isActive || isChecked,
@@ -53,8 +50,8 @@ fun CheckboxWithTextField(
         Spacer(modifier = Modifier.width(15.dp))
         Box(
             modifier =
-            Modifier
-                .weight(1f),
+                Modifier
+                    .weight(1f),
         ) {
             BasicTextField(
                 value = text,
@@ -66,13 +63,13 @@ fun CheckboxWithTextField(
                 },
                 singleLine = true,
                 textStyle =
-                LocalTextStyle.current.copy(
-                    color = if (isActive) darkModeColors.white else darkModeColors.gray08,
-                ),
+                    LocalTextStyle.current.copy(
+                        color = if (isActive) darkModeColors.white else darkModeColors.gray08,
+                    ),
                 decorationBox = { innerTextField ->
                     Column {
                         Box(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             if (text.isEmpty()) {
                                 Text(
@@ -84,12 +81,13 @@ fun CheckboxWithTextField(
                             innerTextField()
                         }
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(
-                                    color = if (isActive) darkModeColors.white else darkModeColors.gray08
-                                )
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(
+                                        color = if (isActive) darkModeColors.white else darkModeColors.gray08,
+                                    ),
                         )
                     }
                 },

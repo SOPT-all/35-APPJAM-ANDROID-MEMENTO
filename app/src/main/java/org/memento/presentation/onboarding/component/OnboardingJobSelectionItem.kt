@@ -29,10 +29,10 @@ fun OnboardingJobSelectionItem(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .noRippleClickable { },
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .noRippleClickable { },
     ) {
         when (type) {
             JobSelectionType.Selection -> {

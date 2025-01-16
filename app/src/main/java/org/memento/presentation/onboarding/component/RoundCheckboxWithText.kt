@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
@@ -29,11 +30,15 @@ fun RoundCheckboxWithText(
 ) {
     Row(
         modifier =
-            Modifier
-                .then(modifier)
-                .padding(16.dp),
+        Modifier
+            .then(modifier)
+            .padding(16.dp)
+            .noRippleClickable {
+                onCheckedChange(!isChecked)
+            },
         verticalAlignment = Alignment.CenterVertically,
-    ) {
+
+        ) {
         RoundCheckbox(
             isChecked = isChecked,
             onCheckedChange = onCheckedChange,
@@ -43,6 +48,9 @@ fun RoundCheckboxWithText(
             text = stringResource(content),
             style = defaultMementoTypography.body_b_14,
             color = if (isChecked) darkModeColors.white else darkModeColors.gray06,
+            modifier = Modifier.noRippleClickable {
+                onCheckedChange(!isChecked)
+            }
         )
     }
 }

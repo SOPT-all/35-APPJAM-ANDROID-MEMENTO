@@ -1,5 +1,6 @@
 package org.memento.presentation.main
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.component.MainBottomBar
 import org.memento.presentation.navigator.component.MainNavHost
 import org.memento.presentation.navigator.rememberMainNavigator
+import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MainScreen(
@@ -17,6 +19,8 @@ fun MainScreen(
 ) {
     MainScreenContent(
         navigator = navigator,
+        modifier = Modifier
+            .background(color = darkModeColors.black)
     )
 }
 

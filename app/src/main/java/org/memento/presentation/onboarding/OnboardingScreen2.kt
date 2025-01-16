@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -24,7 +25,7 @@ import org.memento.presentation.onboarding.component.RoundCheckboxWithText
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
-fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit) {
+fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboardingScreen4: () -> Unit, popBackStack: () -> Unit) {
     val jobItems =
         immutableListOf(
             R.string.onboarding2_tech,
@@ -44,13 +45,14 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit) {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE2,
-            onSkipClick = {},
+            onSkipClick = { navigateToOnboardingScreen4() },
+            onBackClick = { popBackStack() }
         )
         Spacer(Modifier.height(20.dp))
         LazyColumn {
@@ -74,6 +76,8 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit) {
                     text = textFieldValue,
                     onTextChange = { textFieldValue = it },
                     placeholder = stringResource(id = R.string.onboarding2_placeholder),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
                 )
             }
         }

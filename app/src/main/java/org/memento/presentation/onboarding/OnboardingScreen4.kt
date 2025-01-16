@@ -16,16 +16,19 @@ import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
-fun OnboardingScreen4(navigateToMainScreen: () -> Unit) {
+fun OnboardingScreen4(
+    navigateToMainScreen: () -> Unit,
+    popBackStack: () -> Unit,
+) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE4,
-            onBackClick = {},
+            onBackClick = popBackStack,
         )
         Spacer(Modifier.height(203.dp))
         SocialLoginButton(

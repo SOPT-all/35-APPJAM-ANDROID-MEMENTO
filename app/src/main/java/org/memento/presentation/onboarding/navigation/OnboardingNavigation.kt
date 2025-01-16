@@ -32,6 +32,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     navigateToOnboardingScreen3: () -> Unit,
     navigateToOnboardingScreen4: () -> Unit,
     navigateToMainScreen: () -> Unit,
+    popBackStack: () -> Unit,
 ) {
     composable("LoginScreen") {
         LoginScreen(
@@ -39,18 +40,18 @@ fun NavGraphBuilder.onboardingNavGraph(
         )
     }
     composable("OnboardingScreen1") {
-        OnboardingScreen1(navigateToOnboardingScreen2 = navigateToOnboardingScreen2)
+        OnboardingScreen1(navigateToOnboardingScreen2 = navigateToOnboardingScreen2, navigateToOnboardingScreen4 = navigateToOnboardingScreen4)
     }
     composable("OnboardingScreen2") {
-        OnboardingScreen2(navigateToOnboardingScreen3 = navigateToOnboardingScreen3)
+        OnboardingScreen2(navigateToOnboardingScreen3 = navigateToOnboardingScreen3, navigateToOnboardingScreen4 = navigateToOnboardingScreen4, popBackStack = popBackStack)
     }
 
     composable("OnboardingScreen3") {
-        OnboardingScreen3(navigateToOnboardingScreen4 = navigateToOnboardingScreen4)
+        OnboardingScreen3(navigateToOnboardingScreen4 = navigateToOnboardingScreen4, popBackStack = popBackStack)
     }
 
     composable("OnboardingScreen4") {
-        OnboardingScreen4(navigateToMainScreen = navigateToMainScreen)
+        OnboardingScreen4(navigateToMainScreen = navigateToMainScreen, popBackStack = popBackStack)
     }
 }
 

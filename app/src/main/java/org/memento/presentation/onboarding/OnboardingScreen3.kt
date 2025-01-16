@@ -28,7 +28,10 @@ import org.memento.presentation.type.OnboardingTopType
 import org.memento.presentation.type.YesNoButtonType
 
 @Composable
-fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
+fun OnboardingScreen3(
+    navigateToOnboardingScreen4: () -> Unit,
+    popBackStack: () -> Unit,
+) {
     val questionList =
         immutableListOf(
             R.string.onboarding3_q1,
@@ -41,22 +44,22 @@ fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
                 type = OnboardingTopType.PAGE3,
-                onBackClick = {},
-                onSkipClick = {},
+                onBackClick = popBackStack,
+                onSkipClick = navigateToOnboardingScreen4,
             )
             Spacer(Modifier.height(20.dp))
 
             LazyColumn(
                 modifier =
-                    Modifier
-                        .padding(horizontal = 14.dp),
+                Modifier
+                    .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
@@ -74,10 +77,10 @@ fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
                 item {
                     Box(
                         modifier =
-                            Modifier
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .background(color = Color.Transparent),
+                        Modifier
+                            .height(50.dp)
+                            .fillMaxWidth()
+                            .background(color = Color.Transparent),
                     )
                 }
             }
@@ -87,9 +90,9 @@ fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
             isSelected = isAllSelected,
             onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
             modifier =
-                Modifier
-                    .align(androidx.compose.ui.Alignment.BottomCenter)
-                    .padding(bottom = 10.dp),
+            Modifier
+                .align(androidx.compose.ui.Alignment.BottomCenter)
+                .padding(bottom = 10.dp),
         )
     }
 }

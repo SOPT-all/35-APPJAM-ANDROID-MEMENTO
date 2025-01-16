@@ -21,8 +21,8 @@ fun MainNavHost(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxSize(),
+        modifier
+            .fillMaxSize(),
     ) {
         NavHost(
             navController = navigator.navHostController,
@@ -34,6 +34,7 @@ fun MainNavHost(
                 navigateToOnboardingScreen3 = { navigator.navigateToOnboarding3() },
                 navigateToOnboardingScreen4 = { navigator.navigateToOnboarding4() },
                 navigateToMainScreen = { navigator.navigateMainNavigation(BottomNavigationType.TODAY) },
+                popBackStack = { navigator.popBackStack() }
             )
 
             todayNavGraph(

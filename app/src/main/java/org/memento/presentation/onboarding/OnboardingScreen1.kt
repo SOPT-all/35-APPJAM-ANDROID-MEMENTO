@@ -40,7 +40,7 @@ enum class SETTIME {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
+fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboardingScreen4: () -> Unit) {
     val initialTimeText = stringResource(id = R.string.time_example)
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
@@ -58,13 +58,13 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
-            onSkipClick = {},
+            onSkipClick = navigateToOnboardingScreen4,
         )
         Spacer(Modifier.height(40.dp))
         Column {
@@ -82,8 +82,8 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
                 )
                 Spacer(
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -110,8 +110,8 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
                 )
                 Spacer(
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -165,10 +165,3 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
     }
 }
 
-@Preview
-@Composable
-fun OnboardingScreen1Prev() {
-    OnboardingScreen1(
-        {},
-    )
-}

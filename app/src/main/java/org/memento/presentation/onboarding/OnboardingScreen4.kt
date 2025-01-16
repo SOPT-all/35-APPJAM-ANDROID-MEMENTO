@@ -41,6 +41,8 @@ fun OnboardingScreen4(
             content = R.string.onboarding_start,
             isSelected = true,
             onSelected = navigateToMainScreen,
+            modifier = Modifier
+                .padding(bottom = 10.dp)
         )
     }
 }

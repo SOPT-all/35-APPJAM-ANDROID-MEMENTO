@@ -29,23 +29,24 @@ import org.memento.ui.theme.defaultMementoTypography
 @Composable
 fun OnboardingQuestionBox(
     @StringRes question: Int,
+    selectedOption: YesNoButtonType?,
+    onOptionSelected: (YesNoButtonType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedOption by remember { mutableStateOf<YesNoButtonType?>(null) }
 
     Box(
         modifier =
-            Modifier
-                .then(modifier)
-                .background(
-                    color = darkModeColors.gray10,
-                    shape = RoundedCornerShape(2.dp),
-                ),
+        Modifier
+            .then(modifier)
+            .background(
+                color = darkModeColors.gray10,
+                shape = RoundedCornerShape(2.dp),
+            ),
     ) {
         Column(
             modifier =
-                Modifier
-                    .padding(horizontal = 13.dp, vertical = 14.dp),
+            Modifier
+                .padding(horizontal = 13.dp, vertical = 14.dp),
         ) {
             Text(
                 text = stringResource(id = question),
@@ -53,46 +54,29 @@ fun OnboardingQuestionBox(
                 color = darkModeColors.white,
             )
             Spacer(Modifier.height(22.dp))
-            Row(
-                modifier = Modifier,
-            ) {
+            Row {
                 OnboardingYesNoButton(
                     content = stringResource(id = R.string.onboarding_yes),
                     isSelected = selectedOption == YesNoButtonType.YES,
                     onSelected = {
-                        selectedOption = YesNoButtonType.YES
+                        onOptionSelected(YesNoButtonType.YES)
                     },
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
                 Spacer(Modifier.width(10.dp))
                 OnboardingYesNoButton(
                     content = stringResource(id = R.string.onboarding_no),
                     isSelected = selectedOption == YesNoButtonType.NO,
                     onSelected = {
-                        selectedOption = YesNoButtonType.NO
+                        onOptionSelected(YesNoButtonType.NO)
                     },
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun OnboardingQuestionBoxPreview() {
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize(),
-    ) {
-        OnboardingQuestionBox(
-            question = R.string.onboarding3_q1,
-            modifier = Modifier.padding(horizontal = 30.dp),
-        )
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -77,13 +78,18 @@ fun MEMENTOTheme(
                 }
             }
         }
-        Box(
-            modifier =
-                Modifier
+        MaterialTheme(
+            colorScheme = darkColorScheme(
+                background = darkModeColors.black
+            )
+        ) {
+            Box(
+                modifier = Modifier
                     .fillMaxSize()
                     .background(darkModeColors.black),
-        ) {
-            MaterialTheme(content = content)
+            ) {
+                content()
+            }
         }
     }
 }

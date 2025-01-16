@@ -45,7 +45,7 @@ fun OnboardingScreen3() {
         modifier =
         Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
@@ -87,7 +87,7 @@ fun OnboardingScreen3() {
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = isAllSelected,
-            onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
+            onSelected = {  },
             modifier =
             Modifier
                 .align(androidx.compose.ui.Alignment.BottomCenter)

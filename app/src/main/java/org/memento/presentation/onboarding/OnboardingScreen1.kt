@@ -160,9 +160,7 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = isSelectedWakeUp && isSelectedWindDown,
-            onSelected = {
-                if (isSelectedWakeUp && isSelectedWindDown) navigateToOnboardingScreen2()
-            },
+            onSelected = { if (isSelectedWakeUp && isSelectedWindDown) navigateToOnboardingScreen2() },
         )
     }
 }

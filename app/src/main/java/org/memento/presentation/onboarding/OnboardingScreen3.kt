@@ -30,7 +30,7 @@ import org.memento.presentation.type.YesNoButtonType
 import org.memento.ui.theme.darkModeColors
 
 @Composable
-fun OnboardingScreen3() {
+fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
     val questionList =
         immutableListOf(
             R.string.onboarding3_q1,
@@ -87,7 +87,7 @@ fun OnboardingScreen3() {
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = isAllSelected,
-            onSelected = {  },
+            onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
             modifier =
             Modifier
                 .align(androidx.compose.ui.Alignment.BottomCenter)

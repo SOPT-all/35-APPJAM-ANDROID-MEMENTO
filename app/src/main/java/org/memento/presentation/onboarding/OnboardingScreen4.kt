@@ -17,12 +17,12 @@ import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
-fun OnboardingScreen4() {
+fun OnboardingScreen4(navigateToMainScreen: () -> Unit) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE4,
@@ -38,13 +38,7 @@ fun OnboardingScreen4() {
         OnboardingBottomButton(
             content = R.string.onboarding_start,
             isSelected = true,
-            onSelected = {},
+            onSelected = navigateToMainScreen,
         )
     }
-}
-
-@Preview
-@Composable
-fun OnboardingScreen4Preview() {
-    OnboardingScreen4()
 }

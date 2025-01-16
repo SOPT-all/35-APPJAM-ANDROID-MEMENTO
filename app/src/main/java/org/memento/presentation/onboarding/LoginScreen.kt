@@ -26,12 +26,12 @@ import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navigationToOnboardingScreen1: () -> Unit) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(top = 130.dp, bottom = 176.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(top = 130.dp, bottom = 176.dp),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
@@ -50,7 +50,7 @@ fun LoginScreen() {
         SocialLoginButton(
             icon = R.drawable.img_google,
             content = stringResource(id = R.string.onboarding_google_login),
-            onClick = {},
+            onClick = navigationToOnboardingScreen1,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Spacer(Modifier.height(18.dp))
@@ -66,15 +66,9 @@ fun LoginScreen() {
                 style = defaultMementoTypography.detail_r_11,
                 color = darkModeColors.gray04,
                 modifier =
-                    Modifier
-                        .noRippleClickable { },
+                Modifier
+                    .noRippleClickable { },
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }

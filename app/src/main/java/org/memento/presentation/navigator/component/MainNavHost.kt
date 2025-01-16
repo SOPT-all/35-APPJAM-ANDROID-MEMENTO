@@ -25,14 +25,16 @@ fun MainNavHost(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = Color.Gray),
     ) {
         NavHost(
             navController = navigator.navHostController,
             startDestination = navigator.startDestination,
         ) {
             onboardingNavGraph(
+                navigateToOnboardingScreen1 = { navigator.navigateToOnboarding1() },
                 navigateToOnboardingScreen2 = { navigator.navigateToOnboarding2() },
+                navigateToOnboardingScreen3 = { navigator.navigateToOnboarding3() },
+                navigateToOnboardingScreen4 = { navigator.navigateToOnboarding4() },
                 navigateToMainScreen = { navigator.navigateMainNavigation(BottomNavigationType.TODAY) },
             )
 

@@ -10,7 +10,10 @@ import androidx.navigation.navOptions
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
+import org.memento.presentation.onboarding.navigation.navigationOnboarding1
 import org.memento.presentation.onboarding.navigation.navigationOnboarding2
+import org.memento.presentation.onboarding.navigation.navigationOnboarding3
+import org.memento.presentation.onboarding.navigation.navigationOnboarding4
 import org.memento.presentation.plusbottomsheet.navigation.navigationBottomSheet
 import org.memento.presentation.reqres.navigation.navigationReqres
 import org.memento.presentation.today.navigation.navigationToday
@@ -53,8 +56,20 @@ class MainNavigator(
         navHostController.navigationBottomSheet()
     }
 
+    fun navigateToOnboarding1() {
+        navHostController.navigationOnboarding1()
+    }
+
     fun navigateToOnboarding2() {
         navHostController.navigationOnboarding2()
+    }
+
+    fun navigateToOnboarding3() {
+        navHostController.navigationOnboarding3()
+    }
+
+    fun navigateToOnboarding4() {
+        navHostController.navigationOnboarding4()
     }
 
     @Composable

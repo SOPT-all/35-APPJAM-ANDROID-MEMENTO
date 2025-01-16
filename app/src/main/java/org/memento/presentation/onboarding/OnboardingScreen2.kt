@@ -25,7 +25,7 @@ import org.memento.presentation.onboarding.component.RoundCheckboxWithText
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
-fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
+fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit) {
     val jobItems =
         immutableListOf(
             R.string.onboarding2_tech,
@@ -45,9 +45,9 @@ fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE2,
@@ -82,13 +82,9 @@ fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = selectedIndex != null || isCheckedTextField,
-            onSelected = {},
+            onSelected = {
+                if (selectedIndex != null || isCheckedTextField) navigateToOnboardingScreen3()
+            },
         )
     }
-}
-
-@Preview
-@Composable
-fun OnboardingScreen2Preview() {
-    OnboardingScreen2({})
 }

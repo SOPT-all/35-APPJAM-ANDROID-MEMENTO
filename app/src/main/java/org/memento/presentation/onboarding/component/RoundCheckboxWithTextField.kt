@@ -38,9 +38,9 @@ fun CheckboxWithTextField(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
-        Modifier
-            .then(modifier)
-            .padding(16.dp),
+            Modifier
+                .then(modifier)
+                .padding(16.dp),
     ) {
         RoundCheckbox(
             isChecked = isActive || isChecked,
@@ -52,11 +52,11 @@ fun CheckboxWithTextField(
         Spacer(modifier = Modifier.width(15.dp))
         Box(
             modifier =
-            Modifier
-                .weight(1f)
-                .noRippleClickable {
-                    onCheckedChange(true)
-                },
+                Modifier
+                    .weight(1f)
+                    .noRippleClickable {
+                        onCheckedChange(true)
+                    },
         ) {
             BasicTextField(
                 value = text,
@@ -68,9 +68,9 @@ fun CheckboxWithTextField(
                 },
                 singleLine = true,
                 textStyle =
-                LocalTextStyle.current.copy(
-                    color = if (isActive) darkModeColors.white else darkModeColors.gray08,
-                ),
+                    LocalTextStyle.current.copy(
+                        color = if (isActive) darkModeColors.white else darkModeColors.gray08,
+                    ),
                 decorationBox = { innerTextField ->
                     Column {
                         Box(
@@ -87,12 +87,12 @@ fun CheckboxWithTextField(
                         }
                         Box(
                             modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(
-                                    color = if (isActive) darkModeColors.white else darkModeColors.gray08,
-                                ),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(
+                                        color = if (isActive) darkModeColors.white else darkModeColors.gray08,
+                                    ),
                         )
                     }
                 },

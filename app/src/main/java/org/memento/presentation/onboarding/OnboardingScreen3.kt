@@ -44,9 +44,9 @@ fun OnboardingScreen3(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
@@ -58,8 +58,8 @@ fun OnboardingScreen3(
 
             LazyColumn(
                 modifier =
-                Modifier
-                    .padding(horizontal = 14.dp),
+                    Modifier
+                        .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
@@ -77,10 +77,10 @@ fun OnboardingScreen3(
                 item {
                     Box(
                         modifier =
-                        Modifier
-                            .height(50.dp)
-                            .fillMaxWidth()
-                            .background(color = Color.Transparent),
+                            Modifier
+                                .height(50.dp)
+                                .fillMaxWidth()
+                                .background(color = Color.Transparent),
                     )
                 }
             }
@@ -90,9 +90,9 @@ fun OnboardingScreen3(
             isSelected = isAllSelected,
             onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
             modifier =
-            Modifier
-                .align(androidx.compose.ui.Alignment.BottomCenter)
-                .padding(bottom = 10.dp),
+                Modifier
+                    .align(androidx.compose.ui.Alignment.BottomCenter)
+                    .padding(bottom = 10.dp),
         )
     }
 }

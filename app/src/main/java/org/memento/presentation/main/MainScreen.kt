@@ -19,8 +19,8 @@ fun MainScreen(
 ) {
     MainScreenContent(
         navigator = navigator,
-        modifier = Modifier
-            .background(color = darkModeColors.black)
+        modifier =
+        Modifier,
     )
 }
 

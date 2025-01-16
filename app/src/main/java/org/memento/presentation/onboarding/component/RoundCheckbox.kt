@@ -2,7 +2,6 @@ package org.memento.presentation.onboarding.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -40,18 +39,18 @@ fun RoundCheckbox(
     Box(
         contentAlignment = Alignment.Center,
         modifier =
-        modifier
-            .size(size)
-            .background(
-                color = if (isChecked) checkedColor else Color.Transparent,
-                shape = CircleShape,
-            )
-            .border(
-                width = if (!isChecked) borderWidth else 0.dp,
-                color = if (!isChecked) uncheckedBorderColor else Color.Transparent,
-                shape = CircleShape,
-            )
-            .noRippleClickable { onCheckedChange(!isChecked) },
+            modifier
+                .size(size)
+                .background(
+                    color = if (isChecked) checkedColor else Color.Transparent,
+                    shape = CircleShape,
+                )
+                .border(
+                    width = if (!isChecked) borderWidth else 0.dp,
+                    color = if (!isChecked) uncheckedBorderColor else Color.Transparent,
+                    shape = CircleShape,
+                )
+                .noRippleClickable { onCheckedChange(!isChecked) },
     ) {
         if (isChecked) {
             Icon(

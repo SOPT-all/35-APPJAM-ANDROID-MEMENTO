@@ -25,7 +25,11 @@ import org.memento.presentation.onboarding.component.RoundCheckboxWithText
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
-fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboardingScreen4: () -> Unit, popBackStack: () -> Unit) {
+fun OnboardingScreen2(
+    navigateToOnboardingScreen3: () -> Unit,
+    navigateToOnboardingScreen4: () -> Unit,
+    popBackStack: () -> Unit,
+) {
     val jobItems =
         immutableListOf(
             R.string.onboarding2_tech,
@@ -45,15 +49,15 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboard
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
                 type = OnboardingTopType.PAGE2,
                 onSkipClick = { navigateToOnboardingScreen4() },
-                onBackClick = { popBackStack() }
+                onBackClick = { popBackStack() },
             )
             Spacer(Modifier.height(20.dp))
             LazyColumn {
@@ -77,8 +81,9 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboard
                         text = textFieldValue,
                         onTextChange = { textFieldValue = it },
                         placeholder = stringResource(id = R.string.onboarding2_placeholder),
-                        modifier = Modifier
-                            .padding(bottom = 16.dp)
+                        modifier =
+                            Modifier
+                                .padding(bottom = 16.dp),
                     )
                 }
             }
@@ -94,6 +99,5 @@ fun OnboardingScreen2(navigateToOnboardingScreen3: () -> Unit, navigateToOnboard
                 .align(androidx.compose.ui.Alignment.BottomCenter)
                 .padding(bottom = 10.dp),
         )
-
     }
 }

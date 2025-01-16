@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
@@ -40,7 +39,10 @@ enum class SETTIME {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboardingScreen4: () -> Unit) {
+fun OnboardingScreen1(
+    navigateToOnboardingScreen2: () -> Unit,
+    navigateToOnboardingScreen4: () -> Unit,
+) {
     val initialTimeText = stringResource(id = R.string.time_example)
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
@@ -58,9 +60,9 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboard
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
@@ -82,8 +84,8 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboard
                 )
                 Spacer(
                     modifier =
-                    Modifier
-                        .weight(1f),
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -110,8 +112,8 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboard
                 )
                 Spacer(
                     modifier =
-                    Modifier
-                        .weight(1f),
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -164,4 +166,3 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit, navigateToOnboard
         )
     }
 }
-

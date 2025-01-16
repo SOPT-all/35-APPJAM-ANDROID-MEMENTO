@@ -30,15 +30,14 @@ fun RoundCheckboxWithText(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .padding(16.dp)
-            .noRippleClickable {
-                onCheckedChange(!isChecked)
-            },
+            Modifier
+                .then(modifier)
+                .padding(16.dp)
+                .noRippleClickable {
+                    onCheckedChange(!isChecked)
+                },
         verticalAlignment = Alignment.CenterVertically,
-
-        ) {
+    ) {
         RoundCheckbox(
             isChecked = isChecked,
             onCheckedChange = onCheckedChange,
@@ -48,9 +47,10 @@ fun RoundCheckboxWithText(
             text = stringResource(content),
             style = defaultMementoTypography.body_b_14,
             color = if (isChecked) darkModeColors.white else darkModeColors.gray06,
-            modifier = Modifier.noRippleClickable {
-                onCheckedChange(!isChecked)
-            }
+            modifier =
+                Modifier.noRippleClickable {
+                    onCheckedChange(!isChecked)
+                },
         )
     }
 }

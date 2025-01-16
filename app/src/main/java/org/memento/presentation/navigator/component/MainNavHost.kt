@@ -34,7 +34,7 @@ fun MainNavHost(
                 navigateToOnboardingScreen3 = { navigator.navigateToOnboarding3() },
                 navigateToOnboardingScreen4 = { navigator.navigateToOnboarding4() },
                 navigateToMainScreen = { navigator.navigateMainNavigation(BottomNavigationType.TODAY) },
-                popBackStack = { navigator.popBackStack() }
+                popBackStack = { navigator.popBackStack() },
             )
 
             todayNavGraph(

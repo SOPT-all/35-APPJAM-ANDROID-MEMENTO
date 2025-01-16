@@ -22,9 +22,9 @@ fun OnboardingScreen4(
 ) {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE4,
@@ -41,8 +41,9 @@ fun OnboardingScreen4(
             content = R.string.onboarding_start,
             isSelected = true,
             onSelected = navigateToMainScreen,
-            modifier = Modifier
-                .padding(bottom = 10.dp)
+            modifier =
+                Modifier
+                    .padding(bottom = 10.dp),
         )
     }
 }

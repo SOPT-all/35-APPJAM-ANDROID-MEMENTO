@@ -33,27 +33,27 @@ fun OnboardingTopAppBar(
 ) {
     Column(
         modifier =
-            modifier
-                .then(modifier)
-                .fillMaxWidth(),
+        modifier
+            .then(modifier)
+            .fillMaxWidth(),
     ) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .align(Alignment.CenterHorizontally),
         ) {
             if (type.isBack) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.btn_back),
                     contentDescription = stringResource(id = R.string.onboarding_back),
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(vertical = 16.dp)
-                            .noRippleClickable {
-                                onBackClick()
-                            },
+                    Modifier
+                        .align(Alignment.CenterStart)
+                        .noRippleClickable {
+                            onBackClick()
+                        },
                 )
             }
 
@@ -63,12 +63,11 @@ fun OnboardingTopAppBar(
                     style = defaultMementoTypography.body_b_14,
                     color = darkModeColors.gray06,
                     modifier =
-                        Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(top = 4.dp)
-                            .noRippleClickable {
-                                onSkipClick()
-                            },
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .noRippleClickable {
+                            onSkipClick()
+                        },
                 )
             }
         }
@@ -81,8 +80,8 @@ fun OnboardingTopAppBar(
             Spacer(Modifier.height(29.dp))
             Column(
                 modifier =
-                    Modifier
-                        .padding(start = 4.dp),
+                Modifier
+                    .padding(start = 4.dp),
             ) {
                 Text(
                     text = type.pageNum.toString(),
@@ -105,9 +104,9 @@ fun OnboardingTopAppBar(
                     imageVector = ImageVector.vectorResource(id = R.drawable.img_calendar),
                     contentDescription = null,
                     modifier =
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .offset(y = 34.dp),
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(y = 34.dp),
                 )
                 Text(
                     text = stringResource(id = type.title),
@@ -115,8 +114,8 @@ fun OnboardingTopAppBar(
                     color = darkModeColors.white,
                     textAlign = TextAlign.Center,
                     modifier =
-                        Modifier
-                            .align(Alignment.Center),
+                    Modifier
+                        .align(Alignment.Center),
                 )
             }
         }

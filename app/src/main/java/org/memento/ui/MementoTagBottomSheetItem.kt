@@ -130,6 +130,16 @@ fun getDummyTagData(): List<ColorTagData> {
         ColorTagData("SOPT", "#33FF57"),
         ColorTagData("Fitness", "#3357FF"),
         ColorTagData("Project", "#FFD700"),
+        ColorTagData("Project", "#FFD700"),
+        ColorTagData("Untitled", "#FF5733"),
+        ColorTagData("SOPT", "#33FF57"),
+        ColorTagData("Fitness", "#3357FF"),
+        ColorTagData("Project", "#FFD700"),
+        ColorTagData("Project", "#FFD700"),
+        ColorTagData("Untitled", "#FF5733"),
+        ColorTagData("SOPT", "#33FF57"),
+        ColorTagData("Fitness", "#3357FF"),
+        ColorTagData("Project", "#FFD700"),
     )
 }
 

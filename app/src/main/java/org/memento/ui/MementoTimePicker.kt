@@ -3,6 +3,7 @@ package org.memento.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -57,7 +58,7 @@ fun MementoTimePicker(
                 )
             },
         ) { index ->
-            onTimeSelected(getFormattedTime())
+//            onTimeSelected(getFormattedTime())
             Text(
                 text = index.toString().padStart(2, '0'),
                 style =
@@ -80,7 +81,7 @@ fun MementoTimePicker(
                 )
             },
         ) { index ->
-            onTimeSelected(getFormattedTime())
+//            onTimeSelected(getFormattedTime())
             Text(
                 text = minuteValues[index].toString().padStart(2, '0'),
                 style =
@@ -103,7 +104,7 @@ fun MementoTimePicker(
                 )
             },
         ) { index ->
-            onTimeSelected(getFormattedTime())
+//            onTimeSelected(getFormattedTime())
             Text(
                 text = periods[index],
                 style =

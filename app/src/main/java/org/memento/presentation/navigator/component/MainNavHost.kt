@@ -1,12 +1,10 @@
 package org.memento.presentation.navigator.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.onboarding.navigation.onboardingNavGraph
@@ -24,7 +22,7 @@ fun MainNavHost(
     Box(
         modifier =
             modifier
-                .fillMaxSize()
+                .fillMaxSize(),
     ) {
         NavHost(
             navController = navigator.navHostController,

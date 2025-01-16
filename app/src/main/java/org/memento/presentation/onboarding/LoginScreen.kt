@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.onboarding.component.SocialLoginButton
@@ -29,9 +28,9 @@ import org.memento.ui.theme.defaultMementoTypography
 fun LoginScreen(navigationToOnboardingScreen1: () -> Unit) {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(top = 130.dp, bottom = 176.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(top = 130.dp, bottom = 176.dp),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
@@ -66,8 +65,8 @@ fun LoginScreen(navigationToOnboardingScreen1: () -> Unit) {
                 style = defaultMementoTypography.detail_r_11,
                 color = darkModeColors.gray04,
                 modifier =
-                Modifier
-                    .noRippleClickable { },
+                    Modifier
+                        .noRippleClickable { },
             )
         }
     }

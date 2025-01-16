@@ -35,7 +35,7 @@ fun NavGraphBuilder.onboardingNavGraph(
 ) {
     composable("LoginScreen") {
         LoginScreen(
-            navigationToOnboardingScreen1 = navigateToOnboardingScreen1
+            navigationToOnboardingScreen1 = navigateToOnboardingScreen1,
         )
     }
     composable("OnboardingScreen1") {

@@ -21,8 +21,8 @@ fun MainNavHost(
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxSize(),
+            modifier
+                .fillMaxSize(),
     ) {
         NavHost(
             navController = navigator.navHostController,

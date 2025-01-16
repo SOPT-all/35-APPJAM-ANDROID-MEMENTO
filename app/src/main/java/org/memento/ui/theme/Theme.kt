@@ -79,14 +79,16 @@ fun MEMENTOTheme(
             }
         }
         MaterialTheme(
-            colorScheme = darkColorScheme(
-                background = darkModeColors.black
-            )
+            colorScheme =
+                darkColorScheme(
+                    background = darkModeColors.black,
+                ),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(darkModeColors.black),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(darkModeColors.black),
             ) {
                 content()
             }

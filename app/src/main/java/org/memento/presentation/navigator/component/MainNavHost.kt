@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.onboarding.navigation.onboardingNavGraph
-import org.memento.presentation.plusbottomsheet.navigation.bottomSheetNavGraph
 import org.memento.presentation.reqres.navigation.reqresNavGraph
 import org.memento.presentation.today.navigation.todayNavGraph
 import org.memento.presentation.todo.navigation.todoGraph
@@ -46,9 +45,6 @@ fun MainNavHost(
 
             reqresNavGraph(
                 navigateBack = { navigator.navHostController.popBackStack() },
-            )
-            bottomSheetNavGraph(
-                navigateBack = { navigator.navigateToBottomSheet() },
             )
         }
     }

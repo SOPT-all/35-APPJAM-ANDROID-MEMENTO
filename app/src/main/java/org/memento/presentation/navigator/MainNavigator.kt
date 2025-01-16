@@ -11,7 +11,6 @@ import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
 import org.memento.presentation.onboarding.navigation.navigationOnboarding2
-import org.memento.presentation.plusbottomsheet.navigation.navigationBottomSheet
 import org.memento.presentation.reqres.navigation.navigationReqres
 import org.memento.presentation.today.navigation.navigationToday
 import org.memento.presentation.todo.navigation.navigationTodo
@@ -49,9 +48,9 @@ class MainNavigator(
         navHostController.navigationReqres()
     }
 
-    fun navigateToBottomSheet() {
-        navHostController.navigationBottomSheet()
-    }
+//    fun navigateToBottomSheet() {
+//        navHostController.navigationBottomSheet()
+//    }
 
     fun navigateToOnboarding2() {
         navHostController.navigationOnboarding2()

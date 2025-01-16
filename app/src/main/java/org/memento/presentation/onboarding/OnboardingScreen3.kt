@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -31,20 +30,21 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun OnboardingScreen3() {
-
-    val questionList = immutableListOf(
-        R.string.onboarding3_q1,
-        R.string.onboarding3_q2,
-        R.string.onboarding3_q3,
-        R.string.onboarding3_q4,
-    )
+    val questionList =
+        immutableListOf(
+            R.string.onboarding3_q1,
+            R.string.onboarding3_q2,
+            R.string.onboarding3_q3,
+            R.string.onboarding3_q4,
+        )
     var selectedOptions by remember { mutableStateOf(List<YesNoButtonType?>(questionList.size) { null }) }
     val isAllSelected = selectedOptions.all { it != null }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
         Column {
             OnboardingTopAppBar(
@@ -55,28 +55,30 @@ fun OnboardingScreen3() {
             Spacer(Modifier.height(20.dp))
 
             LazyColumn(
-                modifier = Modifier
-                    .padding(horizontal = 14.dp)
+                modifier =
+                    Modifier
+                        .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
                         question = item,
                         selectedOption = selectedOptions[index],
                         onOptionSelected = { newSelection ->
-                            selectedOptions = selectedOptions.toMutableList().apply {
-                                set(index, newSelection)
-                            }
-                        }
-
+                            selectedOptions =
+                                selectedOptions.toMutableList().apply {
+                                    set(index, newSelection)
+                                }
+                        },
                     )
                     Spacer(Modifier.height(18.dp))
                 }
                 item {
                     Box(
-                        modifier = Modifier
-                            .height(50.dp)
-                            .fillMaxWidth()
-                            .background(color = darkModeColors.black)
+                        modifier =
+                            Modifier
+                                .height(50.dp)
+                                .fillMaxWidth()
+                                .background(color = darkModeColors.black),
                     )
                 }
             }
@@ -85,9 +87,10 @@ fun OnboardingScreen3() {
             content = R.string.onboarding_next,
             isSelected = isAllSelected,
             onSelected = {},
-            modifier = Modifier
-                .align(androidx.compose.ui.Alignment.BottomCenter)
-                .padding(bottom = 10.dp)
+            modifier =
+                Modifier
+                    .align(androidx.compose.ui.Alignment.BottomCenter)
+                    .padding(bottom = 10.dp),
         )
     }
 }

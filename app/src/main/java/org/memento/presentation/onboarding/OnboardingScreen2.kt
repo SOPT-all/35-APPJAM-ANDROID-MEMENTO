@@ -26,27 +26,28 @@ import org.memento.presentation.type.OnboardingTopType
 
 @Composable
 fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
-
-    val jobItems = immutableListOf(
-        R.string.onboarding2_tech,
-        R.string.onboarding2_data,
-        R.string.onboarding2_design,
-        R.string.onboarding2_business,
-        R.string.onboarding2_edu,
-        R.string.onboarding2_health,
-        R.string.onboarding2_free,
-        R.string.onboarding2_service,
-        R.string.onboarding2_engineer,
-    )
+    val jobItems =
+        immutableListOf(
+            R.string.onboarding2_tech,
+            R.string.onboarding2_data,
+            R.string.onboarding2_design,
+            R.string.onboarding2_business,
+            R.string.onboarding2_edu,
+            R.string.onboarding2_health,
+            R.string.onboarding2_free,
+            R.string.onboarding2_service,
+            R.string.onboarding2_engineer,
+        )
 
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var textFieldValue by remember { mutableStateOf("") }
     var isCheckedTextField by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE2,
@@ -61,7 +62,7 @@ fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
                     onCheckedChange = { isChecked ->
                         selectedIndex = if (isChecked) index else null
                         isCheckedTextField = false
-                    }
+                    },
                 )
             }
             item(key = R.string.onboarding2_other) {
@@ -73,20 +74,18 @@ fun OnboardingScreen2(navigateToMainScreen: () -> Unit) {
                     },
                     text = textFieldValue,
                     onTextChange = { textFieldValue = it },
-                    placeholder = stringResource(id = R.string.onboarding2_placeholder)
+                    placeholder = stringResource(id = R.string.onboarding2_placeholder),
                 )
             }
-
         }
         Spacer(Modifier.weight(1f))
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = selectedIndex != null || isCheckedTextField,
-            onSelected = {}
+            onSelected = {},
         )
     }
 }
-
 
 @Preview
 @Composable

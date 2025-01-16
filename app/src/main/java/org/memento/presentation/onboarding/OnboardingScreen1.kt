@@ -35,13 +35,12 @@ import org.memento.ui.theme.defaultMementoTypography
 
 enum class SETTIME {
     WAKEUP,
-    WINDDOWN
+    WINDDOWN,
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
-
     val initialTimeText = stringResource(id = R.string.time_example)
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
@@ -55,14 +54,13 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
     var isSelectedWakeUp by remember { mutableStateOf(false) }
     var isSelectedWindDown by remember { mutableStateOf(false) }
 
-
-
     var currentActiveSelector by remember { mutableStateOf<SETTIME?>(null) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
@@ -74,17 +72,18 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_wakeup),
                     contentDescription = null,
-                    tint = darkModeColors.white
+                    tint = darkModeColors.white,
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = stringResource(id = R.string.onboarding1_wake_up),
                     style = defaultMementoTypography.title_b_22,
-                    color = darkModeColors.white
+                    color = darkModeColors.white,
                 )
                 Spacer(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier =
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -101,17 +100,18 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic__winddown),
                     contentDescription = null,
-                    tint = darkModeColors.white
+                    tint = darkModeColors.white,
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text = stringResource(id = R.string.onboarding1_wind_down),
                     style = defaultMementoTypography.title_b_22,
-                    color = darkModeColors.white
+                    color = darkModeColors.white,
                 )
                 Spacer(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier =
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -133,14 +133,14 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
                                     selectedTimeTextWakeUp = selectedTime
                                     isClickedWakeUp = true
                                     isClickedWindDown = false
-                                    isSelectedWakeUp=true
+                                    isSelectedWakeUp = true
                                 }
 
                                 SETTIME.WINDDOWN -> {
                                     selectedTimeTextWindDown = selectedTime
                                     isClickedWindDown = true
                                     isClickedWakeUp = false
-                                    isSelectedWindDown=true
+                                    isSelectedWindDown = true
                                 }
 
                                 else -> Unit
@@ -162,7 +162,7 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
             isSelected = isSelectedWakeUp && isSelectedWindDown,
             onSelected = {
                 if (isSelectedWakeUp && isSelectedWindDown) navigateToOnboardingScreen2()
-            }
+            },
         )
     }
 }
@@ -171,6 +171,6 @@ fun OnboardingScreen1(navigateToOnboardingScreen2: () -> Unit) {
 @Composable
 fun OnboardingScreen1Prev() {
     OnboardingScreen1(
-        {}
+        {},
     )
 }

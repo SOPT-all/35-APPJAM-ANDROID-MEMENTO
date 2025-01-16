@@ -39,13 +39,13 @@ fun MementoChipSelector(
 
     Box(
         modifier =
-        Modifier
-            .then(modifier)
-            .clip(RoundedCornerShape(selectorType.cornerRadius))
-            .background(color = if (isClicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
-            .noRippleClickable {
-                onClickedChange(clicked)
-            },
+            Modifier
+                .then(modifier)
+                .clip(RoundedCornerShape(selectorType.cornerRadius))
+                .background(color = if (isClicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
+                .noRippleClickable {
+                    onClickedChange(clicked)
+                },
         Alignment.Center,
     ) {
         when (selectorType) {
@@ -55,10 +55,10 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier.padding(
-                        horizontal = selectorType.paddingHorizontal,
-                        vertical = selectorType.paddingVertical,
-                    ),
+                        Modifier.padding(
+                            horizontal = selectorType.paddingHorizontal,
+                            vertical = selectorType.paddingVertical,
+                        ),
                 )
                 Text(
                     text = content,
@@ -73,11 +73,11 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                 )
                 Text(
                     text = content,
@@ -89,16 +89,16 @@ fun MementoChipSelector(
             SelectorType.TAG -> {
                 Box(
                     modifier =
-                    Modifier
-                        .align(Alignment.Center),
+                        Modifier
+                            .align(Alignment.Center),
                 ) {
                     Row(
                         modifier =
-                        Modifier
-                            .padding(
-                                horizontal = selectorType.paddingHorizontal,
-                                vertical = selectorType.paddingVertical,
-                            ),
+                            Modifier
+                                .padding(
+                                    horizontal = selectorType.paddingHorizontal,
+                                    vertical = selectorType.paddingVertical,
+                                ),
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_tag),
@@ -114,8 +114,8 @@ fun MementoChipSelector(
                     }
                     Row(
                         modifier =
-                        Modifier
-                            .align(Alignment.Center),
+                            Modifier
+                                .align(Alignment.Center),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         tagColor?.let { changeHexToColor(hex = it) }?.let {
@@ -138,11 +138,11 @@ fun MementoChipSelector(
             SelectorType.DEADLINE -> {
                 Row(
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
@@ -164,11 +164,11 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                 )
                 Text(
                     text = content,

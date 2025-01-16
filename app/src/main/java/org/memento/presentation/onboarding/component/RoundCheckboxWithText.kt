@@ -29,9 +29,9 @@ fun RoundCheckboxWithText(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .padding(16.dp),
+            Modifier
+                .then(modifier)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RoundCheckbox(
@@ -52,8 +52,7 @@ fun RoundCheckboxWithText(
 fun RoundCheckboxWithTextExample() {
     var isChecked by remember { mutableStateOf(false) }
 
-    Row(
-    ) {
+    Row {
         RoundCheckboxWithText(
             content = R.string.onboarding2_free,
             isChecked = isChecked,

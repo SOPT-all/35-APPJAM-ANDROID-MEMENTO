@@ -32,36 +32,36 @@ fun OnboardingBottomButton(
 ) {
     Box(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .height(50.dp)
-            .background(
-                color =
-                if (isSelected) {
-                    darkModeColors.green
-                } else {
-                    darkModeColors.gray10
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(
+                    color =
+                        if (isSelected) {
+                            darkModeColors.green
+                        } else {
+                            darkModeColors.gray10
+                        },
+                    shape = RoundedCornerShape(2.dp),
+                )
+                .noRippleClickable {
+                    onSelected()
                 },
-                shape = RoundedCornerShape(2.dp),
-            )
-            .noRippleClickable {
-                onSelected()
-            },
         Alignment.Center,
     ) {
         Text(
             text = stringResource(content),
             style = defaultMementoTypography.body_b_16,
             color =
-            if (isSelected) {
-                darkModeColors.black
-            } else {
-                darkModeColors.gray08
-            },
+                if (isSelected) {
+                    darkModeColors.black
+                } else {
+                    darkModeColors.gray08
+                },
             modifier =
-            Modifier
-                .padding(vertical = 13.dp),
+                Modifier
+                    .padding(vertical = 13.dp),
         )
     }
 }

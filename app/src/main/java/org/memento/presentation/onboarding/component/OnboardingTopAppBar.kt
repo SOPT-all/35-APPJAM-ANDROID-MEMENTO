@@ -1,9 +1,6 @@
 package org.memento.presentation.onboarding.component
 
-import android.widget.Space
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,27 +33,27 @@ fun OnboardingTopAppBar(
 ) {
     Column(
         modifier =
-        modifier
-            .then(modifier)
-            .fillMaxWidth(),
+            modifier
+                .then(modifier)
+                .fillMaxWidth(),
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
         ) {
             if (type.isBack) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.btn_back),
                     contentDescription = stringResource(id = R.string.onboarding_back),
                     modifier =
-                    Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(vertical = 16.dp)
-                        .noRippleClickable {
-                            onBackClick()
-                        },
+                        Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(vertical = 16.dp)
+                            .noRippleClickable {
+                                onBackClick()
+                            },
                 )
             }
 
@@ -66,12 +63,12 @@ fun OnboardingTopAppBar(
                     style = defaultMementoTypography.body_b_14,
                     color = darkModeColors.gray06,
                     modifier =
-                    Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(top = 4.dp)
-                        .noRippleClickable {
-                            onSkipClick()
-                        },
+                        Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(top = 4.dp)
+                            .noRippleClickable {
+                                onSkipClick()
+                            },
                 )
             }
         }
@@ -83,8 +80,9 @@ fun OnboardingTopAppBar(
             )
             Spacer(Modifier.height(29.dp))
             Column(
-                modifier = Modifier
-                    .padding(start = 4.dp),
+                modifier =
+                    Modifier
+                        .padding(start = 4.dp),
             ) {
                 Text(
                     text = type.pageNum.toString(),
@@ -101,22 +99,24 @@ fun OnboardingTopAppBar(
         } else {
             Spacer(Modifier.height(63.dp))
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.img_calendar),
                     contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .offset(y = 34.dp)
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(y = 34.dp),
                 )
                 Text(
                     text = stringResource(id = type.title),
                     style = defaultMementoTypography.title_b_24,
                     color = darkModeColors.white,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.Center)
+                    modifier =
+                        Modifier
+                            .align(Alignment.Center),
                 )
             }
         }
@@ -152,7 +152,6 @@ fun OnboardingTopAppBarPreview3() {
         onSkipClick = { println("Skip clicked") },
     )
 }
-
 
 @Preview
 @Composable

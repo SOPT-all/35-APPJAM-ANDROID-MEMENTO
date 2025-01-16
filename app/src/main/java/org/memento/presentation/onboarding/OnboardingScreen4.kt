@@ -1,6 +1,5 @@
 package org.memento.presentation.onboarding
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,13 +19,14 @@ import org.memento.presentation.type.OnboardingTopType
 @Composable
 fun OnboardingScreen4() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE4,
-            onBackClick = {}
+            onBackClick = {},
         )
         Spacer(Modifier.height(203.dp))
         SocialLoginButton(
@@ -38,9 +38,8 @@ fun OnboardingScreen4() {
         OnboardingBottomButton(
             content = R.string.onboarding_start,
             isSelected = true,
-            onSelected = {}
+            onSelected = {},
         )
-
     }
 }
 

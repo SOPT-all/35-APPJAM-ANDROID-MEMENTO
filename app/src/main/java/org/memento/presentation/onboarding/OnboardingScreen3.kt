@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.immutableListOf
@@ -29,7 +30,7 @@ import org.memento.presentation.type.YesNoButtonType
 import org.memento.ui.theme.darkModeColors
 
 @Composable
-fun OnboardingScreen3() {
+fun OnboardingScreen3(navigateToOnboardingScreen4: () -> Unit) {
     val questionList =
         immutableListOf(
             R.string.onboarding3_q1,
@@ -42,9 +43,9 @@ fun OnboardingScreen3() {
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
         Column {
             OnboardingTopAppBar(
@@ -56,8 +57,8 @@ fun OnboardingScreen3() {
 
             LazyColumn(
                 modifier =
-                    Modifier
-                        .padding(horizontal = 14.dp),
+                Modifier
+                    .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
@@ -75,10 +76,10 @@ fun OnboardingScreen3() {
                 item {
                     Box(
                         modifier =
-                            Modifier
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .background(color = darkModeColors.black),
+                        Modifier
+                            .height(50.dp)
+                            .fillMaxWidth()
+                            .background(color = Color.Transparent),
                     )
                 }
             }
@@ -86,17 +87,11 @@ fun OnboardingScreen3() {
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = isAllSelected,
-            onSelected = {},
+            onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
             modifier =
-                Modifier
-                    .align(androidx.compose.ui.Alignment.BottomCenter)
-                    .padding(bottom = 10.dp),
+            Modifier
+                .align(androidx.compose.ui.Alignment.BottomCenter)
+                .padding(bottom = 10.dp),
         )
     }
-}
-
-@Preview
-@Composable
-fun OnboardingScreen3Preview() {
-    OnboardingScreen3()
 }

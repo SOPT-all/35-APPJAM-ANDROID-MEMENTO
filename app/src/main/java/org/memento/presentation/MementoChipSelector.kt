@@ -40,26 +40,28 @@ fun MementoChipSelector(
     var clicked by remember { mutableStateOf(isClicked) }
 
     Box(
-        modifier = Modifier
-            .then(modifier)
-            .clip(RoundedCornerShape(selectorType.cornerRadius))
-            .background(
-                color = when {
-                    isLimited == true -> darkModeColors.navy
-                    clicked -> selectorType.clickedBackgroundColor
-                    else -> selectorType.unClickedBackgroundColor
-                }
-            )
-            .then(
-                if (isLimited != true) {
-                    Modifier.noRippleClickable {
-                        clicked = !clicked
-                        onClickedChange(clicked)
-                    }
-                } else {
-                    Modifier
-                }
-            ),
+        modifier =
+            Modifier
+                .then(modifier)
+                .clip(RoundedCornerShape(selectorType.cornerRadius))
+                .background(
+                    color =
+                        when {
+                            isLimited == true -> darkModeColors.navy
+                            clicked -> selectorType.clickedBackgroundColor
+                            else -> selectorType.unClickedBackgroundColor
+                        },
+                )
+                .then(
+                    if (isLimited != true) {
+                        Modifier.noRippleClickable {
+                            clicked = !clicked
+                            onClickedChange(clicked)
+                        }
+                    } else {
+                        Modifier
+                    },
+                ),
         Alignment.Center,
     ) {
         when (selectorType) {
@@ -69,15 +71,15 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier.padding(
-                        horizontal = selectorType.paddingHorizontal,
-                        vertical = selectorType.paddingVertical,
-                    ),
+                        Modifier.padding(
+                            horizontal = selectorType.paddingHorizontal,
+                            vertical = selectorType.paddingVertical,
+                        ),
                 )
                 Text(
                     text = content,
                     style = selectorType.textStyle,
-                    color = if(isLimited == true) darkModeColors.gray07 else selectorType.textColor,
+                    color = if (isLimited == true) darkModeColors.gray07 else selectorType.textColor,
                 )
             }
 
@@ -87,11 +89,11 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                 )
                 Text(
                     text = content,
@@ -103,16 +105,16 @@ fun MementoChipSelector(
             SelectorType.TAG -> {
                 Box(
                     modifier =
-                    Modifier
-                        .align(Alignment.Center),
+                        Modifier
+                            .align(Alignment.Center),
                 ) {
                     Row(
                         modifier =
-                        Modifier
-                            .padding(
-                                horizontal = selectorType.paddingHorizontal,
-                                vertical = selectorType.paddingVertical,
-                            ),
+                            Modifier
+                                .padding(
+                                    horizontal = selectorType.paddingHorizontal,
+                                    vertical = selectorType.paddingVertical,
+                                ),
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_tag),
@@ -128,8 +130,8 @@ fun MementoChipSelector(
                     }
                     Row(
                         modifier =
-                        Modifier
-                            .align(Alignment.Center),
+                            Modifier
+                                .align(Alignment.Center),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         tagColor?.let { changeHexToColor(hex = it) }?.let {
@@ -152,11 +154,11 @@ fun MementoChipSelector(
             SelectorType.DEADLINE -> {
                 Row(
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
@@ -178,11 +180,11 @@ fun MementoChipSelector(
                     style = selectorType.textStyle,
                     color = Color.Transparent,
                     modifier =
-                    Modifier
-                        .padding(
-                            horizontal = selectorType.paddingHorizontal,
-                            vertical = selectorType.paddingVertical,
-                        ),
+                        Modifier
+                            .padding(
+                                horizontal = selectorType.paddingHorizontal,
+                                vertical = selectorType.paddingVertical,
+                            ),
                 )
                 Text(
                     text = content,

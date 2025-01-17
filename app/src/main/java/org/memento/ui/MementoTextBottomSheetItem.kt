@@ -90,7 +90,7 @@ fun DeadLineSelectorContent(
         DatePickerModalHandler(
             isCalendarVisible = isCalendarVisible,
             onDateSelected = onDateSelected,
-            onDismiss = { isCalendarVisible = false }
+            onDismiss = { isCalendarVisible = false },
         )
     }
 }
@@ -99,14 +99,14 @@ fun DeadLineSelectorContent(
 fun DatePickerModalHandler(
     isCalendarVisible: Boolean,
     onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     if (isCalendarVisible) {
         DatePickerModal(
             onDateSelected = { selectedDate ->
                 onDateSelected(selectedDate)
             },
-            onDismiss = onDismiss
+            onDismiss = onDismiss,
         )
     }
 }

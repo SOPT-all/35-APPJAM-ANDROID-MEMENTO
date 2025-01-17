@@ -181,7 +181,7 @@ fun TodoScreen() {
             content = {
                 MementoTimePicker(
                     selectedTime = selectedTimeText,
-                    onTimeSelected = { selectedTimeText = it }
+                    onTimeSelected = { selectedTimeText = it },
                 )
             },
             sheetState = sheetTimePickerState,

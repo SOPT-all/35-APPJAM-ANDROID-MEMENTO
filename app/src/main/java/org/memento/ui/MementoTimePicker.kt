@@ -15,14 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.sd.lib.compose.wheel_picker.FVerticalWheelPicker
 import com.sd.lib.compose.wheel_picker.FWheelPickerFocusVertical
 import com.sd.lib.compose.wheel_picker.rememberFWheelPickerState
-import kotlinx.coroutines.delay
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MementoTimePicker(
     selectedTime: String,
-    onTimeSelected: (String) -> Unit
+    onTimeSelected: (String) -> Unit,
 ) {
     val hourState = rememberFWheelPickerState(initialIndex = 0)
     val minuteState = rememberFWheelPickerState(initialIndex = 0)
@@ -53,7 +52,6 @@ fun MementoTimePicker(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
         FVerticalWheelPicker(
             modifier = Modifier.weight(1f),
             count = 12,

@@ -38,7 +38,6 @@ import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
-import org.memento.ui.theme.mementoColors
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,45 +91,51 @@ fun AddPlanScreen() {
     }
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
             TextField(
                 value = eventText,
                 onValueChange = { eventText = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.gray10),
-                textStyle = MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = darkModeColors.gray10),
+                textStyle =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
                 placeholder = {
                     Text(
                         text = "Add your event",
-                        style = MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.gray07,
-                        ),
+                        style =
+                            MementoTheme.typography.body_b_18.copy(
+                                color = darkModeColors.gray07,
+                            ),
                     )
                 },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = darkModeColors.gray10,
-                    unfocusedContainerColor = darkModeColors.gray10,
-                    cursorColor = darkModeColors.white,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                ),
+                colors =
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = darkModeColors.gray10,
+                        unfocusedContainerColor = darkModeColors.gray10,
+                        cursorColor = darkModeColors.white,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                    ),
                 singleLine = true,
             )
         }
 
         item {
             HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(darkModeColors.gray08),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(darkModeColors.gray08),
                 thickness = 2.dp,
             )
         }
@@ -141,9 +146,9 @@ fun AddPlanScreen() {
                 title = "Starts",
                 dateText = selectedStartDateText,
                 onDateClick = { isStartCalendarVisible = true },
-                timeText = if(isAllDayChecked) "All-day" else selectedStartTimeText,
+                timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
                 onTimeClick = { showStartTimePickerBottomSheet = true },
-                isAllChecked = isAllDayChecked
+                isAllChecked = isAllDayChecked,
             )
         }
 
@@ -153,7 +158,7 @@ fun AddPlanScreen() {
                 title = "Ends",
                 dateText = selectedEndDateText,
                 onDateClick = { isEndCalendarVisible = true },
-                timeText = if(isAllDayChecked) "All-day" else selectedEndTimeText,
+                timeText = if (isAllDayChecked) "All-day" else selectedEndTimeText,
                 onTimeClick = { showEndTimePickerBottomSheet = true },
                 isAllChecked = isAllDayChecked,
             )
@@ -164,22 +169,24 @@ fun AddPlanScreen() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Checkbox(
                     checked = isAllDayChecked,
                     onCheckedChange = { isAllDayChecked = it },
-                    colors = CheckboxDefaults.colors(
-                        uncheckedColor = darkModeColors.gray05,
-                        checkedColor = darkModeColors.gray05,
-                        checkmarkColor = darkModeColors.black,
-                    ),
+                    colors =
+                        CheckboxDefaults.colors(
+                            uncheckedColor = darkModeColors.gray05,
+                            checkedColor = darkModeColors.gray05,
+                            checkmarkColor = darkModeColors.black,
+                        ),
                 )
                 Text(
                     text = "All-day",
-                    style = defaultMementoTypography.body_r_14.copy(
-                        darkModeColors.gray05
-                    )
+                    style =
+                        defaultMementoTypography.body_r_14.copy(
+                            darkModeColors.gray05,
+                        ),
                 )
             }
         }
@@ -191,7 +198,7 @@ fun AddPlanScreen() {
                 dateText = selectedRepeatText,
                 onDateClick = { showRepeatBottomSheet = true },
                 timeText = null,
-                onTimeClick = null
+                onTimeClick = null,
             )
         }
 
@@ -204,7 +211,6 @@ fun AddPlanScreen() {
                     onDateClick = { isEndRepeatCalendarVisible = true },
                     timeText = null,
                     onTimeClick = null,
-
                 )
             }
         }
@@ -217,7 +223,7 @@ fun AddPlanScreen() {
                 onDateClick = { showTagBottomSheet = true },
                 timeText = null,
                 onTimeClick = null,
-                tagColor = selectedTagColor
+                tagColor = selectedTagColor,
             )
         }
     }
@@ -227,7 +233,7 @@ fun AddPlanScreen() {
         content = {
             MementoTimePicker(
                 selectedTime = selectedStartTimeText,
-                onTimeSelected = { selectedStartTimeText = it }
+                onTimeSelected = { selectedStartTimeText = it },
             )
         },
         sheetState = sheetTimePickerState,
@@ -284,19 +290,19 @@ fun AddPlanScreen() {
     DatePickerModalHandler(
         isCalendarVisible = isStartCalendarVisible,
         onDateSelected = { selectedStartDateText = formatDate(it ?: 0) },
-        onDismiss = { isStartCalendarVisible = false }
+        onDismiss = { isStartCalendarVisible = false },
     )
 
     DatePickerModalHandler(
         isCalendarVisible = isEndCalendarVisible,
         onDateSelected = { selectedEndDateText = formatDate(it ?: 0) },
-        onDismiss = { isEndCalendarVisible = false }
+        onDismiss = { isEndCalendarVisible = false },
     )
 
     DatePickerModalHandler(
         isCalendarVisible = isEndRepeatCalendarVisible,
         onDateSelected = { selectedEndRepeatText = formatDate(it ?: 0) },
-        onDismiss = { isEndRepeatCalendarVisible = false }
+        onDismiss = { isEndRepeatCalendarVisible = false },
     )
 }
 
@@ -308,28 +314,35 @@ fun AddPlanSelectComponent(
     timeText: String?,
     onTimeClick: (() -> Unit)?,
     tagColor: String? = null,
-    isAllChecked: Boolean? = null
+    isAllChecked: Boolean? = null,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title,
             style =
-            MementoTheme.typography.body_r_16.copy(
-                color = darkModeColors.gray05,
-            ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray05,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         MementoChipSelector(
-            selectorType = if (title == "Repeat" || title == "End Repeat") SelectorType.BASIC else if (title == "Tag") SelectorType.TAG else SelectorType.DATESELECTOR,
+            selectorType =
+                if (title == "Repeat" || title == "End Repeat") {
+                    SelectorType.BASIC
+                } else if (title == "Tag") {
+                    SelectorType.TAG
+                } else {
+                    SelectorType.DATESELECTOR
+                },
             isClicked = false,
             onClickedChange = { onDateClick() },
-            content =  dateText,
+            content = dateText,
             tagColor = tagColor,
         )
 
@@ -341,12 +354,11 @@ fun AddPlanSelectComponent(
                 content = timeText,
                 tagColor = null,
                 modifier = Modifier.padding(start = 10.dp),
-                isLimited = isAllChecked
+                isLimited = isAllChecked,
             )
         }
     }
 }
-
 
 @Preview
 @Composable

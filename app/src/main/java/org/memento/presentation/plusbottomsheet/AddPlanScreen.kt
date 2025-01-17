@@ -17,6 +17,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,8 @@ import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
+import org.memento.ui.theme.mementoColors
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +68,28 @@ fun AddPlanScreen() {
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     var isEndRepeatCalendarVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        val currentTime = System.currentTimeMillis()
+        val startDate = formatDate(System.currentTimeMillis())
+
+        val calendar = java.util.Calendar.getInstance().apply { timeInMillis = currentTime }
+
+        val hour = calendar.get(java.util.Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(java.util.Calendar.MINUTE)
+
+        val roundedMinute = if (minute in 16..44) 30 else 0
+        val startTime = String.format(Locale.ENGLISH, "%02d:%02d %s", if (hour % 12 == 0) 12 else hour % 12, roundedMinute, if (hour < 12) "AM" else "PM")
+
+        calendar.add(java.util.Calendar.HOUR_OF_DAY, 2)
+        val endHour = calendar.get(java.util.Calendar.HOUR_OF_DAY)
+        val endTime = String.format(Locale.ENGLISH, "%02d:%02d %s", if (endHour % 12 == 0) 12 else endHour % 12, roundedMinute, if (endHour < 12) "AM" else "PM")
+
+        selectedStartDateText = startDate
+        selectedEndDateText = startDate
+        selectedStartTimeText = startTime
+        selectedEndTimeText = endTime
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -111,12 +136,14 @@ fun AddPlanScreen() {
         }
 
         item {
+            // 시작 날짜와 시간 선택
             AddPlanSelectComponent(
                 title = "Starts",
                 dateText = selectedStartDateText,
                 onDateClick = { isStartCalendarVisible = true },
-                timeText = selectedStartTimeText,
-                onTimeClick = { showStartTimePickerBottomSheet = true }
+                timeText = if(isAllDayChecked) "All-day" else selectedStartTimeText,
+                onTimeClick = { showStartTimePickerBottomSheet = true },
+                isAllChecked = isAllDayChecked
             )
         }
 
@@ -126,8 +153,9 @@ fun AddPlanScreen() {
                 title = "Ends",
                 dateText = selectedEndDateText,
                 onDateClick = { isEndCalendarVisible = true },
-                timeText = selectedEndTimeText,
-                onTimeClick = { showEndTimePickerBottomSheet = true }
+                timeText = if(isAllDayChecked) "All-day" else selectedEndTimeText,
+                onTimeClick = { showEndTimePickerBottomSheet = true },
+                isAllChecked = isAllDayChecked,
             )
         }
 
@@ -157,7 +185,7 @@ fun AddPlanScreen() {
         }
 
         item {
-            // 반복 설정
+            // 그냥 Repeat
             AddPlanSelectComponent(
                 title = "Repeat",
                 dateText = selectedRepeatText,
@@ -167,19 +195,22 @@ fun AddPlanScreen() {
             )
         }
 
-        item {
-            // 반복 설정
-            AddPlanSelectComponent(
-                title = "End Repeat",
-                dateText = selectedEndRepeatText,
-                onDateClick = { isEndRepeatCalendarVisible = true },
-                timeText = null,
-                onTimeClick = null
-            )
+        if (isAllDayChecked) {
+            item {
+                // End Repeat
+                AddPlanSelectComponent(
+                    title = "End Repeat",
+                    dateText = selectedEndRepeatText,
+                    onDateClick = { isEndRepeatCalendarVisible = true },
+                    timeText = null,
+                    onTimeClick = null,
+
+                )
+            }
         }
 
         item {
-            // 태그 설정
+            // Tag
             AddPlanSelectComponent(
                 title = "Tag",
                 dateText = selectedTagText,
@@ -277,6 +308,7 @@ fun AddPlanSelectComponent(
     timeText: String?,
     onTimeClick: (() -> Unit)?,
     tagColor: String? = null,
+    isAllChecked: Boolean? = null
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -297,7 +329,7 @@ fun AddPlanSelectComponent(
             selectorType = if (title == "Repeat" || title == "End Repeat") SelectorType.BASIC else if (title == "Tag") SelectorType.TAG else SelectorType.DATESELECTOR,
             isClicked = false,
             onClickedChange = { onDateClick() },
-            content = dateText,
+            content =  dateText,
             tagColor = tagColor,
         )
 
@@ -308,7 +340,8 @@ fun AddPlanSelectComponent(
                 onClickedChange = { onTimeClick?.invoke() },
                 content = timeText,
                 tagColor = null,
-                modifier = Modifier.padding(start = 10.dp)
+                modifier = Modifier.padding(start = 10.dp),
+                isLimited = isAllChecked
             )
         }
     }

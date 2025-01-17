@@ -48,7 +48,9 @@ fun MementoBottomSheet(
         }
 
         ModalBottomSheet(
-            onDismissRequest = { },
+            onDismissRequest = {
+                onConfirm(null)
+            },
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray09,

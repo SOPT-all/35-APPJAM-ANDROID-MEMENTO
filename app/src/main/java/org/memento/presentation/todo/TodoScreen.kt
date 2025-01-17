@@ -136,7 +136,7 @@ fun TodoScreen() {
                 )
             },
             sheetState = sheetRepeatState,
-            onDismissRequest = {
+            onConfirm = {
                 showRepeatBottomSheet = false
             },
         )
@@ -155,7 +155,7 @@ fun TodoScreen() {
                 )
             },
             sheetState = sheetDeadLineState,
-            onDismissRequest = {
+            onConfirm = {
                 showDeadLineBottomSheet = false
             },
         )
@@ -171,7 +171,7 @@ fun TodoScreen() {
                 )
             },
             sheetState = sheetTagState,
-            onDismissRequest = {
+            onConfirm = {
                 showTagBottomSheet = false
             },
         )
@@ -180,13 +180,12 @@ fun TodoScreen() {
             isOpenBottomSheet = showTimePickerBottomSheet,
             content = {
                 MementoTimePicker(
-                    onTimeSelected = { selectedTime ->
-                        selectedTimeText = selectedTime
-                    },
+                    selectedTime = selectedTimeText,
+                    onTimeSelected = { selectedTimeText = it }
                 )
             },
             sheetState = sheetTimePickerState,
-            onDismissRequest = {
+            onConfirm = {
                 showTimePickerBottomSheet = false
             },
         )

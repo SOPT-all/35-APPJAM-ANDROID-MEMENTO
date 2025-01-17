@@ -3,6 +3,7 @@ package org.memento.presentation.main
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -63,7 +64,8 @@ fun MainScreenContent(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.73f),
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -109,7 +111,7 @@ fun MainScreenContent(
     }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         content = { padding ->
             MainNavHost(
                 navigator = navigator,

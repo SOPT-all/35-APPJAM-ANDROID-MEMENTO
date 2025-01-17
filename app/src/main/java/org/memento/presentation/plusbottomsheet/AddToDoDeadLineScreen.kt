@@ -43,9 +43,9 @@ fun AddToDoDeadLineScreen(
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.gray10),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.gray10),
     ) {
         val sheetRepeatState = rememberModalBottomSheetState()
         var showRepeatBottomSheet by remember { mutableStateOf(false) }
@@ -68,9 +68,9 @@ fun AddToDoDeadLineScreen(
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 6.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
@@ -80,22 +80,23 @@ fun AddToDoDeadLineScreen(
             Text(
                 text = "Done",
                 modifier =
-                    Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
-                        .noRippleClickable {
-                            onDone(selectedDateText)
-                        },
+                Modifier
+                    .padding(horizontal = 18.dp, vertical = 12.dp)
+                    .noRippleClickable {
+                        onDone(selectedDateText)
+                    },
                 style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray07,
-                    ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray07,
+                ),
             )
         }
 
         Column(
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp, vertical = 26.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
@@ -106,9 +107,9 @@ fun AddToDoDeadLineScreen(
                 Text(
                     text = "Deadline",
                     style =
-                        MementoTheme.typography.body_r_16.copy(
-                            color = darkModeColors.gray05,
-                        ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -132,9 +133,9 @@ fun AddToDoDeadLineScreen(
                 Text(
                     text = "Repeat",
                     style =
-                        MementoTheme.typography.body_r_16.copy(
-                            color = darkModeColors.gray05,
-                        ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -143,12 +144,12 @@ fun AddToDoDeadLineScreen(
                     checked = repeatChecked,
                     onCheckedChange = { repeatChecked = it },
                     colors =
-                        SwitchDefaults.colors(
-                            checkedThumbColor = darkModeColors.white,
-                            checkedTrackColor = darkModeColors.gray08,
-                            uncheckedThumbColor = darkModeColors.gray06,
-                            uncheckedTrackColor = darkModeColors.gray07,
-                        ),
+                    SwitchDefaults.colors(
+                        checkedThumbColor = darkModeColors.white,
+                        checkedTrackColor = darkModeColors.gray08,
+                        uncheckedThumbColor = darkModeColors.gray06,
+                        uncheckedTrackColor = darkModeColors.gray07,
+                    ),
                 )
             }
 
@@ -177,9 +178,9 @@ fun AddToDoDeadLineScreen(
                     Text(
                         text = "End Repeat",
                         style =
-                            MementoTheme.typography.body_r_16.copy(
-                                color = darkModeColors.gray05,
-                            ),
+                        MementoTheme.typography.body_r_16.copy(
+                            color = darkModeColors.gray05,
+                        ),
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -206,7 +207,7 @@ fun AddToDoDeadLineScreen(
                     )
                 },
                 sheetState = sheetRepeatState,
-                onDismissRequest = {
+                onConfirm = {
                     showRepeatBottomSheet = false
                 },
             )
@@ -225,7 +226,7 @@ fun AddToDoDeadLineScreen(
                     )
                 },
                 sheetState = sheetDeadLineState,
-                onDismissRequest = {
+                onConfirm = {
                     showDeadLineBottomSheet = false
                 },
             )
@@ -234,14 +235,12 @@ fun AddToDoDeadLineScreen(
                 isOpenBottomSheet = showTimePickerBottomSheet,
                 content = {
                     MementoTimePicker(
-                        onTimeSelected = { selectedTime ->
-                            selectedTimeText = selectedTime
-                            showTimePickerBottomSheet = false
-                        },
+                        selectedTime = selectedTimeText,
+                        onTimeSelected = { selectedTimeText = it }
                     )
                 },
                 sheetState = sheetTimePickerState,
-                onDismissRequest = {
+                onConfirm = {
                     showTimePickerBottomSheet = false
                 },
             )

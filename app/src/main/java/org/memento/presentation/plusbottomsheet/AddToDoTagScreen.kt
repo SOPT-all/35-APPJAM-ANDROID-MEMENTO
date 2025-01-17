@@ -118,7 +118,7 @@ fun AddToDoTagScreen(
                     )
                 },
                 sheetState = sheetTagState,
-                onDismissRequest = {
+                onConfirm = {
                     showTagBottomSheet = false
                 },
             )

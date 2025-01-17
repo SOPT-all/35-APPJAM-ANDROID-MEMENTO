@@ -2,12 +2,12 @@ package org.memento.presentation.plusbottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import org.memento.domain.type.SelectorType
 import org.memento.presentation.MementoChipSelector
 import org.memento.presentation.util.formatDate
-import org.memento.ui.DatePickerModal
+import org.memento.ui.DatePickerModalHandler
 import org.memento.ui.MementoBottomSheet
 import org.memento.ui.MementoTimePicker
 import org.memento.ui.RepeatSelectorContent
@@ -62,361 +62,258 @@ fun AddPlanScreen() {
     var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
 
     var isAllDayChecked by remember { mutableStateOf(false) }
-
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     var isEndRepeatCalendarVisible by remember { mutableStateOf(false) }
 
-    var isStartDateText by remember { mutableStateOf(false) }
-    var isEndDateText by remember { mutableStateOf(false) }
-    var isTimeStartText by remember { mutableStateOf(false) }
-    var isTimeEndText by remember { mutableStateOf(false) }
-    var isRepeatText by remember { mutableStateOf(false) }
-    var isEndRepeatText by remember { mutableStateOf(false) }
-    var isTagText by remember { mutableStateOf(false) }
-
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 6.dp),
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        TextField(
-            value = eventText,
-            onValueChange = { eventText = it },
-            modifier =
-                Modifier
+        item {
+            TextField(
+                value = eventText,
+                onValueChange = { eventText = it },
+                modifier = Modifier
                     .fillMaxWidth()
                     .background(color = darkModeColors.gray10),
-            textStyle =
-                MementoTheme.typography.body_b_18.copy(
+                textStyle = MementoTheme.typography.body_b_18.copy(
                     color = darkModeColors.white,
                 ),
-            placeholder = {
-                Text(
-                    text = "Add your event",
-                    style =
-                        MementoTheme.typography.body_b_18.copy(
+                placeholder = {
+                    Text(
+                        text = "Add your event",
+                        style = MementoTheme.typography.body_b_18.copy(
                             color = darkModeColors.gray07,
                         ),
-                )
-            },
-            colors =
-                TextFieldDefaults.colors(
+                    )
+                },
+                colors = TextFieldDefaults.colors(
                     focusedContainerColor = darkModeColors.gray10,
                     unfocusedContainerColor = darkModeColors.gray10,
                     cursorColor = darkModeColors.white,
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                 ),
-            singleLine = true,
-        )
+                singleLine = true,
+            )
+        }
 
-        HorizontalDivider(
-            modifier =
-                Modifier
+        item {
+            HorizontalDivider(
+                modifier = Modifier
                     .fillMaxWidth()
                     .background(darkModeColors.gray08),
-            thickness = 2.dp,
-        )
-
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 31.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Starts",
-                style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
+                thickness = 2.dp,
             )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MementoChipSelector(
-                selectorType = SelectorType.DATESELECTOR,
-                isClicked = isStartDateText,
-                onClickedChange = {
-                    isStartCalendarVisible = true
-                },
-                content = selectedStartDateText,
-                tagColor = null,
-                modifier = Modifier.padding(end = 10.dp),
-            )
-
-            MementoChipSelector(
-                selectorType = SelectorType.TIMESELECTOR,
-                isClicked = isTimeStartText,
-                onClickedChange = {
-                    showStartTimePickerBottomSheet = true
-                },
-                content = selectedStartTimeText,
-                tagColor = null,
-            )
-
-            if (isStartCalendarVisible) {
-                DatePickerModal(
-                    onDateSelected = { selectedDate ->
-                        if (selectedDate != null) {
-                            selectedStartDateText = formatDate(selectedDate)
-                        }
-                    },
-                    onDismiss = {
-                        isStartCalendarVisible = false
-                    },
-                )
-            }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Ends",
-                style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
+        item {
+            AddPlanSelectComponent(
+                title = "Starts",
+                dateText = selectedStartDateText,
+                onDateClick = { isStartCalendarVisible = true },
+                timeText = selectedStartTimeText,
+                onTimeClick = { showStartTimePickerBottomSheet = true }
             )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MementoChipSelector(
-                selectorType = SelectorType.DATESELECTOR,
-                isClicked = isEndDateText,
-                onClickedChange = {
-                    isEndCalendarVisible = true
-                },
-                content = selectedEndDateText,
-                tagColor = null,
-                modifier = Modifier.padding(end = 10.dp),
-            )
-
-            MementoChipSelector(
-                selectorType = SelectorType.TIMESELECTOR,
-                isClicked = isTimeEndText,
-                onClickedChange = {
-                    showEndTimePickerBottomSheet = true
-                },
-                content = selectedEndTimeText,
-                tagColor = null,
-            )
-
-            if (isEndCalendarVisible) {
-                DatePickerModal(
-                    onDateSelected = { selectedDate ->
-                        if (selectedDate != null) {
-                            selectedEndDateText = formatDate(selectedDate)
-                        }
-                    },
-                    onDismiss = {
-                        isEndCalendarVisible = false
-                    },
-                )
-            }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Checkbox(
-                checked = isAllDayChecked,
-                onCheckedChange = {
-                    isAllDayChecked = it
-                },
-                colors =
-                    CheckboxDefaults.colors(
+        item {
+            // 종료 날짜와 시간 선택
+            AddPlanSelectComponent(
+                title = "Ends",
+                dateText = selectedEndDateText,
+                onDateClick = { isEndCalendarVisible = true },
+                timeText = selectedEndTimeText,
+                onTimeClick = { showEndTimePickerBottomSheet = true }
+            )
+        }
+
+        item {
+            // All-day 체크박스
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isAllDayChecked,
+                    onCheckedChange = { isAllDayChecked = it },
+                    colors = CheckboxDefaults.colors(
                         uncheckedColor = darkModeColors.gray05,
                         checkedColor = darkModeColors.gray05,
                         checkmarkColor = darkModeColors.black,
                     ),
-            )
-
-            Text(
-                text = "All-day",
-                style = defaultMementoTypography.body_r_14,
-                color = darkModeColors.gray05,
-            )
-        }
-
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 25.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Repeat",
-                style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MementoChipSelector(
-                selectorType = SelectorType.BASIC,
-                isClicked = isRepeatText,
-                onClickedChange = {
-                    showRepeatBottomSheet = true
-                },
-                content = selectedRepeatText,
-                tagColor = null,
-            )
-        }
-
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "End Repeat",
-                style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MementoChipSelector(
-                selectorType = SelectorType.BASIC,
-                isClicked = isEndRepeatText,
-                onClickedChange = {
-                    isEndRepeatCalendarVisible = true
-                },
-                content = selectedEndRepeatText,
-                tagColor = null,
-            )
-
-            if (isEndRepeatCalendarVisible) {
-                DatePickerModal(
-                    onDateSelected = { selectedDate ->
-                        if (selectedDate != null) {
-                            selectedEndRepeatText = formatDate(selectedDate)
-                        }
-                    },
-                    onDismiss = {
-                        isEndRepeatCalendarVisible = false
-                    },
+                )
+                Text(
+                    text = "All-day",
+                    style = defaultMementoTypography.body_r_14.copy(
+                        darkModeColors.gray05
+                    )
                 )
             }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Tag",
-                style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MementoChipSelector(
-                selectorType = SelectorType.TAG,
-                isClicked = isTagText,
-                onClickedChange = {
-                    showTagBottomSheet = true
-                },
-                content = selectedTagText,
-                tagColor = selectedTagColor,
+        item {
+            // 반복 설정
+            AddPlanSelectComponent(
+                title = "Repeat",
+                dateText = selectedRepeatText,
+                onDateClick = { showRepeatBottomSheet = true },
+                timeText = null,
+                onTimeClick = null
             )
         }
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showStartTimePickerBottomSheet,
-            content = {
-                MementoTimePicker(
-                    onTimeSelected = { selectedTime ->
-//                        selectedTimeText = selectedTime
-                        showStartTimePickerBottomSheet = false
-                    },
-                )
-            },
-            sheetState = sheetTimePickerState,
-            onDismissRequest = {
-                showStartTimePickerBottomSheet = false
-            },
+        item {
+            // 반복 설정
+            AddPlanSelectComponent(
+                title = "End Repeat",
+                dateText = selectedEndRepeatText,
+                onDateClick = { isEndRepeatCalendarVisible = true },
+                timeText = null,
+                onTimeClick = null
+            )
+        }
+
+        item {
+            // 태그 설정
+            AddPlanSelectComponent(
+                title = "Tag",
+                dateText = selectedTagText,
+                onDateClick = { showTagBottomSheet = true },
+                timeText = null,
+                onTimeClick = null,
+                tagColor = selectedTagColor
+            )
+        }
+    }
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showStartTimePickerBottomSheet,
+        content = {
+            MementoTimePicker(
+                selectedTime = selectedStartTimeText,
+                onTimeSelected = { selectedStartTimeText = it }
+            )
+        },
+        sheetState = sheetTimePickerState,
+        onConfirm = {
+            showStartTimePickerBottomSheet = false
+        },
+    )
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showEndTimePickerBottomSheet,
+        content = {
+            MementoTimePicker(
+                selectedTime = selectedEndTimeText,
+                onTimeSelected = { selectedEndTimeText = it },
+            )
+        },
+        sheetState = sheetTimePickerState,
+        onConfirm = {
+            showEndTimePickerBottomSheet = false
+        },
+    )
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showRepeatBottomSheet,
+        content = {
+            RepeatSelectorContent(
+                onRepeatSelected = { selectedRepeat ->
+                    selectedRepeatText = selectedRepeat
+                },
+            )
+        },
+        sheetState = sheetRepeatState,
+        onConfirm = {
+            showRepeatBottomSheet = false
+        },
+    )
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showTagBottomSheet,
+        content = {
+            TagSelectorContent(
+                onTagSelected = { color, tag ->
+                    selectedTagColor = color
+                    selectedTagText = tag
+                },
+            )
+        },
+        sheetState = sheetTagState,
+        onConfirm = {
+            showTagBottomSheet = false
+        },
+    )
+
+    DatePickerModalHandler(
+        isCalendarVisible = isStartCalendarVisible,
+        onDateSelected = { selectedStartDateText = formatDate(it ?: 0) },
+        onDismiss = { isStartCalendarVisible = false }
+    )
+
+    DatePickerModalHandler(
+        isCalendarVisible = isEndCalendarVisible,
+        onDateSelected = { selectedEndDateText = formatDate(it ?: 0) },
+        onDismiss = { isEndCalendarVisible = false }
+    )
+
+    DatePickerModalHandler(
+        isCalendarVisible = isEndRepeatCalendarVisible,
+        onDateSelected = { selectedEndRepeatText = formatDate(it ?: 0) },
+        onDismiss = { isEndRepeatCalendarVisible = false }
+    )
+}
+
+@Composable
+fun AddPlanSelectComponent(
+    title: String,
+    dateText: String,
+    onDateClick: () -> Unit,
+    timeText: String?,
+    onTimeClick: (() -> Unit)?,
+    tagColor: String? = null,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style =
+            MementoTheme.typography.body_r_16.copy(
+                color = darkModeColors.gray05,
+            ),
         )
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showEndTimePickerBottomSheet,
-            content = {
-                MementoTimePicker(
-                    onTimeSelected = { selectedTime ->
-//                        selectedTimeText = selectedTime
-                        showEndTimePickerBottomSheet = false
-                    },
-                )
-            },
-            sheetState = sheetTimePickerState,
-            onDismissRequest = {
-                showEndTimePickerBottomSheet = false
-            },
+        Spacer(modifier = Modifier.weight(1f))
+
+        MementoChipSelector(
+            selectorType = if (title == "Repeat" || title == "End Repeat") SelectorType.BASIC else if (title == "Tag") SelectorType.TAG else SelectorType.DATESELECTOR,
+            isClicked = false,
+            onClickedChange = { onDateClick() },
+            content = dateText,
+            tagColor = tagColor,
         )
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showRepeatBottomSheet,
-            content = {
-                RepeatSelectorContent(
-                    onRepeatSelected = { selectedRepeat ->
-                        selectedRepeatText = selectedRepeat
-                    },
-                )
-            },
-            sheetState = sheetRepeatState,
-            onDismissRequest = {
-                showRepeatBottomSheet = false
-            },
-        )
-
-        MementoBottomSheet(
-            isOpenBottomSheet = showTagBottomSheet,
-            content = {
-                TagSelectorContent(
-                    onTagSelected = { color, tag ->
-                        selectedTagColor = color
-                        selectedTagText = tag
-                    },
-                )
-            },
-            sheetState = sheetTagState,
-            onDismissRequest = {
-                showTagBottomSheet = false
-            },
-        )
+        timeText?.let {
+            MementoChipSelector(
+                selectorType = SelectorType.TIMESELECTOR,
+                isClicked = false,
+                onClickedChange = { onTimeClick?.invoke() },
+                content = timeText,
+                tagColor = null,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
     }
 }
+
 
 @Preview
 @Composable

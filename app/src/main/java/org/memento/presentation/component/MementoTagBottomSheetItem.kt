@@ -29,7 +29,6 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
-import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoTagBottomSheetItem(

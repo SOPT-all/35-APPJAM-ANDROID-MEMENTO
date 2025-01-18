@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -72,9 +73,10 @@ fun MainPlusBottomSheet(
                             },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(image),
                         contentDescription = "탭 아이콘",
+                        tint = if(isSelected) darkModeColors.gray02 else darkModeColors.gray07,
                     )
                 }
             }

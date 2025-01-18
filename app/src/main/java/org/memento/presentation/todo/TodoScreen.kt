@@ -25,7 +25,7 @@ import org.memento.presentation.todo.component.TodoDateLine
 import java.time.LocalDate
 
 data class TodoItem(
-    val date: LocalDate,  // 날짜
+    val date: LocalDate, // 날짜
 )
 
 @Composable
@@ -37,20 +37,21 @@ fun TodoScreen() {
     val selectedDate = remember { mutableStateOf(today) }
     val coroutineScope = rememberCoroutineScope()
 
-    val todoList = remember {
-        mutableStateListOf<LocalDate>().apply {
-            for (i in -30..30) { // today 기준 플마 30일
-                add(today.plusDays(i.toLong()))
+    val todoList =
+        remember {
+            mutableStateListOf<LocalDate>().apply {
+                for (i in -30..30) { // today 기준 플마 30일
+                    add(today.plusDays(i.toLong()))
+                }
             }
         }
-    }
 
     LaunchedEffect(todolistState) {
         snapshotFlow { todolistState.layoutInfo }
             .collect { layoutInfo ->
                 val firstVisibleIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: return@collect
                 val lastVisibleIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@collect
-                if (firstVisibleIndex < 5) { //스크롤이 위로 가면 과거 날짜 추가
+                if (firstVisibleIndex < 5) { // 스크롤이 위로 가면 과거 날짜 추가
                     val firstDate = todoList.first()
                     repeat(10) { todoList.add(0, firstDate.minusDays(it.toLong() + 1)) }
                 } else if (lastVisibleIndex > todoList.size - 10) {
@@ -75,8 +76,8 @@ fun TodoScreen() {
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
     ) {
         MementoTopBar(
             date = today.toString(),
@@ -88,7 +89,7 @@ fun TodoScreen() {
             onDateClick = { newDate ->
                 selectedDate.value = newDate
                 coroutineScope.launch { scrollToDate(newDate) }
-            }
+            },
         )
         TodoBoxUp()
         Box(

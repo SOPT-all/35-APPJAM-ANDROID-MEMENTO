@@ -16,19 +16,22 @@ fun TodoBoxDown(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(28.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        mementoColors.scrollBox.copy(alpha = 0f),
-                        mementoColors.scrollBox,
-                    ),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY,
-                )
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(28.dp)
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors =
+                                listOf(
+                                    mementoColors.scrollBox.copy(alpha = 0f),
+                                    mementoColors.scrollBox,
+                                ),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY,
+                        ),
+                ),
     )
 }
 
@@ -37,7 +40,6 @@ fun TodoBoxDown(
 fun TodoBoxUpPrev() {
     TodoBoxUp()
 }
-
 
 @Preview
 @Composable

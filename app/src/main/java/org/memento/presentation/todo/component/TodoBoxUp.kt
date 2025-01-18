@@ -15,18 +15,21 @@ fun TodoBoxUp(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(36.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        mementoColors.scrollBox,
-                        mementoColors.scrollBox.copy(alpha = 0f),
-                    ),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY,
-                )
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(36.dp)
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors =
+                                listOf(
+                                    mementoColors.scrollBox,
+                                    mementoColors.scrollBox.copy(alpha = 0f),
+                                ),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY,
+                        ),
+                ),
     )
 }

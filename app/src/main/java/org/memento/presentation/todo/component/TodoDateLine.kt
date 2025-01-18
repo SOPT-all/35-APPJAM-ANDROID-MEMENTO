@@ -17,26 +17,29 @@ import java.time.LocalDate
 @Composable
 fun TodoDateLine(
     date: LocalDate,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .then(modifier)
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .then(modifier)
+                .fillMaxWidth(),
     ) {
         HorizontalDivider(
-            modifier = Modifier
-                .padding(vertical = 5.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 5.dp),
             thickness = 1.dp,
-            color = darkModeColors.gray07
+            color = darkModeColors.gray07,
         )
         Spacer(Modifier.height(2.dp))
         Text(
             text = date.toString(),
             color = darkModeColors.gray05,
             style = defaultMementoTypography.body_b_14,
-            modifier = Modifier
-                .padding(start = 22.dp, top = 2.dp, bottom = 2.dp)
+            modifier =
+                Modifier
+                    .padding(start = 22.dp, top = 2.dp, bottom = 2.dp),
         )
     }
 }

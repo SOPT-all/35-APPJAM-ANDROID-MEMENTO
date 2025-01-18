@@ -18,7 +18,7 @@ fun NavGraphBuilder.todayNavGraph(
     navigateToReqres: () -> Unit,
 ) {
     composable(TodayRoute.TODAY) {
-        TodayScreen(navigateToReqres = navigateToReqres)
+        TodayScreen()
     }
 }
 

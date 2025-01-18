@@ -18,9 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
-import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoAiFloatingButton(

@@ -32,7 +32,7 @@ fun MementoChipSelector(
     isClicked: Boolean = false,
     onClickedChange: (Boolean) -> Unit = {},
     content: String,
-    tagColor: String?,
+    tagColor: String? = null,
     modifier: Modifier = Modifier,
 ) {
     var clicked by remember { mutableStateOf(isClicked) }
@@ -42,9 +42,8 @@ fun MementoChipSelector(
             Modifier
                 .then(modifier)
                 .clip(RoundedCornerShape(selectorType.cornerRadius))
-                .background(color = if (clicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
+                .background(color = if (isClicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
                 .noRippleClickable {
-                    clicked = !clicked
                     onClickedChange(clicked)
                 },
         Alignment.Center,

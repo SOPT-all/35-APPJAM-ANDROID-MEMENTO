@@ -35,5 +35,48 @@
     <string name="date_example">Jan 30, 2025</string>
     <string name="time_example">00:00 AM</string>
 
+    <!--    Onboarding-->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_1">1</string>
+    <string name="onboarding_2">2</string>
+    <string name="onboarding_3">3</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_yes">Yes</string>
+    <string name="onboarding_no">No</string>
+    <string name="onboarding_start">Start MEMENTO</string>
+    <string name="onboarding_back">back</string>
+    <string name="onboarding_logo">logo</string>
+
+    <!--    Onboarding/Login-->
+    <string name="onboarding_login_title">Less Noise, \nMore Progress.</string>
+    <string name="onboarding_google_login">Continue with Google</string>
+    <string name="onboarding_login_contract">by continuing, you agree to memento\&apos;s</string>
+    <string name="onboarding_login_contract_link">Term of use</string>
+
+    <!--    Onboarding1-->
+    <string name="onboarding1_title">Set your\nwake-up and\nwind-down hours.</string>
+    <string name="onboarding1_wake_up">Wake-up</string>
+    <string name="onboarding1_wind_down">Wind-down</string>
+    <!--    Onboarding2-->
+    <string name="onboarding2_title">What do you do for work?</string>
+    <string name="onboarding2_tech">Technology &amp; IT</string>
+    <string name="onboarding2_data">Data &amp; Analytics</string>
+    <string name="onboarding2_design">Design &amp; Creativity</string>
+    <string name="onboarding2_business">Business &amp; Management</string>
+    <string name="onboarding2_edu">Education &amp; Training</string>
+    <string name="onboarding2_health">Healthcare &amp; Wellness</string>
+    <string name="onboarding2_free">Freelance &amp; Self-Employment</string>
+    <string name="onboarding2_service">Service &amp; Hospitality</string>
+    <string name="onboarding2_engineer">Engineering &amp; Manufacturing</string>
+    <string name="onboarding2_placeholder">Please specify, max 10 characters</string>
+    <string name="onboarding2_other">Other</string>
+    <!--    Onboarding3-->
+    <string name="onboarding3_title">Discover how you work best.</string>
+    <string name="onboarding3_q1">Do you feel stressed when you have an unorganized schedule?</string>
+    <string name="onboarding3_q2">Do you often forget important tasks or appointments?</string>
+    <string name="onboarding3_q3">Do you prefer reminders to help you stay on track with your tasks?</string>
+    <string name="onboarding3_q4">How important is it for you to take breaks during work or study?</string>
+    <!--    Onboarding4-->
+    <string name="onboarding4_title">Connect your calendar\nfor seamless scheduling.</string>
 
 </resources>

@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
+
+    id("com.google.gms.google-services")
 }
 
 val properties =
@@ -116,6 +118,15 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
 
     implementation(libs.compose.wheel.picker)
+
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // Google
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 }
 
 ktlint {

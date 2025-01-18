@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.component.MainBottomBar
@@ -42,6 +43,7 @@ fun MainScreenContent(
                 onAddButtonClick = { navigator.navigateToBottomSheet() },
             )
         },
+        floatingActionButton = { MementoAiFloatingButton(onClick = {}) }
     )
 }
 

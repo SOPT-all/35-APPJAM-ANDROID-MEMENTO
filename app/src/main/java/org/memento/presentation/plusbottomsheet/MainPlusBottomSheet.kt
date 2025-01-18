@@ -82,6 +82,7 @@ fun MainPlusBottomSheet(
 
     HorizontalPager(
         state = pagerState,
+        userScrollEnabled = false,
     ) { page ->
         when (page) {
             0 ->

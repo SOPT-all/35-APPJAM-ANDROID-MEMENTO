@@ -23,11 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
-import org.memento.domain.type.SelectorType
-import org.memento.presentation.MementoChipSelector
+import org.memento.presentation.component.MementoBottomSheet
+import org.memento.presentation.component.MementoChipSelector
+import org.memento.presentation.component.TagSelectorContent
+import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.MementoBottomSheet
-import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 

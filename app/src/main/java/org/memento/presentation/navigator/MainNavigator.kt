@@ -14,7 +14,6 @@ import org.memento.presentation.onboarding.navigation.navigationOnboarding1
 import org.memento.presentation.onboarding.navigation.navigationOnboarding2
 import org.memento.presentation.onboarding.navigation.navigationOnboarding3
 import org.memento.presentation.onboarding.navigation.navigationOnboarding4
-import org.memento.presentation.plusbottomsheet.navigation.navigationBottomSheet
 import org.memento.presentation.reqres.navigation.navigationReqres
 import org.memento.presentation.today.navigation.navigationToday
 import org.memento.presentation.todo.navigation.navigationTodo

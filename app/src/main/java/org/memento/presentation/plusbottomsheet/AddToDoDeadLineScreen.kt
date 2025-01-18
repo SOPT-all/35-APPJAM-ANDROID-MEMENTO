@@ -22,12 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.memento.R
-import org.memento.domain.type.SelectorType
-import org.memento.presentation.MementoChipSelector
+import org.memento.presentation.component.DeadLineSelectorContent
+import org.memento.presentation.component.MementoBottomSheet
+import org.memento.presentation.component.MementoChipSelector
+import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.DeadLineSelectorContent
-import org.memento.ui.MementoBottomSheet
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
@@ -39,9 +39,9 @@ fun AddToDoDeadLineScreen(
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.gray10),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.gray10),
     ) {
         val sheetDeadLineState = rememberModalBottomSheetState()
         var showDeadLineBottomSheet by remember { mutableStateOf(false) }
@@ -50,9 +50,9 @@ fun AddToDoDeadLineScreen(
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 6.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
@@ -62,23 +62,23 @@ fun AddToDoDeadLineScreen(
             Text(
                 text = "Done",
                 modifier =
-                    Modifier
-                        .padding(horizontal = 18.dp, vertical = 12.dp)
-                        .noRippleClickable {
-                            onDone(selectedDateText)
-                        },
+                Modifier
+                    .padding(horizontal = 18.dp, vertical = 12.dp)
+                    .noRippleClickable {
+                        onDone(selectedDateText)
+                    },
                 style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray07,
-                    ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray07,
+                ),
             )
         }
 
         Column(
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp, vertical = 26.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
@@ -89,9 +89,9 @@ fun AddToDoDeadLineScreen(
                 Text(
                     text = "Deadline",
                     style =
-                        MementoTheme.typography.body_r_16.copy(
-                            color = darkModeColors.gray05,
-                        ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray05,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

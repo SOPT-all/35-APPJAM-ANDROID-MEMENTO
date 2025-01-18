@@ -26,6 +26,7 @@ import org.memento.presentation.navigator.component.MainBottomBar
 import org.memento.presentation.navigator.component.MainNavHost
 import org.memento.presentation.navigator.rememberMainNavigator
 import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
+import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.ui.theme.darkModeColors
@@ -62,10 +63,10 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.73f)
-                        .imePadding(),
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.73f)
+                    .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -78,6 +79,9 @@ fun MainScreenContent(
                             onNavigateTagSetting = {
                                 currentBottomSheet = BottomSheetType.TAG
                             },
+                            onNavigateEisenSetting = {
+                                currentBottomSheet = BottomSheetType.EISEN
+                            }
                         )
 
                     BottomSheetType.DEADLINE ->
@@ -98,11 +102,14 @@ fun MainScreenContent(
                             },
                         )
 
-                    BottomSheetType.URGENCY ->
-                        AddToDoDeadLineScreen(
+                    BottomSheetType.EISEN ->
+                        AddToDoEisenScreen(
                             onClose = { currentBottomSheet = null },
-                            onDone = { },
+                            onDone = {
+
+                            },
                         )
+
 
                     null -> {}
                 }
@@ -139,7 +146,7 @@ enum class BottomSheetType {
     MAIN,
     DEADLINE,
     TAG,
-    URGENCY,
+    EISEN
 }
 
 @Preview(showBackground = true)

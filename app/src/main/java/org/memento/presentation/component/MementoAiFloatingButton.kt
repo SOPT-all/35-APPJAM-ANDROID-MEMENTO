@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.util.noRippleClickable
+import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoAiFloatingButton(
@@ -32,7 +34,7 @@ fun MementoAiFloatingButton(
         modifier =
             modifier
                 .background(
-                    color = if (isClicked) Color.Green else darkModeColors.gray09,
+                    color = if (isClicked) darkModeColors.green else darkModeColors.gray09,
                     shape = CircleShape,
                 )
                 .noRippleClickable {

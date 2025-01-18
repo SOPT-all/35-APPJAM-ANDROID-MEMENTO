@@ -32,7 +32,7 @@ fun MementoAiFloatingButton(
         modifier =
             modifier
                 .background(
-                    color = if (isClicked) Color.Green else darkModeColors.gray09,
+                    color = if (isClicked) darkModeColors.green else darkModeColors.gray09,
                     shape = CircleShape,
                 )
                 .noRippleClickable {

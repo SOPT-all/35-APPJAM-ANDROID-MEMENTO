@@ -119,7 +119,7 @@ fun MementoWeeklyCalendar(
                                     .background(
                                         color =
                                             when {
-                                                isSelected -> Color.White
+                                                isSelected -> darkModeColors.gray04
                                                 isToday -> Color.Transparent
                                                 else -> Color.Transparent
                                             },
@@ -132,8 +132,8 @@ fun MementoWeeklyCalendar(
                                 color =
                                     when {
                                         isSelected && currentDate == today -> Color.Black
-                                        isSelected -> Color.Black
-                                        isToday -> Color.Green
+                                        isSelected -> darkModeColors.black
+                                        isToday -> darkModeColors.green
                                         else -> darkModeColors.gray06
                                     },
                                 textAlign = TextAlign.Center,

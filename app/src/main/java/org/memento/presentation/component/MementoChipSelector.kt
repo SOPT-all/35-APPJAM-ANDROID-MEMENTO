@@ -1,4 +1,4 @@
-package org.memento.presentation
+package org.memento.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.memento.R
-import org.memento.domain.type.SelectorType
+import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
@@ -33,7 +33,7 @@ fun MementoChipSelector(
     isLimited: Boolean? = null,
     onClickedChange: (Boolean) -> Unit = {},
     content: String,
-    tagColor: String?,
+    tagColor: String? = null,
     modifier: Modifier = Modifier,
     isBottomSheetOpen: Boolean = false,
 ) {

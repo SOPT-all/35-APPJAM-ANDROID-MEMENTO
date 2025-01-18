@@ -1,4 +1,4 @@
-package org.memento.domain.type
+package org.memento.presentation.type
 
 enum class DeadLineType(
     val text: String,

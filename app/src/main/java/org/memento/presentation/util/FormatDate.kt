@@ -3,6 +3,8 @@ package org.memento.presentation.util
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 fun formatDate(timestamp: Long): String {
     val formatter = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
@@ -24,4 +26,9 @@ fun parseDateTime(
 ): Date {
     val formatter = SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.ENGLISH)
     return formatter.parse("$date $time") ?: Date() // Sun Jan 01 15:00 UTC 2023
+}
+
+fun todoFormatDate(localDate: LocalDate): String {
+    val formatter = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH)
+    return localDate.format(formatter)
 }

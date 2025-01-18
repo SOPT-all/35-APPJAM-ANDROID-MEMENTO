@@ -1,6 +1,5 @@
 package org.memento.presentation.plusbottomsheet
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,7 +75,7 @@ fun MainPlusBottomSheet(
                     Icon(
                         painter = painterResource(image),
                         contentDescription = "탭 아이콘",
-                        tint = if(isSelected) darkModeColors.gray02 else darkModeColors.gray07,
+                        tint = if (isSelected) darkModeColors.gray02 else darkModeColors.gray07,
                     )
                 }
             }

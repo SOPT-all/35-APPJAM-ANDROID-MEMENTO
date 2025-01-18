@@ -3,7 +3,6 @@ package org.memento.ui.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import org.memento.presentation.component.MementoTodoItem
 
 @Immutable
 sealed class MementoColorScheme
@@ -55,7 +54,6 @@ val ProgressBar = Color(0xFFADB3BA)
 val ScrollBox = Color(0xFF010211)
 val BrainDumpExStart = Color(0xFF222531)
 val BrainDumpExEnd = Color(0xFF161B2D)
-
 
 // Memento color scheme class
 @Immutable

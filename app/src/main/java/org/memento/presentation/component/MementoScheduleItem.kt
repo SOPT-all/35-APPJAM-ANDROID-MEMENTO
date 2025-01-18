@@ -27,41 +27,43 @@ import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-
 @Composable
 fun MementoScheduleItem(
     tagColor: Color,
     scheduleTitleText: String,
     timeRange: String,
-    isConnected: Boolean = false
-
+    isConnected: Boolean = false,
 ) {
     val fraction = 3f / 300f
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.navy)
-            .clip(RoundedCornerShape(2.dp))
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.navy)
+                .clip(RoundedCornerShape(2.dp)),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(fraction = fraction)
-                    .aspectRatio(3f / 68f)
-                    .background(color = tagColor)
+                modifier =
+                    Modifier
+                        .fillMaxWidth(fraction = fraction)
+                        .aspectRatio(3f / 68f)
+                        .background(color = tagColor),
             )
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(top = 12.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 12.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(modifier = Modifier.width(12.dp))
 
@@ -69,7 +71,7 @@ fun MementoScheduleItem(
                         painter = painterResource(id = R.drawable.ic_event),
                         contentDescription = null,
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
@@ -81,10 +83,11 @@ fun MementoScheduleItem(
                 }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(modifier = Modifier.padding(start = 46.dp))
                     if (isConnected) {
@@ -92,14 +95,14 @@ fun MementoScheduleItem(
                             painter = painterResource(id = R.drawable.ic_notion),
                             contentDescription = null,
                             tint = Color.Unspecified,
-                            modifier = Modifier.padding(end = 10.dp)
+                            modifier = Modifier.padding(end = 10.dp),
                         )
                     }
 
                     Text(
                         text = timeRange,
                         style = MementoTheme.typography.detail_r_12,
-                        color = darkModeColors.gray05
+                        color = darkModeColors.gray05,
                     )
                 }
             }
@@ -113,19 +116,20 @@ fun MementoScheduleItemWithLine(
     scheduleTitleText: String,
     timeRange: String,
     isConnected: Boolean = false,
-    isFirstUndone: Boolean = false
+    isFirstUndone: Boolean = false,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_progress),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.padding(end = 10.dp)
+            modifier = Modifier.padding(end = 10.dp),
         )
 
         MementoScheduleItem(
@@ -137,7 +141,6 @@ fun MementoScheduleItemWithLine(
     }
 }
 
-
 @Preview()
 @Composable
 private fun preview2() {
@@ -146,7 +149,5 @@ private fun preview2() {
             MementoScheduleItem(tagColor = Color.Red, scheduleTitleText = "ddddd", timeRange = "12:00", isConnected = true)
             MementoTodoItem(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isDone = true)
         }
-
     }
 }
-

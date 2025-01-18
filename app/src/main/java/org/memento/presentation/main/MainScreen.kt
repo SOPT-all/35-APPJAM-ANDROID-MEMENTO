@@ -43,7 +43,7 @@ fun MainScreenContent(
                 onAddButtonClick = { navigator.navigateToBottomSheet() },
             )
         },
-        floatingActionButton = { MementoAiFloatingButton(onClick = {}) }
+        floatingActionButton = { MementoAiFloatingButton(onClick = {}) },
     )
 }
 

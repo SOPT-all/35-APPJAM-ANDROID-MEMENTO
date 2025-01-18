@@ -40,50 +40,57 @@ fun MementoTodoItem(
     todoTitleText: String,
     priorityTagType: PriorityTagType,
     isConnected: Boolean = false,
-    isFirstUndone: Boolean = false
+    isFirstUndone: Boolean = false,
 ) {
     val fraction = 3f / 300f
     val backgroundColord = if (isFirstUndone) Color.White else darkModeColors.navy
-    val backgroundModifier = if (isFirstUndone) {
-        Modifier.background(
-            brush = Brush.linearGradient(
-                colors = listOf(
-                    mementoColors.todoNowStart,
-                    mementoColors.todoNowEnd
-                )
+    val backgroundModifier =
+        if (isFirstUndone) {
+            Modifier.background(
+                brush =
+                    Brush.linearGradient(
+                        colors =
+                            listOf(
+                                mementoColors.todoNowStart,
+                                mementoColors.todoNowEnd,
+                            ),
+                    ),
             )
-        )
-    } else {
-        Modifier.background(color = darkModeColors.navy)
-    }
+        } else {
+            Modifier.background(color = darkModeColors.navy)
+        }
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(backgroundModifier)
-                .clip(RoundedCornerShape(2.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .then(backgroundModifier)
+                    .clip(RoundedCornerShape(2.dp)),
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(fraction = fraction)
-                        .aspectRatio(3f / 68f)
-                        .background(color = tagColor)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(fraction = fraction)
+                            .aspectRatio(3f / 68f)
+                            .background(color = tagColor),
                 )
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .padding(top = 12.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                            .padding(top = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.width(14.dp))
 
@@ -92,11 +99,11 @@ fun MementoTodoItem(
                             checked = isDone,
                             onCheckedChange = onCheckedChange,
                             colors =
-                            CheckboxDefaults.colors(
-                                uncheckedColor = darkModeColors.gray05,
-                                checkedColor = darkModeColors.gray05,
-                                checkmarkColor = darkModeColors.black,
-                            ),
+                                CheckboxDefaults.colors(
+                                    uncheckedColor = darkModeColors.gray05,
+                                    checkedColor = darkModeColors.gray05,
+                                    checkmarkColor = darkModeColors.black,
+                                ),
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
@@ -109,10 +116,11 @@ fun MementoTodoItem(
                     }
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.padding(start = 44.dp))
                         if (isConnected) {
@@ -120,7 +128,7 @@ fun MementoTodoItem(
                                 painter = painterResource(id = R.drawable.ic_notion),
                                 contentDescription = null,
                                 tint = Color.Unspecified,
-                                modifier = Modifier.padding(end = 10.dp)
+                                modifier = Modifier.padding(end = 10.dp),
                             )
                         }
                         Icon(
@@ -131,7 +139,7 @@ fun MementoTodoItem(
                         Text(
                             text = "dfdf",
                             style = MementoTheme.typography.detail_r_12,
-                            color = darkModeColors.gray05
+                            color = darkModeColors.gray05,
                         )
                     }
                 }
@@ -140,14 +148,14 @@ fun MementoTodoItem(
 
         if (isDone) {
             Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .clip(RoundedCornerShape(2.dp))
-                    .zIndex(0f)
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .clip(RoundedCornerShape(2.dp))
+                        .zIndex(0f),
             )
         }
-
     }
 }
 
@@ -160,19 +168,20 @@ fun MementoTodoItemWithLine(
     priorityTagType: PriorityTagType,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_progress),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.padding(end = 10.dp)
+            modifier = Modifier.padding(end = 10.dp),
         )
 
         MementoTodoItem(
@@ -182,11 +191,10 @@ fun MementoTodoItemWithLine(
             todoTitleText = todoTitleText,
             priorityTagType = priorityTagType,
             isConnected = isConnected,
-            isFirstUndone = isFirstUndone
+            isFirstUndone = isFirstUndone,
         )
     }
 }
-
 
 @Preview()
 @Composable
@@ -195,4 +203,3 @@ private fun preview2() {
         MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isFirstUndone = true)
     }
 }
-

@@ -20,7 +20,6 @@ import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-
 @Composable
 fun AllDayScheduleTag(
     allDayText: String,
@@ -28,20 +27,23 @@ fun AllDayScheduleTag(
 ) {
     val fraction = 5f / 360f
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp)
-            .background(color = darkModeColors.navy)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
+                .background(color = darkModeColors.navy),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(fraction = fraction)
-                    .aspectRatio(5f / 30f)
-                    .background(color = tagColor)
+                modifier =
+                    Modifier
+                        .fillMaxWidth(fraction = fraction)
+                        .aspectRatio(5f / 30f)
+                        .background(color = tagColor),
             )
 
             Spacer(modifier = Modifier.width(22.dp))
@@ -50,21 +52,16 @@ fun AllDayScheduleTag(
                 text = allDayText,
                 style = MementoTheme.typography.body_r_14,
                 color = darkModeColors.gray05,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
             )
         }
     }
 }
 
-
-
 @Preview()
 @Composable
 private fun preview() {
     MEMENTOTheme {
-
         AllDayScheduleTag(allDayText = "하이하이", tagColor = Color.Red)
-
     }
 }
-

@@ -41,7 +41,7 @@ fun OnboardingQuestionBox(
         Column(
             modifier =
                 Modifier
-                    .padding(horizontal = 13.dp, vertical = 14.dp),
+                    .padding(14.dp),
         ) {
             Text(
                 text = stringResource(id = question),

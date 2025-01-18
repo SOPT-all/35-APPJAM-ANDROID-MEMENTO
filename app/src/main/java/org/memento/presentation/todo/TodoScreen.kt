@@ -87,10 +87,13 @@ fun TodoScreen() {
         MementoTopBar(
             date = todoFormatDate(today),
             year = nowYear,
-            onDateClick = {},
+            onDateClick = {
+                selectedDate.value = today
+            },
             onIconClick = {},
         )
         MementoWeeklyCalendar(
+            selectedDate = selectedDate.value,
             onDateClick = { newDate ->
                 selectedDate.value = newDate
                 coroutineScope.launch { scrollToDate(newDate) }

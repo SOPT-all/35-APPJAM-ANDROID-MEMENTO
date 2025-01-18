@@ -247,7 +247,7 @@ val dummyData: List<MementoItem> =
             priority = PriorityTagType.Immediate,
             order = 6,
             isConnected = true,
-            isFirstUndone = false,
+            isFirstUndone = true,
         ),
         MementoItem.TodoItem(
             id = "8",
@@ -263,6 +263,15 @@ val dummyData: List<MementoItem> =
             timeRange = "12 PM - 4 PM (4h)",
             order = 3,
             isConnected = true,
+        ),
+        MementoItem.TodoItem(
+            id = "10",
+            title = "이건 마지막에",
+            isChecked = false,
+            priority = PriorityTagType.None,
+            order = 12,
+            isConnected = false,
+            isFirstUndone = true,
         ),
     ).sortedBy { item ->
         when (item) {

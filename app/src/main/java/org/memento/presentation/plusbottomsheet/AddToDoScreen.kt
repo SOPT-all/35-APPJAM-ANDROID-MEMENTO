@@ -48,7 +48,7 @@ fun AddToDoScreen(
     deadLineText: String,
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
-    onNavigateEisenHourSetting: () -> Unit
+    onNavigateEisenHourSetting: () -> Unit,
 ) {
     var selectedDateText by remember { mutableStateOf("Today") }
     var isCalendarVisible by remember { mutableStateOf(false) }
@@ -63,31 +63,31 @@ fun AddToDoScreen(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 23.dp, vertical = 5.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 23.dp, vertical = 5.dp),
     ) {
         Row {
             Text(
                 text = "Add to-do,",
                 style =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.gray07,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
 
             Text(
                 text = selectedDateText,
                 modifier =
-                Modifier
-                    .padding(start = 5.dp)
-                    .noRippleClickable {
-                        isCalendarVisible = true
-                    },
+                    Modifier
+                        .padding(start = 5.dp)
+                        .noRippleClickable {
+                            isCalendarVisible = true
+                        },
                 style =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
             )
 
             if (isCalendarVisible) {
@@ -108,22 +108,22 @@ fun AddToDoScreen(
             value = addToDoText,
             onValueChange = { addToDoText = it },
             modifier =
-            Modifier
-                .background(color = Color.Transparent)
-                .focusRequester(focusRequester)
-                .padding(top = 16.dp),
+                Modifier
+                    .background(color = Color.Transparent)
+                    .focusRequester(focusRequester)
+                    .padding(top = 16.dp),
             textStyle =
-            MementoTheme.typography.body_b_16.copy(
-                color = darkModeColors.white,
-            ),
+                MementoTheme.typography.body_b_16.copy(
+                    color = darkModeColors.white,
+                ),
             cursorBrush =
-            Brush.verticalGradient(
-                listOf(darkModeColors.green, darkModeColors.green),
-            ),
+                Brush.verticalGradient(
+                    listOf(darkModeColors.green, darkModeColors.green),
+                ),
             keyboardOptions =
-            KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences,
-            ),
+                KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -135,12 +135,12 @@ fun AddToDoScreen(
         ) {
             Row(
                 modifier =
-                Modifier
-                    .background(color = darkModeColors.gray09)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onNavigateDeadLineSetting()
-                    },
+                    Modifier
+                        .background(color = darkModeColors.gray09)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onNavigateDeadLineSetting()
+                        },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_deadline),
@@ -149,56 +149,56 @@ fun AddToDoScreen(
                 Text(
                     text = deadLineText,
                     style =
-                    MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray02,
-                    ),
-                )
-            }
-
-            Box(
-                modifier =
-                Modifier
-                    .background(color = darkModeColors.gray09)
-                    .align(alignment = Alignment.CenterVertically)
-                    .padding(all = 16.dp)
-                    .noRippleClickable {
-                        onNavigateTagSetting()
-                    },
-            ) {
-                Box(
-                    modifier =
-                    Modifier
-                        .size(10.dp)
-                        .background(
-                            color = changeHexToColor(hex = tagColor),
-                            shape = CircleShape,
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray02,
                         ),
                 )
             }
 
             Box(
                 modifier =
-                Modifier
-                    .background(color = darkModeColors.gray09)
-                    .align(alignment = Alignment.CenterVertically)
-                    .padding(all = 8.dp)
-                    .noRippleClickable {
-                        onNavigateEisenHourSetting()
-                    },
+                    Modifier
+                        .background(color = darkModeColors.gray09)
+                        .align(alignment = Alignment.CenterVertically)
+                        .padding(all = 16.dp)
+                        .noRippleClickable {
+                            onNavigateTagSetting()
+                        },
             ) {
                 Box(
                     modifier =
+                        Modifier
+                            .size(10.dp)
+                            .background(
+                                color = changeHexToColor(hex = tagColor),
+                                shape = CircleShape,
+                            ),
+                )
+            }
+
+            Box(
+                modifier =
                     Modifier
-                        .background(
-                            color = darkModeColors.gray08,
-                            shape = RoundedCornerShape(2.dp),
-                        )
-                        .padding(all = 2.dp),
-                    contentAlignment = Alignment.Center
-                ){
+                        .background(color = darkModeColors.gray09)
+                        .align(alignment = Alignment.CenterVertically)
+                        .padding(all = 8.dp)
+                        .noRippleClickable {
+                            onNavigateEisenHourSetting()
+                        },
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .background(
+                                color = darkModeColors.gray08,
+                                shape = RoundedCornerShape(2.dp),
+                            )
+                            .padding(all = 2.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_eisen_hour),
-                        contentDescription = "아이젠 하워 버튼"
+                        contentDescription = "아이젠 하워 버튼",
                     )
                 }
             }
@@ -207,21 +207,21 @@ fun AddToDoScreen(
 
             Box(
                 modifier =
-                Modifier.background(
-                    shape = CircleShape,
-                    color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                ),
+                    Modifier.background(
+                        shape = CircleShape,
+                        color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                    ),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                    Modifier
-                        .padding(horizontal = 13.dp)
-                        .padding(top = 12.dp, bottom = 10.dp)
-                        .noRippleClickable {
-                            isShowToast = true
-                        },
+                        Modifier
+                            .padding(horizontal = 13.dp)
+                            .padding(top = 12.dp, bottom = 10.dp)
+                            .noRippleClickable {
+                                isShowToast = true
+                            },
                 )
             }
         }
@@ -242,6 +242,6 @@ fun AddToDoScreenPreview() {
         deadLineText = "",
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
-        onNavigateEisenHourSetting = { }
+        onNavigateEisenHourSetting = { },
     )
 }

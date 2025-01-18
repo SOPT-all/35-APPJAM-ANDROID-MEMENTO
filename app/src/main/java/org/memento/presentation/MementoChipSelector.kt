@@ -35,14 +35,15 @@ fun MementoChipSelector(
     content: String,
     tagColor: String?,
     modifier: Modifier = Modifier,
-    isBottomSheetOpen: Boolean = false
+    isBottomSheetOpen: Boolean = false,
 ) {
-    val backgroundColor = when {
-        isLimited == true -> darkModeColors.navy
-        isBottomSheetOpen -> selectorType.clickedBackgroundColor
-        isClicked -> selectorType.clickedBackgroundColor
-        else -> selectorType.unClickedBackgroundColor
-    }
+    val backgroundColor =
+        when {
+            isLimited == true -> darkModeColors.navy
+            isBottomSheetOpen -> selectorType.clickedBackgroundColor
+            isClicked -> selectorType.clickedBackgroundColor
+            else -> selectorType.unClickedBackgroundColor
+        }
 
     Box(
         modifier =

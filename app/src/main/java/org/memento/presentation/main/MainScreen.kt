@@ -63,10 +63,10 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
-                    .imePadding(),
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -81,7 +81,7 @@ fun MainScreenContent(
                             },
                             onNavigateEisenSetting = {
                                 currentBottomSheet = BottomSheetType.EISEN
-                            }
+                            },
                         )
 
                     BottomSheetType.DEADLINE ->
@@ -106,10 +106,8 @@ fun MainScreenContent(
                         AddToDoEisenScreen(
                             onClose = { currentBottomSheet = null },
                             onDone = {
-
                             },
                         )
-
 
                     null -> {}
                 }
@@ -146,7 +144,7 @@ enum class BottomSheetType {
     MAIN,
     DEADLINE,
     TAG,
-    EISEN
+    EISEN,
 }
 
 @Preview(showBackground = true)

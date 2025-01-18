@@ -11,10 +11,11 @@ enum class ErrorType(val message: String) {
 
 enum class SuccessType(val message: String) {
     // 성공 타입
-    CREATE_SUCCESS("Created Successfully!")
+    CREATE_SUCCESS("Created Successfully!"),
 }
 
-sealed class ToastType(val backgroundColor : Color){
-    class SUCCESS(val successType: SuccessType): ToastType(darkModeColors.green)
-    class ERROR(val errorType: ErrorType): ToastType(darkModeColors.gray07)
+sealed class ToastType(val backgroundColor: Color) {
+    class SUCCESS(val successType: SuccessType) : ToastType(darkModeColors.green)
+
+    class ERROR(val errorType: ErrorType) : ToastType(darkModeColors.gray07)
 }

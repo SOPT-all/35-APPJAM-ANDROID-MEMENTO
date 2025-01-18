@@ -28,7 +28,7 @@ fun MainPlusBottomSheet(
     deadLineText: String,
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
-    onNavigateEisenSetting: () -> Unit
+    onNavigateEisenSetting: () -> Unit,
 ) {
     val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab, R.drawable.ic_brain_tab)
     val pagerState =
@@ -92,7 +92,7 @@ fun MainPlusBottomSheet(
                     tagColor = tagColor,
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
-                    onNavigateEisenHourSetting = onNavigateEisenSetting
+                    onNavigateEisenHourSetting = onNavigateEisenSetting,
                 )
 
             1 -> AddPlanScreen()
@@ -103,7 +103,7 @@ fun MainPlusBottomSheet(
                     tagColor = tagColor,
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
-                    onNavigateEisenHourSetting = onNavigateEisenSetting
+                    onNavigateEisenHourSetting = onNavigateEisenSetting,
                 )
         }
     }

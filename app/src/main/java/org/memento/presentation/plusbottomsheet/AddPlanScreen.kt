@@ -99,7 +99,11 @@ fun AddPlanScreen() {
         selectedEndTimeText = endTime
     }
 
-    fun calculateEndTime(startDate: String, startTime: String, hoursToAdd: Int = 2): Pair<String, String> {
+    fun calculateEndTime(
+        startDate: String,
+        startTime: String,
+        hoursToAdd: Int = 2,
+    ): Pair<String, String> {
         val startDateTime = parseDateTime(startDate, startTime)
         val calendar = Calendar.getInstance().apply { time = startDateTime }
         calendar.add(Calendar.HOUR_OF_DAY, hoursToAdd)
@@ -132,9 +136,9 @@ fun AddPlanScreen() {
     Column {
         LazyColumn(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 6.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
@@ -142,30 +146,30 @@ fun AddPlanScreen() {
                     value = eventText,
                     onValueChange = { eventText = it },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .background(color = darkModeColors.gray10),
+                        Modifier
+                            .fillMaxWidth()
+                            .background(color = darkModeColors.gray10),
                     textStyle =
-                    MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.white,
-                    ),
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.white,
+                        ),
                     placeholder = {
                         Text(
                             text = "Add your event",
                             style =
-                            MementoTheme.typography.body_b_18.copy(
-                                color = darkModeColors.gray07,
-                            ),
+                                MementoTheme.typography.body_b_18.copy(
+                                    color = darkModeColors.gray07,
+                                ),
                         )
                     },
                     colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = darkModeColors.gray10,
-                        unfocusedContainerColor = darkModeColors.gray10,
-                        cursorColor = darkModeColors.white,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                    ),
+                        TextFieldDefaults.colors(
+                            focusedContainerColor = darkModeColors.gray10,
+                            unfocusedContainerColor = darkModeColors.gray10,
+                            cursorColor = darkModeColors.white,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                        ),
                     singleLine = true,
                 )
             }
@@ -173,9 +177,9 @@ fun AddPlanScreen() {
             item {
                 HorizontalDivider(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .background(darkModeColors.gray08),
+                        Modifier
+                            .fillMaxWidth()
+                            .background(darkModeColors.gray08),
                     thickness = 2.dp,
                 )
             }
@@ -188,9 +192,10 @@ fun AddPlanScreen() {
                     onDateClick = { isStartCalendarVisible = true },
                     timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
                     onTimeClick = {
-                        showStartTimePickerBottomSheet = true },
+                        showStartTimePickerBottomSheet = true
+                    },
                     isAllChecked = isAllDayChecked,
-                    isChipClicked = showStartTimePickerBottomSheet
+                    isChipClicked = showStartTimePickerBottomSheet,
                 )
             }
 
@@ -203,7 +208,7 @@ fun AddPlanScreen() {
                     timeText = if (isAllDayChecked) "All-day" else selectedEndTimeText,
                     onTimeClick = { showEndTimePickerBottomSheet = true },
                     isAllChecked = isAllDayChecked,
-                    isChipClicked = showEndTimePickerBottomSheet
+                    isChipClicked = showEndTimePickerBottomSheet,
                 )
             }
 
@@ -225,18 +230,18 @@ fun AddPlanScreen() {
                             }
                         },
                         colors =
-                        CheckboxDefaults.colors(
-                            uncheckedColor = darkModeColors.gray05,
-                            checkedColor = darkModeColors.gray05,
-                            checkmarkColor = darkModeColors.black,
-                        ),
+                            CheckboxDefaults.colors(
+                                uncheckedColor = darkModeColors.gray05,
+                                checkedColor = darkModeColors.gray05,
+                                checkmarkColor = darkModeColors.black,
+                            ),
                     )
                     Text(
                         text = "All-day",
                         style =
-                        defaultMementoTypography.body_r_14.copy(
-                            darkModeColors.gray05,
-                        ),
+                            defaultMementoTypography.body_r_14.copy(
+                                darkModeColors.gray05,
+                            ),
                     )
                 }
             }
@@ -250,7 +255,7 @@ fun AddPlanScreen() {
                     timeText = null,
                     onTimeClick = null,
                     tagColor = selectedTagColor,
-                    isChipClicked = showTagBottomSheet
+                    isChipClicked = showTagBottomSheet,
                 )
             }
         }
@@ -315,18 +320,18 @@ fun AddPlanScreen() {
 
         Box(
             modifier =
-            Modifier.background(
-                shape = CircleShape,
-                color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-            ),
+                Modifier.background(
+                    shape = CircleShape,
+                    color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                ),
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_send),
                 contentDescription = "전송 버튼",
                 modifier =
-                Modifier
-                    .padding(horizontal = 13.dp)
-                    .padding(top = 12.dp, bottom = 10.dp),
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp),
             )
         }
     }
@@ -353,28 +358,28 @@ fun AddPlanSelectComponent(
         Text(
             text = title,
             style =
-            MementoTheme.typography.body_r_16.copy(
-                color = darkModeColors.gray05,
-            ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray05,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         MementoChipSelector(
             selectorType =
-            when (title) {
-                "Repeat", "End Repeat" -> {
-                    SelectorType.BASIC
-                }
+                when (title) {
+                    "Repeat", "End Repeat" -> {
+                        SelectorType.BASIC
+                    }
 
-                "Tag" -> {
-                    SelectorType.TAG
-                }
+                    "Tag" -> {
+                        SelectorType.TAG
+                    }
 
-                else -> {
-                    SelectorType.DATESELECTOR
-                }
-            },
+                    else -> {
+                        SelectorType.DATESELECTOR
+                    }
+                },
             isClicked = false,
             onClickedChange = {
                 onDateClick()
@@ -389,7 +394,8 @@ fun AddPlanSelectComponent(
                 isClicked = isChipClicked,
                 onClickedChange = {
                     isClicked = it
-                    onTimeClick?.invoke() },
+                    onTimeClick?.invoke()
+                },
                 content = timeText,
                 tagColor = null,
                 modifier = Modifier.padding(start = 10.dp),

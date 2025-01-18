@@ -51,7 +51,6 @@ class MainNavigator(
         navHostController.navigationReqres()
     }
 
-
     fun navigateToOnboarding1() {
         navHostController.navigationOnboarding1()
     }

@@ -60,9 +60,9 @@ fun OnboardingScreen1(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
@@ -84,8 +84,8 @@ fun OnboardingScreen1(
                 )
                 Spacer(
                     modifier =
-                    Modifier
-                        .weight(1f),
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -112,8 +112,8 @@ fun OnboardingScreen1(
                 )
                 Spacer(
                     modifier =
-                    Modifier
-                        .weight(1f),
+                        Modifier
+                            .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,

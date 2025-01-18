@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,8 +28,6 @@ import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.DeadLineSelectorContent
 import org.memento.ui.MementoBottomSheet
-import org.memento.ui.MementoTimePicker
-import org.memento.ui.RepeatSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 

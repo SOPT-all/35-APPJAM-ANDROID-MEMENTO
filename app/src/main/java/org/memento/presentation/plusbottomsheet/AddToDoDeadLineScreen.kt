@@ -47,24 +47,10 @@ fun AddToDoDeadLineScreen(
                 .fillMaxSize()
                 .background(color = darkModeColors.gray10),
     ) {
-        val sheetRepeatState = rememberModalBottomSheetState()
-        var showRepeatBottomSheet by remember { mutableStateOf(false) }
-
         val sheetDeadLineState = rememberModalBottomSheetState()
         var showDeadLineBottomSheet by remember { mutableStateOf(false) }
 
-        val sheetTimePickerState = rememberModalBottomSheetState()
-        var showTimePickerBottomSheet by remember { mutableStateOf(false) }
-
-        var selectedRepeatText by remember { mutableStateOf("Select") }
         var selectedDateText by remember { mutableStateOf("Today") }
-        var selectedTimeText by remember { mutableStateOf("Select Date") }
-
-        var isRepeatClicked by remember { mutableStateOf(false) }
-        var isDeadLineClicked by remember { mutableStateOf(false) }
-        var isTimePickerClicked by remember { mutableStateOf(false) }
-
-        var repeatChecked by remember { mutableStateOf(false) }
 
         Row(
             modifier =
@@ -116,7 +102,7 @@ fun AddToDoDeadLineScreen(
 
                 MementoChipSelector(
                     selectorType = SelectorType.BASIC,
-                    isClicked = isDeadLineClicked,
+                    isClicked = showDeadLineBottomSheet,
                     onClickedChange = {
                         showDeadLineBottomSheet = true
                     },
@@ -124,93 +110,6 @@ fun AddToDoDeadLineScreen(
                     tagColor = null,
                 )
             }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Repeat",
-                    style =
-                        MementoTheme.typography.body_r_16.copy(
-                            color = darkModeColors.gray05,
-                        ),
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Switch(
-                    checked = repeatChecked,
-                    onCheckedChange = { repeatChecked = it },
-                    colors =
-                        SwitchDefaults.colors(
-                            checkedThumbColor = darkModeColors.white,
-                            checkedTrackColor = darkModeColors.gray08,
-                            uncheckedThumbColor = darkModeColors.gray06,
-                            uncheckedTrackColor = darkModeColors.gray07,
-                        ),
-                )
-            }
-
-            if (repeatChecked) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    MementoChipSelector(
-                        selectorType = SelectorType.BASIC,
-                        isClicked = isRepeatClicked,
-                        onClickedChange = {
-                            showRepeatBottomSheet = true
-                        },
-                        content = selectedRepeatText,
-                        tagColor = null,
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "End Repeat",
-                        style =
-                            MementoTheme.typography.body_r_16.copy(
-                                color = darkModeColors.gray05,
-                            ),
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    MementoChipSelector(
-                        selectorType = SelectorType.BASIC,
-                        isClicked = isTimePickerClicked,
-                        onClickedChange = {
-                            showTimePickerBottomSheet = true
-                        },
-                        content = selectedTimeText,
-                        tagColor = null,
-                    )
-                }
-            }
-
-            MementoBottomSheet(
-                isOpenBottomSheet = showRepeatBottomSheet,
-                content = {
-                    RepeatSelectorContent(
-                        onRepeatSelected = { selectedRepeat ->
-                            selectedRepeatText = selectedRepeat
-                        },
-                    )
-                },
-                sheetState = sheetRepeatState,
-                onConfirm = {
-                    showRepeatBottomSheet = false
-                },
-            )
 
             MementoBottomSheet(
                 isOpenBottomSheet = showDeadLineBottomSheet,
@@ -228,20 +127,6 @@ fun AddToDoDeadLineScreen(
                 sheetState = sheetDeadLineState,
                 onConfirm = {
                     showDeadLineBottomSheet = false
-                },
-            )
-
-            MementoBottomSheet(
-                isOpenBottomSheet = showTimePickerBottomSheet,
-                content = {
-                    MementoTimePicker(
-                        selectedTime = selectedTimeText,
-                        onTimeSelected = { selectedTimeText = it },
-                    )
-                },
-                sheetState = sheetTimePickerState,
-                onConfirm = {
-                    showTimePickerBottomSheet = false
                 },
             )
         }

@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.coroutineScope
 import org.memento.R
 import org.memento.domain.type.SelectorType
 import org.memento.presentation.MementoChipSelector
@@ -42,7 +41,6 @@ import org.memento.presentation.util.parseDateTime
 import org.memento.ui.DatePickerModalHandler
 import org.memento.ui.MementoBottomSheet
 import org.memento.ui.MementoTimePicker
-import org.memento.ui.RepeatSelectorContent
 import org.memento.ui.TagSelectorContent
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -82,11 +80,12 @@ fun AddPlanScreen() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        val roundedMinute = when (minute) {
-            in 0..15 -> 0
-            in 16..45 -> 30
-            else -> 0
-        }
+        val roundedMinute =
+            when (minute) {
+                in 0..15 -> 0
+                in 16..45 -> 30
+                else -> 0
+            }
 
         val adjustedHour = if (minute in 46..59) (hour + 1) % 24 else hour
 
@@ -102,16 +101,28 @@ fun AddPlanScreen() {
         selectedEndTimeText = endTime
     }
 
+    fun calculateEndTime(startDate: String, startTime: String, hoursToAdd: Int = 2): Pair<String, String> {
+        val startDateTime = parseDateTime(startDate, startTime)
+        val calendar = Calendar.getInstance().apply { time = startDateTime }
+        calendar.add(Calendar.HOUR_OF_DAY, hoursToAdd)
+
+        val endDate = formatDate(calendar.timeInMillis)
+        val endHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val endMinute = calendar.get(Calendar.MINUTE)
+        val endTime = formatTime(endHour, endMinute)
+
+        return endDate to endTime
+    }
+
     fun updateAllDayCheck() {
         val startDateTime = parseDateTime(selectedStartDateText, selectedStartTimeText)
         val endDateTime = parseDateTime(selectedEndDateText, selectedEndTimeText)
 
         val difference = endDateTime.time - startDateTime.time
 
-        if (difference >= 86_400_000) {
-            isAllDayChecked = true
-        }
+        isAllDayChecked = difference >= 86_400_000
     }
+
     LaunchedEffect(Unit) {
         initialTimeValue()
     }
@@ -120,9 +131,10 @@ fun AddPlanScreen() {
         updateAllDayCheck()
     }
 
-    Column() {
+    Column {
         LazyColumn(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 6.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -179,7 +191,7 @@ fun AddPlanScreen() {
                     timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
                     onTimeClick = { showStartTimePickerBottomSheet = true },
                     isAllChecked = isAllDayChecked,
-                    isStartTimeClicked = isStartTimeClicked
+                    isStartTimeClicked = isStartTimeClicked,
                 )
             }
 
@@ -204,7 +216,14 @@ fun AddPlanScreen() {
                 ) {
                     Checkbox(
                         checked = isAllDayChecked,
-                        onCheckedChange = { isAllDayChecked = it },
+                        onCheckedChange = {
+                            isAllDayChecked = it
+                            if (!it) {
+                                val (endDate, endTime) = calculateEndTime(selectedStartDateText, selectedStartTimeText)
+                                selectedEndDateText = endDate
+                                selectedEndTimeText = endTime
+                            }
+                        },
                         colors =
                         CheckboxDefaults.colors(
                             uncheckedColor = darkModeColors.gray05,
@@ -294,7 +313,6 @@ fun AddPlanScreen() {
 
         Spacer(modifier = Modifier.weight(1f))
 
-
         Box(
             modifier =
             Modifier.background(
@@ -311,7 +329,6 @@ fun AddPlanScreen() {
                     .padding(top = 12.dp, bottom = 10.dp),
             )
         }
-
     }
 }
 
@@ -324,7 +341,7 @@ fun AddPlanSelectComponent(
     onTimeClick: (() -> Unit)?,
     tagColor: String? = null,
     isAllChecked: Boolean? = null,
-    isStartTimeClicked: Boolean = false
+    isStartTimeClicked: Boolean = false,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),

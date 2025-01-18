@@ -29,6 +29,7 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoTagBottomSheetItem(
@@ -113,32 +114,12 @@ fun TagSelectorContent(
 
 fun getDummyTagData(): List<ColorTagData> {
     return listOf(
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Project", "#FFD700"),
-        ColorTagData("Untitled", "#FF5733"),
-        ColorTagData("SOPT", "#33FF57"),
-        ColorTagData("Fitness", "#3357FF"),
-        ColorTagData("Project", "#FFD700"),
+        ColorTagData("Untitled", "#A9ADBB"),
+        ColorTagData("Family", "#FF0D45"),
+        ColorTagData("Hobby", "#FF8162"),
+        ColorTagData("Self-Development", "#149C95"),
+        ColorTagData("Work", "#6CA9E1"),
+        ColorTagData("Personal", "#3867FF"),
     )
 }
 

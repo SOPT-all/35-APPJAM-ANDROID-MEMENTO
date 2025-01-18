@@ -17,6 +17,8 @@ fun MainScreen(
 ) {
     MainScreenContent(
         navigator = navigator,
+        modifier =
+        Modifier,
     )
 }
 

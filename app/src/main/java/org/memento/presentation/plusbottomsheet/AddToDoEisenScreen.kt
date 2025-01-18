@@ -23,13 +23,13 @@ fun AddToDoEisenScreen(
     onDone: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
@@ -39,27 +39,25 @@ fun AddToDoEisenScreen(
             Text(
                 text = "Done",
                 modifier =
-                Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onDone()
-                    },
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onDone()
+                        },
                 style =
-                MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray07,
-                ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
         }
 
         Column(
             modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-
         }
     }
-
 }

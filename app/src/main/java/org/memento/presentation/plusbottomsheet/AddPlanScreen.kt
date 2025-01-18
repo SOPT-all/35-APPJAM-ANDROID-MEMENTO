@@ -70,8 +70,6 @@ fun AddPlanScreen() {
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
 
-    var isStartTimeClicked by remember { mutableStateOf(false) }
-
     fun initialTimeValue() {
         val currentTime = System.currentTimeMillis()
         val startDate = formatDate(currentTime)
@@ -189,9 +187,10 @@ fun AddPlanScreen() {
                     dateText = selectedStartDateText,
                     onDateClick = { isStartCalendarVisible = true },
                     timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
-                    onTimeClick = { showStartTimePickerBottomSheet = true },
+                    onTimeClick = {
+                        showStartTimePickerBottomSheet = true },
                     isAllChecked = isAllDayChecked,
-                    isStartTimeClicked = isStartTimeClicked,
+                    isChipClicked = showStartTimePickerBottomSheet
                 )
             }
 
@@ -204,6 +203,7 @@ fun AddPlanScreen() {
                     timeText = if (isAllDayChecked) "All-day" else selectedEndTimeText,
                     onTimeClick = { showEndTimePickerBottomSheet = true },
                     isAllChecked = isAllDayChecked,
+                    isChipClicked = showEndTimePickerBottomSheet
                 )
             }
 
@@ -250,6 +250,7 @@ fun AddPlanScreen() {
                     timeText = null,
                     onTimeClick = null,
                     tagColor = selectedTagColor,
+                    isChipClicked = showTagBottomSheet
                 )
             }
         }
@@ -264,7 +265,6 @@ fun AddPlanScreen() {
             },
             sheetState = sheetTimePickerState,
             onConfirm = {
-                isStartTimeClicked = true
                 showStartTimePickerBottomSheet = false
             },
         )
@@ -341,8 +341,10 @@ fun AddPlanSelectComponent(
     onTimeClick: (() -> Unit)?,
     tagColor: String? = null,
     isAllChecked: Boolean? = null,
-    isStartTimeClicked: Boolean = false,
+    isChipClicked: Boolean = false,
 ) {
+    var isClicked by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -374,7 +376,9 @@ fun AddPlanSelectComponent(
                 }
             },
             isClicked = false,
-            onClickedChange = { onDateClick() },
+            onClickedChange = {
+                onDateClick()
+            },
             content = dateText,
             tagColor = tagColor,
         )
@@ -382,8 +386,10 @@ fun AddPlanSelectComponent(
         timeText?.let {
             MementoChipSelector(
                 selectorType = SelectorType.TIMESELECTOR,
-                isClicked = isStartTimeClicked,
-                onClickedChange = { onTimeClick?.invoke() },
+                isClicked = isChipClicked,
+                onClickedChange = {
+                    isClicked = it
+                    onTimeClick?.invoke() },
                 content = timeText,
                 tagColor = null,
                 modifier = Modifier.padding(start = 10.dp),

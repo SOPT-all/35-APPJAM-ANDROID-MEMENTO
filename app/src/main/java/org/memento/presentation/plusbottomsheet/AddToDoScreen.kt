@@ -183,14 +183,14 @@ fun AddToDoScreen(
                     .align(alignment = Alignment.CenterVertically)
                     .padding(all = 8.dp)
                     .noRippleClickable {
-                        onNavigateTagSetting()
+                        onNavigateEisenHourSetting()
                     },
             ) {
                 Box(
                     modifier =
                     Modifier
                         .background(
-                            color = changeHexToColor(hex = tagColor),
+                            color = darkModeColors.gray08,
                             shape = RoundedCornerShape(2.dp),
                         )
                         .padding(all = 2.dp),

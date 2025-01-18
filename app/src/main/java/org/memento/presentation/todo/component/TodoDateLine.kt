@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 import java.time.LocalDate
@@ -34,7 +35,7 @@ fun TodoDateLine(
         )
         Spacer(Modifier.height(2.dp))
         Text(
-            text = date.toString(),
+            text = todoFormatDate(date),
             color = darkModeColors.gray05,
             style = defaultMementoTypography.body_b_14,
             modifier =

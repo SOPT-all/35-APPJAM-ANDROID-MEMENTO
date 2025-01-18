@@ -3,10 +3,7 @@ package org.memento.presentation.todo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -28,16 +25,18 @@ import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.todo.component.TodoBoxDown
 import org.memento.presentation.todo.component.TodoBoxUp
 import org.memento.presentation.todo.component.TodoDateLine
+import org.memento.presentation.util.todoFormatDate
 import java.time.LocalDate
 
+// dummy data class
 data class TodoItem(
-    val date: LocalDate, // 날짜
+    val date: LocalDate,
 )
 
 @Composable
 fun TodoScreen() {
     val today = LocalDate.now()
-    val nowYear = LocalDate.now().year.toString() // 2025
+    val nowYear = LocalDate.now().year.toString()
 
     val todolistState = rememberLazyListState()
     val selectedDate = remember { mutableStateOf(today) }
@@ -46,7 +45,7 @@ fun TodoScreen() {
     val todoList =
         remember {
             mutableStateListOf<LocalDate>().apply {
-                for (i in -30..30) { // today 기준 플마 30일
+                for (i in -30..30) {
                     add(today.plusDays(i.toLong()))
                 }
             }
@@ -82,11 +81,11 @@ fun TodoScreen() {
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
     ) {
         MementoTopBar(
-            date = today.toString(),
+            date = todoFormatDate(today),
             year = nowYear,
             onDateClick = {},
             onIconClick = {},
@@ -102,8 +101,9 @@ fun TodoScreen() {
             contentAlignment = Alignment.Center,
         ) {
             TodoBoxUp(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
+                modifier =
+                    Modifier
+                        .align(Alignment.TopCenter),
             )
             LazyColumn(state = todolistState) {
                 items(todoList, key = { it }) { date ->
@@ -113,14 +113,15 @@ fun TodoScreen() {
             }
             MementoAiFloatingButton(
                 onClick = {},
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 20.dp, end = 20.dp)
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter),
             )
         }
     }

@@ -1,7 +1,7 @@
 package org.memento.data.mapper
 
 import org.memento.data.dto.response.ResponseReqresDto
-import org.memento.domain.model.Reqres
+import org.memento.domain.entity.Reqres
 
 fun ResponseReqresDto.toReqres() =
     data.map {

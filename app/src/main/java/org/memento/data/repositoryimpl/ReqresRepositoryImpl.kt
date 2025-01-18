@@ -2,7 +2,7 @@ package org.memento.data.repositoryimpl
 
 import org.memento.data.datastore.ReqresDataSource
 import org.memento.data.mapper.toReqres
-import org.memento.domain.model.Reqres
+import org.memento.domain.entity.Reqres
 import org.memento.domain.repository.ReqresRepository
 import javax.inject.Inject
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
-import org.memento.domain.model.Reqres
+import org.memento.domain.entity.Reqres
 import org.memento.domain.repository.ReqresRepository
 import javax.inject.Inject
 

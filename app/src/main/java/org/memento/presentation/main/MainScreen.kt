@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.component.MainBottomBar
@@ -65,10 +66,10 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.73f)
-                        .imePadding(),
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.73f)
+                    .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -139,6 +140,7 @@ fun MainScreenContent(
                 },
             )
         },
+        floatingActionButton = { MementoAiFloatingButton(onClick = {}) },
     )
 }
 

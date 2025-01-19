@@ -1,4 +1,4 @@
-package org.memento.domain.model
+package org.memento.domain.entity
 
 data class Reqres(
     val avatar: String,

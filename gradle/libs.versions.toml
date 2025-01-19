@@ -37,6 +37,7 @@ retrofitJsonConverter = "1.0.0"
 phoenix = "3.0.0"
 
 ktlint = "12.1.1"
+composeMaterial = "1.4.0"
 
 [libraries]
 ## android
@@ -102,6 +103,7 @@ process-phoenix = { group = "com.jakewharton", name = "process-phoenix", version
 
 ## Wheel Picker
 compose-wheel-picker = { module = "com.github.zj565061763:compose-wheel-picker", version.ref = "composeWheelPicker" }
+androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

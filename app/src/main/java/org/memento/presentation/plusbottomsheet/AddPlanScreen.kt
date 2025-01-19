@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -142,36 +144,36 @@ fun AddPlanScreen() {
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
-                TextField(
-                    value = eventText,
-                    onValueChange = { eventText = it },
-                    modifier =
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(bottom = 3.dp)
+                ) {
+                    BasicTextField(
+                        value = eventText,
+                        onValueChange = { eventText = it },
+                        modifier =
                         Modifier
                             .fillMaxWidth()
-                            .background(color = darkModeColors.gray10),
-                    textStyle =
+                            .background(color = darkModeColors.gray10)
+                            .padding(horizontal = 6.dp),
+                        textStyle =
                         MementoTheme.typography.body_b_18.copy(
                             color = darkModeColors.white,
                         ),
-                    placeholder = {
+                        cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
+                        singleLine = true,
+                    )
+
+                    if (eventText.isEmpty()) {
                         Text(
                             text = "Add your event",
-                            style =
-                                MementoTheme.typography.body_b_18.copy(
-                                    color = darkModeColors.gray07,
-                                ),
+                            modifier = Modifier.padding(horizontal = 6.dp),
+                            style = MementoTheme.typography.body_b_18.copy(
+                                color = darkModeColors.gray07,
+                            ),
                         )
-                    },
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = darkModeColors.gray10,
-                            unfocusedContainerColor = darkModeColors.gray10,
-                            cursorColor = darkModeColors.white,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                        ),
-                    singleLine = true,
-                )
+                    }
+                }
             }
 
             item {
@@ -179,7 +181,7 @@ fun AddPlanScreen() {
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .background(darkModeColors.gray08),
+                            .background(darkModeColors.gray07),
                     thickness = 2.dp,
                 )
             }

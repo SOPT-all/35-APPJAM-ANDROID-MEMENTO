@@ -43,7 +43,7 @@ enum class SelectorType(
     TAG(
         width = 200.dp,
         height = 36.dp,
-        paddingHorizontal = 67.dp,
+        paddingHorizontal = 71.dp,
         paddingVertical = 8.dp,
         cornerRadius = 2.dp,
         clickedBackgroundColor = darkModeColors.gray07,

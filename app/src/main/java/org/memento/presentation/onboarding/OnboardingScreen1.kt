@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
-import org.memento.presentation.component.MementoTimePicker
+import org.memento.presentation.component.MementoWakeTimePicker
 import org.memento.presentation.onboarding.component.OnboardingBottomButton
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
 import org.memento.presentation.type.OnboardingTopType
@@ -128,7 +128,7 @@ fun OnboardingScreen1(
             MementoBottomSheet(
                 isOpenBottomSheet = showTimePickerBottomSheet,
                 content = {
-                    MementoTimePicker(
+                    MementoWakeTimePicker(
                         onTimeSelected = { selectedTime ->
                             when (currentActiveSelector) {
                                 SETTIME.WAKEUP -> {
@@ -151,7 +151,7 @@ fun OnboardingScreen1(
                     )
                 },
                 sheetState = sheetTimePickerState,
-                onDismissRequest = {
+                onConfirm = {
                     showTimePickerBottomSheet = false
                     isClickedWakeUp = false
                     isClickedWindDown = false

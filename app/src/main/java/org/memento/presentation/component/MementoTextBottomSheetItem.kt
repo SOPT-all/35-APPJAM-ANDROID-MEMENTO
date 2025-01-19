@@ -87,16 +87,27 @@ fun DeadLineSelectorContent(
             )
         }
 
-        if (isCalendarVisible) {
-            DatePickerModal(
-                onDateSelected = { selectedDate ->
-                    onDateSelected(selectedDate)
-                },
-                onDismiss = {
-                    isCalendarVisible = false
-                },
-            )
-        }
+        DatePickerModalHandler(
+            isCalendarVisible = isCalendarVisible,
+            onDateSelected = onDateSelected,
+            onDismiss = { isCalendarVisible = false },
+        )
+    }
+}
+
+@Composable
+fun DatePickerModalHandler(
+    isCalendarVisible: Boolean,
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    if (isCalendarVisible) {
+        DatePickerModal(
+            onDateSelected = { selectedDate ->
+                onDateSelected(selectedDate)
+            },
+            onDismiss = onDismiss,
+        )
     }
 }
 

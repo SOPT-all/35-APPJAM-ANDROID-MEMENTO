@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
@@ -38,17 +39,18 @@ fun MementoBottomSheet(
     content: @Composable () -> Unit,
     sheetState: SheetState,
     modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit = {},
+    onConfirm: (String?) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
-
     if (isOpenBottomSheet) {
         coroutineScope.launch {
             sheetState.show()
         }
 
         ModalBottomSheet(
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = {
+                onConfirm(null)
+            },
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray09,
@@ -80,8 +82,8 @@ fun MementoBottomSheet(
                             Modifier
                                 .noRippleClickable {
                                     coroutineScope.launch {
+                                        onConfirm(null)
                                         sheetState.hide()
-                                        onDismissRequest()
                                     }
                                 },
                     )
@@ -178,7 +180,7 @@ fun MementoDateSelectorPreview() {
                 )
             },
             sheetState = sheetRepeatState,
-            onDismissRequest = {
+            onConfirm = { _ ->
                 showRepeatBottomSheet = false
             },
         )
@@ -197,7 +199,7 @@ fun MementoDateSelectorPreview() {
                 )
             },
             sheetState = sheetDeadLineState,
-            onDismissRequest = {
+            onConfirm = { _ ->
                 showDeadLineBottomSheet = false
             },
         )
@@ -211,7 +213,7 @@ fun MementoDateSelectorPreview() {
                 )
             },
             sheetState = sheetTagState,
-            onDismissRequest = {
+            onConfirm = { _ ->
                 showTagBottomSheet = false
             },
         )
@@ -219,15 +221,15 @@ fun MementoDateSelectorPreview() {
         MementoBottomSheet(
             isOpenBottomSheet = showTimePickerBottomSheet,
             content = {
+                var tempTime by remember { mutableStateOf(selectedTimeText) }
                 MementoTimePicker(
-                    onTimeSelected = { selectedTime ->
-                        selectedTimeText = selectedTime
-                        showTimePickerBottomSheet = false
-                    },
+                    selectedTime = tempTime,
+                    onTimeSelected = { tempTime = it },
                 )
             },
             sheetState = sheetTimePickerState,
-            onDismissRequest = {
+            onConfirm = { selectedValue ->
+                selectedTimeText = selectedValue ?: selectedTimeText
                 showTimePickerBottomSheet = false
             },
         )

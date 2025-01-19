@@ -88,7 +88,7 @@ fun MainScreenContent(
 
                     BottomSheetType.DEADLINE ->
                         AddToDoDeadLineScreen(
-                            onClose = { currentBottomSheet = null },
+                            onClose = { currentBottomSheet = BottomSheetType.MAIN },
                             onDone = { deadLine ->
                                 selectedDeadLine = deadLine
                                 currentBottomSheet = BottomSheetType.MAIN
@@ -97,7 +97,7 @@ fun MainScreenContent(
 
                     BottomSheetType.TAG ->
                         AddToDoTagScreen(
-                            onClose = { currentBottomSheet = null },
+                            onClose = { currentBottomSheet = BottomSheetType.MAIN },
                             onDone = { tagColor ->
                                 selectedTagColor = tagColor
                                 currentBottomSheet = BottomSheetType.MAIN
@@ -106,7 +106,7 @@ fun MainScreenContent(
 
                     BottomSheetType.EISEN ->
                         AddToDoEisenScreen(
-                            onClose = { currentBottomSheet = null },
+                            onClose = { currentBottomSheet = BottomSheetType.MAIN },
                             onDone = {
                             },
                         )

@@ -58,6 +58,9 @@ fun AddToDoDeadLineScreen(
             Image(
                 painter = painterResource(R.drawable.ic_back),
                 contentDescription = "뒤로가기 버튼",
+                modifier = Modifier.noRippleClickable {
+                    onClose()
+                }
             )
             Text(
                 text = "Done",

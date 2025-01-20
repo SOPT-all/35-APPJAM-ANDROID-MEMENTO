@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,16 +32,15 @@ fun AddToDoEisenScreen(
     selectedType: PriorityTagType,
     onTypeSelected: (PriorityTagType) -> Unit,
     modifier: Modifier = Modifier,
-
-    ) {
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 6.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
@@ -52,27 +50,27 @@ fun AddToDoEisenScreen(
             Text(
                 text = "Done",
                 modifier =
-                Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        onDone()
-                    },
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            onDone()
+                        },
                 style =
-                MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray07,
-                ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
         }
         Column(
             modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 MementoUrgentChip(selectedType = selectedType)
             }
@@ -83,13 +81,13 @@ fun AddToDoEisenScreen(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(end = 10.dp)
+                modifier = Modifier.padding(end = 10.dp),
             ) {
                 Text(
                     text = "Importance",
                     style = MementoTheme.typography.detail_r_12,
                     modifier = Modifier.rotateVertically(false),
-                    color = Color.White
+                    color = Color.White,
                 )
 
                 MementoPriorityTile(selectedType = PriorityTagType.Low, onTypeSelected = { onTypeSelected })
@@ -98,15 +96,14 @@ fun AddToDoEisenScreen(
                 text = "Select an area,",
                 style = MementoTheme.typography.body_r_16,
                 color = darkModeColors.gray07,
-                modifier = Modifier.padding(top = 15.dp)
+                modifier = Modifier.padding(top = 15.dp),
             )
             Text(
                 text =
-                "or let AI do it for you.",
+                    "or let AI do it for you.",
                 style = MementoTheme.typography.body_r_16,
                 color = darkModeColors.gray07,
             )
-
         }
     }
 }
@@ -114,17 +111,19 @@ fun AddToDoEisenScreen(
 fun Modifier.rotateVertically(clockwise: Boolean = true): Modifier {
     val rotate = rotate(if (clockwise) 90f else -90f)
 
-    val adjustBounds = layout { measurable, constraints ->
-        val placeable = measurable.measure(constraints)
-        layout(placeable.height, placeable.width) {
-            placeable.place(
-                x = -(placeable.width / 2 - placeable.height / 2),
-                y = -(placeable.height / 2 - placeable.width / 2)
-            )
+    val adjustBounds =
+        layout { measurable, constraints ->
+            val placeable = measurable.measure(constraints)
+            layout(placeable.height, placeable.width) {
+                placeable.place(
+                    x = -(placeable.width / 2 - placeable.height / 2),
+                    y = -(placeable.height / 2 - placeable.width / 2),
+                )
+            }
         }
-    }
     return rotate then adjustBounds
 }
+
 @Preview
 @Composable
 private fun ScreenPreview() {

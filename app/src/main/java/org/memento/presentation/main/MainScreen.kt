@@ -67,10 +67,10 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
-                    .imePadding(),
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -111,7 +111,8 @@ fun MainScreenContent(
                             onClose = { currentBottomSheet = null },
                             onDone = {
                             },
-                            selectedType = PriorityTagType.Immediate, onTypeSelected = {}
+                            selectedType = PriorityTagType.Immediate,
+                            onTypeSelected = {},
                         )
 
                     null -> {}

@@ -57,110 +57,118 @@ fun MementoPriorityTile(
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(start = 10.dp)
-                .onGloballyPositioned { coordinates ->
-                    arrowHeight = coordinates.size.height.toFloat()
-                },
+            modifier =
+                Modifier
+                    .wrapContentWidth()
+                    .padding(start = 10.dp)
+                    .onGloballyPositioned { coordinates ->
+                        arrowHeight = coordinates.size.height.toFloat()
+                    },
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Column(
-                modifier = Modifier
-                    .width(1.dp)
-                    .wrapContentHeight()
-                    .height(with(LocalDensity.current) { arrowHeight.toDp() })
-                    .background(
-                        brush =
-                        Brush.linearGradient(
-                            colors = listOf(
-                                darkModeColors.gray04,
-                                mementoColors.todoNowEnd,
-                                mementoColors.todoNowStart
-                            ),
-                        )
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .width(1.dp)
+                        .wrapContentHeight()
+                        .height(with(LocalDensity.current) { arrowHeight.toDp() })
+                        .background(
+                            brush =
+                                Brush.linearGradient(
+                                    colors =
+                                        listOf(
+                                            darkModeColors.gray04,
+                                            mementoColors.todoNowEnd,
+                                            mementoColors.todoNowStart,
+                                        ),
+                                ),
+                        ),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Canvas(
-                    modifier = Modifier
-                        .height(with(LocalDensity.current) { arrowHeight.toDp() })
+                    modifier =
+                        Modifier
+                            .height(with(LocalDensity.current) { arrowHeight.toDp() }),
                 ) {
                     val arrowSize = 10.dp.toPx()
                     drawLine(
                         color = darkModeColors.gray04,
                         start = Offset(size.width / 2, 0f),
                         end = Offset((size.width / 2) - (arrowSize / 2), arrowSize),
-                        strokeWidth = 1.dp.toPx()
+                        strokeWidth = 1.dp.toPx(),
                     )
                     drawLine(
                         color = darkModeColors.gray04,
                         start = Offset(size.width / 2, 0f),
                         end = Offset((size.width / 2) + (arrowSize / 2), arrowSize),
-                        strokeWidth = 1.dp.toPx()
+                        strokeWidth = 1.dp.toPx(),
                     )
                 }
             }
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(16.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(16.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(
-                            brush =
-                            Brush.linearGradient(
-                                colors = listOf(
-                                    darkModeColors.gray04,
-                                    mementoColors.todoNowEnd,
-                                    mementoColors.todoNowStart
-                                ),
-                            )
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(
+                                brush =
+                                    Brush.linearGradient(
+                                        colors =
+                                            listOf(
+                                                darkModeColors.gray04,
+                                                mementoColors.todoNowEnd,
+                                                mementoColors.todoNowStart,
+                                            ),
+                                    ),
+                            ),
                 ) {
                 }
 
                 Canvas(modifier = Modifier.fillMaxWidth()) {
-
                     val arrowSize = 10.dp.toPx()
                     drawLine(
                         color = darkModeColors.gray04,
                         start = Offset(0f, size.height / 2),
                         end = Offset(arrowSize, (size.height / 2) - (arrowSize / 2)),
-                        strokeWidth = 1.dp.toPx()
+                        strokeWidth = 1.dp.toPx(),
                     )
                     drawLine(
                         color = darkModeColors.gray04,
                         start = Offset(0f, size.height / 2),
                         end = Offset(arrowSize, (size.height / 2) + (arrowSize / 2)),
-                        strokeWidth = 1.dp.toPx()
+                        strokeWidth = 1.dp.toPx(),
                     )
                 }
             }
 
             for (row in 0 until 2) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .onGloballyPositioned { coordinates ->
-                            arrowHeight = coordinates.size.height.toFloat() * 2
-                        },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .onGloballyPositioned { coordinates ->
+                                arrowHeight = coordinates.size.height.toFloat() * 2
+                            },
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     for (col in 0 until 2) {
@@ -168,25 +176,25 @@ fun MementoPriorityTile(
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier =
-                            Modifier
-                                .weight(1f)
-                                .aspectRatio(155f / 132f)
-                                .background(
-                                    if (selectedType == type) {
-                                        type.backgroundColor
-                                    } else {
-                                        darkModeColors.gray09
-                                    },
-                                )
-                                .clickable { onTypeSelected(type) },
+                                Modifier
+                                    .weight(1f)
+                                    .aspectRatio(155f / 132f)
+                                    .background(
+                                        if (selectedType == type) {
+                                            type.backgroundColor
+                                        } else {
+                                            darkModeColors.gray09
+                                        },
+                                    )
+                                    .clickable { onTypeSelected(type) },
                         ) {
                             Text(
                                 text = stringResource(id = type.chipDiscription),
                                 style =
-                                MementoTheme.typography.detail_r_12.copy(
-                                    color = if (selectedType == type) darkModeColors.gray06 else darkModeColors.gray07,
-                                    textAlign = TextAlign.Center,
-                                ),
+                                    MementoTheme.typography.detail_r_12.copy(
+                                        color = if (selectedType == type) darkModeColors.gray06 else darkModeColors.gray07,
+                                        textAlign = TextAlign.Center,
+                                    ),
                             )
                         }
                     }

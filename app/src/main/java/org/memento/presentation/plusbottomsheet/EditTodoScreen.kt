@@ -44,46 +44,52 @@ fun EditToDoScreen(
     content: String,
     deadline: String = "Today",
     tag: String = "SOPT",
-    tagColor: String
+    tagColor: String,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = "Cancle",
-                modifier = Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable { onClose() },
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = mementoColors.red,
-                ),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable { onClose() },
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = mementoColors.red,
+                    ),
             )
             Text(
                 text = "Done",
-                modifier = Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable { onDone() },
-                style = MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.white,
-                ),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable { onDone() },
+                style =
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.white,
+                    ),
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(end = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -92,11 +98,12 @@ fun EditToDoScreen(
                 Checkbox(
                     checked = isChecked,
                     onCheckedChange = onCheckedChange,
-                    colors = CheckboxDefaults.colors(
-                        uncheckedColor = darkModeColors.gray05,
-                        checkedColor = darkModeColors.gray05,
-                        checkmarkColor = darkModeColors.black,
-                    ),
+                    colors =
+                        CheckboxDefaults.colors(
+                            uncheckedColor = darkModeColors.gray05,
+                            checkedColor = darkModeColors.gray05,
+                            checkmarkColor = darkModeColors.black,
+                        ),
                 )
 
                 Text(
@@ -107,15 +114,15 @@ fun EditToDoScreen(
                     maxLines = 2,
                     textDecoration = if (isChecked) TextDecoration.LineThrough else null,
                 )
-
             }
             MementoUrgentChip(selectedType = selectedType)
         }
 
         Column(
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(start = 75.dp),
+            modifier =
+                Modifier
+                    .wrapContentSize()
+                    .padding(start = 75.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -138,7 +145,7 @@ fun EditToDoScreen(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 6.dp)
+                modifier = Modifier.padding(top = 6.dp),
             ) {
                 Text(
                     text = "Tag",
@@ -161,10 +168,11 @@ fun EditToDoScreen(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp)
-                .padding(end = 20.dp, start = 10.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp)
+                    .padding(end = 20.dp, start = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -174,7 +182,7 @@ fun EditToDoScreen(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
                     text = "Importance",
@@ -185,16 +193,15 @@ fun EditToDoScreen(
 
                 MementoPriorityTile(
                     selectedType = PriorityTagType.Low,
-                    onTypeSelected = { onTypeSelected }
+                    onTypeSelected = { onTypeSelected },
                 )
             }
         }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             Text(
                 text = "Select an area,",
                 style = MementoTheme.typography.body_r_16,
@@ -209,7 +216,6 @@ fun EditToDoScreen(
         }
     }
 }
-
 
 @Preview
 @Composable

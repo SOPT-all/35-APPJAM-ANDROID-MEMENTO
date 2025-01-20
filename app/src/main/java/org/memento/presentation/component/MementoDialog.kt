@@ -502,7 +502,7 @@ fun MementoDialogPreview() {
             onDismiss = closeDialog,
             onDelete = { },
             onEdit = { },
-            dialogType = DialogType.TO_DO,
+            dialogType = DialogType.ADD_PLAN,
             planId = 1,
         )
     }

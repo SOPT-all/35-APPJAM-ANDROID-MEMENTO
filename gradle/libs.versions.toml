@@ -14,6 +14,7 @@ datastore = "1.1.1"
 
 kotlin = "2.0.0"
 kotlinxImmutable = "0.3.7"
+playServicesAuth = "21.3.0"
 serialization = "1.6.3"
 kotlinParcelize = "1.8.20"
 kotlinCoroutine = "1.8.1"
@@ -89,6 +90,7 @@ okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref 
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 ## retrofit
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitJsonConverter" }
 

@@ -31,12 +31,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
         buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
     }
 
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+            buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
             buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
         }
 
@@ -130,6 +132,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.play.services.auth)
 
     // Web View
     implementation(libs.accompanist.webview)

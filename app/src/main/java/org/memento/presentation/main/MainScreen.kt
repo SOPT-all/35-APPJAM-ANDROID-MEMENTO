@@ -30,6 +30,7 @@ import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
 import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
+import org.memento.presentation.type.BottomSheetType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.darkModeColors
 
@@ -143,15 +144,7 @@ fun MainScreenContent(
                 },
             )
         },
-        floatingActionButton = { MementoAiFloatingButton(onClick = {}) },
     )
-}
-
-enum class BottomSheetType {
-    MAIN,
-    DEADLINE,
-    TAG,
-    EISEN,
 }
 
 @Preview(showBackground = true)

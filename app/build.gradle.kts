@@ -127,6 +127,9 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+
+    // Web View
+    implementation(libs.accompanist.webview)
 }
 
 ktlint {

@@ -2,7 +2,6 @@ package org.memento.presentation.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
@@ -65,7 +65,7 @@ fun TagSelectionGrid(
                                         darkModeColors.gray09
                                     },
                                 )
-                                .clickable { onTypeSelected(type) },
+                                .noRippleClickable { onTypeSelected(type) },
                     ) {
                         Text(
                             text = stringResource(id = type.chipDiscription),

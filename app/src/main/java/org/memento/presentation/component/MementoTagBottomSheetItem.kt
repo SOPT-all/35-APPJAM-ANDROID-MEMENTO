@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.persistentListOf
 import org.memento.presentation.type.ColorTagData
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
@@ -112,7 +113,7 @@ fun TagSelectorContent(
 }
 
 fun getDummyTagData(): List<ColorTagData> {
-    return listOf(
+    return persistentListOf(
         ColorTagData("Untitled", "#A9ADBB"),
         ColorTagData("Family", "#FF0D45"),
         ColorTagData("Hobby", "#FF8162"),

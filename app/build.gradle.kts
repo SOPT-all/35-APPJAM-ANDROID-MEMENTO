@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
+
+    id("com.google.gms.google-services")
 }
 
 val properties =
@@ -29,11 +31,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
     }
 
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+            buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
         }
 
         release {
@@ -117,6 +121,18 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
 
     implementation(libs.compose.wheel.picker)
+
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // Google
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+
+    // Web View
+    implementation(libs.accompanist.webview)
 }
 
 ktlint {

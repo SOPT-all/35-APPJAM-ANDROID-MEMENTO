@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "301410211395",
+    "project_id": "memento-ae9aa",
+    "storage_bucket": "memento-ae9aa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301410211395:android:7bf98788b9abf6a599a6f6",
+        "android_client_info": {
+          "package_name": "org.memento"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301410211395-uq87j4ice89hrq2p9cu808sm1qu7g9mb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.memento",
+            "certificate_hash": "ded24cf8fa19517529a19b392c21cc9bcb46defc"
+          }
+        },
+        {
+          "client_id": "301410211395-78gll1sbfqg1j0mk30pi6vc16ssq6mfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoMwB_COVUUFNL44ofhIWXRxfVfmns4JI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301410211395-78gll1sbfqg1j0mk30pi6vc16ssq6mfd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "301410211395-grq5ib85rqcn55nji3mmd4kg35a3c23m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.memento.lifeManager"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

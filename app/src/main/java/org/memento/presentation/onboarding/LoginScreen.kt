@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.memento.BuildConfig
 import org.memento.R
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.util.noRippleClickable
@@ -81,7 +82,7 @@ fun LoginScreen(navigationToOnboardingScreen1: () -> Unit) {
 
     if (webViewVisible) {
         MementoWebView(
-            url = "https://testmanzi.notion.site/18167bb5c6cf80339e99f6fc6d28fc04",
+            url = BuildConfig.WebView_URL,
             onClose = { webViewVisible = false },
         )
     }

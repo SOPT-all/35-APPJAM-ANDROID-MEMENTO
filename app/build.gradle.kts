@@ -32,12 +32,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
+        buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
     }
 
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", properties["base.url"].toString())
             buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
+            buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
         }
 
         release {
@@ -117,6 +119,8 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.process.phoenix)
 
+    implementation("com.google.accompanist:accompanist-pager:0.30.1")
+
     implementation(libs.compose.wheel.picker)
 
     // Splash
@@ -128,6 +132,9 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.play.services.auth)
+
+    // Web View
+    implementation(libs.accompanist.webview)
 }
 
 ktlint {

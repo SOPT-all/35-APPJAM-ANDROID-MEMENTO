@@ -1,6 +1,5 @@
 package org.memento.presentation.today
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -9,24 +8,31 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.domain.entity.AllDay
@@ -38,18 +44,23 @@ import org.memento.presentation.today.component.AllDayScheduleTag
 import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
+import java.time.LocalDate
 
 @Composable
 fun TodayScreen(modifier: Modifier = Modifier) {
     val dummyDataState = remember { mutableStateListOf(*dummyData.toTypedArray()) }
     var draggedItemIndex by remember { mutableStateOf(-1) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
+    var itemHeight by remember { mutableIntStateOf(0) }
+    var listHeight by remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black),
     ) {
         val allDay =
             listOf(
@@ -61,13 +72,13 @@ fun TodayScreen(modifier: Modifier = Modifier) {
 
         MementoTopBar(date = "Jan 3", year = "2025", onDateClick = {}, onIconClick = {})
 
-        MementoWeeklyCalendar(onDateClick = {})
+        MementoWeeklyCalendar(onDateClick = {}, selectedDate = LocalDate.now())
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = (5 * 30).dp),
         ) {
             val state = rememberLazyListState()
             LazyColumn(
@@ -85,8 +96,8 @@ fun TodayScreen(modifier: Modifier = Modifier) {
         if (dummyDataState.isEmpty()) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize(),
+                Modifier
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -96,35 +107,42 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                 )
             }
         } else {
-            LazyColumn(
-                modifier =
+            Box {
+                LazyColumn(
+                    modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                item {
-                    Text(
-                        text = "2:00 PM",
-                        style = MementoTheme.typography.body_b_16,
-                        color = darkModeColors.gray05,
-                        modifier =
+                        .padding(horizontal = 16.dp)
+                        .onGloballyPositioned { it ->
+                            listHeight = it.size.height
+                        },
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    item {
+                        Text(
+                            text = "2:00 PM",
+                            style = MementoTheme.typography.body_b_16,
+                            color = darkModeColors.gray05,
+                            modifier =
                             Modifier
-                                .padding(top = 16.dp),
-                    )
-                }
-                item {
-                    VerticalDivider(thickness = 4.dp, color = Color.White)
-                }
+                                .padding(top = 16.dp)
+                                .onGloballyPositioned { it ->
+                                    itemHeight = it.size.height
+                                },
+                        )
+                    }
 
-                itemsIndexed(dummyDataState) { index, item ->
-                    val isDragging = index == draggedItemIndex
-                    val scale = animateFloatAsState(if (isDragging) 1.1f else 1f)
-                    var initialIndex by remember { mutableStateOf(-1) }
-                    var finalIndex by remember { mutableStateOf(-1) }
+                    itemsIndexed(dummyDataState) { index, item ->
+                        val isDragging = index == draggedItemIndex
+                        val scale = animateFloatAsState(if (isDragging) 1.1f else 1f)
+                        var initialIndex by remember { mutableStateOf(-1) }
+                        var finalIndex by remember { mutableStateOf(-1) }
 
-                    Box(
-                        modifier =
+                        var isDraggingEnabled by remember { mutableStateOf(false) } // 드래그 활성화 여부
+                        var draggedStarted by remember { mutableStateOf(false) } // 드래그가 시작되었는지 여부
+
+                        Box(
+                            modifier =
                             Modifier
                                 .fillMaxWidth()
                                 .graphicsLayer(
@@ -154,48 +172,95 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                                             finalIndex = draggedItemIndex
                                             draggedItemIndex = -1
                                             draggedOffsetY = 0f
-
+                                            isDraggingEnabled = false
+                                            draggedStarted = false
+                                        },
+                                        onDragCancel = {
+                                            isDraggingEnabled = false
+                                            draggedStarted = false
                                         },
                                     )
                                 },
-                    ) {
-                        when (item) {
-                            is MementoItem.TodoItem -> {
-                                MementoTodoItemWithLine(
-                                    tagColor = Color.Red,
-                                    isDone = item.isChecked,
-                                    onCheckedChange = { },
-                                    todoTitleText = item.title,
-                                    priorityTagType = item.priority,
-                                    isConnected = item.isConnected,
-                                    isFirstUndone = item.isFirstUndone,
-                                )
-                            }
+                        ) {
+                            when (item) {
+                                is MementoItem.TodoItem -> {
+                                    MementoTodoItemWithLine(
+                                        tagColor = Color.Red,
+                                        isDone = item.isChecked,
+                                        onCheckedChange = { },
+                                        todoTitleText = item.title,
+                                        priorityTagType = item.priority,
+                                        isConnected = item.isConnected,
+                                        isFirstUndone = item.isFirstUndone,
+                                    )
+                                }
 
-                            is MementoItem.ScheduleItem -> {
-                                MementoScheduleItemWithLine(
-                                    tagColor = Color.Blue,
-                                    scheduleTitleText = item.title,
-                                    timeRange = item.timeRange,
-                                    isConnected = item.isConnected,
-                                )
+                                is MementoItem.ScheduleItem -> {
+                                    MementoScheduleItemWithLine(
+                                        tagColor = Color.Blue,
+                                        scheduleTitleText = item.title,
+                                        timeRange = item.timeRange,
+                                        isConnected = item.isConnected,
+                                    )
+                                }
                             }
                         }
                     }
-                }
-                item {
-                    Text(
-                        text = "2:00 PM",
-                        style = MementoTheme.typography.body_b_16,
-                        color = darkModeColors.gray05,
-                        modifier =
+                    item {
+                        Text(
+                            text = "2:00 PM",
+                            style = MementoTheme.typography.body_b_16,
+                            color = darkModeColors.gray05,
+                            modifier =
                             Modifier
                                 .padding(bottom = 16.dp),
-                    )
+                        )
+                    }
+                }
+                Column(
+                    modifier =
+                    Modifier
+                        .offset(x = 28.dp)
+                        .width(1.dp)
+                        .height(with(density) { listHeight.toDp() })
+                        .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                        .background(
+                            brush =
+                            Brush.linearGradient(
+                                colors =
+                                listOf(
+                                    Color.Transparent,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    Color.Transparent,
+                                ),
+                            ),
+                        ),
+                ) {
                 }
             }
         }
     }
+}
+
+suspend fun PointerInputScope.awaitLongPress(durationMillis: Long = 5000): Boolean {
+    awaitPointerEventScope {
+        val startTime = System.currentTimeMillis()
+        while (true) {
+            val event = awaitPointerEvent()
+            val pointer = event.changes.firstOrNull()
+
+            if (pointer == null || !pointer.pressed) {
+                return@awaitPointerEventScope false
+            }
+
+            if (System.currentTimeMillis() - startTime >= durationMillis) {
+                return@awaitPointerEventScope true
+            }
+        }
+    }
+    return false
 }
 
 fun <T> MutableList<T>.move(

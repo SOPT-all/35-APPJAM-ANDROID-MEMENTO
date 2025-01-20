@@ -61,7 +61,7 @@ fun LoginScreen(
                 try {
                     val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
                     credential.googleIdToken?.let { idToken ->
-                        viewModel.signInWithGoogle(idToken) // ViewModel에서 로그인 처리
+                        viewModel.signInWithGoogle(idToken)
                     }
                 } catch (e: ApiException) {
                 }

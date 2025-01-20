@@ -18,7 +18,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.memento.presentation.component.MementoAiFloatingButton
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.memento.presentation.navigator.MainNavigator

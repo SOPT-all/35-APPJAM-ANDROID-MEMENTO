@@ -1,4 +1,5 @@
 [versions]
+accompanistWebview = "0.24.13-rc"
 agp = "8.7.2"
 
 composeWheelPicker = "1.0.0-rc01"
@@ -40,11 +41,14 @@ ktlint = "12.1.1"
 composeMaterial = "1.4.0"
 playServicesMaps = "19.0.0"
 composeTesting = "1.0.0-alpha01"
+webkit = "1.12.1"
 
 [libraries]
 ## android
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistWebview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

@@ -38,6 +38,7 @@ import org.memento.presentation.today.component.AllDayScheduleTag
 import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import java.time.LocalDate
 
 @Composable
 fun TodayScreen(modifier: Modifier = Modifier) {
@@ -47,9 +48,9 @@ fun TodayScreen(modifier: Modifier = Modifier) {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black),
     ) {
         val allDay =
             listOf(
@@ -61,13 +62,13 @@ fun TodayScreen(modifier: Modifier = Modifier) {
 
         MementoTopBar(date = "Jan 3", year = "2025", onDateClick = {}, onIconClick = {})
 
-        MementoWeeklyCalendar(onDateClick = {})
+        MementoWeeklyCalendar(onDateClick = {}, selectedDate = LocalDate.now())
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = (5 * 30).dp),
         ) {
             val state = rememberLazyListState()
             LazyColumn(
@@ -85,8 +86,8 @@ fun TodayScreen(modifier: Modifier = Modifier) {
         if (dummyDataState.isEmpty()) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize(),
+                Modifier
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -98,9 +99,9 @@ fun TodayScreen(modifier: Modifier = Modifier) {
         } else {
             LazyColumn(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 item {
@@ -109,8 +110,8 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                         style = MementoTheme.typography.body_b_16,
                         color = darkModeColors.gray05,
                         modifier =
-                            Modifier
-                                .padding(top = 16.dp),
+                        Modifier
+                            .padding(top = 16.dp),
                     )
                 }
                 item {
@@ -125,41 +126,41 @@ fun TodayScreen(modifier: Modifier = Modifier) {
 
                     Box(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .graphicsLayer(
-                                    scaleX = scale.value,
-                                    scaleY = scale.value,
-                                    translationY = if (isDragging) draggedOffsetY else 0f,
-                                )
-                                .pointerInput(Unit) {
-                                    detectDragGestures(
-                                        onDragStart = {
-                                            draggedItemIndex = index
-                                            initialIndex = index
-                                        },
-                                        onDrag = { change, dragAmount ->
-                                            change.consume()
-                                            draggedOffsetY += dragAmount.y
-                                            val targetIndex =
-                                                (draggedItemIndex + (draggedOffsetY / 60.dp.toPx()).toInt())
-                                                    .coerceIn(0, dummyDataState.size - 1)
-                                            if (targetIndex != draggedItemIndex) {
-                                                dummyDataState.move(draggedItemIndex, targetIndex)
-                                                draggedItemIndex = targetIndex
-                                                draggedOffsetY = 0f
-                                            }
-                                        },
-                                        onDragEnd = {
-                                            finalIndex = draggedItemIndex
-                                            draggedItemIndex = -1
+                        Modifier
+                            .fillMaxWidth()
+                            .graphicsLayer(
+                                scaleX = scale.value,
+                                scaleY = scale.value,
+                                translationY = if (isDragging) draggedOffsetY else 0f,
+                            )
+                            .pointerInput(Unit) {
+                                detectDragGestures(
+                                    onDragStart = {
+                                        draggedItemIndex = index
+                                        initialIndex = index
+                                    },
+                                    onDrag = { change, dragAmount ->
+                                        change.consume()
+                                        draggedOffsetY += dragAmount.y
+                                        val targetIndex =
+                                            (draggedItemIndex + (draggedOffsetY / 60.dp.toPx()).toInt())
+                                                .coerceIn(0, dummyDataState.size - 1)
+                                        if (targetIndex != draggedItemIndex) {
+                                            dummyDataState.move(draggedItemIndex, targetIndex)
+                                            draggedItemIndex = targetIndex
                                             draggedOffsetY = 0f
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        finalIndex = draggedItemIndex
+                                        draggedItemIndex = -1
+                                        draggedOffsetY = 0f
 
-                                            Log.d("1", finalIndex.toString())
-                                            Log.d("1", initialIndex.toString())
-                                        },
-                                    )
-                                },
+                                        Log.d("1", finalIndex.toString())
+                                        Log.d("1", initialIndex.toString())
+                                    },
+                                )
+                            },
                     ) {
                         when (item) {
                             is MementoItem.TodoItem -> {
@@ -191,8 +192,8 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                         style = MementoTheme.typography.body_b_16,
                         color = darkModeColors.gray05,
                         modifier =
-                            Modifier
-                                .padding(bottom = 16.dp),
+                        Modifier
+                            .padding(bottom = 16.dp),
                     )
                 }
             }

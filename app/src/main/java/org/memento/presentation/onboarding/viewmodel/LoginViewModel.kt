@@ -34,7 +34,7 @@ class LoginViewModel
 
         fun checkCurrentUser() {
             viewModelScope.launch {
-                _user.value = authRepository.getCurrentUser()
+                _user.update { authRepository.getCurrentUser() }
             }
         }
     }

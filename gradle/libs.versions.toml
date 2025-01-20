@@ -38,6 +38,8 @@ phoenix = "3.0.0"
 
 ktlint = "12.1.1"
 composeMaterial = "1.4.0"
+playServicesMaps = "19.0.0"
+composeTesting = "1.0.0-alpha01"
 
 [libraries]
 ## android
@@ -104,6 +106,8 @@ process-phoenix = { group = "com.jakewharton", name = "process-phoenix", version
 ## Wheel Picker
 compose-wheel-picker = { module = "com.github.zj565061763:compose-wheel-picker", version.ref = "composeWheelPicker" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+androidx-compose-testing = { group = "androidx.xr.compose", name = "compose-testing", version.ref = "composeTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

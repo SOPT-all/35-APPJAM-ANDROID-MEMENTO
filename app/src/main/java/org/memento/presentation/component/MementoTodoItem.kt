@@ -43,7 +43,6 @@ fun MementoTodoItem(
     isFirstUndone: Boolean = false,
 ) {
     val fraction = 3f / 300f
-    val backgroundColord = if (isFirstUndone) Color.White else darkModeColors.navy
     val backgroundModifier =
         if (isFirstUndone) {
             Modifier.background(
@@ -151,7 +150,7 @@ fun MementoTodoItem(
                 modifier =
                     Modifier
                         .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.5f))
+                        .background(darkModeColors.black.copy(alpha = 0.5f))
                         .clip(RoundedCornerShape(2.dp))
                         .zIndex(0f),
             )

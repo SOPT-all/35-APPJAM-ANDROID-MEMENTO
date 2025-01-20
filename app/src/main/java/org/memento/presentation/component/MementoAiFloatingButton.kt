@@ -32,7 +32,7 @@ fun MementoAiFloatingButton(
         modifier =
             modifier
                 .background(
-                    color = if (isClicked) Color.Green else darkModeColors.gray09,
+                    color = if (isClicked) darkModeColors.green else darkModeColors.gray09,
                     shape = CircleShape,
                 )
                 .noRippleClickable {
@@ -44,7 +44,7 @@ fun MementoAiFloatingButton(
         Icon(
             painter = painterResource(id = R.drawable.ic_sparkle_29),
             contentDescription = "AI Button",
-            tint = if (isClicked) Color.Black else Color.White,
+            tint = if (isClicked) darkModeColors.black else darkModeColors.white,
         )
     }
 }

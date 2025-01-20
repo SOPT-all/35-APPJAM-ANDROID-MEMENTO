@@ -155,8 +155,6 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                                             draggedItemIndex = -1
                                             draggedOffsetY = 0f
 
-                                            Log.d("1", finalIndex.toString())
-                                            Log.d("1", initialIndex.toString())
                                         },
                                     )
                                 },

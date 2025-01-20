@@ -48,7 +48,7 @@ import org.memento.ui.theme.defaultMementoTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlanScreen(
-    viewModel: AddPlanViewModel = viewModel()
+    viewModel: AddPlanViewModel = viewModel(),
 ) {
     val eventText by viewModel.eventText.collectAsStateWithLifecycle()
     val selectedStartDateText by viewModel.selectedStartDateText.collectAsStateWithLifecycle()
@@ -75,17 +75,17 @@ fun AddPlanScreen(
     Column {
         LazyColumn(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 6.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
                 Box(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 3.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 3.dp),
                 ) {
                     BasicTextField(
                         value = eventText,
@@ -93,14 +93,14 @@ fun AddPlanScreen(
                             viewModel.updateEventText(newText)
                         },
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(color = darkModeColors.gray10)
-                            .padding(horizontal = 6.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .background(color = darkModeColors.gray10)
+                                .padding(horizontal = 6.dp),
                         textStyle =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.white,
-                        ),
+                            MementoTheme.typography.body_b_18.copy(
+                                color = darkModeColors.white,
+                            ),
                         cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
                         singleLine = true,
                     )
@@ -110,9 +110,9 @@ fun AddPlanScreen(
                             text = "Add your event",
                             modifier = Modifier.padding(horizontal = 6.dp),
                             style =
-                            MementoTheme.typography.body_b_18.copy(
-                                color = darkModeColors.gray07,
-                            ),
+                                MementoTheme.typography.body_b_18.copy(
+                                    color = darkModeColors.gray07,
+                                ),
                         )
                     }
                 }
@@ -121,9 +121,9 @@ fun AddPlanScreen(
             item {
                 HorizontalDivider(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .background(darkModeColors.gray07),
+                        Modifier
+                            .fillMaxWidth()
+                            .background(darkModeColors.gray07),
                     thickness = 2.dp,
                 )
             }
@@ -169,18 +169,18 @@ fun AddPlanScreen(
                             viewModel.toggleAllDay(isChecked)
                         },
                         colors =
-                        CheckboxDefaults.colors(
-                            uncheckedColor = darkModeColors.gray05,
-                            checkedColor = darkModeColors.gray05,
-                            checkmarkColor = darkModeColors.black,
-                        ),
+                            CheckboxDefaults.colors(
+                                uncheckedColor = darkModeColors.gray05,
+                                checkedColor = darkModeColors.gray05,
+                                checkmarkColor = darkModeColors.black,
+                            ),
                     )
                     Text(
                         text = "All-day",
                         style =
-                        defaultMementoTypography.body_r_14.copy(
-                            darkModeColors.gray05,
-                        ),
+                            defaultMementoTypography.body_r_14.copy(
+                                darkModeColors.gray05,
+                            ),
                     )
                 }
             }
@@ -250,7 +250,7 @@ fun AddPlanScreen(
             isCalendarVisible = isStartCalendarVisible,
             onDateSelected = { selectedStartDateText ->
                 viewModel.updateStartDate(
-                    formatDate(selectedStartDateText ?: 0)
+                    formatDate(selectedStartDateText ?: 0),
                 )
             },
             onDismiss = { isStartCalendarVisible = false },
@@ -260,7 +260,7 @@ fun AddPlanScreen(
             isCalendarVisible = isEndCalendarVisible,
             onDateSelected = { selectedEndDateText ->
                 viewModel.updateEndDate(
-                    formatDate(selectedEndDateText ?: 0)
+                    formatDate(selectedEndDateText ?: 0),
                 )
             },
             onDismiss = { isEndCalendarVisible = false },
@@ -270,18 +270,18 @@ fun AddPlanScreen(
 
         Box(
             modifier =
-            Modifier.background(
-                shape = CircleShape,
-                color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-            ),
+                Modifier.background(
+                    shape = CircleShape,
+                    color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                ),
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_send),
                 contentDescription = "전송 버튼",
                 modifier =
-                Modifier
-                    .padding(horizontal = 13.dp)
-                    .padding(top = 12.dp, bottom = 10.dp),
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp),
             )
         }
     }
@@ -308,28 +308,28 @@ fun AddPlanSelectComponent(
         Text(
             text = title,
             style =
-            MementoTheme.typography.body_r_16.copy(
-                color = darkModeColors.gray05,
-            ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray05,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         MementoChipSelector(
             selectorType =
-            when (title) {
-                "Repeat", "End Repeat" -> {
-                    SelectorType.BASIC
-                }
+                when (title) {
+                    "Repeat", "End Repeat" -> {
+                        SelectorType.BASIC
+                    }
 
-                "Tag" -> {
-                    SelectorType.TAG
-                }
+                    "Tag" -> {
+                        SelectorType.TAG
+                    }
 
-                else -> {
-                    SelectorType.DATESELECTOR
-                }
-            },
+                    else -> {
+                        SelectorType.DATESELECTOR
+                    }
+                },
             isClicked = false,
             onClickedChange = {
                 onDateClick()

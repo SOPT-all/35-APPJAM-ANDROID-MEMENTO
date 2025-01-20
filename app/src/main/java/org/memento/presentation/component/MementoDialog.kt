@@ -142,7 +142,7 @@ fun MementoDialog(
 @Composable
 fun ToDoDialogComponent() {
     val isChecked = remember { mutableStateOf(false) }
-    val deadLineText = "Jan 31,2025"
+    val title = "여기는 todo dialog"
     val tagColor = "#FFFFFF"
     val tagText = "SOPT"
     val urgentType = PriorityTagType.High
@@ -171,7 +171,7 @@ fun ToDoDialogComponent() {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = deadLineText,
+                text = title,
                 style =
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
@@ -286,6 +286,7 @@ fun ToDoDialogComponent() {
 @Composable
 fun AddPlanDialogComponent() {
     val isChecked = remember { mutableStateOf(false) }
+    val title = "여기는 add plan 텍스트"
     val startDate = "Jan 31,2025"
     val endDate = "Feb 2,2025"
     val startTime = "8AM"
@@ -314,7 +315,7 @@ fun AddPlanDialogComponent() {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "여기는 add plan 텍스트",
+                text = title,
                 style =
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
@@ -501,7 +502,7 @@ fun MementoDialogPreview() {
             onDismiss = closeDialog,
             onDelete = { },
             onEdit = { },
-            dialogType = DialogType.ADD_PLAN,
+            dialogType = DialogType.TO_DO,
             planId = 1,
         )
     }

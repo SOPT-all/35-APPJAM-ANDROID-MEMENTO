@@ -1,6 +1,5 @@
 package org.memento.presentation.component
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,12 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -41,7 +37,6 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
-import org.memento.ui.theme.defaultMementoTypography
 import org.memento.ui.theme.mementoColors
 
 @Composable
@@ -51,23 +46,25 @@ fun MementoDialog(
     onDelete: () -> Unit,
     onEdit: () -> Unit,
     dialogType: DialogType,
-    planId: Int
+    planId: Int,
 ) {
     if (showDialog) {
         Dialog(
-            onDismissRequest = onDismiss
+            onDismissRequest = onDismiss,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = darkModeColors.gray10,
-                        shape = RoundedCornerShape(2.dp)
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = darkModeColors.gray10,
+                            shape = RoundedCornerShape(2.dp),
+                        ),
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 20.dp),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp, vertical = 20.dp),
                 ) {
                     when (dialogType) {
                         DialogType.ADD_PLAN -> AddPlanDialogComponent()
@@ -76,59 +73,63 @@ fun MementoDialog(
 
                     Row(
                         modifier = Modifier.padding(top = 53.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(
-                                    color = mementoColors.red.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(2.dp)
-                                )
-                                .padding(vertical = 11.dp)
-                                .noRippleClickable {
-                                    onDelete()
-                                },
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .background(
+                                        color = mementoColors.red.copy(alpha = 0.15f),
+                                        shape = RoundedCornerShape(2.dp),
+                                    )
+                                    .padding(vertical = 11.dp)
+                                    .noRippleClickable {
+                                        onDelete()
+                                    },
                             verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_delete),
                                 contentDescription = "삭제 버튼",
-                                tint = mementoColors.red
+                                tint = mementoColors.red,
                             )
                             Text(
                                 text = "Delete",
-                                style = MementoTheme.typography.body_r_16.copy(
-                                    color = mementoColors.red
-                                )
+                                style =
+                                    MementoTheme.typography.body_r_16.copy(
+                                        color = mementoColors.red,
+                                    ),
                             )
                         }
 
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(
-                                    color = darkModeColors.gray09,
-                                    shape = RoundedCornerShape(2.dp)
-                                )
-                                .padding(vertical = 11.dp)
-                                .noRippleClickable {
-                                    onEdit()
-                                },
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .background(
+                                        color = darkModeColors.gray09,
+                                        shape = RoundedCornerShape(2.dp),
+                                    )
+                                    .padding(vertical = 11.dp)
+                                    .noRippleClickable {
+                                        onEdit()
+                                    },
                             verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_edit),
                                 contentDescription = "수정 버튼",
-                                tint = darkModeColors.gray05
+                                tint = darkModeColors.gray05,
                             )
                             Text(
                                 text = "Edit",
-                                style = MementoTheme.typography.body_r_16.copy(
-                                    color = darkModeColors.gray05
-                                )
+                                style =
+                                    MementoTheme.typography.body_r_16.copy(
+                                        color = darkModeColors.gray05,
+                                    ),
                             )
                         }
                     }
@@ -148,51 +149,55 @@ fun ToDoDialogComponent() {
 
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+            Modifier
+                .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
     ) {
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
             Checkbox(
                 checked = isChecked.value,
                 onCheckedChange = { isChecked.value = it },
-                colors = CheckboxDefaults.colors(
-                    uncheckedColor = darkModeColors.gray05,
-                    checkedColor = darkModeColors.gray05,
-                    checkmarkColor = darkModeColors.black
-                ),
-                modifier = Modifier.padding(end = 10.dp)
+                colors =
+                    CheckboxDefaults.colors(
+                        uncheckedColor = darkModeColors.gray05,
+                        checkedColor = darkModeColors.gray05,
+                        checkmarkColor = darkModeColors.black,
+                    ),
+                modifier = Modifier.padding(end = 10.dp),
             )
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = deadLineText,
-                style = MementoTheme.typography.body_b_16.copy(
-                    color = darkModeColors.white
-                ),
+                style =
+                    MementoTheme.typography.body_b_16.copy(
+                        color = darkModeColors.white,
+                    ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 textDecoration = if (isChecked.value) TextDecoration.LineThrough else null,
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "DeadLine",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_deadline),
@@ -204,25 +209,28 @@ fun ToDoDialogComponent() {
 
                     Text(
                         text = "날짜 데이터",
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "Tag",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
                     modifier = Modifier.weight(1f),
@@ -232,36 +240,39 @@ fun ToDoDialogComponent() {
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
                         tint = changeHexToColor(tagColor),
-                        modifier = Modifier.padding(all = 2.dp)
+                        modifier = Modifier.padding(all = 2.dp),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
                         text = tagText,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 14.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 14.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "Priority",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
 
                 Box(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     MementoUrgentChip(
                         selectedType = urgentType,
@@ -273,8 +284,7 @@ fun ToDoDialogComponent() {
 }
 
 @Composable
-fun AddPlanDialogComponent(
-) {
+fun AddPlanDialogComponent() {
     val isChecked = remember { mutableStateOf(false) }
     val startDate = "Jan 31,2025"
     val endDate = "Feb 2,2025"
@@ -287,111 +297,122 @@ fun AddPlanDialogComponent(
 
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth(),
+            Modifier
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_event),
             contentDescription = "일정 아이콘",
             tint = darkModeColors.white,
-            modifier = Modifier.padding(end = 10.dp)
-                .padding(vertical = 2.dp)
+            modifier =
+                Modifier.padding(end = 10.dp)
+                    .padding(vertical = 2.dp),
         )
 
-
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = "여기는 add plan 텍스트",
-                style = MementoTheme.typography.body_b_16.copy(
-                    color = darkModeColors.white
-                ),
+                style =
+                    MementoTheme.typography.body_b_16.copy(
+                        color = darkModeColors.white,
+                    ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 textDecoration = if (isChecked.value) TextDecoration.LineThrough else null,
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "Starts",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = startDate,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        ),
-                        modifier = Modifier.padding(end = 10.dp)
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
+                        modifier = Modifier.padding(end = 10.dp),
                     )
 
                     Text(
                         text = startTime,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "Ends",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = endDate,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        ),
-                        modifier = Modifier.padding(end = 10.dp)
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
+                        modifier = Modifier.padding(end = 10.dp),
                     )
 
                     Text(
                         text = endTime,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        ),
-                        modifier = Modifier.padding(end = 10.dp)
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
+                        modifier = Modifier.padding(end = 10.dp),
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "Tag",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
                     modifier = Modifier.weight(1f),
@@ -401,32 +422,35 @@ fun AddPlanDialogComponent(
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
                         tint = changeHexToColor(tagColor),
-                        modifier = Modifier.padding(all = 2.dp)
+                        modifier = Modifier.padding(all = 2.dp),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
                         text = tagText,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(27.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(27.dp),
             ) {
                 Text(
                     text = "From",
-                    style = MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05
-                    ),
-                    modifier = Modifier.weight(0.3f)
+                    style =
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
+                    modifier = Modifier.weight(0.3f),
                 )
                 Row(
                     modifier = Modifier.weight(1f),
@@ -436,20 +460,20 @@ fun AddPlanDialogComponent(
                         painter = painterResource(platForm),
                         contentDescription = "태그 색 표시",
                         tint = mementoColors.red,
-                        modifier = Modifier.padding(all = 2.dp)
+                        modifier = Modifier.padding(all = 2.dp),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
                         text = platFormText,
-                        style = MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray05
-                        )
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray05,
+                            ),
                     )
                 }
             }
-
         }
     }
 }
@@ -461,12 +485,13 @@ fun MementoDialogPreview() {
     val closeDialog = { showDialog.value = false }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(darkModeColors.white)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(darkModeColors.white),
     ) {
         Button(
-            onClick = { showDialog.value = true }
+            onClick = { showDialog.value = true },
         ) {
             Text("Show Dialog")
         }
@@ -477,7 +502,7 @@ fun MementoDialogPreview() {
             onDelete = { },
             onEdit = { },
             dialogType = DialogType.ADD_PLAN,
-            planId = 1
+            planId = 1,
         )
     }
 }

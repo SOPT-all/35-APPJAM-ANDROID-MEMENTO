@@ -37,12 +37,12 @@ fun MementoTodoCheckBox(
                 checked = isChecked,
                 onCheckedChange = onCheckedChange,
                 colors =
-                CheckboxDefaults.colors(
-                    uncheckedColor = darkModeColors.gray05,
-                    checkedColor = darkModeColors.gray05,
-                    checkmarkColor = darkModeColors.black,
-                ),
-                modifier = Modifier.padding(end = 10.dp)
+                    CheckboxDefaults.colors(
+                        uncheckedColor = darkModeColors.gray05,
+                        checkedColor = darkModeColors.gray05,
+                        checkmarkColor = darkModeColors.black,
+                    ),
+                modifier = Modifier.padding(end = 10.dp),
             )
         }
 

@@ -1,7 +1,6 @@
 package org.memento.presentation.onboarding
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -33,9 +32,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import org.memento.BuildConfig
-import com.google.android.gms.auth.api.identity.Identity
 import org.memento.R
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
@@ -46,7 +45,7 @@ import org.memento.ui.theme.defaultMementoTypography
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigationToOnboardingScreen1: () -> Unit
+    navigationToOnboardingScreen1: () -> Unit,
 ) {
     var webViewVisible by remember { mutableStateOf(false) }
 
@@ -54,31 +53,33 @@ fun LoginScreen(
     val context = LocalContext.current
     val oneTapClient = remember { Identity.getSignInClient(context) }
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            try {
-                val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
-                credential.googleIdToken?.let { idToken ->
-                    viewModel.signInWithGoogle(idToken) // ViewModel에서 로그인 처리
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartIntentSenderForResult(),
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
+                    credential.googleIdToken?.let { idToken ->
+                        viewModel.signInWithGoogle(idToken) // ViewModel에서 로그인 처리
+                    }
+                } catch (e: ApiException) {
                 }
-            } catch (e: ApiException) {
             }
         }
-    }
 
-    val signInRequest = remember {
-        BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId(BuildConfig.CLIENT_ID)
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-            )
-            .build()
-    }
+    val signInRequest =
+        remember {
+            BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(
+                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        .setServerClientId(BuildConfig.CLIENT_ID)
+                        .setFilterByAuthorizedAccounts(false)
+                        .build(),
+                )
+                .build()
+        }
 
     LaunchedEffect(user) {
         user?.let {
@@ -88,9 +89,9 @@ fun LoginScreen(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(top = 130.dp, bottom = 176.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(top = 130.dp, bottom = 176.dp),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
@@ -134,10 +135,10 @@ fun LoginScreen(
                 style = defaultMementoTypography.detail_r_11,
                 color = darkModeColors.gray04,
                 modifier =
-                Modifier
-                    .noRippleClickable {
-                        webViewVisible = true
-                    },
+                    Modifier
+                        .noRippleClickable {
+                            webViewVisible = true
+                        },
             )
         }
     }

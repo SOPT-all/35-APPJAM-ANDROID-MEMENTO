@@ -35,6 +35,12 @@
     <string name="date_example">Jan 30, 2025</string>
     <string name="time_example">00:00 AM</string>
 
+    <!--    brain dump-->
+    <string name="brain_dump_example_1">Schedule a brainstorming session for the marketing team.</string>
+    <string name="brain_dump_example_2">Prepare slides for next week’s meeting. The focus should be on highlighting key milestones and providing visuals for the timeline.</string>
+    <string name="brain_dump_example_3">Add a task to refactor the user dashboard UI code for improved performance. We need to reduce the load time and ensure compatibility across all devices.</string>
+    <string name="brain_dump_example_4">Create a task to design icons for the new feature set. Ensure that each icon is intuitive, consistent with the existing UI style, and easy to scale across different screen sizes.</string>
+
     <!--    Onboarding-->
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_1">1</string>

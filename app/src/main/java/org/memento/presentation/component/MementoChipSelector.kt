@@ -10,8 +10,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,28 +23,40 @@ import org.memento.R
 import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
+import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoChipSelector(
     selectorType: SelectorType,
-    isClicked: Boolean = false,
+    isClicked: Boolean,
+    isLimited: Boolean? = null,
     onClickedChange: (Boolean) -> Unit = {},
     content: String,
     tagColor: String? = null,
     modifier: Modifier = Modifier,
+    isBottomSheetOpen: Boolean = false,
 ) {
-    var clicked by remember { mutableStateOf(isClicked) }
+    val backgroundColor =
+        when {
+            isLimited == true -> darkModeColors.navy
+            isBottomSheetOpen -> selectorType.clickedBackgroundColor
+            isClicked -> selectorType.clickedBackgroundColor
+            else -> selectorType.unClickedBackgroundColor
+        }
 
     Box(
         modifier =
             Modifier
                 .then(modifier)
                 .clip(RoundedCornerShape(selectorType.cornerRadius))
-                .background(color = if (isClicked) selectorType.clickedBackgroundColor else selectorType.unClickedBackgroundColor)
+                .background(color = backgroundColor)
                 .noRippleClickable {
-                    onClickedChange(clicked)
+                    if (isLimited != true) {
+                        onClickedChange(!isClicked)
+                    }
                 },
-        Alignment.Center,
+        contentAlignment = Alignment.Center,
     ) {
         when (selectorType) {
             SelectorType.TIMESELECTOR -> {
@@ -63,7 +73,7 @@ fun MementoChipSelector(
                 Text(
                     text = content,
                     style = selectorType.textStyle,
-                    color = selectorType.textColor,
+                    color = if (isLimited == true) darkModeColors.gray07 else selectorType.textColor,
                 )
             }
 
@@ -173,7 +183,7 @@ fun MementoChipSelector(
                 Text(
                     text = content,
                     style = selectorType.textStyle,
-                    color = selectorType.textColor,
+                    color = if (content == "Select" || content == "Select Date") mementoColors.blue else selectorType.textColor,
                 )
             }
         }

@@ -138,8 +138,8 @@ fun TodayScreen(modifier: Modifier = Modifier) {
                         var initialIndex by remember { mutableStateOf(-1) }
                         var finalIndex by remember { mutableStateOf(-1) }
 
-                        var isDraggingEnabled by remember { mutableStateOf(false) } // 드래그 활성화 여부
-                        var draggedStarted by remember { mutableStateOf(false) } // 드래그가 시작되었는지 여부
+                        var isDraggingEnabled by remember { mutableStateOf(false) }
+                        var draggedStarted by remember { mutableStateOf(false) }
 
                         Box(
                             modifier =

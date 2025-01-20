@@ -117,7 +117,6 @@ fun LoginScreen(
                         launcher.launch(intentSenderRequest)
                     }
                     .addOnFailureListener { e ->
-
                     }
             },
             modifier = Modifier.padding(horizontal = 16.dp),

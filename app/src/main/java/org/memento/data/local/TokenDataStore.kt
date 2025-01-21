@@ -30,7 +30,6 @@ class TokenDataStore
                 preferences[preferencesRefreshTokenKey] ?: TEMPORARY_REFRESH_TOKEN
             }.firstOrNull()
 
-
         suspend fun setRefreshToken(token: String) {
             preferenceDataStore.edit { preferences ->
                 preferences[preferencesRefreshTokenKey] = token

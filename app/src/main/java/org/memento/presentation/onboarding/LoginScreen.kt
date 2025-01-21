@@ -111,13 +111,15 @@ fun LoginScreen(
             icon = R.drawable.img_google,
             content = stringResource(id = R.string.onboarding_google_login),
             onClick = {
-                oneTapClient.beginSignIn(signInRequest)
-                    .addOnSuccessListener { result ->
-                        val intentSenderRequest = IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
-                        launcher.launch(intentSenderRequest)
-                    }
-                    .addOnFailureListener { e ->
-                    }
+                oneTapClient.signOut().addOnCompleteListener {
+                    oneTapClient.beginSignIn(signInRequest)
+                        .addOnSuccessListener { result ->
+                            val intentSenderRequest = IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
+                            launcher.launch(intentSenderRequest)
+                        }
+                        .addOnFailureListener { e ->
+                        }
+                }
             },
             modifier = Modifier.padding(horizontal = 16.dp),
         )

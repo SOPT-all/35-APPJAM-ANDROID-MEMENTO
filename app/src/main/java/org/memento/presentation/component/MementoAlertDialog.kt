@@ -24,14 +24,14 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun MementoAlertDialog(
     @StringRes content: Int,
-    @StringRes confirmButtonText: Int,
-    @StringRes dismissButtonText: Int,
-    onConfirmButtonClick: () -> Unit,
-    onDismissButtonClick: () -> Unit,
+    @StringRes leftButtonText: Int,
+    @StringRes rightButtonText: Int,
+    onLeftButtonClick: () -> Unit,
+    onRightButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(
-        onDismissRequest = { onConfirmButtonClick() },
+        onDismissRequest = { onLeftButtonClick() },
         text = {
             Text(
                 text = stringResource(id = content),
@@ -40,29 +40,29 @@ fun MementoAlertDialog(
         },
         dismissButton = {
             TextButton(
-                onClick = onConfirmButtonClick,
+                onClick = onLeftButtonClick,
             ) {
                 Text(
-                    text = stringResource(id = confirmButtonText),
+                    text = stringResource(id = leftButtonText),
                     color = darkModeColors.gray05,
                 )
             }
         },
         confirmButton = {
             TextButton(
-                onClick = onDismissButtonClick,
+                onClick = onRightButtonClick,
             ) {
                 Text(
-                    text = stringResource(id = dismissButtonText),
+                    text = stringResource(id = rightButtonText),
                     color = mementoColors.red,
                 )
             }
         },
         containerColor = darkModeColors.gray09,
         modifier =
-            Modifier
-                .then(modifier)
-                .fillMaxWidth(),
+        Modifier
+            .then(modifier)
+            .fillMaxWidth(),
     )
 }
 
@@ -82,12 +82,12 @@ fun DeleteDialogTestScreen() {
         if (showDialog) {
             MementoAlertDialog(
                 content = R.string.alert_delete,
-                confirmButtonText = R.string.alert_delete_button,
-                dismissButtonText = R.string.alert_cancel_button,
-                onConfirmButtonClick = {
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDialog = false },
+                onRightButtonClick = {
                     showDialog = false
                 },
-                onDismissButtonClick = { showDialog = false },
             )
         }
     }

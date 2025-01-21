@@ -27,18 +27,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 import org.memento.R
+import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModalHandler
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
 import org.memento.presentation.component.MementoTimePicker
 import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.type.SelectorType
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.formatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -57,10 +61,12 @@ fun AddPlanScreen(
     val selectedTagText by viewModel.selectedTagText.collectAsStateWithLifecycle()
     val selectedTagColor by viewModel.selectedTagColor.collectAsStateWithLifecycle()
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
+    val isTimeValid by viewModel.isTimeValid.collectAsStateWithLifecycle()
 
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
 
+    var isShowToast by remember { mutableStateOf(false) }
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showEndTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showTagBottomSheet by remember { mutableStateOf(false) }
@@ -69,6 +75,15 @@ fun AddPlanScreen(
 
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
+        viewModel.validateTimeOrder()
+    }
+
+    LaunchedEffect(isTimeValid) {
+        if (!isTimeValid) {
+            isShowToast = true
+            delay(2000)
+            isShowToast = false
+        }
     }
 
     Column(
@@ -285,6 +300,12 @@ fun AddPlanScreen(
         },
         onDismiss = { isEndCalendarVisible = false },
     )
+
+    if (isShowToast) {
+        val customToast = MementoToast(LocalContext.current)
+        customToast.MakeText(message = ErrorType.TIME_PRECEDE_ERROR.message, icon = R.drawable.ic_toast)
+        isShowToast = false
+    }
 }
 
 @Composable

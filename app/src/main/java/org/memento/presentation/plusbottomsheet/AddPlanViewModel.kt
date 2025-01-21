@@ -1,6 +1,5 @@
 package org.memento.presentation.plusbottomsheet
 
-import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +39,9 @@ class AddPlanViewModel
 
         private val _isAllDayChecked = MutableStateFlow(false)
         val isAllDayChecked: StateFlow<Boolean> = _isAllDayChecked
+
+        private val _isTimeValid = MutableStateFlow(true)
+        val isTimeValid: StateFlow<Boolean> = _isTimeValid
 
         private fun initialTimeValue() {
             val currentTime = System.currentTimeMillis()
@@ -133,7 +135,26 @@ class AddPlanViewModel
             }
         }
 
-        init {
+        fun validateTimeOrder() {
+            try {
+                val startDateTime = parseDateTime(_selectedStartDateText.value, _selectedStartTimeText.value)
+                val endDateTime = parseDateTime(_selectedEndDateText.value, _selectedEndTimeText.value)
+
+                if (startDateTime.after(endDateTime)) {
+                    val (correctedEndDate, correctedEndTime) = calculateEndTime(_selectedStartDateText.value, _selectedStartTimeText.value)
+                    _selectedEndDateText.value = correctedEndDate
+                    _selectedEndTimeText.value = correctedEndTime
+                    _isTimeValid.value = false
+                } else {
+                    _isTimeValid.value = true
+                }
+            } catch (e: Exception) {
+                _isTimeValid.value = false
+            }
+        }
+
+
+    init {
             viewModelScope.launch {
                 initialTimeValue()
             }

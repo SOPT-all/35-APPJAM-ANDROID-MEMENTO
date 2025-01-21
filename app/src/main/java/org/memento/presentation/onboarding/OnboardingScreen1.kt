@@ -155,10 +155,9 @@ fun OnboardingScreen1(
                     isClickedWakeUp = false
                     isClickedWindDown = false
 
-                    if (currentActiveSelector == SETTIME.WINDDOWN)
-                        {
-                            isSelectedWindDown = true
-                        }
+                    if (currentActiveSelector == SETTIME.WINDDOWN) {
+                        isSelectedWindDown = true
+                    }
                 },
             )
         }

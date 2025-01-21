@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberImagePainter
 import org.memento.core.util.UiState
-import org.memento.domain.model.Reqres
+import org.memento.domain.entity.Reqres
 import org.memento.ui.theme.MementoTheme
 
 @Composable

@@ -30,6 +30,7 @@ import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.presentation.type.BottomSheetType
+import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.darkModeColors
 
 @Composable
@@ -101,6 +102,8 @@ fun MainScreenContent(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
                             onDone = {
                             },
+                            selectedType = PriorityTagType.Immediate,
+                            onTypeSelected = {},
                         )
 
                     null -> {}

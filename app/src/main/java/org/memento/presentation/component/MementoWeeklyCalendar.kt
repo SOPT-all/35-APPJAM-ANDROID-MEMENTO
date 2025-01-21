@@ -44,7 +44,7 @@ fun MementoWeeklyCalendar(
             Modifier
                 .fillMaxWidth()
                 .background(color = darkModeColors.black)
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 12.dp),
     ) {
         val daysOfWeek = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 

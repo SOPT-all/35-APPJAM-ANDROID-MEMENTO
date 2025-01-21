@@ -74,6 +74,18 @@ fun BrainDumpScreen(
                             color = darkModeColors.white,
                         ),
                 )
+
+                if (inputText.isEmpty()) {
+                    Text(
+                        text = "Got any plans? I’ll summarize it for you.",
+                        modifier = Modifier.padding(horizontal = 6.dp)
+                            .padding(top = 8.dp),
+                        style =
+                        MementoTheme.typography.body_b_16.copy(
+                            color = darkModeColors.navy,
+                        ),
+                    )
+                }
             }
 
             LazyRow(

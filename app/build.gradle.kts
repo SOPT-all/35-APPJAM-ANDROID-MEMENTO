@@ -35,6 +35,7 @@ android {
         buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
         buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
         buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
+        buildConfigField("String", "REFRESH_TOKEN", properties["refresh.token"].toString())
     }
 
     buildTypes {
@@ -43,6 +44,7 @@ android {
             buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
             buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
             buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
+            buildConfigField("String", "REFRESH_TOKEN", properties["refresh.token"].toString())
         }
 
         release {

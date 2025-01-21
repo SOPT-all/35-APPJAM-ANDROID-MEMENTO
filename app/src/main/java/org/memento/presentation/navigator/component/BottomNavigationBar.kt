@@ -6,19 +6,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -47,10 +42,10 @@ fun CustomNavigationBarItem(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .noRippleClickable(onClick = onClick)
-            .background(darkModeColors.navy),
+            modifier
+                .fillMaxWidth()
+                .noRippleClickable(onClick = onClick)
+                .background(darkModeColors.navy),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
     ) {
@@ -79,12 +74,12 @@ fun MainBottomBar(
     ) {
         Row(
             modifier =
-            modifier
-                .background(darkModeColors.navy)
-                .fillMaxWidth()
-                .height(64.dp),
+                modifier
+                    .background(darkModeColors.navy)
+                    .fillMaxWidth()
+                    .height(64.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             CustomNavigationBarItem(
                 context = context,
@@ -96,11 +91,11 @@ fun MainBottomBar(
 
             Box(
                 modifier =
-                Modifier
-                    .aspectRatio(86f/50f)
-                    .padding(vertical = 8.dp)
-                    .background(darkModeColors.gray09, shape = RoundedCornerShape(24.dp))
-                    .noRippleClickable { onAddButtonClick() },
+                    Modifier
+                        .aspectRatio(86f / 50f)
+                        .padding(vertical = 8.dp)
+                        .background(darkModeColors.gray09, shape = RoundedCornerShape(24.dp))
+                        .noRippleClickable { onAddButtonClick() },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(

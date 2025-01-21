@@ -38,29 +38,29 @@ fun MementoScheduleItem(
     val fraction = 3f / 300f
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.navy)
-            .clip(RoundedCornerShape(2.dp)),
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.navy)
+                .clip(RoundedCornerShape(2.dp)),
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth(),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth(fraction = fraction)
-                    .aspectRatio(3f / 68f)
-                    .background(color = tagColor),
+                    Modifier
+                        .fillMaxWidth(fraction = fraction)
+                        .aspectRatio(3f / 68f)
+                        .background(color = tagColor),
             )
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(top = 12.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 12.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -85,9 +85,9 @@ fun MementoScheduleItem(
 
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(modifier = Modifier.padding(start = 46.dp))
@@ -118,22 +118,23 @@ fun MementoScheduleItemWithLine(
     timeRange: String,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
-    isNow: Boolean = false
+    isNow: Boolean = false,
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_progress),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier
-                .padding(end = 10.dp)
-                .alpha(if (isNow) 1f else 0f),
+            modifier =
+                Modifier
+                    .padding(end = 10.dp)
+                    .alpha(if (isNow) 1f else 0f),
         )
 
         MementoScheduleItem(

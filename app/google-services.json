@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "301410211395-719o7skp4bbtjaosfd9qnfi2jdeg8jt8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.memento",
+            "certificate_hash": "b58043baa97b8b157d82bf7c44cfa8553495e8c9"
+          }
+        },
+        {
+          "client_id": "301410211395-msfvcj0rgira8939vs7hacrfhph8ji13.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.memento",
+            "certificate_hash": "0702b6b182f2343ae1f23a9ef16601b2ccf79f88"
+          }
+        },
+        {
           "client_id": "301410211395-uq87j4ice89hrq2p9cu808sm1qu7g9mb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -45,6 +45,7 @@ import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
+import timber.log.Timber
 
 @Composable
 fun LoginScreen(
@@ -60,18 +61,12 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (uiState) {
-        is UiState.Loading -> {
-        }
-
+        is UiState.Loading -> { }
         is UiState.Success -> {
             val data = (uiState as UiState.Success<UserInfo>).data
-            Log.d("Data", data.toString())
             viewModel.saveToken(data.accessToken)
         }
-
-        is UiState.Failure -> {
-            Log.e("data", "data")
-        }
+        is UiState.Failure -> { }
     }
 
     val launcher =

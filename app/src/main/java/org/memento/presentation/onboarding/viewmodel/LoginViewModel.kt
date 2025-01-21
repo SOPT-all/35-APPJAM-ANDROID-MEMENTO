@@ -3,6 +3,7 @@ package org.memento.presentation.onboarding.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,7 @@ class LoginViewModel
                     result.fold(
                         onSuccess = { data -> UiState.Success(data) },
                         onFailure = { data ->
-                            Log.d("data", data.message.toString())
+                            Timber.tag("data").d(data.message.toString())
                             UiState.Failure
                         },
                     )

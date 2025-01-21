@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -16,6 +17,9 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.presentation.component.MementoPriorityTile
 import org.memento.presentation.component.MementoUrgentChip
@@ -26,34 +30,39 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun AddToDoEisenScreen(
+    viewModel: AddToDoViewModel = hiltViewModel(),
     onClose: () -> Unit,
     onDone: () -> Unit,
-    selectedType: PriorityTagType,
-    onTypeSelected: (PriorityTagType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val tempPriorityType by viewModel.tempPriorityType.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 6.dp, start = 6.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp, start = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_back),
                 contentDescription = "",
+                modifier = modifier.noRippleClickable {
+                    onClose()
+                }
             )
             Text(
                 text = "Done",
                 modifier =
-                    Modifier
-                        .padding(horizontal = 18.dp, vertical = 12.dp)
-                        .noRippleClickable {
-                            onDone()
-                        },
+                Modifier
+                    .padding(horizontal = 18.dp, vertical = 12.dp)
+                    .noRippleClickable {
+                        viewModel.savePriorityType()
+                        onDone()
+                    },
                 style =
                     MementoTheme.typography.body_r_16.copy(
                         color = darkModeColors.gray07,
@@ -62,16 +71,16 @@ fun AddToDoEisenScreen(
         }
         Column(
             modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 26.dp),
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp, vertical = 26.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
             ) {
-                MementoUrgentChip(selectedType = selectedType)
+                MementoUrgentChip(selectedType = tempPriorityType)
             }
             Text(
                 text = "Urgency",
@@ -89,7 +98,10 @@ fun AddToDoEisenScreen(
                     color = darkModeColors.white,
                 )
 
-                MementoPriorityTile(selectedType = PriorityTagType.Low, onTypeSelected = { onTypeSelected })
+                MementoPriorityTile(
+                    selectedType = tempPriorityType,
+                    onTypeSelected = { viewModel.updatePriorityType(it) }
+                )
             }
             Text(
                 text = "Select an area,",
@@ -126,5 +138,5 @@ fun Modifier.rotateVertically(clockwise: Boolean = true): Modifier {
 @Preview
 @Composable
 private fun ScreenPreview() {
-    AddToDoEisenScreen(onClose = {}, onDone = {}, selectedType = PriorityTagType.Low, onTypeSelected = {})
+    AddToDoEisenScreen(onClose = {}, onDone = {})
 }

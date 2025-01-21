@@ -100,10 +100,7 @@ fun MainScreenContent(
                     BottomSheetType.EISEN ->
                         AddToDoEisenScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = {
-                            },
-                            selectedType = PriorityTagType.Immediate,
-                            onTypeSelected = {},
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     null -> {}

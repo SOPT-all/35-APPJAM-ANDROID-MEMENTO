@@ -73,7 +73,7 @@ fun AddToDoDeadLineScreen(
                     Modifier
                         .padding(horizontal = 18.dp, vertical = 12.dp)
                         .noRippleClickable {
-                            viewModel.updateDeadLineText(tempDeadLineText)
+                            viewModel.saveDeadLineText()
                             onDone()
                         },
                 style =

@@ -87,7 +87,7 @@ fun AddToDoEisenScreen(
                     text = "Importance",
                     style = MementoTheme.typography.detail_r_12,
                     modifier = Modifier.rotateVertically(false),
-                    color = Color.White,
+                    color = darkModeColors.white,
                 )
 
                 MementoPriorityTile(selectedType = PriorityTagType.Low, onTypeSelected = { onTypeSelected })

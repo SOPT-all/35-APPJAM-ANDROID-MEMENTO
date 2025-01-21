@@ -60,7 +60,11 @@ fun OnboardingScreen2(
                 onBackClick = { popBackStack() },
             )
             Spacer(Modifier.height(20.dp))
-            LazyColumn {
+            LazyColumn(
+                modifier =
+                    Modifier
+                        .weight(1f),
+            ) {
                 itemsIndexed(jobItems, key = { index, _ -> index }) { index, item ->
                     RoundCheckboxWithText(
                         content = item,
@@ -87,17 +91,15 @@ fun OnboardingScreen2(
                     )
                 }
             }
-            Spacer(Modifier.weight(1f))
+            OnboardingBottomButton(
+                content = R.string.onboarding_next,
+                isSelected = selectedIndex != null || isCheckedTextField,
+                onSelected = {
+                    if (selectedIndex != null || isCheckedTextField) navigateToOnboardingScreen3()
+                },
+                Modifier
+                    .padding(bottom = 10.dp),
+            )
         }
-        OnboardingBottomButton(
-            content = R.string.onboarding_next,
-            isSelected = selectedIndex != null || isCheckedTextField,
-            onSelected = {
-                if (selectedIndex != null || isCheckedTextField) navigateToOnboardingScreen3()
-            },
-            Modifier
-                .align(androidx.compose.ui.Alignment.BottomCenter)
-                .padding(bottom = 10.dp),
-        )
     }
 }

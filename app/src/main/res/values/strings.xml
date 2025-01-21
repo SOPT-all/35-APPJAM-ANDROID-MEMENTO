@@ -85,4 +85,10 @@
     <!--    Onboarding4-->
     <string name="onboarding4_title">Connect your calendar\nfor seamless scheduling.</string>
 
+    <!--    AlertDialog-->
+    <string name="alert_delete">Do you really want to delete this event?</string>
+    <string name="alert_cancel_button">Cancel</string>
+    <string name="alert_delete_button">Delete</string>
+
+
 </resources>

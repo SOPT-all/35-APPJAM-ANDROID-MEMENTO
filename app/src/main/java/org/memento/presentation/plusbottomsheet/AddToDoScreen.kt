@@ -32,6 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModal
@@ -44,15 +47,16 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun AddToDoScreen(
-    tagColor: String,
-    deadLineText: String,
+    viewModel: AddToDoViewModel = hiltViewModel(),
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
 ) {
-    var selectedDateText by remember { mutableStateOf("Today") }
+    val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
+    val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
+    val addTagColor by viewModel.addTagColor.collectAsStateWithLifecycle()
+    val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
-    var addToDoText by remember { mutableStateOf("") }
     var isShowToast by remember { mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
@@ -93,8 +97,8 @@ fun AddToDoScreen(
             if (isCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null) {
-                            selectedDateText = formatDate(selectedDate)
+                        selectedDate?.let {
+                            viewModel.updateSelectedDateText(formatDate(it))
                         }
                     },
                     onDismiss = {
@@ -106,7 +110,9 @@ fun AddToDoScreen(
 
         BasicTextField(
             value = addToDoText,
-            onValueChange = { addToDoText = it },
+            onValueChange = { newText ->
+                viewModel.updateToDoText(newText = newText)
+            },
             modifier =
                 Modifier
                     .background(color = Color.Transparent)
@@ -170,7 +176,7 @@ fun AddToDoScreen(
                         Modifier
                             .size(10.dp)
                             .background(
-                                color = changeHexToColor(hex = tagColor),
+                                color = changeHexToColor(hex = addTagColor),
                                 shape = CircleShape,
                             ),
                 )
@@ -238,8 +244,6 @@ fun AddToDoScreen(
 @Composable
 fun AddToDoScreenPreview() {
     AddToDoScreen(
-        tagColor = "",
-        deadLineText = "",
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },

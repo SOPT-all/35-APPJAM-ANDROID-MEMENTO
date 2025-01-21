@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -32,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.util.noRippleClickable
+import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun CustomNavigationBarItem(
@@ -43,22 +47,18 @@ fun CustomNavigationBarItem(
 ) {
     Column(
         modifier =
-            modifier
-                .noRippleClickable(onClick = onClick)
-                .background(if (isSelected) Color.White else Color.Transparent),
+        modifier
+            .fillMaxWidth()
+            .noRippleClickable(onClick = onClick)
+            .background(darkModeColors.navy),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceAround,
     ) {
-        Spacer(modifier = Modifier.height(11.dp))
         Icon(
             painter = painterResource(id = bottomNavigationType.iconRes),
-            tint = if (isSelected) Color.Black else Color.Gray,
+            tint = if (isSelected) darkModeColors.gray04 else darkModeColors.gray07,
             contentDescription = "",
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        bottomNavigationType.label?.let {
-        }
-        Spacer(modifier = Modifier.height(6.dp))
     }
 }
 
@@ -79,12 +79,12 @@ fun MainBottomBar(
     ) {
         Row(
             modifier =
-                modifier
-                    .background(Color.White)
-                    .border(1.dp, color = Color.Black)
-                    .fillMaxWidth()
-                    .height(64.dp),
+            modifier
+                .background(darkModeColors.navy)
+                .fillMaxWidth()
+                .height(64.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             CustomNavigationBarItem(
                 context = context,
@@ -96,14 +96,15 @@ fun MainBottomBar(
 
             Box(
                 modifier =
-                    Modifier
-                        .size(48.dp)
-                        .background(Color.LightGray, shape = RoundedCornerShape(24.dp))
-                        .clickable { onAddButtonClick() },
+                Modifier
+                    .aspectRatio(86f/50f)
+                    .padding(vertical = 8.dp)
+                    .background(darkModeColors.gray09, shape = RoundedCornerShape(24.dp))
+                    .noRippleClickable { onAddButtonClick() },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_white_24),
+                    painter = painterResource(id = R.drawable.ic_add),
                     contentDescription = "Add Button",
                     tint = Color.White,
                 )

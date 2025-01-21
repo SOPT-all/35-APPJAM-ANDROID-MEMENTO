@@ -60,9 +60,9 @@ fun MementoAlertDialog(
         },
         containerColor = darkModeColors.gray09,
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth(),
+            Modifier
+                .then(modifier)
+                .fillMaxWidth(),
     )
 }
 

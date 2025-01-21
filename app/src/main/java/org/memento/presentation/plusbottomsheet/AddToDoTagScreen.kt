@@ -64,7 +64,7 @@ fun AddToDoTagScreen(
                 contentDescription = "뒤로가기 버튼",
                 modifier =
                     Modifier.noRippleClickable {
-                        onClose
+                        onClose()
                     },
             )
             Text(

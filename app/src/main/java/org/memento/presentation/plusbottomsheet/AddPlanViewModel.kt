@@ -153,8 +153,7 @@ class AddPlanViewModel
             }
         }
 
-
-    init {
+        init {
             viewModelScope.launch {
                 initialTimeValue()
             }

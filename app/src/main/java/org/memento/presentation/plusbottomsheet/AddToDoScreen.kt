@@ -143,7 +143,7 @@ fun AddToDoScreen(
 
         Row(
             modifier = Modifier
-                .padding(vertical = 16.dp)
+                .padding(vertical = 16.dp, horizontal = 20.dp)
                 .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,

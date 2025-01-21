@@ -3,6 +3,7 @@ package org.memento.presentation.onboarding.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -31,11 +32,12 @@ fun RoundCheckboxWithText(
     Row(
         modifier =
             Modifier
-                .then(modifier)
-                .padding(16.dp)
+                .fillMaxWidth()
                 .noRippleClickable {
                     onCheckedChange(!isChecked)
-                },
+                }
+                .then(modifier)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RoundCheckbox(

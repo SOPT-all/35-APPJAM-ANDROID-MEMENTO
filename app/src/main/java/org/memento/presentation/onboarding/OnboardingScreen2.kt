@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,9 +44,15 @@ fun OnboardingScreen2(
             R.string.onboarding2_engineer,
         )
 
-    var selectedIndex by remember { mutableStateOf<Int?>(null) }
+    var selectedIndex by remember { mutableStateOf<Int?>(-1) }
     var textFieldValue by remember { mutableStateOf("") }
     var isCheckedTextField by remember { mutableStateOf(false) }
+
+    LaunchedEffect(selectedIndex, isCheckedTextField) {
+        if (selectedIndex != -1) {
+            isCheckedTextField = false
+        }
+    }
 
     Box(
         modifier =
@@ -72,15 +79,16 @@ fun OnboardingScreen2(
                         onCheckedChange = { isChecked ->
                             selectedIndex = if (isChecked) index else null
                             isCheckedTextField = false
+                            textFieldValue = ""
                         },
                     )
                 }
                 item(key = R.string.onboarding2_other) {
                     CheckboxWithTextField(
                         isChecked = isCheckedTextField,
-                        onCheckedChange = {
-                            isCheckedTextField = it
-                            if (it) selectedIndex = null
+                        onCheckedChange = { isChecked ->
+                            isCheckedTextField = isChecked
+                            if (isChecked) selectedIndex = -1
                         },
                         text = textFieldValue,
                         onTextChange = { textFieldValue = it },

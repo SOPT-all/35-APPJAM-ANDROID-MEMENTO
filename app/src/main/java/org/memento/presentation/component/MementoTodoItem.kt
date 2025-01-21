@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.memento.R
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.lineThrough
 import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -35,7 +37,7 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun MementoTodoItem(
     tagColor: Color,
-    isDone: Boolean = false,
+    isChecked: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     todoTitleText: String,
     priorityTagType: PriorityTagType,
@@ -47,45 +49,45 @@ fun MementoTodoItem(
         if (isFirstUndone) {
             Modifier.background(
                 brush =
-                    Brush.linearGradient(
-                        colors =
-                            listOf(
-                                mementoColors.todoNowStart,
-                                mementoColors.todoNowEnd,
-                            ),
+                Brush.linearGradient(
+                    colors =
+                    listOf(
+                        mementoColors.todoNowStart,
+                        mementoColors.todoNowEnd,
                     ),
+                ),
             )
         } else {
             Modifier.background(color = darkModeColors.navy)
         }
     Box(
         modifier =
-            Modifier
-                .fillMaxWidth(),
+        Modifier
+            .fillMaxWidth(),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .then(backgroundModifier)
-                    .clip(RoundedCornerShape(2.dp)),
+            Modifier
+                .fillMaxWidth()
+                .then(backgroundModifier)
+                .clip(RoundedCornerShape(2.dp)),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .fillMaxWidth(fraction = fraction)
-                            .aspectRatio(3f / 68f)
-                            .background(color = tagColor),
+                    Modifier
+                        .fillMaxWidth(fraction = fraction)
+                        .aspectRatio(3f / 68f)
+                        .background(color = tagColor),
                 )
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                            .padding(top = 12.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -95,30 +97,33 @@ fun MementoTodoItem(
 
                         Checkbox(
                             modifier = Modifier.size(18.dp),
-                            checked = isDone,
+                            checked = isChecked,
                             onCheckedChange = onCheckedChange,
                             colors =
-                                CheckboxDefaults.colors(
-                                    uncheckedColor = darkModeColors.gray05,
-                                    checkedColor = darkModeColors.gray05,
-                                    checkmarkColor = darkModeColors.black,
-                                ),
+                            CheckboxDefaults.colors(
+                                uncheckedColor = darkModeColors.gray05,
+                                checkedColor = darkModeColors.gray05,
+                                checkmarkColor = darkModeColors.black,
+                            ),
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = todoTitleText,
                             style = MementoTheme.typography.body_b_16,
                             color = darkModeColors.white,
+                            modifier = Modifier.lineThrough(isChecked)
                         )
+
+
                         Spacer(modifier = Modifier.weight(1f))
                         MementoUrgentChip(priorityTagType)
                     }
 
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.padding(start = 44.dp))
@@ -145,14 +150,14 @@ fun MementoTodoItem(
             }
         }
 
-        if (isDone) {
+        if (isChecked) {
             Box(
                 modifier =
-                    Modifier
-                        .matchParentSize()
-                        .background(darkModeColors.black.copy(alpha = 0.5f))
-                        .clip(RoundedCornerShape(2.dp))
-                        .zIndex(0f),
+                Modifier
+                    .matchParentSize()
+                    .background(darkModeColors.black.copy(alpha = 0.5f))
+                    .clip(RoundedCornerShape(2.dp))
+                    .zIndex(0f),
             )
         }
     }
@@ -161,6 +166,7 @@ fun MementoTodoItem(
 @Composable
 fun MementoTodoItemWithLine(
     tagColor: Color,
+    isNow: Boolean = false,
     isDone: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     todoTitleText: String,
@@ -171,21 +177,23 @@ fun MementoTodoItemWithLine(
 ) {
     Row(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_progress),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.padding(end = 10.dp),
+            modifier = Modifier
+                .padding(end = 10.dp)
+                .alpha(if (isNow) 1f else 0f),
         )
 
         MementoTodoItem(
             tagColor = tagColor,
-            isDone = isDone,
+            isChecked = isDone,
             onCheckedChange = onCheckedChange,
             todoTitleText = todoTitleText,
             priorityTagType = priorityTagType,
@@ -199,6 +207,6 @@ fun MementoTodoItemWithLine(
 @Composable
 private fun preview2() {
     MEMENTOTheme {
-        MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isFirstUndone = true)
+        MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isDone = true)
     }
 }

@@ -33,6 +33,8 @@ android {
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
         buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+        buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+        buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
     }
 
     buildTypes {
@@ -40,6 +42,7 @@ android {
             buildConfigField("String", "BASE_URL", properties["base.url"].toString())
             buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
             buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+            buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
         }
 
         release {

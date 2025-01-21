@@ -2,6 +2,7 @@ package org.memento.presentation.plusbottomsheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun BrainDumpScreen() {
@@ -51,53 +56,62 @@ fun BrainDumpScreen() {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.9f)
-                    .background(
-                        color = darkModeColors.black,
-                    ),
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.9f)
+                .background(
+                    color = darkModeColors.black,
+                ),
         ) {
             BasicTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 12.dp)
-                        .padding(top = 8.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp)
+                    .padding(top = 8.dp),
                 textStyle =
-                    MementoTheme.typography.body_b_16.copy(
-                        color = darkModeColors.white,
-                    ),
+                MementoTheme.typography.body_b_16.copy(
+                    color = darkModeColors.white,
+                ),
             )
         }
 
         LazyRow(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             items(dummyTexts) { text ->
                 Text(
                     text = text,
                     style =
-                        MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray06,
-                        ),
+                    MementoTheme.typography.detail_r_12.copy(
+                        color = darkModeColors.gray06,
+                    ),
                     modifier =
-                        Modifier
-                            .width(195.dp)
-                            .background(darkModeColors.black)
-                            .padding(horizontal = 10.dp, vertical = 7.dp),
+                    Modifier
+                        .width(195.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors =
+                                listOf(
+                                    mementoColors.brainDumpExStart,
+                                    mementoColors.brainDumpExEnd,
+                                ),
+                            ),
+                        )
+                        .border(width = 0.5.dp, color = darkModeColors.gray07, shape = RoundedCornerShape(2.dp) )
+                        .padding(horizontal = 10.dp, vertical = 7.dp),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -108,51 +122,52 @@ fun BrainDumpScreen() {
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp, end = 10.dp)
-                    .padding(vertical = 16.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 4.dp, end = 10.dp)
+                .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier =
-                    Modifier.background(
-                        color = darkModeColors.gray08,
-                        shape = RoundedCornerShape(100.dp),
-                    ),
+                Modifier.background(
+                    color = darkModeColors.gray08,
+                    shape = RoundedCornerShape(100.dp),
+                ),
             ) {
                 Text(
                     text = "Paste",
                     style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
                     modifier =
-                        Modifier.padding(horizontal = 54.dp, vertical = 11.dp)
-                            .clickable {
-                                val clipboardText = clipboardManager.getText()?.text
-                                if (clipboardText != null) {
-                                    inputText = clipboardText
-                                }
-                            },
+                    Modifier
+                        .padding(horizontal = 54.dp, vertical = 11.dp)
+                        .clickable {
+                            val clipboardText = clipboardManager.getText()?.text
+                            if (clipboardText != null) {
+                                inputText = clipboardText
+                            }
+                        },
                 )
             }
 
             Box(
                 modifier =
-                    Modifier.background(
-                        shape = CircleShape,
-                        color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
+                Modifier.background(
+                    shape = CircleShape,
+                    color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                ),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                        Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp),
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp),
                 )
             }
         }

@@ -6,6 +6,6 @@ import org.memento.domain.entity.UserInfo
 fun ResponseLoginDto.toUserInfo(): UserInfo =
     UserInfo(
         accessToken = accessToken,
-        refreshToken=refreshToken,
-        isNewUser=isNewUser
+        refreshToken = refreshToken,
+        isNewUser = isNewUser,
     )

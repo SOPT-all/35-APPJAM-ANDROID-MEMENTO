@@ -21,8 +21,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.ui.theme.MementoTheme
@@ -41,7 +38,7 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun BrainDumpScreen(
-    viewModel: BrainDumpViewModel = hiltViewModel()
+    viewModel: BrainDumpViewModel = hiltViewModel(),
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current

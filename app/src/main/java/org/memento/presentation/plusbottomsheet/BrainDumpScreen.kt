@@ -43,112 +43,119 @@ fun BrainDumpScreen(
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
 
-    Column(
-        modifier =
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier =
             Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
-    ) {
-        Box(
-            modifier =
+        ) {
+            Box(
+                modifier =
                 Modifier
                     .fillMaxWidth()
                     .aspectRatio(1.9f)
                     .background(
                         color = darkModeColors.black,
                     ),
-        ) {
-            BasicTextField(
-                value = inputText,
-                onValueChange = { viewModel.updateInputText(it) },
-                modifier =
+            ) {
+                BasicTextField(
+                    value = inputText,
+                    onValueChange = { viewModel.updateInputText(it) },
+                    modifier =
                     Modifier
                         .fillMaxSize()
                         .padding(horizontal = 12.dp)
                         .padding(top = 8.dp),
-                textStyle =
+                    textStyle =
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
                     ),
-            )
-        }
+                )
+            }
 
-        LazyRow(
-            modifier =
+            LazyRow(
+                modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            items(viewModel.dummyTexts) { text ->
-                Text(
-                    text = stringResource(text),
-                    style =
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                items(viewModel.dummyTexts) { text ->
+                    Text(
+                        text = stringResource(text),
+                        style =
                         MementoTheme.typography.detail_r_12.copy(
                             color = darkModeColors.gray06,
                         ),
-                    modifier =
+                        modifier =
                         Modifier
                             .width(195.dp)
                             .background(darkModeColors.black)
                             .padding(horizontal = 10.dp, vertical = 7.dp),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp, end = 10.dp)
-                    .padding(vertical = 16.dp),
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.gray10)
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier =
-                    Modifier.background(
-                        color = darkModeColors.gray08,
-                        shape = RoundedCornerShape(100.dp),
-                    ),
+                Modifier.background(
+                    color = darkModeColors.gray08,
+                    shape = RoundedCornerShape(100.dp),
+                ),
             ) {
                 Text(
                     text = "Paste",
                     style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
                     modifier =
-                        Modifier.padding(horizontal = 54.dp, vertical = 11.dp)
-                            .clickable {
-                                val clipboardText = clipboardManager.getText()?.text
-                                viewModel.pasteCipBoard(clipboardText)
-                            },
+                    Modifier
+                        .padding(horizontal = 54.dp, vertical = 11.dp)
+                        .clickable {
+                            val clipboardText = clipboardManager.getText()?.text
+                            viewModel.pasteCipBoard(clipboardText)
+                        },
                 )
             }
 
             Box(
                 modifier =
-                    Modifier.background(
-                        shape = CircleShape,
-                        color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
+                Modifier.background(
+                    shape = CircleShape,
+                    color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                ),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                        Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp),
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp),
                 )
             }
         }
     }
+
 }
 
 @Preview

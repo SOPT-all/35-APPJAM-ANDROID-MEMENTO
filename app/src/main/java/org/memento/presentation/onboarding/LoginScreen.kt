@@ -59,12 +59,16 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (uiState) {
-        is UiState.Loading -> { }
+        is UiState.Loading -> {}
         is UiState.Success -> {
             val data = (uiState as UiState.Success<UserInfo>).data
-            viewModel.saveToken(data.accessToken)
+            viewModel.saveToken(
+                accessToken = data.accessToken,
+                refreshToken = data.refreshToken
+            )
         }
-        is UiState.Failure -> { }
+
+        is UiState.Failure -> {}
     }
 
     val launcher =
@@ -104,9 +108,9 @@ fun LoginScreen(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(top = 130.dp, bottom = 176.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(top = 130.dp, bottom = 176.dp),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
@@ -149,10 +153,10 @@ fun LoginScreen(
                 style = defaultMementoTypography.detail_r_11,
                 color = darkModeColors.gray04,
                 modifier =
-                    Modifier
-                        .noRippleClickable {
-                            webViewVisible = true
-                        },
+                Modifier
+                    .noRippleClickable {
+                        webViewVisible = true
+                    },
             )
         }
     }

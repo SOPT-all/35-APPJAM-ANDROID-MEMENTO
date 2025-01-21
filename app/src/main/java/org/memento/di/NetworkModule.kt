@@ -63,9 +63,11 @@ object NetworkModule {
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: Interceptor,
+        tokenAuthenticator: TokenAuthenticator
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
+        builder.authenticator(tokenAuthenticator)
         builder.addInterceptor(authInterceptor)
         return builder.build()
     }

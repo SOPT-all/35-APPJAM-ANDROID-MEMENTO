@@ -115,7 +115,9 @@ fun AddToDoScreen(
             BasicTextField(
                 value = addToDoText,
                 onValueChange = { newText ->
-                    viewModel.updateToDoText(newText = newText)
+                    if (newText.replace(" ", "").length <= 30) {
+                        viewModel.updateToDoText(newText = newText)
+                    }
                 },
                 modifier =
                 Modifier

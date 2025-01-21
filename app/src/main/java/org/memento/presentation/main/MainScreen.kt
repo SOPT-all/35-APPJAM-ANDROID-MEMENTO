@@ -65,10 +65,10 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
-                    .imePadding(),
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->

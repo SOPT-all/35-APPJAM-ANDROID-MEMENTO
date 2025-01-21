@@ -43,51 +43,51 @@ fun AddToDoTagScreen(
     val tempTagColor by viewModel.tempTagColor.collectAsStateWithLifecycle()
     val tempTagText by viewModel.tempTagText.collectAsStateWithLifecycle()
 
-
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.gray10),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.gray10),
     ) {
         val sheetTagState = rememberModalBottomSheetState()
         var showTagBottomSheet by remember { mutableStateOf(false) }
 
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_back),
                 contentDescription = "뒤로가기 버튼",
-                modifier = Modifier.noRippleClickable {
-                    onClose
-                }
+                modifier =
+                    Modifier.noRippleClickable {
+                        onClose
+                    },
             )
             Text(
                 text = "Done",
                 modifier =
-                Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        viewModel.updateTagColor(newColor = tempTagColor)
-                        onDone()
-                    },
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            viewModel.updateTagColor(newColor = tempTagColor)
+                            onDone()
+                        },
                 style =
-                MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray07,
-                ),
+                    MementoTheme.typography.body_r_16.copy(
+                        color = darkModeColors.gray07,
+                    ),
             )
         }
 
         Column(
             modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
@@ -98,9 +98,9 @@ fun AddToDoTagScreen(
                 Text(
                     text = "Deadline",
                     style =
-                    MementoTheme.typography.body_r_16.copy(
-                        color = darkModeColors.gray05,
-                    ),
+                        MementoTheme.typography.body_r_16.copy(
+                            color = darkModeColors.gray05,
+                        ),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -123,7 +123,7 @@ fun AddToDoTagScreen(
                         onTagSelected = { color, tag ->
                             viewModel.updateTempTagData(
                                 tempTagColor = color,
-                                tempTagText = tag
+                                tempTagText = tag,
                             )
                         },
                     )

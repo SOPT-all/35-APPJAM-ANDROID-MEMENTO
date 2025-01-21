@@ -53,7 +53,6 @@ fun MainScreenContent(
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var currentBottomSheet by remember { mutableStateOf<BottomSheetType?>(null) }
 
-    var selectedDeadLine by remember { mutableStateOf("Add DeadLine") }
     var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
 
     if (currentBottomSheet != null) {
@@ -66,16 +65,14 @@ fun MainScreenContent(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.73f)
-                        .imePadding(),
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.73f)
+                    .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
                         MainPlusBottomSheet(
-                            tagColor = selectedTagColor,
-                            deadLineText = selectedDeadLine,
                             onNavigateDeadLineSetting = {
                                 currentBottomSheet = BottomSheetType.DEADLINE
                             },
@@ -90,19 +87,13 @@ fun MainScreenContent(
                     BottomSheetType.DEADLINE ->
                         AddToDoDeadLineScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = { deadLine ->
-                                selectedDeadLine = deadLine
-                                currentBottomSheet = BottomSheetType.MAIN
-                            },
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     BottomSheetType.TAG ->
                         AddToDoTagScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = { tagColor ->
-                                selectedTagColor = tagColor
-                                currentBottomSheet = BottomSheetType.MAIN
-                            },
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     BottomSheetType.EISEN ->

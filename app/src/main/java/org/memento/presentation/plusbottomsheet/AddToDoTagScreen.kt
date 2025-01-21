@@ -73,7 +73,7 @@ fun AddToDoTagScreen(
                     Modifier
                         .padding(horizontal = 18.dp, vertical = 12.dp)
                         .noRippleClickable {
-                            viewModel.updateTagColor(newColor = tempTagColor)
+                            viewModel.saveTagColor()
                             onDone()
                         },
                 style =

@@ -7,5 +7,5 @@ data class AddPlan(
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val isAllDay: Boolean,
-    val tagId: Long
+    val tagId: Long,
 )

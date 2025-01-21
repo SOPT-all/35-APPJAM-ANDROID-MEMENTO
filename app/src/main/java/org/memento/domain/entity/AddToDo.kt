@@ -8,5 +8,5 @@ data class AddToDo(
     val repeatExpiredDate: String,
     val tagId: Int,
     val priorityUrgency: Long,
-    val priorityImportance: Long
+    val priorityImportance: Long,
 )

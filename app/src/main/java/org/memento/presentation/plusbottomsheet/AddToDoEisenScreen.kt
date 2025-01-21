@@ -23,7 +23,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.presentation.component.MementoPriorityTile
 import org.memento.presentation.component.MementoUrgentChip
-import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -42,27 +41,28 @@ fun AddToDoEisenScreen(
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 6.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_back),
                 contentDescription = "",
-                modifier = modifier.noRippleClickable {
-                    onClose()
-                }
+                modifier =
+                    modifier.noRippleClickable {
+                        onClose()
+                    },
             )
             Text(
                 text = "Done",
                 modifier =
-                Modifier
-                    .padding(horizontal = 18.dp, vertical = 12.dp)
-                    .noRippleClickable {
-                        viewModel.savePriorityType()
-                        onDone()
-                    },
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
+                        .noRippleClickable {
+                            viewModel.savePriorityType()
+                            onDone()
+                        },
                 style =
                     MementoTheme.typography.body_r_16.copy(
                         color = darkModeColors.gray07,
@@ -71,9 +71,9 @@ fun AddToDoEisenScreen(
         }
         Column(
             modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 26.dp),
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp, vertical = 26.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
@@ -100,7 +100,7 @@ fun AddToDoEisenScreen(
 
                 MementoPriorityTile(
                     selectedType = tempPriorityType,
-                    onTypeSelected = { viewModel.updatePriorityType(it) }
+                    onTypeSelected = { viewModel.updatePriorityType(it) },
                 )
             }
             Text(

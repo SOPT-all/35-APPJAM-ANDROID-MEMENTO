@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.memento.data.service.LoginService
 import org.memento.data.service.ReqresService
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -14,4 +15,8 @@ internal object ServiceModule {
     @Provides
     @Singleton
     fun provideReqresService(retrofit: Retrofit): ReqresService = retrofit.create(ReqresService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLoginService(retrofit: Retrofit): LoginService = retrofit.create(LoginService::class.java)
 }

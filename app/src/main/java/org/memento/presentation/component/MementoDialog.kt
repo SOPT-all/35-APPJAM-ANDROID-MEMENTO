@@ -67,7 +67,7 @@ fun MementoDialog(
                             .padding(horizontal = 16.dp, vertical = 20.dp),
                 ) {
                     when (dialogType) {
-                        DialogType.ADD_PLAN -> AddPlanDialogComponent()
+                        DialogType.ADD_PLAN -> AddScheduleDialogComponent()
                         DialogType.TO_DO -> ToDoDialogComponent()
                     }
 
@@ -284,7 +284,7 @@ fun ToDoDialogComponent() {
 }
 
 @Composable
-fun AddPlanDialogComponent() {
+fun AddScheduleDialogComponent() {
     val isChecked = remember { mutableStateOf(false) }
     val title = "여기는 add plan 텍스트"
     val startDate = "Jan 31,2025"

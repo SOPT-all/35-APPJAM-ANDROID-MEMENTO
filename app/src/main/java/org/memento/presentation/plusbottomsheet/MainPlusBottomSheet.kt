@@ -92,7 +92,7 @@ fun MainPlusBottomSheet(
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
                 )
 
-            1 -> AddPlanScreen()
+            1 -> AddScheduleScreen()
             2 -> BrainDumpScreen()
             else ->
                 AddToDoScreen(

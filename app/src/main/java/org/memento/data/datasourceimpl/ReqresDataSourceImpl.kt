@@ -1,6 +1,6 @@
-package org.memento.data.datastroeimpl
+package org.memento.data.datasourceimpl
 
-import org.memento.data.datastore.ReqresDataSource
+import org.memento.data.datasource.ReqresDataSource
 import org.memento.data.dto.response.ResponseReqresDto
 import org.memento.data.service.ReqresService
 import javax.inject.Inject

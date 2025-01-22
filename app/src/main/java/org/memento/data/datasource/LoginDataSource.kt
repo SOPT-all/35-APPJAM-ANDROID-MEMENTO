@@ -1,4 +1,4 @@
-package org.memento.data.datastore
+package org.memento.data.datasource
 
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestLoginDto

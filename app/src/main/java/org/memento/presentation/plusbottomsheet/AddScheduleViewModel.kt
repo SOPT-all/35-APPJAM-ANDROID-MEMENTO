@@ -6,16 +6,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.util.UiState
+import org.memento.domain.entity.AddSchedule
+import org.memento.domain.repository.AddPlanRepository
+import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
+import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class AddPlanViewModel
+class AddScheduleViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(
+        val addPlanRepository: AddPlanRepository,
+    ) : ViewModel() {
         private val _eventText = MutableStateFlow("")
         val eventText: StateFlow<String> = _eventText
 
@@ -42,6 +49,34 @@ class AddPlanViewModel
 
         private val _isTimeValid = MutableStateFlow(true)
         val isTimeValid: StateFlow<Boolean> = _isTimeValid
+
+        private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+        val uiState: StateFlow<UiState<Unit>> = _uiState
+
+        fun postAddPlan() {
+            viewModelScope.launch {
+                _uiState.value = UiState.Loading
+                val result =
+                    addPlanRepository.postAddSchedule(
+                        AddSchedule(
+                            description = _eventText.value,
+                            startDate = createLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
+                            endDate = createLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
+                            isAllDay = _isAllDayChecked.value,
+                        ),
+                    )
+                _uiState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(Unit)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to post plan")
+                            UiState.Failure
+                        },
+                    )
+            }
+        }
 
         private fun initialTimeValue() {
             val currentTime = System.currentTimeMillis()

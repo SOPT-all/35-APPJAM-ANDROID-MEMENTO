@@ -31,11 +31,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 import org.memento.R
+import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
+import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModalHandler
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
@@ -44,14 +46,15 @@ import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.formatDate
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlanScreen(
-    viewModel: AddPlanViewModel = viewModel(),
+fun AddScheduleScreen(
+    viewModel: AddScheduleViewModel = viewModel(),
 ) {
     val eventText by viewModel.eventText.collectAsStateWithLifecycle()
     val selectedStartDateText by viewModel.selectedStartDateText.collectAsStateWithLifecycle()
@@ -66,12 +69,16 @@ fun AddPlanScreen(
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
 
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     var isShowToast by remember { mutableStateOf(false) }
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showEndTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showTagBottomSheet by remember { mutableStateOf(false) }
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
@@ -80,9 +87,36 @@ fun AddPlanScreen(
 
     LaunchedEffect(isTimeValid) {
         if (!isTimeValid) {
-            isShowToast = true
-            delay(2000)
-            isShowToast = false
+            val toast = MementoToast(context)
+            toast.makeText(
+                message = ErrorType.TIME_PRECEDE_ERROR.message,
+                icon = R.drawable.ic_toast,
+                lifecycleOwner = lifecycleOwner,
+            )
+        }
+    }
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is UiState.Success -> {
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = SuccessType.CREATE_SUCCESS.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
+            }
+
+            is UiState.Failure -> {
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = ErrorType.NETWORK_ERROR.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
+            }
+
+            else -> Unit
         }
     }
 
@@ -212,10 +246,14 @@ fun AddPlanScreen(
         ) {
             Box(
                 modifier =
-                    Modifier.background(
-                        shape = CircleShape,
-                        color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
+                    Modifier
+                        .background(
+                            shape = CircleShape,
+                            color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                        )
+                        .noRippleClickable {
+                            viewModel.postAddPlan()
+                        },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
@@ -298,7 +336,7 @@ fun AddPlanScreen(
 
     if (isShowToast) {
         val customToast = MementoToast(LocalContext.current)
-        customToast.MakeText(message = ErrorType.TIME_PRECEDE_ERROR.message, icon = R.drawable.ic_toast)
+        customToast.makeText(message = ErrorType.TIME_PRECEDE_ERROR.message, icon = R.drawable.ic_toast, lifecycleOwner)
         isShowToast = false
     }
 }
@@ -373,6 +411,6 @@ fun AddPlanSelectComponent(
 
 @Preview
 @Composable
-fun AddPlanScreenPreview() {
-    AddPlanScreen()
+fun AddScheduleScreenPreview() {
+    AddScheduleScreen()
 }

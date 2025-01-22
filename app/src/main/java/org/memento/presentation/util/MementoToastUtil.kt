@@ -16,42 +16,40 @@ import androidx.compose.ui.unit.dp
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-object MementoToastUtil {
-    @Composable
-    fun SetView(
-        messageTxt: String,
-        resourceIcon: Int,
+@Composable
+fun MementoToastContent(
+    messageTxt: String,
+    resourceIcon: Int,
+) {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(
+        Row(
             modifier =
                 Modifier
-                    .fillMaxWidth(),
-            contentAlignment = Alignment.Center,
+                    .background(
+                        color = darkModeColors.gray07,
+                        shape = RoundedCornerShape(size = 30.dp),
+                    )
+                    .padding(horizontal = 30.dp, vertical = 12.dp),
         ) {
-            Row(
+            Image(
+                painter = painterResource(id = resourceIcon),
+                contentDescription = "toastIcon",
                 modifier =
                     Modifier
-                        .background(
-                            color = darkModeColors.gray07,
-                            shape = RoundedCornerShape(size = 30.dp),
-                        )
-                        .padding(horizontal = 30.dp, vertical = 12.dp),
-            ) {
-                Image(
-                    painter = painterResource(id = resourceIcon),
-                    contentDescription = "toastIcon",
-                    modifier =
-                        Modifier
-                            .padding(end = 7.dp),
-                )
-                Text(
-                    text = messageTxt,
-                    style =
-                        MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.white,
-                        ),
-                )
-            }
+                        .padding(end = 7.dp),
+            )
+            Text(
+                text = messageTxt,
+                style =
+                    MementoTheme.typography.detail_r_12.copy(
+                        color = darkModeColors.white,
+                    ),
+            )
         }
     }
 }

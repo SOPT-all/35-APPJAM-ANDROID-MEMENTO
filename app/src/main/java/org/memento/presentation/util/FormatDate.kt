@@ -1,7 +1,9 @@
 package org.memento.presentation.util
 
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -35,4 +37,17 @@ fun todoFormatDate(localDate: LocalDate): String {
 
 fun String.toLocalDate(): LocalDate {
     return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
+}
+
+fun createLocalDateTime(
+    dateText: String,
+    timeText: String,
+): LocalDateTime {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a", Locale.ENGLISH)
+        LocalDateTime.parse("$dateText $timeText", formatter)
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to parse LocalDateTime for input: $dateText $timeText")
+        throw e
+    }
 }

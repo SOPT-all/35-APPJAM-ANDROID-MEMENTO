@@ -1,6 +1,6 @@
-package org.memento.data.datastroeimpl
+package org.memento.data.datasourceimpl
 
-import org.memento.data.datastore.LoginDataSource
+import org.memento.data.datasource.LoginDataSource
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestLoginDto
 import org.memento.data.dto.response.ResponseLoginDto

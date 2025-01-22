@@ -1,6 +1,6 @@
 package org.memento.data.repositoryimpl
 
-import org.memento.data.datastore.LoginDataSource
+import org.memento.data.datasource.LoginDataSource
 import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toDomain.toUserInfo
 import org.memento.data.util.handleBaseResponse

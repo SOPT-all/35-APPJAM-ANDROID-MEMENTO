@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
-import org.memento.domain.entity.AddPlan
-import org.memento.domain.repository.AddScheduleRepository
+import org.memento.domain.entity.AddSchedule
+import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime
@@ -18,10 +18,10 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class AddPlanViewModel
+class AddScheduleViewModel
     @Inject
     constructor(
-        val addScheduleRepository: AddScheduleRepository,
+        val addPlanRepository: AddPlanRepository,
     ) : ViewModel() {
         private val _eventText = MutableStateFlow("")
         val eventText: StateFlow<String> = _eventText
@@ -57,8 +57,8 @@ class AddPlanViewModel
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
                 val result =
-                    addScheduleRepository.postAddPlan(
-                        AddPlan(
+                    addPlanRepository.postAddSchedule(
+                        AddSchedule(
                             description = _eventText.value,
                             startDate = createLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
                             endDate = createLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),

@@ -53,8 +53,8 @@ import org.memento.ui.theme.defaultMementoTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlanScreen(
-    viewModel: AddPlanViewModel = viewModel(),
+fun AddScheduleScreen(
+    viewModel: AddScheduleViewModel = viewModel(),
 ) {
     val eventText by viewModel.eventText.collectAsStateWithLifecycle()
     val selectedStartDateText by viewModel.selectedStartDateText.collectAsStateWithLifecycle()
@@ -411,6 +411,6 @@ fun AddPlanSelectComponent(
 
 @Preview
 @Composable
-fun AddPlanScreenPreview() {
-    AddPlanScreen()
+fun AddScheduleScreenPreview() {
+    AddScheduleScreen()
 }

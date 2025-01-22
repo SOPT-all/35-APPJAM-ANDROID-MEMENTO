@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RequestAddPlanDto(
+data class RequestAddScheduleDto(
     @SerialName("description")
     val description: String,
     @SerialName("startDate")

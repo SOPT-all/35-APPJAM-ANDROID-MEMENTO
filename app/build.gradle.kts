@@ -129,9 +129,6 @@ dependencies {
 
     implementation(libs.compose.wheel.picker)
 
-    // Splash
-    implementation(libs.androidx.core.splashscreen)
-
     // Google
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

@@ -49,7 +49,10 @@ class TokenDataStore
             private const val REFRESH_TOKEN_KEY = "refresh_token_key"
             private val preferencesRefreshTokenKey = stringPreferencesKey(REFRESH_TOKEN_KEY)
 
-            private const val TEMPORARY_TOKEN = BuildConfig.ACCESS_TOKEN
-            private const val TEMPORARY_REFRESH_TOKEN = BuildConfig.REFRESH_TOKEN
+            val TEMPORARY_TOKEN: String
+                get() = BuildConfig.ACCESS_TOKEN.ifEmpty { "default_access_token" }
+
+            val TEMPORARY_REFRESH_TOKEN: String
+                get() = BuildConfig.REFRESH_TOKEN.ifEmpty { "default_refresh_token" }
         }
     }

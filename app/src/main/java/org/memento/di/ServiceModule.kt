@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import org.memento.data.service.AddPlanService
 import org.memento.data.service.LoginService
 import org.memento.data.service.ReqresService
+import org.memento.data.service.ScheduleService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -24,4 +25,8 @@ internal object ServiceModule {
     @Provides
     @Singleton
     fun provideAddScheduleService(retrofit: Retrofit): AddPlanService = retrofit.create(AddPlanService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideScheduleService(retrofit: Retrofit): ScheduleService = retrofit.create(ScheduleService::class.java)
 }

@@ -20,4 +20,3 @@ fun <T> BaseResponse<T>.handleBaseResponse(): Result<T?> {
         }
     }
 }
-

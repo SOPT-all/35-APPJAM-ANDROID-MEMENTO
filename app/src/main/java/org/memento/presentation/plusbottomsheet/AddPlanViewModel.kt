@@ -65,15 +65,16 @@ class AddPlanViewModel
                             isAllDay = _isAllDayChecked.value,
                         ),
                     )
-                _uiState.value = result.fold(
-                    onSuccess = {
-                        UiState.Success(Unit)
-                    },
-                    onFailure = { throwable ->
-                        Timber.e(throwable, "Failed to post plan")
-                        UiState.Failure
-                    }
-                )
+                _uiState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(Unit)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to post plan")
+                            UiState.Failure
+                        },
+                    )
             }
         }
 

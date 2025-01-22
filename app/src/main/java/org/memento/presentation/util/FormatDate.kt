@@ -1,6 +1,5 @@
 package org.memento.presentation.util
 
-import org.memento.presentation.type.PriorityTagType
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -37,4 +36,3 @@ fun todoFormatDate(localDate: LocalDate): String {
 fun String.toLocalDate(): LocalDate {
     return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
 }
-

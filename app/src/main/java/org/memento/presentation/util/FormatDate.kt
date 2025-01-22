@@ -51,3 +51,13 @@ fun createLocalDateTime(
         throw e
     }
 }
+
+fun createLocalDate(dateText: String): LocalDate {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
+        LocalDate.parse(dateText, formatter)
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to parse LocalDate for input: $dateText")
+        throw e
+    }
+}

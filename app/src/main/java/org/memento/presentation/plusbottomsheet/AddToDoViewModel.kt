@@ -1,16 +1,28 @@
 package org.memento.presentation.plusbottomsheet
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import org.memento.core.util.UiState
+import org.memento.domain.entity.AddSchedule
+import org.memento.domain.entity.AddTodo
+import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.createLocalDate
+import org.memento.presentation.util.createLocalDateTime
+import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class AddToDoViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(
+        val addPlanRepository: AddPlanRepository
+    ) : ViewModel() {
         private val _selectedDateText = MutableStateFlow("Today")
         val selectedDateText: StateFlow<String> = _selectedDateText
 
@@ -37,6 +49,56 @@ class AddToDoViewModel
 
         private val _tempPriorityType = MutableStateFlow(PriorityTagType.None)
         val tempPriorityType: StateFlow<PriorityTagType> = _tempPriorityType
+
+        private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+        val uiState: StateFlow<UiState<Unit>> = _uiState
+
+        fun postAddTodo() {
+            viewModelScope.launch {
+                _uiState.value = UiState.Loading
+
+                val startDate = if (_selectedDateText.value == "Today") {
+                    LocalDate.now().toString()
+                } else {
+                    createLocalDate(_selectedDateText.value).toString()
+                }
+
+                val endDate = if (_deadLineText.value == "Add DeadLine") {
+                    null
+                } else {
+                    createLocalDate(_deadLineText.value).toString()
+                }
+
+                val (priorityUrgency, priorityImportance) = when (_addPriorityType.value) {
+                    PriorityTagType.None -> null to null
+                    PriorityTagType.High -> 0.25 to 0.75
+                    PriorityTagType.Immediate -> 0.75 to 0.75
+                    PriorityTagType.Medium -> 0.75 to 0.25
+                    PriorityTagType.Low -> 0.25 to 0.25
+                }
+
+                val addTodo = AddTodo(
+                    startDate = startDate,
+                    description = _addToDoText.value,
+                    endDate = endDate,
+                    tagId = null,
+                    priorityUrgency = priorityUrgency,
+                    priorityImportance = priorityImportance
+                )
+
+                val result = addPlanRepository.postAddTodo(addTodo)
+
+                _uiState.value = result.fold(
+                    onSuccess = {
+                        UiState.Success(Unit)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    },
+                )
+            }
+        }
 
         fun updateToDoText(newText: String) {
             _addToDoText.value = newText

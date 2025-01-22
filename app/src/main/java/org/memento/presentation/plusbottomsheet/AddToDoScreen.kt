@@ -35,7 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
+import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
+import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModal
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.MementoToast
@@ -58,14 +60,38 @@ fun AddToDoScreen(
     val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
     val addPriorityType by viewModel.addPriorityType.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
-    var isShowToast by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusRequester = remember { FocusRequester() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is UiState.Success -> {
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = SuccessType.CREATE_SUCCESS.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
+            }
+
+            is UiState.Failure -> {
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = ErrorType.NETWORK_ERROR.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
+            }
+
+            else -> Unit
+        }
     }
 
     Box(
@@ -229,16 +255,10 @@ fun AddToDoScreen(
                             .padding(horizontal = 13.dp)
                             .padding(top = 12.dp, bottom = 10.dp)
                             .noRippleClickable {
-                                isShowToast = true
+                                viewModel.postAddTodo()
                             },
                 )
             }
-        }
-
-        if (isShowToast) {
-            val customToast = MementoToast(LocalContext.current)
-            customToast.makeText(message = ErrorType.NETWORK_ERROR.message, icon = R.drawable.ic_toast, lifecycleOwner)
-            isShowToast = false
         }
     }
 }

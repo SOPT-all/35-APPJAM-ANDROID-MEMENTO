@@ -32,6 +32,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.domain.type.ErrorType
@@ -59,6 +61,8 @@ fun AddToDoScreen(
     var isCalendarVisible by remember { mutableStateOf(false) }
     var isShowToast by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -234,7 +238,7 @@ fun AddToDoScreen(
 
         if (isShowToast) {
             val customToast = MementoToast(LocalContext.current)
-            customToast.MakeText(message = ErrorType.NETWORK_ERROR.message, icon = R.drawable.ic_toast)
+            customToast.makeText(message = ErrorType.NETWORK_ERROR.message, icon = R.drawable.ic_toast, lifecycleOwner)
             isShowToast = false
         }
     }

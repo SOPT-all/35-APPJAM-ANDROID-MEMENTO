@@ -16,9 +16,8 @@ import androidx.compose.ui.unit.dp
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-object MementoToastUtil {
-    @Composable
-    fun SetView(
+@Composable
+    fun MementoToastContent(
         messageTxt: String,
         resourceIcon: Int,
     ) {
@@ -54,4 +53,4 @@ object MementoToastUtil {
             }
         }
     }
-}
+

@@ -10,5 +10,5 @@ fun AddTodo.toData(): RequestAddTodoDto =
         endDate = endDate,
         tagId = tagId,
         priorityUrgency = priorityUrgency,
-        priorityImportance = priorityImportance
+        priorityImportance = priorityImportance,
     )

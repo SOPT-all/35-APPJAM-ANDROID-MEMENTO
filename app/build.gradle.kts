@@ -136,6 +136,20 @@ dependencies {
 
     // Web View
     implementation(libs.accompanist.webview)
+
+    // Accompanist System UI Controller
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta")
+
+    // Accompanist Navigation Animation
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.31.5-beta")
+
+    // Accompanist Pager
+    implementation("com.google.accompanist:accompanist-pager:0.31.5-beta")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.31.5-beta")
+
+    // Accompanist Placeholder
+    implementation("com.google.accompanist:accompanist-placeholder:0.31.5-beta")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.31.5-beta")
 }
 
 ktlint {

@@ -33,8 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import org.memento.R
 import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModal
@@ -67,77 +65,86 @@ fun AddToDoScreen(
         focusRequester.requestFocus()
     }
 
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 23.dp, vertical = 5.dp),
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        Row {
-            Text(
-                text = "Add to-do,",
-                style =
-                    MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.gray07,
-                    ),
-            )
-
-            Text(
-                text = selectedDateText,
-                modifier =
-                    Modifier
-                        .padding(start = 5.dp)
-                        .noRippleClickable {
-                            isCalendarVisible = true
-                        },
-                style =
-                    MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.white,
-                    ),
-            )
-
-            if (isCalendarVisible) {
-                DatePickerModal(
-                    onDateSelected = { selectedDate ->
-                        selectedDate?.let {
-                            viewModel.updateSelectedDateText(formatDate(it))
-                        }
-                    },
-                    onDismiss = {
-                        isCalendarVisible = false
-                    },
-                )
-            }
-        }
-
-        BasicTextField(
-            value = addToDoText,
-            onValueChange = { newText ->
-                viewModel.updateToDoText(newText = newText)
-            },
+        Column(
             modifier =
                 Modifier
-                    .background(color = Color.Transparent)
-                    .focusRequester(focusRequester)
-                    .padding(top = 16.dp),
-            textStyle =
-                MementoTheme.typography.body_b_16.copy(
-                    color = darkModeColors.white,
-                ),
-            cursorBrush =
-                Brush.verticalGradient(
-                    listOf(darkModeColors.green, darkModeColors.green),
-                ),
-            keyboardOptions =
-                KeyboardOptions.Default.copy(
-                    capitalization = KeyboardCapitalization.Sentences,
-                ),
-        )
+                    .fillMaxSize()
+                    .padding(horizontal = 23.dp, vertical = 5.dp),
+        ) {
+            Row {
+                Text(
+                    text = "Add to-do,",
+                    style =
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.gray07,
+                        ),
+                )
 
-        Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = selectedDateText,
+                    modifier =
+                        Modifier
+                            .padding(start = 5.dp)
+                            .noRippleClickable {
+                                isCalendarVisible = true
+                            },
+                    style =
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.white,
+                        ),
+                )
+
+                if (isCalendarVisible) {
+                    DatePickerModal(
+                        onDateSelected = { selectedDate ->
+                            selectedDate?.let {
+                                viewModel.updateSelectedDateText(formatDate(it))
+                            }
+                        },
+                        onDismiss = {
+                            isCalendarVisible = false
+                        },
+                    )
+                }
+            }
+
+            BasicTextField(
+                value = addToDoText,
+                onValueChange = { newText ->
+                    if (newText.replace(" ", "").length <= 30) {
+                        viewModel.updateToDoText(newText = newText)
+                    }
+                },
+                modifier =
+                    Modifier
+                        .background(color = Color.Transparent)
+                        .focusRequester(focusRequester)
+                        .padding(top = 16.dp),
+                textStyle =
+                    MementoTheme.typography.body_b_16.copy(
+                        color = darkModeColors.white,
+                    ),
+                cursorBrush =
+                    Brush.verticalGradient(
+                        listOf(darkModeColors.green, darkModeColors.green),
+                    ),
+                keyboardOptions =
+                    KeyboardOptions.Default.copy(
+                        capitalization = KeyboardCapitalization.Sentences,
+                    ),
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
         Row(
-            modifier = Modifier.padding(vertical = 16.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 16.dp, horizontal = 20.dp)
+                    .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -224,12 +231,12 @@ fun AddToDoScreen(
                 )
             }
         }
-    }
 
-    if (isShowToast) {
-        val customToast = MementoToast(LocalContext.current)
-        customToast.MakeText(message = ErrorType.NETWORK_ERROR.message, icon = R.drawable.ic_toast)
-        isShowToast = false
+        if (isShowToast) {
+            val customToast = MementoToast(LocalContext.current)
+            customToast.MakeText(message = ErrorType.NETWORK_ERROR.message, icon = R.drawable.ic_toast)
+            isShowToast = false
+        }
     }
 }
 

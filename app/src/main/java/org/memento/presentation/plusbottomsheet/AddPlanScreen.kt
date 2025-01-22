@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Checkbox
@@ -28,18 +27,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 import org.memento.R
+import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModalHandler
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
 import org.memento.presentation.component.MementoTimePicker
 import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.type.SelectorType
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.formatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -58,10 +61,12 @@ fun AddPlanScreen(
     val selectedTagText by viewModel.selectedTagText.collectAsStateWithLifecycle()
     val selectedTagColor by viewModel.selectedTagColor.collectAsStateWithLifecycle()
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
+    val isTimeValid by viewModel.isTimeValid.collectAsStateWithLifecycle()
 
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
 
+    var isShowToast by remember { mutableStateOf(false) }
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showEndTimePickerBottomSheet by remember { mutableStateOf(false) }
     var showTagBottomSheet by remember { mutableStateOf(false) }
@@ -70,220 +75,231 @@ fun AddPlanScreen(
 
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
+        viewModel.validateTimeOrder()
     }
 
-    Column {
-        LazyColumn(
+    LaunchedEffect(isTimeValid) {
+        if (!isTimeValid) {
+            isShowToast = true
+            delay(2000)
+            isShowToast = false
+        }
+    }
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Box(
             modifier =
                 Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 6.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+                    .fillMaxWidth()
+                    .padding(bottom = 3.dp),
         ) {
-            item {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 3.dp),
-                ) {
-                    BasicTextField(
-                        value = eventText,
-                        onValueChange = { newText ->
-                            viewModel.updateEventText(newText)
-                        },
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .background(color = darkModeColors.gray10)
-                                .padding(horizontal = 6.dp),
-                        textStyle =
-                            MementoTheme.typography.body_b_18.copy(
-                                color = darkModeColors.white,
-                            ),
-                        cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
-                        singleLine = true,
-                    )
+            BasicTextField(
+                value = eventText,
+                onValueChange = { newText ->
+                    viewModel.updateEventText(newText)
+                },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = darkModeColors.gray10)
+                        .padding(horizontal = 6.dp),
+                textStyle =
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
+                cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
+                singleLine = true,
+            )
 
-                    if (eventText.isEmpty()) {
-                        Text(
-                            text = "Add your event",
-                            modifier = Modifier.padding(horizontal = 6.dp),
-                            style =
-                                MementoTheme.typography.body_b_18.copy(
-                                    color = darkModeColors.gray07,
-                                ),
-                        )
-                    }
-                }
-            }
-
-            item {
-                HorizontalDivider(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(darkModeColors.gray07),
-                    thickness = 2.dp,
-                )
-            }
-
-            item {
-                // 시작 날짜와 시간 선택
-                AddPlanSelectComponent(
-                    title = "Starts",
-                    dateText = selectedStartDateText,
-                    onDateClick = { isStartCalendarVisible = true },
-                    timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
-                    onTimeClick = {
-                        showStartTimePickerBottomSheet = true
-                    },
-                    isAllChecked = isAllDayChecked,
-                    isChipClicked = showStartTimePickerBottomSheet,
-                )
-            }
-
-            item {
-                // 종료 날짜와 시간 선택
-                AddPlanSelectComponent(
-                    title = "Ends",
-                    dateText = selectedEndDateText,
-                    onDateClick = { isEndCalendarVisible = true },
-                    timeText = if (isAllDayChecked) "All-day" else selectedEndTimeText,
-                    onTimeClick = { showEndTimePickerBottomSheet = true },
-                    isAllChecked = isAllDayChecked,
-                    isChipClicked = showEndTimePickerBottomSheet,
-                )
-            }
-
-            item {
-                // All-day 체크박스
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(
-                        checked = isAllDayChecked,
-                        onCheckedChange = { isChecked ->
-                            viewModel.toggleAllDay(isChecked)
-                        },
-                        colors =
-                            CheckboxDefaults.colors(
-                                uncheckedColor = darkModeColors.gray05,
-                                checkedColor = darkModeColors.gray05,
-                                checkmarkColor = darkModeColors.black,
-                            ),
-                    )
-                    Text(
-                        text = "All-day",
-                        style =
-                            defaultMementoTypography.body_r_14.copy(
-                                darkModeColors.gray05,
-                            ),
-                    )
-                }
-            }
-
-            item {
-                // Tag
-                AddPlanSelectComponent(
-                    title = "Tag",
-                    dateText = selectedTagText,
-                    onDateClick = { showTagBottomSheet = true },
-                    timeText = null,
-                    onTimeClick = null,
-                    tagColor = selectedTagColor,
-                    isChipClicked = showTagBottomSheet,
+            if (eventText.isEmpty()) {
+                Text(
+                    text = "Add your event",
+                    modifier = Modifier.padding(horizontal = 6.dp),
+                    style =
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.gray07,
+                        ),
                 )
             }
         }
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showStartTimePickerBottomSheet,
-            content = {
-                MementoTimePicker(
-                    selectedTime = selectedStartTimeText,
-                    onTimeSelected = { newStartTime ->
-                        viewModel.updateStartTime(newTime = newStartTime)
-                    },
-                )
-            },
-            sheetState = sheetTimePickerState,
-            onConfirm = {
-                showStartTimePickerBottomSheet = false
-            },
+        HorizontalDivider(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray07),
+            thickness = 2.dp,
         )
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showEndTimePickerBottomSheet,
-            content = {
-                MementoTimePicker(
-                    selectedTime = selectedEndTimeText,
-                    onTimeSelected = { newEndTime ->
-                        viewModel.updateEndTime(newTime = newEndTime)
-                    },
-                )
+        // 시작 날짜와 시간 선택
+        AddPlanSelectComponent(
+            title = "Starts",
+            dateText = selectedStartDateText,
+            onDateClick = { isStartCalendarVisible = true },
+            timeText = if (isAllDayChecked) "All-day" else selectedStartTimeText,
+            onTimeClick = {
+                showStartTimePickerBottomSheet = true
             },
-            sheetState = sheetTimePickerState,
-            onConfirm = {
-                showEndTimePickerBottomSheet = false
-            },
+            isAllChecked = isAllDayChecked,
+            isChipClicked = showStartTimePickerBottomSheet,
         )
 
-        MementoBottomSheet(
-            isOpenBottomSheet = showTagBottomSheet,
-            content = {
-                TagSelectorContent(
-                    onTagSelected = { color, tag ->
-                        viewModel.updateTag(tag = tag, color = color)
-                    },
-                )
-            },
-            sheetState = sheetTagState,
-            onConfirm = {
-                showTagBottomSheet = false
-            },
+        // 종료 날짜와 시간 선택
+        AddPlanSelectComponent(
+            title = "Ends",
+            dateText = selectedEndDateText,
+            onDateClick = { isEndCalendarVisible = true },
+            timeText = if (isAllDayChecked) "All-day" else selectedEndTimeText,
+            onTimeClick = { showEndTimePickerBottomSheet = true },
+            isAllChecked = isAllDayChecked,
+            isChipClicked = showEndTimePickerBottomSheet,
         )
 
-        DatePickerModalHandler(
-            isCalendarVisible = isStartCalendarVisible,
-            onDateSelected = { selectedStartDateText ->
-                viewModel.updateStartDate(
-                    formatDate(selectedStartDateText ?: 0),
-                )
-            },
-            onDismiss = { isStartCalendarVisible = false },
-        )
+        // All-day 체크박스
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Checkbox(
+                checked = isAllDayChecked,
+                onCheckedChange = { isChecked ->
+                    viewModel.toggleAllDay(isChecked)
+                },
+                colors =
+                    CheckboxDefaults.colors(
+                        uncheckedColor = darkModeColors.gray05,
+                        checkedColor = darkModeColors.gray05,
+                        checkmarkColor = darkModeColors.black,
+                    ),
+            )
+            Text(
+                text = "All-day",
+                style =
+                    defaultMementoTypography.body_r_14.copy(
+                        darkModeColors.gray05,
+                    ),
+            )
+        }
 
-        DatePickerModalHandler(
-            isCalendarVisible = isEndCalendarVisible,
-            onDateSelected = { selectedEndDateText ->
-                viewModel.updateEndDate(
-                    formatDate(selectedEndDateText ?: 0),
-                )
-            },
-            onDismiss = { isEndCalendarVisible = false },
+        // Tag
+        AddPlanSelectComponent(
+            title = "Tag",
+            dateText = selectedTagText,
+            onDateClick = { showTagBottomSheet = true },
+            timeText = null,
+            onTimeClick = null,
+            tagColor = selectedTagColor,
+            isChipClicked = showTagBottomSheet,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(
+        Row(
             modifier =
-                Modifier.background(
-                    shape = CircleShape,
-                    color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                ),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.gray10)
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_send),
-                contentDescription = "전송 버튼",
+            Box(
                 modifier =
-                    Modifier
-                        .padding(horizontal = 13.dp)
-                        .padding(top = 12.dp, bottom = 10.dp),
-            )
+                    Modifier.background(
+                        shape = CircleShape,
+                        color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                    ),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_send),
+                    contentDescription = "전송 버튼",
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 13.dp)
+                            .padding(top = 12.dp, bottom = 10.dp),
+                )
+            }
         }
+    }
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showStartTimePickerBottomSheet,
+        content = {
+            MementoTimePicker(
+                selectedTime = selectedStartTimeText,
+                onTimeSelected = { newStartTime ->
+                    viewModel.updateStartTime(newTime = newStartTime)
+                },
+            )
+        },
+        sheetState = sheetTimePickerState,
+        onConfirm = {
+            showStartTimePickerBottomSheet = false
+        },
+    )
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showEndTimePickerBottomSheet,
+        content = {
+            MementoTimePicker(
+                selectedTime = selectedEndTimeText,
+                onTimeSelected = { newEndTime ->
+                    viewModel.updateEndTime(newTime = newEndTime)
+                },
+            )
+        },
+        sheetState = sheetTimePickerState,
+        onConfirm = {
+            showEndTimePickerBottomSheet = false
+        },
+    )
+
+    MementoBottomSheet(
+        isOpenBottomSheet = showTagBottomSheet,
+        content = {
+            TagSelectorContent(
+                onTagSelected = { color, tag ->
+                    viewModel.updateTag(tag = tag, color = color)
+                },
+            )
+        },
+        sheetState = sheetTagState,
+        onConfirm = {
+            showTagBottomSheet = false
+        },
+    )
+
+    DatePickerModalHandler(
+        isCalendarVisible = isStartCalendarVisible,
+        onDateSelected = {
+            viewModel.updateStartDate(
+                formatDate(it ?: 0),
+            )
+        },
+        onDismiss = { isStartCalendarVisible = false },
+    )
+
+    DatePickerModalHandler(
+        isCalendarVisible = isEndCalendarVisible,
+        onDateSelected = {
+            viewModel.updateEndDate(
+                formatDate(it ?: 0),
+            )
+        },
+        onDismiss = { isEndCalendarVisible = false },
+    )
+
+    if (isShowToast) {
+        val customToast = MementoToast(LocalContext.current)
+        customToast.MakeText(message = ErrorType.TIME_PRECEDE_ERROR.message, icon = R.drawable.ic_toast)
+        isShowToast = false
     }
 }
 

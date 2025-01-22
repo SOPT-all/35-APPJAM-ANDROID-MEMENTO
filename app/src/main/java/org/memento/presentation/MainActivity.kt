@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import org.memento.presentation.main.MainScreen
@@ -23,9 +22,7 @@ import org.memento.ui.theme.MEMENTOTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen().setOnExitAnimationListener { splashScreenView ->
-            splashScreenView.remove()
-        }
+
         setContent {
             val isDarkMode by remember { mutableStateOf(true) }
             var showSplash by remember { mutableStateOf(true) }
@@ -48,7 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val SPLASH_SCREEN_DELAY = 2000L
+        const val SPLASH_SCREEN_DELAY = 3000L
     }
 }
 

@@ -30,7 +30,6 @@ import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.presentation.type.BottomSheetType
-import org.memento.presentation.type.PriorityTagType
 import org.memento.ui.theme.darkModeColors
 
 @Composable
@@ -54,7 +53,6 @@ fun MainScreenContent(
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var currentBottomSheet by remember { mutableStateOf<BottomSheetType?>(null) }
 
-    var selectedDeadLine by remember { mutableStateOf("Add DeadLine") }
     var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
 
     if (currentBottomSheet != null) {
@@ -75,8 +73,6 @@ fun MainScreenContent(
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
                         MainPlusBottomSheet(
-                            tagColor = selectedTagColor,
-                            deadLineText = selectedDeadLine,
                             onNavigateDeadLineSetting = {
                                 currentBottomSheet = BottomSheetType.DEADLINE
                             },
@@ -91,28 +87,19 @@ fun MainScreenContent(
                     BottomSheetType.DEADLINE ->
                         AddToDoDeadLineScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = { deadLine ->
-                                selectedDeadLine = deadLine
-                                currentBottomSheet = BottomSheetType.MAIN
-                            },
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     BottomSheetType.TAG ->
                         AddToDoTagScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = { tagColor ->
-                                selectedTagColor = tagColor
-                                currentBottomSheet = BottomSheetType.MAIN
-                            },
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     BottomSheetType.EISEN ->
                         AddToDoEisenScreen(
                             onClose = { currentBottomSheet = BottomSheetType.MAIN },
-                            onDone = {
-                            },
-                            selectedType = PriorityTagType.Immediate,
-                            onTypeSelected = {},
+                            onDone = { currentBottomSheet = BottomSheetType.MAIN },
                         )
 
                     null -> {}

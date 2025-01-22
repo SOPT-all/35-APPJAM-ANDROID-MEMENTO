@@ -150,7 +150,6 @@ dependencies {
     // Accompanist Placeholder
     implementation("com.google.accompanist:accompanist-placeholder:0.31.5-beta")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.31.5-beta")
-
 }
 
 ktlint {

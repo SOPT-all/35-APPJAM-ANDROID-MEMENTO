@@ -41,6 +41,7 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun BrainDumpScreen(
     viewModel: BrainDumpViewModel = hiltViewModel(),
+    onCloseBottomSheet: () -> Unit
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
@@ -186,5 +187,7 @@ fun BrainDumpScreen(
 @Preview
 @Composable
 fun BrainDumpScreenPreview() {
-    BrainDumpScreen()
+    BrainDumpScreen(
+        onCloseBottomSheet = { }
+    )
 }

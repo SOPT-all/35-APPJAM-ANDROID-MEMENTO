@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.repository.AddPlanRepository
+import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime
@@ -186,6 +187,14 @@ class AddScheduleViewModel
             } catch (e: Exception) {
                 _isTimeValid.value = false
             }
+        }
+
+        fun resetData() {
+            initialTimeValue()
+            _eventText.value = ""
+            _selectedTagText.value = "Untitled"
+            _selectedTagColor.value = "#F0F0F3"
+            _isAllDayChecked.value = false
         }
 
         init {

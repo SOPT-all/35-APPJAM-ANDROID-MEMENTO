@@ -38,13 +38,3 @@ fun String.toLocalDate(): LocalDate {
     return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
 }
 
-fun String.toPriorityTagType(): PriorityTagType {
-    return when (this.uppercase()) {
-        "IMMEDIATE" -> PriorityTagType.Immediate
-        "HIGH" -> PriorityTagType.High
-        "MEDIUM" -> PriorityTagType.Medium
-        "LOW" -> PriorityTagType.Low
-        "NONE" -> PriorityTagType.None
-        else -> PriorityTagType.None
-    }
-}

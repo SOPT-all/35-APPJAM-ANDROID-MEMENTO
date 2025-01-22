@@ -7,11 +7,10 @@ import org.memento.data.service.AddScheduleService
 import javax.inject.Inject
 
 class AddScheduleDataSourceImpl
-@Inject
-constructor(
-    private val addScheduleService: AddScheduleService,
-) : AddScheduleDataSource {
-    override suspend fun postAddTodo(requestAddTodoDto: RequestAddTodoDto): BaseResponse<Unit> =
-        addScheduleService.postAddToDo(requestAddTodoDto)
-
-}
+    @Inject
+    constructor(
+        private val addScheduleService: AddScheduleService,
+    ) : AddScheduleDataSource {
+        override suspend fun postAddTodo(requestAddTodoDto: RequestAddTodoDto): BaseResponse<Unit> =
+            addScheduleService.postAddToDo(requestAddTodoDto)
+    }

@@ -9,5 +9,5 @@ fun AddTodo.toData(): RequestAddTodoDto =
         startDate = startDate,
         endDate = endDate,
         isAllDay = isAllDay,
-        tagId = tagId
+        tagId = tagId,
     )

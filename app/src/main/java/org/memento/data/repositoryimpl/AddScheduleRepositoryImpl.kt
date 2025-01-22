@@ -8,15 +8,15 @@ import org.memento.domain.repository.AddScheduleRepository
 import javax.inject.Inject
 
 class AddScheduleRepositoryImpl
-@Inject
-constructor(
-    private val addScheduleDataSource: AddScheduleDataSource,
-) : AddScheduleRepository {
-    override suspend fun postAddTodo(addTodo: AddTodo): Result<Unit> {
-        return runCatching {
-            addScheduleDataSource.postAddTodo(
-                requestAddTodoDto = addTodo.toData()
-            ).handleBaseResponse().getOrThrow()
+    @Inject
+    constructor(
+        private val addScheduleDataSource: AddScheduleDataSource,
+    ) : AddScheduleRepository {
+        override suspend fun postAddTodo(addTodo: AddTodo): Result<Unit> {
+            return runCatching {
+                addScheduleDataSource.postAddTodo(
+                    requestAddTodoDto = addTodo.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
     }
-}

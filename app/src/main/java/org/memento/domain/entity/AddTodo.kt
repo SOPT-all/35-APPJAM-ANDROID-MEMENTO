@@ -7,4 +7,3 @@ data class AddTodo(
     val isAllDay: Boolean,
     val tagId: Long,
 )
-

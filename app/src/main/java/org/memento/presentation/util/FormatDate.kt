@@ -1,5 +1,6 @@
 package org.memento.presentation.util
 
+import org.memento.presentation.type.PriorityTagType
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -31,4 +32,19 @@ fun parseDateTime(
 fun todoFormatDate(localDate: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH)
     return localDate.format(formatter)
+}
+
+fun String.toLocalDate(): LocalDate {
+    return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
+}
+
+fun String.toPriorityTagType(): PriorityTagType {
+    return when (this.uppercase()) {
+        "IMMEDIATE" -> PriorityTagType.Immediate
+        "HIGH" -> PriorityTagType.High
+        "MEDIUM" -> PriorityTagType.Medium
+        "LOW" -> PriorityTagType.Low
+        "NONE" -> PriorityTagType.None
+        else -> PriorityTagType.None
+    }
 }

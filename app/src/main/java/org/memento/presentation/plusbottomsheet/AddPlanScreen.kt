@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import org.memento.R
+import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModalHandler
 import org.memento.presentation.component.MementoBottomSheet
@@ -48,6 +49,7 @@ import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +75,7 @@ fun AddPlanScreen(
     var showTagBottomSheet by remember { mutableStateOf(false) }
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
@@ -84,6 +87,20 @@ fun AddPlanScreen(
             isShowToast = true
             delay(2000)
             isShowToast = false
+        }
+    }
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is UiState.Success -> {
+                Timber.d("통신 성공")
+            }
+            is UiState.Failure -> {
+                isShowToast = true
+                delay(2000)
+                isShowToast = false
+            }
+            else -> Unit
         }
     }
 

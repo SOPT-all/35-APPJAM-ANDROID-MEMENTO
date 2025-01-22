@@ -10,15 +10,16 @@ import org.memento.domain.repository.LoginRepository
 import javax.inject.Inject
 
 class LoginRepositoryImpl
-    @Inject
-    constructor(
-        private val loginDataSource: LoginDataSource,
-    ) : LoginRepository {
-        override suspend fun postLogin(login: Login): Result<UserInfo> {
-            return runCatching {
-                loginDataSource.postLogin(
-                    requestLoginDto = login.toData(),
-                ).handleBaseResponse().getOrThrow().toUserInfo()
-            }
+@Inject
+constructor(
+    private val loginDataSource: LoginDataSource,
+) : LoginRepository {
+    override suspend fun postLogin(login: Login): Result<UserInfo> {
+        return runCatching {
+            loginDataSource.postLogin(
+                requestLoginDto = login.toData(),
+            ).handleBaseResponse()
+                .getOrThrow()?.toUserInfo()?: throw Exception("Throw Exception Error")
         }
     }
+}

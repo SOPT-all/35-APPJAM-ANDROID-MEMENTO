@@ -13,6 +13,7 @@ import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
+import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -64,6 +65,15 @@ class AddPlanViewModel
                             isAllDay = _isAllDayChecked.value,
                         ),
                     )
+                _uiState.value = result.fold(
+                    onSuccess = {
+                        UiState.Success(Unit)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    }
+                )
             }
         }
 

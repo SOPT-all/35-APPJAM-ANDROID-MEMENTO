@@ -2,7 +2,9 @@ package org.memento.presentation.todo
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -200,8 +203,8 @@ fun TodoScreen() {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -224,18 +227,24 @@ fun TodoScreen() {
         ) {
             TodoBoxUp(
                 modifier =
-                    Modifier
-                        .align(Alignment.TopCenter),
+                Modifier
+                    .align(Alignment.TopCenter),
             )
-            LazyColumn(state = todolistState) {
+            LazyColumn(
+                state = todolistState
+            ) {
                 items(todoList, key = { it }) { date ->
                     TodoDateLine(date)
+                    Spacer(Modifier.height(8.dp))
                     val filteredTodos =
                         todoItems.filter {
                             it.date.toLocalDate() == date
                         }
                     val sortedTodos = filteredTodos.sortedBy { it.isCompleted }
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                    ) {
                         sortedTodos.forEachIndexed { index, todoItem ->
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
                             MementoTodoItem(
@@ -253,6 +262,7 @@ fun TodoScreen() {
                                 isFirstUndone = false,
                                 deadline = deadline,
                             )
+                            Spacer(Modifier.height(10.dp))
                         }
                     }
                 }
@@ -260,14 +270,14 @@ fun TodoScreen() {
             MementoAiFloatingButton(
                 onClick = {},
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 20.dp, end = 20.dp),
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter),
+                Modifier
+                    .align(Alignment.BottomCenter),
             )
         }
     }

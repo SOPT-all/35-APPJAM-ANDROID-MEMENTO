@@ -34,7 +34,10 @@ fun todoFormatDate(localDate: LocalDate): String {
     return localDate.format(formatter)
 }
 
-fun createLocalDateTime(dateText: String, timeText: String): LocalDateTime {
+fun createLocalDateTime(
+    dateText: String,
+    timeText: String,
+): LocalDateTime {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
     return LocalDateTime.parse("$dateText $timeText", formatter)
 }

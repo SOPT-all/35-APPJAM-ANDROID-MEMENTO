@@ -5,5 +5,6 @@ import org.memento.data.dto.request.RequestAddPlanDto
 
 interface AddScheduleDataSource {
     suspend fun postAddTodo(requestAddPlanDto: RequestAddPlanDto): BaseResponse<Unit>
+
     suspend fun postAddPlan(requestAddPlanDto: RequestAddPlanDto): BaseResponse<Unit>
 }

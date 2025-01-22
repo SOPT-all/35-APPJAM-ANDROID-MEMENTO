@@ -21,11 +21,11 @@ class AddScheduleRepositoryImpl
             }
         }
 
-    override suspend fun postAddPlan(addPlan: AddPlan): Result<Unit> {
-        return runCatching {
-            addScheduleDataSource.postAddPlan(
-                requestAddPlanDto = addPlan.toData()
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun postAddPlan(addPlan: AddPlan): Result<Unit> {
+            return runCatching {
+                addScheduleDataSource.postAddPlan(
+                    requestAddPlanDto = addPlan.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
     }
-}

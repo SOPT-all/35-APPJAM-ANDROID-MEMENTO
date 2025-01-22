@@ -24,8 +24,6 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MainPlusBottomSheet(
-    tagColor: String,
-    deadLineText: String,
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenSetting: () -> Unit,
@@ -89,8 +87,6 @@ fun MainPlusBottomSheet(
         when (page) {
             0 ->
                 AddToDoScreen(
-                    deadLineText = deadLineText,
-                    tagColor = tagColor,
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
@@ -100,8 +96,6 @@ fun MainPlusBottomSheet(
             2 -> BrainDumpScreen()
             else ->
                 AddToDoScreen(
-                    deadLineText = deadLineText,
-                    tagColor = tagColor,
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,

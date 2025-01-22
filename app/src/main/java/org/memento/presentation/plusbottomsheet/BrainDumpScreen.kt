@@ -22,8 +22,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,23 +32,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 
 @Composable
-fun BrainDumpScreen() {
-    var inputText by remember { mutableStateOf("") }
+fun BrainDumpScreen(
+    viewModel: BrainDumpViewModel = hiltViewModel(),
+) {
+    val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
-
-    val dummyTexts =
-        listOf(
-            stringResource(R.string.brain_dump_example_1),
-            stringResource(R.string.brain_dump_example_2),
-            stringResource(R.string.brain_dump_example_3),
-            stringResource(R.string.brain_dump_example_4),
-        )
 
     Column(
         modifier =
@@ -69,7 +63,7 @@ fun BrainDumpScreen() {
         ) {
             BasicTextField(
                 value = inputText,
-                onValueChange = { inputText = it },
+                onValueChange = { viewModel.updateInputText(it) },
                 modifier =
                     Modifier
                         .fillMaxSize()
@@ -89,9 +83,9 @@ fun BrainDumpScreen() {
                     .padding(top = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            items(dummyTexts) { text ->
+            items(viewModel.dummyTexts) { text ->
                 Text(
-                    text = text,
+                    text = stringResource(text),
                     style =
                         MementoTheme.typography.detail_r_12.copy(
                             color = darkModeColors.gray06,
@@ -146,9 +140,7 @@ fun BrainDumpScreen() {
                             .padding(horizontal = 54.dp, vertical = 11.dp)
                             .clickable {
                                 val clipboardText = clipboardManager.getText()?.text
-                                if (clipboardText != null) {
-                                    inputText = clipboardText
-                                }
+                                viewModel.pasteCipBoard(clipboardText)
                             },
                 )
             }

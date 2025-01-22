@@ -21,6 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.presentation.component.DeadLineSelectorContent
 import org.memento.presentation.component.MementoBottomSheet
@@ -34,8 +37,9 @@ import org.memento.ui.theme.darkModeColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddToDoDeadLineScreen(
+    viewModel: AddToDoViewModel = hiltViewModel(),
     onClose: () -> Unit,
-    onDone: (String) -> Unit,
+    onDone: () -> Unit,
 ) {
     Column(
         modifier =
@@ -46,7 +50,7 @@ fun AddToDoDeadLineScreen(
         val sheetDeadLineState = rememberModalBottomSheetState()
         var showDeadLineBottomSheet by remember { mutableStateOf(false) }
 
-        var selectedDateText by remember { mutableStateOf("Today") }
+        val tempDeadLineText by viewModel.tempDeadLineText.collectAsStateWithLifecycle()
 
         Row(
             modifier =
@@ -69,7 +73,8 @@ fun AddToDoDeadLineScreen(
                     Modifier
                         .padding(horizontal = 18.dp, vertical = 12.dp)
                         .noRippleClickable {
-                            onDone(selectedDateText)
+                            viewModel.saveDeadLineText()
+                            onDone()
                         },
                 style =
                     MementoTheme.typography.body_r_16.copy(
@@ -106,7 +111,7 @@ fun AddToDoDeadLineScreen(
                     onClickedChange = {
                         showDeadLineBottomSheet = true
                     },
-                    content = selectedDateText,
+                    content = tempDeadLineText,
                     tagColor = null,
                 )
             }
@@ -118,7 +123,7 @@ fun AddToDoDeadLineScreen(
                         onDateSelected = { selectedDate ->
                             selectedDate?.let {
                                 val formattedDate = formatDate(it)
-                                selectedDateText = formattedDate
+                                viewModel.updateTempDeadLineText(tempDeadLine = formattedDate)
                             }
                             showDeadLineBottomSheet = false
                         },

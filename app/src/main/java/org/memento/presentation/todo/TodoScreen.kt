@@ -250,7 +250,7 @@ fun TodoScreen() {
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
                             MementoTodoItem(
                                 tagColor = changeHexToColor(todoItem.tagColor),
-                                isDone = todoItem.isCompleted,
+                                isChecked = todoItem.isCompleted,
                                 onCheckedChange = { isChecked ->
                                     val indexToUpdate = todoItems.indexOfFirst { it.id == todoItem.id }
                                     if (indexToUpdate != -1) {

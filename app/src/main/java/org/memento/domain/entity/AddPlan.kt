@@ -1,11 +1,9 @@
 package org.memento.domain.entity
 
-import java.time.LocalDateTime
-
 data class AddPlan(
     val description: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val startDate: String,
+    val endDate: String,
     val isAllDay: Boolean,
-    val tagId: Long,
+    val tagId: Long? = null,
 )

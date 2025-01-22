@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RequestAddTodoDto(
+data class RequestAddPlanDto(
     @SerialName("description")
     val description: String,
     @SerialName("startDate")
@@ -14,5 +14,5 @@ data class RequestAddTodoDto(
     @SerialName("isAllDay")
     val isAllDay: Boolean,
     @SerialName("tagId")
-    val tagId: Long,
+    val tagId: Long? = null,
 )

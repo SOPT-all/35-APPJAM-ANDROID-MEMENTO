@@ -44,6 +44,7 @@ import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.type.SelectorType
 import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.formatDate
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
@@ -215,7 +216,9 @@ fun AddPlanScreen(
                     Modifier.background(
                         shape = CircleShape,
                         color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
+                    ).noRippleClickable {
+                        viewModel.postAddPlan()
+                    },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),

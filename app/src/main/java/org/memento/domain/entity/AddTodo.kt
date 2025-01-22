@@ -5,5 +5,5 @@ data class AddTodo(
     val startDate: String,
     val endDate: String,
     val isAllDay: Boolean,
-    val tagId: Long,
+    val tagId: Long? = null,
 )

@@ -1,9 +1,9 @@
 package org.memento.data.mapper.toData
 
 import org.memento.data.dto.request.RequestAddPlanDto
-import org.memento.domain.entity.AddTodo
+import org.memento.domain.entity.AddPlan
 
-fun AddTodo.toData(): RequestAddPlanDto =
+fun AddPlan.toData(): RequestAddPlanDto =
     RequestAddPlanDto(
         description = description,
         startDate = startDate,

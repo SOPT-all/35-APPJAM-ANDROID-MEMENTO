@@ -202,8 +202,8 @@ fun TodoScreen() {
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -226,8 +226,8 @@ fun TodoScreen() {
         ) {
             TodoBoxUp(
                 modifier =
-                    Modifier
-                        .align(Alignment.TopCenter),
+                Modifier
+                    .align(Alignment.TopCenter),
             )
             LazyColumn(
                 state = todolistState,
@@ -240,10 +240,11 @@ fun TodoScreen() {
                             it.date.toLocalDate() == date
                         }
                     val sortedTodos = filteredTodos.sortedBy { it.isCompleted }
+                    val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                     Column(
                         modifier =
-                            Modifier
-                                .padding(horizontal = 16.dp),
+                        Modifier
+                            .padding(horizontal = 16.dp),
                     ) {
                         sortedTodos.forEachIndexed { index, todoItem ->
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -259,7 +260,7 @@ fun TodoScreen() {
                                 todoTitleText = todoItem.description,
                                 priorityTagType = todoItem.priorityType.toPriorityTagType(),
                                 isConnected = false,
-                                isFirstUndone = false,
+                                isFirstUndone = (todoItem.id == firstUndoneTodoId),
                                 deadline = deadline,
                             )
                             Spacer(Modifier.height(10.dp))
@@ -270,14 +271,14 @@ fun TodoScreen() {
             MementoAiFloatingButton(
                 onClick = {},
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 20.dp, end = 20.dp),
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter),
+                Modifier
+                    .align(Alignment.BottomCenter),
             )
         }
     }

@@ -226,8 +226,7 @@ fun AddToDoScreen(
                             .padding(horizontal = 13.dp)
                             .padding(top = 12.dp, bottom = 10.dp)
                             .noRippleClickable {
-                                viewModel
-                                    .isShowToast = true
+                                isShowToast = true
                             },
                 )
             }

@@ -9,12 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,10 +63,10 @@ fun TodoScreen() {
                 TodoItem(
                     id = 1,
                     groupId = "49684f41-42a0-45ab-90c4-d78797918b97",
-                    description = "test1",
+                    description = "트루",
                     date = "2025-01-18",
                     deadline = "2025-01-20",
-                    isCompleted = false,
+                    isCompleted = true,
                     priorityValue = 0.7049999999999998,
                     priorityType = "IMMEDIATE",
                     tagName = "도파민",
@@ -79,7 +77,7 @@ fun TodoScreen() {
                 TodoItem(
                     id = 2,
                     groupId = "124",
-                    description = "알바",
+                    description = "알바(폴스)",
                     date = "2025-01-15",
                     deadline = "2025-01-15",
                     isCompleted = false,
@@ -107,10 +105,10 @@ fun TodoScreen() {
                 TodoItem(
                     id = 4,
                     groupId = "125",
-                    description = "데모데이 발표 준비",
+                    description = "데모데이 발표 준비(폴스)",
                     date = "2025-01-15",
                     deadline = "2025-01-15",
-                    isCompleted = true,
+                    isCompleted = false,
                     priorityValue = 3.0,
                     priorityType = "NONE",
                     tagName = "발표",
@@ -131,6 +129,34 @@ fun TodoScreen() {
                     tagColor = "#3357FF",
                     toDoType = "EVENT",
                     order = 3,
+                ),
+                TodoItem(
+                    id = 6,
+                    groupId = "49684f41-42a0-45ab-90c4-d78797918b97",
+                    description = "test1",
+                    date = "2025-01-18",
+                    deadline = "2025-01-20",
+                    isCompleted = false,
+                    priorityValue = 0.7049999999999998,
+                    priorityType = "IMMEDIATE",
+                    tagName = "도파민",
+                    tagColor = "#FF5733",
+                    toDoType = "TASK",
+                    order = 1,
+                ),
+                TodoItem(
+                    id = 7,
+                    groupId = "124",
+                    description = "알바",
+                    date = "2025-01-15",
+                    deadline = "2025-01-15",
+                    isCompleted = false,
+                    priorityValue = 2.0,
+                    priorityType = "NORMAL",
+                    tagName = "노동",
+                    tagColor = "#33FF57",
+                    toDoType = "TASK",
+                    order = 2,
                 ),
             )
         }
@@ -174,8 +200,8 @@ fun TodoScreen() {
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -198,8 +224,8 @@ fun TodoScreen() {
         ) {
             TodoBoxUp(
                 modifier =
-                Modifier
-                    .align(Alignment.TopCenter),
+                    Modifier
+                        .align(Alignment.TopCenter),
             )
             LazyColumn(state = todolistState) {
                 items(todoList, key = { it }) { date ->
@@ -211,6 +237,7 @@ fun TodoScreen() {
                     val sortedTodos = filteredTodos.sortedBy { it.isCompleted }
                     Column {
                         sortedTodos.forEachIndexed { index, todoItem ->
+                            val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
                             MementoTodoItem(
                                 tagColor = changeHexToColor(todoItem.tagColor),
                                 isDone = todoItem.isCompleted,
@@ -224,6 +251,7 @@ fun TodoScreen() {
                                 priorityTagType = todoItem.priorityType.toPriorityTagType(),
                                 isConnected = false,
                                 isFirstUndone = false,
+                                deadline = deadline,
                             )
                         }
                     }
@@ -232,14 +260,14 @@ fun TodoScreen() {
             MementoAiFloatingButton(
                 onClick = {},
                 modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 20.dp, end = 20.dp),
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                Modifier
-                    .align(Alignment.BottomCenter),
+                    Modifier
+                        .align(Alignment.BottomCenter),
             )
         }
     }

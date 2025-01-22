@@ -252,7 +252,7 @@ fun AddScheduleScreen(
                             color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
                         )
                         .noRippleClickable {
-                            viewModel.postAddPlan()
+                            viewModel.postAddSchedule()
                         },
             ) {
                 Image(

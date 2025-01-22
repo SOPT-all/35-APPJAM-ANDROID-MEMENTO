@@ -2,13 +2,14 @@ package org.memento.data.service
 
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
+import org.memento.data.dto.request.RequestAddTodoDto
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AddPlanService {
     @POST("/api/v1/todos")
     suspend fun postAddToDo(
-        @Body requestAddScheduleDto: RequestAddScheduleDto,
+        @Body requestAddTodoDto: RequestAddTodoDto,
     ): BaseResponse<Unit>
 
     @POST("/api/v1/schedules")

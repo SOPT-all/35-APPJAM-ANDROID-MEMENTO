@@ -19,15 +19,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.component.MainBottomBar
 import org.memento.presentation.navigator.component.MainNavHost
 import org.memento.presentation.navigator.rememberMainNavigator
+import org.memento.presentation.plusbottomsheet.AddScheduleViewModel
 import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
 import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
+import org.memento.presentation.plusbottomsheet.AddToDoViewModel
+import org.memento.presentation.plusbottomsheet.BrainDumpViewModel
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.presentation.type.BottomSheetType
 import org.memento.ui.theme.darkModeColors
@@ -48,16 +52,29 @@ fun MainScreen(
 fun MainScreenContent(
     modifier: Modifier = Modifier,
     navigator: MainNavigator,
+    addToDoViewModel: AddToDoViewModel = hiltViewModel(),
+    addScheduleViewModel: AddScheduleViewModel = hiltViewModel(),
+    brainDoViewModel: BrainDumpViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var currentBottomSheet by remember { mutableStateOf<BottomSheetType?>(null) }
 
-    var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
+    // BottomSheet 종료 시 데이터 초기화
+    val onCloseBottomSheet: () -> Unit = {
+        currentBottomSheet = null
+        addToDoViewModel.resetData()
+        addScheduleViewModel.resetData()
+        brainDoViewModel.resetData()
+        coroutineScope.launch {
+            bottomSheetState.hide()
+        }
+    }
+
 
     if (currentBottomSheet != null) {
         ModalBottomSheet(
-            onDismissRequest = { currentBottomSheet = null },
+            onDismissRequest = { onCloseBottomSheet() },
             sheetState = bottomSheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray10,
@@ -82,6 +99,7 @@ fun MainScreenContent(
                             onNavigateEisenSetting = {
                                 currentBottomSheet = BottomSheetType.EISEN
                             },
+                            onCloseBottomSheet = onCloseBottomSheet
                         )
 
                     BottomSheetType.DEADLINE ->

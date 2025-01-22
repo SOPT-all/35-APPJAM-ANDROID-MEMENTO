@@ -16,7 +16,7 @@ class AddPlanRepositoryImpl
         override suspend fun postAddTodo(addTodo: AddTodo): Result<Unit> {
             return runCatching {
                 addPlanDataSource.postAddTodo(
-                    requestAddScheduleDto = addTodo.toData(),
+                    requestAddTodoDto = addTodo.toData(),
                 ).handleBaseResponse().getOrThrow()
             }
         }

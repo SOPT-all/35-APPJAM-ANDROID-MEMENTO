@@ -31,11 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
@@ -93,20 +91,19 @@ fun AddPlanScreen(
             toast.makeText(
                 message = ErrorType.TIME_PRECEDE_ERROR.message,
                 icon = R.drawable.ic_toast,
-                lifecycleOwner = lifecycleOwner
+                lifecycleOwner = lifecycleOwner,
             )
         }
     }
 
     LaunchedEffect(uiState) {
-
         when (uiState) {
             is UiState.Success -> {
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner
+                    lifecycleOwner = lifecycleOwner,
                 )
             }
 
@@ -115,7 +112,7 @@ fun AddPlanScreen(
                 toast.makeText(
                     message = ErrorType.NETWORK_ERROR.message,
                     icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner
+                    lifecycleOwner = lifecycleOwner,
                 )
             }
 
@@ -123,21 +120,18 @@ fun AddPlanScreen(
         }
     }
 
-
-
-
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(bottom = 3.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 3.dp),
         ) {
             BasicTextField(
                 value = eventText,
@@ -145,14 +139,14 @@ fun AddPlanScreen(
                     viewModel.updateEventText(newText)
                 },
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.gray10)
-                    .padding(horizontal = 6.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = darkModeColors.gray10)
+                        .padding(horizontal = 6.dp),
                 textStyle =
-                MementoTheme.typography.body_b_18.copy(
-                    color = darkModeColors.white,
-                ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
                 cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
                 singleLine = true,
             )
@@ -162,18 +156,18 @@ fun AddPlanScreen(
                     text = "Add your event",
                     modifier = Modifier.padding(horizontal = 6.dp),
                     style =
-                    MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.gray07,
-                    ),
+                        MementoTheme.typography.body_b_18.copy(
+                            color = darkModeColors.gray07,
+                        ),
                 )
             }
         }
 
         HorizontalDivider(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray07),
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray07),
             thickness = 2.dp,
         )
 
@@ -213,18 +207,18 @@ fun AddPlanScreen(
                     viewModel.toggleAllDay(isChecked)
                 },
                 colors =
-                CheckboxDefaults.colors(
-                    uncheckedColor = darkModeColors.gray05,
-                    checkedColor = darkModeColors.gray05,
-                    checkmarkColor = darkModeColors.black,
-                ),
+                    CheckboxDefaults.colors(
+                        uncheckedColor = darkModeColors.gray05,
+                        checkedColor = darkModeColors.gray05,
+                        checkmarkColor = darkModeColors.black,
+                    ),
             )
             Text(
                 text = "All-day",
                 style =
-                defaultMementoTypography.body_r_14.copy(
-                    darkModeColors.gray05,
-                ),
+                    defaultMementoTypography.body_r_14.copy(
+                        darkModeColors.gray05,
+                    ),
             )
         }
 
@@ -243,31 +237,31 @@ fun AddPlanScreen(
 
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = darkModeColors.gray10)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.gray10)
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier =
-                Modifier
-                    .background(
-                        shape = CircleShape,
-                        color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    )
-                    .noRippleClickable {
-                        viewModel.postAddPlan()
-                    },
+                    Modifier
+                        .background(
+                            shape = CircleShape,
+                            color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                        )
+                        .noRippleClickable {
+                            viewModel.postAddPlan()
+                        },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                    Modifier
-                        .padding(horizontal = 13.dp)
-                        .padding(top = 12.dp, bottom = 10.dp),
+                        Modifier
+                            .padding(horizontal = 13.dp)
+                            .padding(top = 12.dp, bottom = 10.dp),
                 )
             }
         }
@@ -368,28 +362,28 @@ fun AddPlanSelectComponent(
         Text(
             text = title,
             style =
-            MementoTheme.typography.body_r_16.copy(
-                color = darkModeColors.gray05,
-            ),
+                MementoTheme.typography.body_r_16.copy(
+                    color = darkModeColors.gray05,
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         MementoChipSelector(
             selectorType =
-            when (title) {
-                "Repeat", "End Repeat" -> {
-                    SelectorType.BASIC
-                }
+                when (title) {
+                    "Repeat", "End Repeat" -> {
+                        SelectorType.BASIC
+                    }
 
-                "Tag" -> {
-                    SelectorType.TAG
-                }
+                    "Tag" -> {
+                        SelectorType.TAG
+                    }
 
-                else -> {
-                    SelectorType.DATESELECTOR
-                }
-            },
+                    else -> {
+                        SelectorType.DATESELECTOR
+                    }
+                },
             isClicked = false,
             onClickedChange = {
                 onDateClick()

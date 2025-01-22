@@ -11,19 +11,18 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
 class MementoToast(private val context: Context) : Toast(context) {
-
     fun makeText(
         message: String,
         icon: Int,
         lifecycleOwner: LifecycleOwner,
-        duration: Int = LENGTH_SHORT
+        duration: Int = LENGTH_SHORT,
     ) {
         val views = ComposeView(context)
 
         views.setContent {
             MementoToastContent(
                 messageTxt = message,
-                resourceIcon = icon
+                resourceIcon = icon,
             )
         }
 
@@ -36,4 +35,3 @@ class MementoToast(private val context: Context) : Toast(context) {
         this.show()
     }
 }
-

@@ -142,7 +142,6 @@ fun OnboardingScreen1(
                                     selectedTimeTextWindDown = selectedTime
                                     isClickedWindDown = true
                                     isClickedWakeUp = false
-                                    isSelectedWindDown = true
                                 }
 
                                 else -> Unit
@@ -155,6 +154,10 @@ fun OnboardingScreen1(
                     showTimePickerBottomSheet = false
                     isClickedWakeUp = false
                     isClickedWindDown = false
+
+                    if (currentActiveSelector == SETTIME.WINDDOWN) {
+                        isSelectedWindDown = true
+                    }
                 },
             )
         }

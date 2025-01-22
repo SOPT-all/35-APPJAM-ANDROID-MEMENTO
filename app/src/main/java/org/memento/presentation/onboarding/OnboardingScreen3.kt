@@ -55,7 +55,6 @@ fun OnboardingScreen3(
                 onSkipClick = navigateToOnboardingScreen4,
             )
             Spacer(Modifier.height(20.dp))
-
             LazyColumn(
                 modifier =
                     Modifier

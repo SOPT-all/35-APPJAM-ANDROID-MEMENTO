@@ -35,6 +35,10 @@ fun todoFormatDate(localDate: LocalDate): String {
     return localDate.format(formatter)
 }
 
+fun String.toLocalDate(): LocalDate {
+    return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
+}
+
 fun createLocalDateTime(
     dateText: String,
     timeText: String,

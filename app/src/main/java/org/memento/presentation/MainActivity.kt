@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val SPLASH_SCREEN_DELAY = 2000L
+        const val SPLASH_SCREEN_DELAY = 3000L
     }
 }
 

@@ -43,6 +43,7 @@ fun MementoTodoItem(
     priorityTagType: PriorityTagType,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
+    deadline: String = "Today",
 ) {
     val fraction = 3f / 300f
     val backgroundModifier =
@@ -140,7 +141,7 @@ fun MementoTodoItem(
                             tint = Color.Unspecified,
                         )
                         Text(
-                            text = "dfdf",
+                            text = deadline,
                             style = MementoTheme.typography.detail_r_12,
                             color = darkModeColors.gray05,
                         )
@@ -172,6 +173,7 @@ fun MementoTodoItemWithLine(
     priorityTagType: PriorityTagType,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
+    deadline: String = "Today",
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -199,6 +201,7 @@ fun MementoTodoItemWithLine(
             priorityTagType = priorityTagType,
             isConnected = isConnected,
             isFirstUndone = isFirstUndone,
+            deadline = deadline,
         )
     }
 }
@@ -208,5 +211,6 @@ fun MementoTodoItemWithLine(
 private fun preview2() {
     MEMENTOTheme {
         MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isDone = true)
+        MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isFirstUndone = true, deadline = "")
     }
 }

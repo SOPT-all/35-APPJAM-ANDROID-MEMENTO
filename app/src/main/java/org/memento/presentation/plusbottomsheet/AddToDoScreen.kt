@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
@@ -32,9 +31,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import org.memento.R
 import org.memento.domain.type.ErrorType
 import org.memento.presentation.component.DatePickerModal
+import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.formatDate
@@ -44,15 +48,17 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun AddToDoScreen(
-    tagColor: String,
-    deadLineText: String,
+    viewModel: AddToDoViewModel = hiltViewModel(),
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
 ) {
-    var selectedDateText by remember { mutableStateOf("Today") }
+    val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
+    val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
+    val addTagColor by viewModel.addTagColor.collectAsStateWithLifecycle()
+    val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
+    val addPriorityType by viewModel.addPriorityType.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
-    var addToDoText by remember { mutableStateOf("") }
     var isShowToast by remember { mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
@@ -93,8 +99,8 @@ fun AddToDoScreen(
             if (isCalendarVisible) {
                 DatePickerModal(
                     onDateSelected = { selectedDate ->
-                        if (selectedDate != null) {
-                            selectedDateText = formatDate(selectedDate)
+                        selectedDate?.let {
+                            viewModel.updateSelectedDateText(formatDate(it))
                         }
                     },
                     onDismiss = {
@@ -106,7 +112,9 @@ fun AddToDoScreen(
 
         BasicTextField(
             value = addToDoText,
-            onValueChange = { addToDoText = it },
+            onValueChange = { newText ->
+                viewModel.updateToDoText(newText = newText)
+            },
             modifier =
                 Modifier
                     .background(color = Color.Transparent)
@@ -170,38 +178,29 @@ fun AddToDoScreen(
                         Modifier
                             .size(10.dp)
                             .background(
-                                color = changeHexToColor(hex = tagColor),
+                                color = changeHexToColor(hex = addTagColor),
                                 shape = CircleShape,
                             ),
                 )
             }
 
-            Box(
-                modifier =
-                    Modifier
-                        .background(color = darkModeColors.gray09)
-                        .align(alignment = Alignment.CenterVertically)
-                        .padding(all = 8.dp)
-                        .noRippleClickable {
-                            onNavigateEisenHourSetting()
+            Image(
+                painter =
+                    painterResource(
+                        when (addPriorityType) {
+                            PriorityTagType.None -> R.drawable.ic_eisen_none
+                            PriorityTagType.Immediate -> R.drawable.ic_eisen_immediate
+                            PriorityTagType.High -> R.drawable.ic_eisen_high
+                            PriorityTagType.Medium -> R.drawable.ic_eisen_medium
+                            PriorityTagType.Low -> R.drawable.ic_eisen_low
                         },
-            ) {
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = darkModeColors.gray08,
-                                shape = RoundedCornerShape(2.dp),
-                            )
-                            .padding(all = 2.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_eisen_hour),
-                        contentDescription = "아이젠 하워 버튼",
-                    )
-                }
-            }
+                    ),
+                contentDescription = "아이젠 하워 버튼",
+                modifier =
+                    Modifier.noRippleClickable {
+                        onNavigateEisenHourSetting()
+                    },
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -238,8 +237,6 @@ fun AddToDoScreen(
 @Composable
 fun AddToDoScreenPreview() {
     AddToDoScreen(
-        tagColor = "",
-        deadLineText = "",
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },

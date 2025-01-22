@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
@@ -34,9 +36,13 @@ import org.memento.ui.theme.darkModeColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddToDoTagScreen(
+    viewModel: AddToDoViewModel = hiltViewModel(),
     onClose: () -> Unit,
-    onDone: (String) -> Unit,
+    onDone: () -> Unit,
 ) {
+    val tempTagColor by viewModel.tempTagColor.collectAsStateWithLifecycle()
+    val tempTagText by viewModel.tempTagText.collectAsStateWithLifecycle()
+
     Column(
         modifier =
             Modifier
@@ -45,9 +51,6 @@ fun AddToDoTagScreen(
     ) {
         val sheetTagState = rememberModalBottomSheetState()
         var showTagBottomSheet by remember { mutableStateOf(false) }
-
-        var selectedTagText by remember { mutableStateOf("Untitled") }
-        var selectedTagColor by remember { mutableStateOf("#F0F0F3") }
 
         Row(
             modifier =
@@ -59,13 +62,19 @@ fun AddToDoTagScreen(
             Image(
                 painter = painterResource(R.drawable.ic_back),
                 contentDescription = "뒤로가기 버튼",
+                modifier =
+                    Modifier.noRippleClickable {
+                        onClose()
+                    },
             )
             Text(
                 text = "Done",
                 modifier =
-                    Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
+                    Modifier
+                        .padding(horizontal = 18.dp, vertical = 12.dp)
                         .noRippleClickable {
-                            onDone(selectedTagColor)
+                            viewModel.saveTagColor()
+                            onDone()
                         },
                 style =
                     MementoTheme.typography.body_r_16.copy(
@@ -98,12 +107,12 @@ fun AddToDoTagScreen(
 
                 MementoChipSelector(
                     selectorType = SelectorType.TAG,
-                    isClicked = true,
+                    isClicked = showTagBottomSheet,
                     onClickedChange = {
                         showTagBottomSheet = true
                     },
-                    content = selectedTagText,
-                    tagColor = selectedTagColor,
+                    content = tempTagText,
+                    tagColor = tempTagColor,
                 )
             }
 
@@ -112,8 +121,10 @@ fun AddToDoTagScreen(
                 content = {
                     TagSelectorContent(
                         onTagSelected = { color, tag ->
-                            selectedTagText = tag
-                            selectedTagColor = color
+                            viewModel.updateTempTagData(
+                                tempTagColor = color,
+                                tempTagText = tag,
+                            )
                         },
                     )
                 },

@@ -5,11 +5,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.memento.BuildConfig
+import org.memento.data.local.TokenDataStore
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Singleton
@@ -30,6 +33,21 @@ object NetworkModule {
         }
     }
 
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(tokenDataStore: TokenDataStore): Interceptor {
+        return Interceptor { chain ->
+            val token = runBlocking { tokenDataStore.getAccessToken() }
+            val requestBuilder = chain.request().newBuilder()
+
+            token?.let {
+                requestBuilder.addHeader("Authorization", "Bearer $it")
+            }
+
+            chain.proceed(requestBuilder.build())
+        }
+    }
+
     @Singleton
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -42,9 +60,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: Interceptor,
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
+        builder.addInterceptor(authInterceptor)
         return builder.build()
     }
 

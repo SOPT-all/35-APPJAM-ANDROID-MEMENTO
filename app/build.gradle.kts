@@ -33,6 +33,9 @@ android {
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
         buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+        buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+        buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
+        buildConfigField("String", "REFRESH_TOKEN", properties["refresh.token"].toString())
     }
 
     buildTypes {
@@ -40,6 +43,8 @@ android {
             buildConfigField("String", "BASE_URL", properties["base.url"].toString())
             buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
             buildConfigField("String", "WebView_URL", properties["webview.url"].toString())
+            buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
+            buildConfigField("String", "REFRESH_TOKEN", properties["refresh.token"].toString())
         }
 
         release {
@@ -136,6 +141,20 @@ dependencies {
 
     // Web View
     implementation(libs.accompanist.webview)
+
+    // Accompanist System UI Controller
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta")
+
+    // Accompanist Navigation Animation
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.31.5-beta")
+
+    // Accompanist Pager
+    implementation("com.google.accompanist:accompanist-pager:0.31.5-beta")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.31.5-beta")
+
+    // Accompanist Placeholder
+    implementation("com.google.accompanist:accompanist-placeholder:0.31.5-beta")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.31.5-beta")
 }
 
 ktlint {

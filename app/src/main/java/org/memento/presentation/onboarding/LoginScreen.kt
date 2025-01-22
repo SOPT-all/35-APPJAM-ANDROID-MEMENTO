@@ -31,11 +31,14 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import org.memento.BuildConfig
 import org.memento.R
+import org.memento.core.util.UiState
+import org.memento.domain.entity.UserInfo
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.noRippleClickable
@@ -53,6 +56,21 @@ fun LoginScreen(
     val context = LocalContext.current
     val oneTapClient = remember { Identity.getSignInClient(context) }
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when (uiState) {
+        is UiState.Loading -> {}
+        is UiState.Success -> {
+            val data = (uiState as UiState.Success<UserInfo>).data
+            viewModel.saveToken(
+                accessToken = data.accessToken,
+                refreshToken = data.refreshToken,
+            )
+        }
+
+        is UiState.Failure -> {}
+    }
+
     val launcher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -62,6 +80,7 @@ fun LoginScreen(
                     val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
                     credential.googleIdToken?.let { idToken ->
                         viewModel.signInWithGoogle(idToken)
+                        viewModel.postLogin(idToken)
                     }
                 } catch (e: ApiException) {
                 }

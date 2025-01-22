@@ -13,11 +13,11 @@ enum class BottomNavigationType(
     val route: MainNavigationBarRoute,
 ) {
     TODAY(
-        iconRes = R.drawable.ic_android_black_24,
+        iconRes = R.drawable.ic_today,
         route = MainNavigationBarRoute.Today,
     ),
     TODO(
-        iconRes = R.drawable.ic_android_black_24,
+        iconRes = R.drawable.ic_todo,
         route = MainNavigationBarRoute.Todo,
     ),
     ;

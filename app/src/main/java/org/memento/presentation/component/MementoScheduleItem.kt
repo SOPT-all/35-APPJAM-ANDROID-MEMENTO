@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -117,6 +118,7 @@ fun MementoScheduleItemWithLine(
     timeRange: String,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
+    isNow: Boolean = false,
 ) {
     Row(
         modifier =
@@ -129,7 +131,10 @@ fun MementoScheduleItemWithLine(
             painter = painterResource(id = R.drawable.ic_progress),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.padding(end = 10.dp),
+            modifier =
+                Modifier
+                    .padding(end = 10.dp)
+                    .alpha(if (isNow) 1f else 0f),
         )
 
         MementoScheduleItem(
@@ -147,7 +152,7 @@ private fun preview2() {
     MEMENTOTheme {
         Column {
             MementoScheduleItem(tagColor = Color.Red, scheduleTitleText = "ddddd", timeRange = "12:00", isConnected = true)
-            MementoTodoItem(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isDone = true)
+            MementoTodoItem(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isChecked = true)
         }
     }
 }

@@ -6,15 +6,14 @@ import org.memento.domain.entity.TodoList
 import org.memento.domain.repository.TodoRepository
 import javax.inject.Inject
 
-
 class TodoRepositoryImpl
-@Inject
-constructor(
-    private val todoDataSource: TodoDataSource,
-) : TodoRepository {
-    override suspend fun getTodoList(): Result<List<TodoList.ToDoGetResponse>> =
-        runCatching {
-            val response = todoDataSource.getTodoList().data
-            response?.toTodoListModel() ?: throw Exception("null")
-        }
-}
+    @Inject
+    constructor(
+        private val todoDataSource: TodoDataSource,
+    ) : TodoRepository {
+        override suspend fun getTodoList(): Result<List<TodoList.ToDoGetResponse>> =
+            runCatching {
+                val response = todoDataSource.getTodoList().data
+                response?.toTodoListModel() ?: throw Exception("null")
+            }
+    }

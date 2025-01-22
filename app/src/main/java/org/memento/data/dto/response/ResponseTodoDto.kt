@@ -1,12 +1,11 @@
 package org.memento.data.dto.response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseTodoDto(
-    val toDoGetResponses: List<ToDoGetResponse>
+    val toDoGetResponses: List<ToDoGetResponse>,
 ) {
     @Serializable
     data class ToDoGetResponse(
@@ -33,7 +32,6 @@ data class ResponseTodoDto(
         @SerialName("tagName")
         val tagName: String,
         @SerialName("toDoType")
-        val toDoType: String
+        val toDoType: String,
     )
 }
-

@@ -1,7 +1,7 @@
 package org.memento.domain.entity
 
 data class TodoList(
-    val toDoGetResponses: List<ToDoGetResponse>
+    val toDoGetResponses: List<ToDoGetResponse>,
 ) {
     data class ToDoGetResponse(
         val description: String,
@@ -15,7 +15,6 @@ data class TodoList(
         val startDate: String,
         val tagColor: String,
         val tagName: String,
-        val toDoType: String
+        val toDoType: String,
     )
 }
-

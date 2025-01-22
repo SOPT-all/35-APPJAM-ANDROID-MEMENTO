@@ -13,22 +13,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel
-@Inject
-constructor(
-    private val todoRepository: TodoRepository,
-) : ViewModel() {
-    private val _todoListState =
-        MutableStateFlow<UiState<List<TodoList.ToDoGetResponse>>>(UiState.Loading)
-    val todoListState get() = _todoListState.asStateFlow()
+    @Inject
+    constructor(
+        private val todoRepository: TodoRepository,
+    ) : ViewModel() {
+        private val _todoListState =
+            MutableStateFlow<UiState<List<TodoList.ToDoGetResponse>>>(UiState.Loading)
+        val todoListState get() = _todoListState.asStateFlow()
 
-    fun getTodoList() =
-        viewModelScope.launch {
-            todoRepository.getTodoList()
-                .onSuccess { scheduleRepository ->
-                    _todoListState.emit(UiState.Success(scheduleRepository))
-                }
-                .onFailure { exception ->
-                    _todoListState.value = UiState.Failure
-                }
-        }
-}
+        fun getTodoList() =
+            viewModelScope.launch {
+                todoRepository.getTodoList()
+                    .onSuccess { scheduleRepository ->
+                        _todoListState.emit(UiState.Success(scheduleRepository))
+                    }
+                    .onFailure { exception ->
+                        _todoListState.value = UiState.Failure
+                    }
+            }
+    }

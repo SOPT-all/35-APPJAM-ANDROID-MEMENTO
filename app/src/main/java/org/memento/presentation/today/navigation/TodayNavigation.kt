@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
-import org.memento.presentation.today.TodayScreen
+import org.memento.presentation.today.NewScreen
 
 fun NavController.navigationToday(navOptions: NavOptions) {
     navigate(
@@ -18,7 +18,7 @@ fun NavGraphBuilder.todayNavGraph(
     navigateToReqres: () -> Unit,
 ) {
     composable(TodayRoute.TODAY) {
-        TodayScreen()
+        NewScreen()
     }
 }
 

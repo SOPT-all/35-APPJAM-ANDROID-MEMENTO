@@ -5,7 +5,7 @@ data class Login(
     val idToken: String,
 )
 
-data class UserInfo(
+data class LoginInfo(
     val accessToken: String,
     val refreshToken: String,
     val isNewUser: Boolean,

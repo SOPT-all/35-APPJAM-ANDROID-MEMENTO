@@ -21,34 +21,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
 import org.memento.presentation.component.MementoWakeTimePicker
 import org.memento.presentation.onboarding.component.OnboardingBottomButton
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
+import org.memento.presentation.onboarding.viewmodel.OnboardingViewModel
 import org.memento.presentation.type.OnboardingTopType
+import org.memento.presentation.type.SETTIME
 import org.memento.presentation.type.SelectorType
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
-enum class SETTIME {
-    WAKEUP,
-    WINDDOWN,
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen1(
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToOnboardingScreen2: () -> Unit,
     navigateToOnboardingScreen4: () -> Unit,
 ) {
     val initialTimeText = stringResource(id = R.string.time_example)
+
+    val selectedTimeTextWakeUp by viewModel.wakeUpTime.collectAsStateWithLifecycle(initialTimeText)
+    val selectedTimeTextWindDown by viewModel.windDownTime.collectAsStateWithLifecycle(initialTimeText)
+
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
-
-    var selectedTimeTextWakeUp by remember { mutableStateOf(initialTimeText) }
-    var selectedTimeTextWindDown by remember { mutableStateOf(initialTimeText) }
 
     var isClickedWakeUp by remember { mutableStateOf(false) }
     var isClickedWindDown by remember { mutableStateOf(false) }
@@ -60,9 +63,9 @@ fun OnboardingScreen1(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
@@ -84,8 +87,8 @@ fun OnboardingScreen1(
                 )
                 Spacer(
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -112,8 +115,8 @@ fun OnboardingScreen1(
                 )
                 Spacer(
                     modifier =
-                        Modifier
-                            .weight(1f),
+                    Modifier
+                        .weight(1f),
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
@@ -132,18 +135,17 @@ fun OnboardingScreen1(
                         onTimeSelected = { selectedTime ->
                             when (currentActiveSelector) {
                                 SETTIME.WAKEUP -> {
-                                    selectedTimeTextWakeUp = selectedTime
+                                    viewModel.setWakeUpTime(selectedTime)
                                     isClickedWakeUp = true
                                     isClickedWindDown = false
                                     isSelectedWakeUp = true
                                 }
 
                                 SETTIME.WINDDOWN -> {
-                                    selectedTimeTextWindDown = selectedTime
+                                    viewModel.setWindDownTime(selectedTime)
                                     isClickedWindDown = true
                                     isClickedWakeUp = false
                                 }
-
                                 else -> Unit
                             }
                         },

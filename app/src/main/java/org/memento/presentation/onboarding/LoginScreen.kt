@@ -38,7 +38,7 @@ import com.google.android.gms.common.api.ApiException
 import org.memento.BuildConfig
 import org.memento.R
 import org.memento.core.util.UiState
-import org.memento.domain.entity.UserInfo
+import org.memento.domain.entity.LoginInfo
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.noRippleClickable
@@ -61,7 +61,7 @@ fun LoginScreen(
     when (uiState) {
         is UiState.Loading -> {}
         is UiState.Success -> {
-            val data = (uiState as UiState.Success<UserInfo>).data
+            val data = (uiState as UiState.Success<LoginInfo>).data
             viewModel.saveToken(
                 accessToken = data.accessToken,
                 refreshToken = data.refreshToken,

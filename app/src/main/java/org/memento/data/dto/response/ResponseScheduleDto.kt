@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseScheduleDto(
     @SerialName("scheduleWithOrderInfos")
-    val scheduleWithOrderInfos: List<ScheduleWithOrderInfo>
+    val scheduleWithOrderInfos: List<ScheduleWithOrderInfo>,
 ) {
     @Serializable
     data class ScheduleWithOrderInfo(
@@ -27,6 +27,6 @@ data class ResponseScheduleDto(
         @SerialName("tagName")
         val tagName: String,
         @SerialName("orderNum")
-        val orderNum: Int
+        val orderNum: Int,
     )
 }

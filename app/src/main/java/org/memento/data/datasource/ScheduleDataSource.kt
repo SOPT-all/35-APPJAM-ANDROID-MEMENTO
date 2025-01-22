@@ -5,5 +5,4 @@ import org.memento.data.dto.response.ResponseScheduleDto
 
 interface ScheduleDataSource {
     suspend fun getScheduleList(date: String): BaseResponse<ResponseScheduleDto>
-
 }

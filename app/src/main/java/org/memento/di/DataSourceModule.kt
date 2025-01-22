@@ -32,5 +32,4 @@ internal abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsScheduleDataSource(scheduleDataSourceImpl: ScheduleDataSourceImpl): ScheduleDataSource
-
 }

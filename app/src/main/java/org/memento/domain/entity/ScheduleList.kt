@@ -1,7 +1,7 @@
 package org.memento.domain.entity
 
 data class ScheduleList(
-    val scheduleWithOrderInfos: List<ScheduleWithOrderInfo>
+    val scheduleWithOrderInfos: List<ScheduleWithOrderInfo>,
 ) {
     data class ScheduleWithOrderInfo(
         val description: String,
@@ -13,6 +13,5 @@ data class ScheduleList(
         val startDate: String,
         val tagColorCode: String,
         val tagName: String,
-
-        )
+    )
 }

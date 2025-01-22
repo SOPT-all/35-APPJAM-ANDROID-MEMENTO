@@ -2,6 +2,7 @@ package org.memento.presentation.plusbottomsheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,97 +22,121 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
-fun BrainDumpScreen() {
-    var inputText by remember { mutableStateOf("") }
+fun BrainDumpScreen(
+    viewModel: BrainDumpViewModel = hiltViewModel(),
+) {
+    val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
 
-    val dummyTexts =
-        listOf(
-            stringResource(R.string.brain_dump_example_1),
-            stringResource(R.string.brain_dump_example_2),
-            stringResource(R.string.brain_dump_example_3),
-            stringResource(R.string.brain_dump_example_4),
-        )
-
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        Box(
+        Column(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.9f)
-                    .background(
-                        color = darkModeColors.black,
-                    ),
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
         ) {
-            BasicTextField(
-                value = inputText,
-                onValueChange = { inputText = it },
+            Box(
                 modifier =
                     Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 12.dp)
-                        .padding(top = 8.dp),
-                textStyle =
-                    MementoTheme.typography.body_b_16.copy(
-                        color = darkModeColors.white,
-                    ),
-            )
-        }
-
-        LazyRow(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            items(dummyTexts) { text ->
-                Text(
-                    text = text,
-                    style =
-                        MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray06,
+                        .fillMaxWidth()
+                        .aspectRatio(1.9f)
+                        .background(
+                            color = darkModeColors.black,
                         ),
+            ) {
+                BasicTextField(
+                    value = inputText,
+                    onValueChange = { viewModel.updateInputText(it) },
                     modifier =
                         Modifier
-                            .width(195.dp)
-                            .background(darkModeColors.black)
-                            .padding(horizontal = 10.dp, vertical = 7.dp),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
+                            .fillMaxSize()
+                            .padding(horizontal = 12.dp)
+                            .padding(top = 8.dp),
+                    textStyle =
+                        MementoTheme.typography.body_b_16.copy(
+                            color = darkModeColors.white,
+                        ),
                 )
-            }
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+                if (inputText.isEmpty()) {
+                    Text(
+                        text = "Got any plans? I’ll summarize it for you.",
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 6.dp)
+                                .padding(top = 8.dp),
+                        style =
+                            MementoTheme.typography.body_b_16.copy(
+                                color = darkModeColors.navy,
+                            ),
+                    )
+                }
+            }
+
+            LazyRow(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                items(viewModel.dummyTexts) { text ->
+                    Text(
+                        text = stringResource(text),
+                        style =
+                            MementoTheme.typography.detail_r_12.copy(
+                                color = darkModeColors.gray06,
+                            ),
+                        modifier =
+                            Modifier
+                                .width(195.dp)
+                                .background(
+                                    brush =
+                                        Brush.verticalGradient(
+                                            colors =
+                                                listOf(
+                                                    mementoColors.brainDumpExStart,
+                                                    mementoColors.brainDumpExEnd,
+                                                ),
+                                        ),
+                                )
+                                .border(width = 0.5.dp, color = darkModeColors.gray07, shape = RoundedCornerShape(2.dp))
+                                .padding(horizontal = 10.dp, vertical = 7.dp),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
         Row(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(start = 4.dp, end = 10.dp)
-                    .padding(vertical = 16.dp),
+                    .background(color = darkModeColors.gray10)
+                    .padding(horizontal = 20.dp, vertical = 16.dp)
+                    .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -129,12 +154,11 @@ fun BrainDumpScreen() {
                             color = darkModeColors.gray02,
                         ),
                     modifier =
-                        Modifier.padding(horizontal = 54.dp, vertical = 11.dp)
+                        Modifier
+                            .padding(horizontal = 54.dp, vertical = 11.dp)
                             .clickable {
                                 val clipboardText = clipboardManager.getText()?.text
-                                if (clipboardText != null) {
-                                    inputText = clipboardText
-                                }
+                                viewModel.pasteCipBoard(clipboardText)
                             },
                 )
             }

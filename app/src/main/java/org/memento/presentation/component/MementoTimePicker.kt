@@ -41,7 +41,7 @@ fun MementoTimePicker(
     }
 
     LaunchedEffect(hourState.currentIndex, minuteState.currentIndex, periodState.currentIndex) {
-        delay(100)
+        delay(200)
         onTimeSelected(getFormattedTime())
     }
 

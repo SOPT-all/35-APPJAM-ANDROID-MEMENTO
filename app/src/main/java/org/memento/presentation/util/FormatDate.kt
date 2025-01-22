@@ -32,3 +32,7 @@ fun todoFormatDate(localDate: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH)
     return localDate.format(formatter)
 }
+
+fun String.toLocalDate(): LocalDate {
+    return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
+}

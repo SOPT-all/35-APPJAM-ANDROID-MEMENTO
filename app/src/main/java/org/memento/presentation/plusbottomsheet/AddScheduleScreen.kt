@@ -55,7 +55,7 @@ import org.memento.ui.theme.defaultMementoTypography
 @Composable
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = viewModel(),
-    onCloseBottomSheet : () -> Unit
+    onCloseBottomSheet: () -> Unit,
 ) {
     val eventText by viewModel.eventText.collectAsStateWithLifecycle()
     val selectedStartDateText by viewModel.selectedStartDateText.collectAsStateWithLifecycle()
@@ -415,6 +415,6 @@ fun AddPlanSelectComponent(
 @Composable
 fun AddScheduleScreenPreview() {
     AddScheduleScreen(
-        onCloseBottomSheet = { }
+        onCloseBottomSheet = { },
     )
 }

@@ -54,7 +54,7 @@ fun MainScreenContent(
     navigator: MainNavigator,
     addToDoViewModel: AddToDoViewModel = hiltViewModel(),
     addScheduleViewModel: AddScheduleViewModel = hiltViewModel(),
-    brainDoViewModel: BrainDumpViewModel = hiltViewModel()
+    brainDoViewModel: BrainDumpViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -70,7 +70,6 @@ fun MainScreenContent(
             bottomSheetState.hide()
         }
     }
-
 
     if (currentBottomSheet != null) {
         ModalBottomSheet(
@@ -99,7 +98,7 @@ fun MainScreenContent(
                             onNavigateEisenSetting = {
                                 currentBottomSheet = BottomSheetType.EISEN
                             },
-                            onCloseBottomSheet = onCloseBottomSheet
+                            onCloseBottomSheet = onCloseBottomSheet,
                         )
 
                     BottomSheetType.DEADLINE ->

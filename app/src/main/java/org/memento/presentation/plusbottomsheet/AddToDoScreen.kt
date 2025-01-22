@@ -53,7 +53,7 @@ fun AddToDoScreen(
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
-    onCloseBottomSheet: () -> Unit
+    onCloseBottomSheet: () -> Unit,
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
     val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
@@ -272,6 +272,6 @@ fun AddToDoScreenPreview() {
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },
-        onCloseBottomSheet = { }
+        onCloseBottomSheet = { },
     )
 }

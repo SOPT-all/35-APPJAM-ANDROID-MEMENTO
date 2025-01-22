@@ -27,7 +27,7 @@ fun MainPlusBottomSheet(
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenSetting: () -> Unit,
-    onCloseBottomSheet: () -> Unit
+    onCloseBottomSheet: () -> Unit,
 ) {
     val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab, R.drawable.ic_brain_tab)
     val pagerState =
@@ -38,19 +38,19 @@ fun MainPlusBottomSheet(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 13.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 13.dp),
         contentAlignment = Alignment.Center,
     ) {
         Row(
             modifier =
-            Modifier
-                .background(
-                    color = darkModeColors.gray08,
-                    shape = CircleShape,
-                )
-                .padding(all = 3.dp),
+                Modifier
+                    .background(
+                        color = darkModeColors.gray08,
+                        shape = CircleShape,
+                    )
+                    .padding(all = 3.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -58,17 +58,17 @@ fun MainPlusBottomSheet(
                 val isSelected = pagerState.currentPage == index
                 Box(
                     modifier =
-                    Modifier
-                        .size(38.dp)
-                        .background(
-                            color = if (isSelected) darkModeColors.black else darkModeColors.gray08,
-                            shape = CircleShape,
-                        )
-                        .noRippleClickable {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
+                        Modifier
+                            .size(38.dp)
+                            .background(
+                                color = if (isSelected) darkModeColors.black else darkModeColors.gray08,
+                                shape = CircleShape,
+                            )
+                            .noRippleClickable {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
@@ -91,17 +91,17 @@ fun MainPlusBottomSheet(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
-                    onCloseBottomSheet = onCloseBottomSheet
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
 
             1 ->
                 AddScheduleScreen(
-                    onCloseBottomSheet = onCloseBottomSheet
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
 
             2 ->
                 BrainDumpScreen(
-                    onCloseBottomSheet = onCloseBottomSheet
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
 
             else ->
@@ -109,7 +109,7 @@ fun MainPlusBottomSheet(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
-                    onCloseBottomSheet = onCloseBottomSheet
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
         }
     }

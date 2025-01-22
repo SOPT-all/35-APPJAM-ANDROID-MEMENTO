@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.repository.AddPlanRepository
-import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatTime

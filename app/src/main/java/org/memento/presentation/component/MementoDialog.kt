@@ -546,12 +546,13 @@ fun AddScheduleDialogComponent(
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
-                        text = when(scheduleType){
-                            "NORMAL" -> "None"
-                            "NOTION" -> "Notion"
-                            "Google" -> "Google"
-                            else -> "None"
-                        },
+                        text =
+                            when (scheduleType) {
+                                "NORMAL" -> "None"
+                                "NOTION" -> "Notion"
+                                "Google" -> "Google"
+                                else -> "None"
+                            },
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,

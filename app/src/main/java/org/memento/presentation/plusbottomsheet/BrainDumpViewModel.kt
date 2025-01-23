@@ -34,4 +34,8 @@ class BrainDumpViewModel
                 _inputText.value = it
             }
         }
+
+        fun resetData() {
+            _inputText.value = ""
+        }
     }

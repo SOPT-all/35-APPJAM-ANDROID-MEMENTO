@@ -53,7 +53,7 @@ class AddScheduleViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
-        fun postAddPlan() {
+        fun postAddSchedule() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
                 val result =
@@ -186,6 +186,14 @@ class AddScheduleViewModel
             } catch (e: Exception) {
                 _isTimeValid.value = false
             }
+        }
+
+        fun resetData() {
+            initialTimeValue()
+            _eventText.value = ""
+            _selectedTagText.value = "Untitled"
+            _selectedTagColor.value = "#F0F0F3"
+            _isAllDayChecked.value = false
         }
 
         init {

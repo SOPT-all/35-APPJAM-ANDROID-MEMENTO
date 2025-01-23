@@ -8,10 +8,12 @@ import org.memento.data.repositoryimpl.AddPlanRepositoryImpl
 import org.memento.data.repositoryimpl.LoginRepositoryImpl
 import org.memento.data.repositoryimpl.ReqresRepositoryImpl
 import org.memento.data.repositoryimpl.UserInfoUpdateRepositoryImpl
+import org.memento.data.repositoryimpl.ScheduleRepositoryImpl
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.LoginRepository
 import org.memento.domain.repository.ReqresRepository
 import org.memento.domain.repository.UserInfoUpdateRepository
+import org.memento.domain.repository.ScheduleRepository
 import javax.inject.Singleton
 
 @Module
@@ -32,4 +34,13 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsUserRepository(userInfoUpdateRepositoryImpl: UserInfoUpdateRepositoryImpl): UserInfoUpdateRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsAddPlanRepository(addPlanRepositoryImpl: AddPlanRepositoryImpl): AddPlanRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsScheduleRepository(scheduleRepositoryImpl: ScheduleRepositoryImpl): ScheduleRepository
+
 }

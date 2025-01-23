@@ -18,10 +18,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -41,9 +42,11 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun BrainDumpScreen(
     viewModel: BrainDumpViewModel = hiltViewModel(),
+    onCloseBottomSheet: () -> Unit,
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
+    val isShowAnimation by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -54,43 +57,17 @@ fun BrainDumpScreen(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
         ) {
-            Box(
+            BrainDumpAITextField(
+                value = inputText,
+                onValueChange = { viewModel.updateInputText(it) },
                 modifier =
                     Modifier
                         .fillMaxWidth()
                         .aspectRatio(1.9f)
-                        .background(
-                            color = darkModeColors.black,
-                        ),
-            ) {
-                BasicTextField(
-                    value = inputText,
-                    onValueChange = { viewModel.updateInputText(it) },
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 12.dp)
-                            .padding(top = 8.dp),
-                    textStyle =
-                        MementoTheme.typography.body_b_16.copy(
-                            color = darkModeColors.white,
-                        ),
-                )
-
-                if (inputText.isEmpty()) {
-                    Text(
-                        text = "Got any plans? I’ll summarize it for you.",
-                        modifier =
-                            Modifier
-                                .padding(horizontal = 6.dp)
-                                .padding(top = 8.dp),
-                        style =
-                            MementoTheme.typography.body_b_16.copy(
-                                color = darkModeColors.navy,
-                            ),
-                    )
-                }
-            }
+                        .padding(top = 8.dp),
+                placeholder = "Got any plans? I’ll summarize it for you.",
+                isShowAnimation = isShowAnimation,
+            )
 
             LazyRow(
                 modifier =
@@ -186,5 +163,7 @@ fun BrainDumpScreen(
 @Preview
 @Composable
 fun BrainDumpScreenPreview() {
-    BrainDumpScreen()
+    BrainDumpScreen(
+        onCloseBottomSheet = { },
+    )
 }

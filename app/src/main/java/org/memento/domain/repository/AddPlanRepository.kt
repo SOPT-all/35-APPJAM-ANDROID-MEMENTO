@@ -25,6 +25,6 @@ interface AddPlanRepository {
     ): Result<ScheduleDetail>
 
     suspend fun getTodoDetail(
-        todoId: Int
+        todoId: Int,
     ): Result<TodoDetail>
 }

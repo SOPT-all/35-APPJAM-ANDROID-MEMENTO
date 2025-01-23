@@ -9,7 +9,7 @@ data class ScheduleData(
     val tagColor: String,
     val tagText: String,
     val platform: Int,
-    val platformText: String
+    val platformText: String,
 )
 
 data class ToDoData(
@@ -17,5 +17,5 @@ data class ToDoData(
     val isChecked: Boolean,
     val tagColor: String,
     val tagText: String,
-    val priorityType: PriorityTagType
+    val priorityType: PriorityTagType,
 )

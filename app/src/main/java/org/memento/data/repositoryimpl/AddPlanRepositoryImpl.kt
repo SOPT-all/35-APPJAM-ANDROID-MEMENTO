@@ -68,8 +68,8 @@ class AddPlanRepositoryImpl
         override suspend fun getTodoDetail(todoId: Int): Result<TodoDetail> {
             return runCatching {
                 addPlanDataSource.getTodoDetail(
-                    todoId = todoId
-                ).handleBaseResponse().getOrThrow()?.toTodoDetail() ?: throw  Exception("Throw Exception Error")
+                    todoId = todoId,
+                ).handleBaseResponse().getOrThrow()?.toTodoDetail() ?: throw Exception("Throw Exception Error")
             }
         }
-}
+    }

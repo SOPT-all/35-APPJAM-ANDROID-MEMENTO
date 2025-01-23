@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseTodoDetailDto (
+data class ResponseTodoDetailDto(
     @SerialName("id")
     val id: Int,
     @SerialName("description")
@@ -24,5 +24,5 @@ data class ResponseTodoDetailDto (
     @SerialName("tagColor")
     val tagColor: String,
     @SerialName("toDoType")
-    val toDoType: String
+    val toDoType: String,
 )

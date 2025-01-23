@@ -14,5 +14,5 @@ fun ResponseTodoDetailDto.toTodoDetail(): TodoDetail =
         tagId = tagId,
         tagName = tagName,
         tagColor = tagColor,
-        toDoType = toDoType
+        toDoType = toDoType,
     )

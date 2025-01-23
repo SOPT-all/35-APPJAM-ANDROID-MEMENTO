@@ -10,5 +10,5 @@ data class TodoDetail(
     val tagId: Int,
     val tagName: String,
     val tagColor: String,
-    val toDoType: String
+    val toDoType: String,
 )

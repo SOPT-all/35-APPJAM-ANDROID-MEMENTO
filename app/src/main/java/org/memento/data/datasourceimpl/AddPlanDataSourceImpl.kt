@@ -43,5 +43,4 @@ class AddPlanDataSourceImpl
 
         override suspend fun getTodoDetail(todoId: Int): BaseResponse<ResponseTodoDetailDto> =
             addPlanService.getTodoDetail(todoId)
-
-}
+    }

@@ -18,7 +18,7 @@ interface AddPlanService {
         @Body requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 
-    @POST("/api/v1/todo/braindump")
+    @POST("/api/v1/braindump")
     suspend fun postBrainDump(
         @Body requestBrainDumpDto: RequestBrainDumpDto,
     ): BaseResponse<Unit>

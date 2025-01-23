@@ -35,6 +35,6 @@ interface AddPlanService {
 
     @GET("/api/v1/schedules/{scheduleId}")
     suspend fun getScheduleDetail(
-        @Path("scheduleId") scheduleId: Int
+        @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<ResponseScheduleDetailDto>
 }

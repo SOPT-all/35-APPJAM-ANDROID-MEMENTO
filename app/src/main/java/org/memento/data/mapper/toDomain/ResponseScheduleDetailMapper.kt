@@ -10,5 +10,5 @@ fun ResponseScheduleDetailDto.toScheduleDetail(): ScheduleDetail =
         startDate = startDate,
         endDate = endDate,
         scheduleType = scheduleType,
-        tagId = tagId
+        tagId = tagId,
     )

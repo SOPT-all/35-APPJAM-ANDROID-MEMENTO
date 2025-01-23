@@ -58,8 +58,8 @@ class AddPlanRepositoryImpl
         override suspend fun getScheduleDetail(scheduleId: Int): Result<ScheduleDetail> {
             return runCatching {
                 addPlanDataSource.getScheduleDetail(
-                    scheduleId = scheduleId
+                    scheduleId = scheduleId,
                 ).handleBaseResponse().getOrThrow()?.toScheduleDetail() ?: throw Exception("Throw Exception Error")
             }
         }
-}
+    }

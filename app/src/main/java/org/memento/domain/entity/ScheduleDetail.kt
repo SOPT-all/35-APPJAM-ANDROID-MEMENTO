@@ -6,5 +6,5 @@ data class ScheduleDetail(
     val startDate: String,
     val endDate: String,
     val scheduleType: String,
-    val tagId: Int
+    val tagId: Int,
 )

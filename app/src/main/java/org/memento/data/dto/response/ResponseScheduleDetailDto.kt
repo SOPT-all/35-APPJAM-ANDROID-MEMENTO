@@ -16,5 +16,5 @@ data class ResponseScheduleDetailDto(
     @SerialName("scheduleType")
     val scheduleType: String,
     @SerialName("tagId")
-    val tagId: Int
+    val tagId: Int,
 )

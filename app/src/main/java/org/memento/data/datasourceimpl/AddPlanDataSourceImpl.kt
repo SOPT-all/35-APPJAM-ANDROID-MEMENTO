@@ -39,4 +39,4 @@ class AddPlanDataSourceImpl
 
         override suspend fun getScheduleDetail(scheduleId: Int): BaseResponse<ResponseScheduleDetailDto> =
             addPlanService.getScheduleDetail(scheduleId)
-}
+    }

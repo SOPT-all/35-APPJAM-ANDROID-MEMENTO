@@ -27,6 +27,7 @@ fun MainPlusBottomSheet(
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenSetting: () -> Unit,
+    onCloseBottomSheet: () -> Unit,
 ) {
     val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab, R.drawable.ic_brain_tab)
     val pagerState =
@@ -90,15 +91,25 @@ fun MainPlusBottomSheet(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
 
-            1 -> AddScheduleScreen()
-            2 -> BrainDumpScreen()
+            1 ->
+                AddScheduleScreen(
+                    onCloseBottomSheet = onCloseBottomSheet,
+                )
+
+            2 ->
+                BrainDumpScreen(
+                    onCloseBottomSheet = onCloseBottomSheet,
+                )
+
             else ->
                 AddToDoScreen(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
+                    onCloseBottomSheet = onCloseBottomSheet,
                 )
         }
     }

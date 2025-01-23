@@ -32,6 +32,19 @@ class LoginViewModel
         private val _uiState = MutableStateFlow<UiState<LoginInfo>>(UiState.Loading)
         val uiState: StateFlow<UiState<LoginInfo>> = _uiState
 
+        private val _token = MutableStateFlow<String?>(null)
+        val token: StateFlow<String?> = _token.asStateFlow()
+
+        init {
+            loadToken()
+        }
+
+        fun loadToken() {
+            viewModelScope.launch {
+                _token.value = tokenDataStore.getAccessToken()
+            }
+        }
+
         fun saveToken(
             accessToken: String,
             refreshToken: String,

@@ -9,6 +9,7 @@ import org.memento.data.service.LoginService
 import org.memento.data.service.ReqresService
 import org.memento.data.service.ScheduleService
 import org.memento.data.service.UserInfoUpdateService
+import org.memento.data.service.TodoService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -34,4 +35,8 @@ internal object ServiceModule {
     @Provides
     @Singleton
     fun provideUserInfoUpdateService(retrofit: Retrofit): UserInfoUpdateService = retrofit.create(UserInfoUpdateService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTodoService(retrofit: Retrofit): TodoService = retrofit.create(TodoService::class.java)
 }

@@ -19,12 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,13 +50,13 @@ import org.memento.presentation.component.MementoTopBar
 import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.today.component.AllDayScheduleTag
 import org.memento.presentation.type.PriorityTagType
-import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
     modifier: Modifier = Modifier,
@@ -65,11 +65,22 @@ fun TodayScreen(
     viewModel: TodayViewModel = hiltViewModel(),
     padding: PaddingValues,
 ) {
+    val dummyDataState = remember { mutableStateListOf(*dummyData.toTypedArray()) }
     var draggedItemIndex by remember { mutableStateOf(-1) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
     var itemHeight by remember { mutableIntStateOf(0) }
     var listHeight by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
+
+    var showDetailDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val sheetEditTodoState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showEditTodoBottomSheet by remember { mutableStateOf(false) }
+    val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
+    var selectedPlanId by remember { mutableIntStateOf(13) }
+    var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
+
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
     val selectedDate = remember { mutableStateOf(today) }
@@ -101,9 +112,9 @@ fun TodayScreen(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -122,9 +133,9 @@ fun TodayScreen(
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = (5 * 30).dp),
         ) {
             val state = rememberLazyListState()
             LazyColumn(
@@ -143,9 +154,9 @@ fun TodayScreen(
         if (combinedItems.isEmpty()) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(top = 150.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 150.dp),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 Text(
@@ -161,12 +172,12 @@ fun TodayScreen(
             ) {
                 LazyColumn(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .onGloballyPositioned { it ->
-                                listHeight = it.size.height
-                            },
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .onGloballyPositioned { it ->
+                            listHeight = it.size.height
+                        },
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     userScrollEnabled = !isDraggingEnabled.value,
                 ) {
@@ -177,11 +188,11 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .onGloballyPositioned { it ->
+                                        itemHeight = it.size.height
+                                    },
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -189,11 +200,11 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .onGloballyPositioned { it ->
+                                        itemHeight = it.size.height
+                                    },
                             )
                         }
                     }
@@ -204,31 +215,31 @@ fun TodayScreen(
 
                         Box(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .graphicsLayer(
-                                        scaleX = scale.value,
-                                        scaleY = scale.value,
-                                        translationY = if (isDragging) draggedOffsetY else 0f,
-                                    )
-                                    .pointerInput(Unit) {
-                                        detectDragGesturesAfterLongPress(
-                                            onDragStart = {
-                                                draggedItemIndex = index
-                                                isDraggingEnabled.value = true
-                                            },
-                                            onDrag = { change, dragAmount ->
-                                                if (isDraggingEnabled.value) {
-                                                    change.consume()
-                                                    draggedOffsetY += dragAmount.y
-                                                    val itemHeightPx = with(density) { 60.dp.toPx() }
+                            Modifier
+                                .fillMaxWidth()
+                                .graphicsLayer(
+                                    scaleX = scale.value,
+                                    scaleY = scale.value,
+                                    translationY = if (isDragging) draggedOffsetY else 0f,
+                                )
+                                .pointerInput(Unit) {
+                                    detectDragGesturesAfterLongPress(
+                                        onDragStart = {
+                                            draggedItemIndex = index
+                                            isDraggingEnabled.value = true
+                                        },
+                                        onDrag = { change, dragAmount ->
+                                            if (isDraggingEnabled.value) {
+                                                change.consume()
+                                                draggedOffsetY += dragAmount.y
+                                                val itemHeightPx = with(density) { 60.dp.toPx() }
 
-                                                    while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                        val moveDirection =
-                                                            if (draggedOffsetY > 0) 1 else -1
-                                                        val targetIndex =
-                                                            (draggedItemIndex + moveDirection)
-                                                                .coerceIn(0, combinedItems.size - 1)
+                                                while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
+                                                    val moveDirection =
+                                                        if (draggedOffsetY > 0) 1 else -1
+                                                    val targetIndex =
+                                                        (draggedItemIndex + moveDirection)
+                                                            .coerceIn(0, combinedItems.size - 1)
 
 //                                                    if (targetIndex != draggedItemIndex) {
 //                                                        combinedItems.move(
@@ -241,13 +252,13 @@ fun TodayScreen(
 //                                                        draggedOffsetY = 0f
 //                                                        break
 //                                                    }
-                                                    }
                                                 }
-                                            },
-                                            onDragEnd = { resetDraggingState() },
-                                            onDragCancel = { resetDraggingState() },
-                                        )
-                                    },
+                                            }
+                                        },
+                                        onDragEnd = { resetDraggingState() },
+                                        onDragCancel = { resetDraggingState() },
+                                    )
+                                },
                         ) {
                             when (item) {
                                 is MementoItem.TodoItem -> {
@@ -259,6 +270,11 @@ fun TodayScreen(
                                         priorityTagType = PriorityTagType.None,
                                         isConnected = item.toDoType.toBoolean(),
                                         isNow = false,
+                                        onClick = {
+                                            // selectedPlanId = schedule.id
+                                            dialogType = DialogType.TO_DO
+                                            showDetailDialog = true
+                                        },
                                     )
                                 }
 
@@ -268,6 +284,11 @@ fun TodayScreen(
                                         scheduleTitleText = item.description,
                                         timeRange = "dfdf",
                                         isNow = false,
+                                        onClick = {
+//                                            selectedPlanId = schedule.id
+                                            dialogType = DialogType.SCHEDULE
+                                            showDetailDialog = true
+                                        },
                                     )
                                 }
                             }
@@ -281,8 +302,8 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
+                                Modifier
+                                    .padding(bottom = 16.dp),
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -290,35 +311,74 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
+                                Modifier
+                                    .padding(bottom = 16.dp),
                             )
                         }
                     }
                 }
                 Column(
                     modifier =
-                        Modifier
-                            .offset(x = 28.dp)
-                            .width(1.dp)
-                            .height(with(density) { listHeight.toDp() })
-                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
-                            .background(
-                                brush =
-                                    Brush.linearGradient(
-                                        colors =
-                                            listOf(
-                                                Color.Transparent,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                Color.Transparent,
-                                            ),
-                                    ),
+                    Modifier
+                        .offset(x = 28.dp)
+                        .width(1.dp)
+                        .height(with(density) { listHeight.toDp() })
+                        .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                        .background(
+                            brush =
+                            Brush.linearGradient(
+                                colors =
+                                listOf(
+                                    Color.Transparent,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    Color.Transparent,
+                                ),
                             ),
+                        ),
                 ) {}
             }
         }
+
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+            dialogType = dialogType,
+            planId = selectedPlanId,
+        )
+
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(
+                        planId = selectedPlanId,
+                        dialogType = dialogType,
+                    )
+                    showDeleteDialog = false
+                },
+            )
+        }
+
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onConfirm = { showEditTodoBottomSheet = false },
+            planId = selectedPlanId,
+        )
+
+        MementoEditScheduleBottomSheet(
+            isOpenBottomSheet = showEditScheduleBottomSheet,
+            sheetState = sheetEditScheduleState,
+            onConfirm = { showEditScheduleBottomSheet = false },
+            planId = selectedPlanId,
+        )
     }
 }
 

@@ -39,15 +39,12 @@ import com.google.android.gms.common.api.ApiException
 import org.memento.BuildConfig
 import org.memento.R
 import org.memento.core.util.UiState
-import org.memento.data.local.TokenDataStore
 import org.memento.domain.entity.UserInfo
-import org.memento.presentation.main.MainScreen
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
-import timber.log.Timber
 
 @Composable
 fun LoginScreen(
@@ -58,7 +55,6 @@ fun LoginScreen(
     val token by viewModel.token.collectAsState()
 
     LaunchedEffect(token) {
-        Log.e("Loginscree",token.toString())
         if (!token.isNullOrEmpty()) {
             navigationToMainScreen()
         }
@@ -121,9 +117,9 @@ fun LoginScreen(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(top = 130.dp, bottom = 176.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(top = 130.dp, bottom = 176.dp),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
@@ -166,10 +162,10 @@ fun LoginScreen(
                 style = defaultMementoTypography.detail_r_11,
                 color = darkModeColors.gray04,
                 modifier =
-                Modifier
-                    .noRippleClickable {
-                        webViewVisible = true
-                    },
+                    Modifier
+                        .noRippleClickable {
+                            webViewVisible = true
+                        },
             )
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
@@ -53,6 +55,9 @@ fun AddToDoScreen(
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
+    isEdit: Boolean = false,
+    isEditDone: () -> Unit,
+    isEditCancel: () -> Unit
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
     val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
@@ -99,31 +104,67 @@ fun AddToDoScreen(
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 23.dp, vertical = 5.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 23.dp, vertical = 5.dp),
         ) {
+            if (isEdit) {
+                Row(
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp, vertical = 7.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Cancel",
+                        style =
+                        MementoTheme.typography.body_r_14.copy(
+                            color = darkModeColors.gray02,
+                        ),
+                        modifier =
+                        Modifier
+                            .noRippleClickable {
+                                isEditCancel()
+                            },
+                    )
+
+                    Text(
+                        text = "Done",
+                        style =
+                        MementoTheme.typography.body_r_14.copy(
+                            color = darkModeColors.gray02,
+                        ),
+                        modifier =
+                        Modifier
+                            .noRippleClickable {
+                                isEditDone()
+                            },
+                    )
+                }
+
+            }
             Row {
                 Text(
                     text = "Add to-do,",
                     style =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.gray07,
-                        ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.gray07,
+                    ),
                 )
 
                 Text(
                     text = selectedDateText,
                     modifier =
-                        Modifier
-                            .padding(start = 5.dp)
-                            .noRippleClickable {
-                                isCalendarVisible = true
-                            },
+                    Modifier
+                        .padding(start = 5.dp)
+                        .noRippleClickable {
+                            isCalendarVisible = true
+                        },
                     style =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.white,
-                        ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.white,
+                    ),
                 )
 
                 if (isCalendarVisible) {
@@ -148,22 +189,22 @@ fun AddToDoScreen(
                     }
                 },
                 modifier =
-                    Modifier
-                        .background(color = Color.Transparent)
-                        .focusRequester(focusRequester)
-                        .padding(top = 16.dp),
+                Modifier
+                    .background(color = Color.Transparent)
+                    .focusRequester(focusRequester)
+                    .padding(top = 16.dp),
                 textStyle =
-                    MementoTheme.typography.body_b_16.copy(
-                        color = darkModeColors.white,
-                    ),
+                MementoTheme.typography.body_b_16.copy(
+                    color = darkModeColors.white,
+                ),
                 cursorBrush =
-                    Brush.verticalGradient(
-                        listOf(darkModeColors.green, darkModeColors.green),
-                    ),
+                Brush.verticalGradient(
+                    listOf(darkModeColors.green, darkModeColors.green),
+                ),
                 keyboardOptions =
-                    KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.Sentences,
-                    ),
+                KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -171,20 +212,20 @@ fun AddToDoScreen(
 
         Row(
             modifier =
-                Modifier
-                    .padding(vertical = 16.dp, horizontal = 20.dp)
-                    .align(alignment = Alignment.BottomCenter),
+            Modifier
+                .padding(vertical = 16.dp, horizontal = 20.dp)
+                .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(
                 modifier =
-                    Modifier
-                        .background(color = darkModeColors.gray09)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .noRippleClickable {
-                            onNavigateDeadLineSetting()
-                        },
+                Modifier
+                    .background(color = darkModeColors.gray09)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .noRippleClickable {
+                        onNavigateDeadLineSetting()
+                    },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_deadline),
@@ -193,71 +234,73 @@ fun AddToDoScreen(
                 Text(
                     text = deadLineText,
                     style =
-                        MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.detail_r_12.copy(
+                        color = darkModeColors.gray02,
+                    ),
                 )
             }
 
             Box(
                 modifier =
-                    Modifier
-                        .background(color = darkModeColors.gray09)
-                        .align(alignment = Alignment.CenterVertically)
-                        .padding(all = 16.dp)
-                        .noRippleClickable {
-                            onNavigateTagSetting()
-                        },
+                Modifier
+                    .background(color = darkModeColors.gray09)
+                    .align(alignment = Alignment.CenterVertically)
+                    .padding(all = 16.dp)
+                    .noRippleClickable {
+                        onNavigateTagSetting()
+                    },
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .size(10.dp)
-                            .background(
-                                color = changeHexToColor(hex = addTagColor),
-                                shape = CircleShape,
-                            ),
+                    Modifier
+                        .size(10.dp)
+                        .background(
+                            color = changeHexToColor(hex = addTagColor),
+                            shape = CircleShape,
+                        ),
                 )
             }
 
             Image(
                 painter =
-                    painterResource(
-                        when (addPriorityType) {
-                            PriorityTagType.None -> R.drawable.ic_eisen_none
-                            PriorityTagType.Immediate -> R.drawable.ic_eisen_immediate
-                            PriorityTagType.High -> R.drawable.ic_eisen_high
-                            PriorityTagType.Medium -> R.drawable.ic_eisen_medium
-                            PriorityTagType.Low -> R.drawable.ic_eisen_low
-                        },
-                    ),
+                painterResource(
+                    when (addPriorityType) {
+                        PriorityTagType.None -> R.drawable.ic_eisen_none
+                        PriorityTagType.Immediate -> R.drawable.ic_eisen_immediate
+                        PriorityTagType.High -> R.drawable.ic_eisen_high
+                        PriorityTagType.Medium -> R.drawable.ic_eisen_medium
+                        PriorityTagType.Low -> R.drawable.ic_eisen_low
+                    },
+                ),
                 contentDescription = "아이젠 하워 버튼",
                 modifier =
-                    Modifier.noRippleClickable {
-                        onNavigateEisenHourSetting()
-                    },
+                Modifier.noRippleClickable {
+                    onNavigateEisenHourSetting()
+                },
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Box(
-                modifier =
+            if (!isEdit) {
+                Box(
+                    modifier =
                     Modifier.background(
                         shape = CircleShape,
                         color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
                     ),
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_send),
-                    contentDescription = "전송 버튼",
-                    modifier =
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_send),
+                        contentDescription = "전송 버튼",
+                        modifier =
                         Modifier
                             .padding(horizontal = 13.dp)
                             .padding(top = 12.dp, bottom = 10.dp)
                             .noRippleClickable {
                                 viewModel.postAddTodo()
                             },
-                )
+                    )
+                }
             }
         }
     }
@@ -270,5 +313,7 @@ fun AddToDoScreenPreview() {
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },
+        isEditCancel = { },
+        isEditDone = { }
     )
 }

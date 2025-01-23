@@ -1,6 +1,5 @@
 package org.memento.presentation.onboarding.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,13 +30,13 @@ fun RoundCheckboxWithText(
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .noRippleClickable {
-                onCheckedChange(!isChecked)
-            }
-            .then(modifier)
-            .padding(16.dp),
+            Modifier
+                .fillMaxWidth()
+                .noRippleClickable {
+                    onCheckedChange(!isChecked)
+                }
+                .then(modifier)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RoundCheckbox(
@@ -50,9 +49,9 @@ fun RoundCheckboxWithText(
             style = defaultMementoTypography.body_b_14,
             color = if (isChecked) darkModeColors.white else darkModeColors.gray06,
             modifier =
-            Modifier.noRippleClickable {
-                onCheckedChange(!isChecked)
-            },
+                Modifier.noRippleClickable {
+                    onCheckedChange(!isChecked)
+                },
         )
     }
 }

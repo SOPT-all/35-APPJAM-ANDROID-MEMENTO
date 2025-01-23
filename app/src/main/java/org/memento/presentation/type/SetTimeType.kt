@@ -1,6 +1,6 @@
 package org.memento.presentation.type
 
-enum class SETTIME {
+enum class SetTimeType {
     WAKEUP,
     WINDDOWN,
 }

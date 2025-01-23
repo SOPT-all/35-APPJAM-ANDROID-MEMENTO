@@ -29,6 +29,7 @@ import androidx.compose.ui.zIndex
 import org.memento.R
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.lineThrough
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -175,12 +176,16 @@ fun MementoTodoItemWithLine(
     isFirstUndone: Boolean = false,
     deadline: String = "Today",
     modifier: Modifier = Modifier,
+    onClick : () -> Unit
 ) {
     Row(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp)
+                .noRippleClickable {
+                    onClick()
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -203,14 +208,5 @@ fun MementoTodoItemWithLine(
             isFirstUndone = isFirstUndone,
             deadline = deadline,
         )
-    }
-}
-
-@Preview()
-@Composable
-private fun preview2() {
-    MEMENTOTheme {
-        MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isDone = true)
-        MementoTodoItemWithLine(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isFirstUndone = true, deadline = "")
     }
 }

@@ -8,14 +8,14 @@ import org.memento.data.repositoryimpl.AddPlanRepositoryImpl
 import org.memento.data.repositoryimpl.LoginRepositoryImpl
 import org.memento.data.repositoryimpl.ReqresRepositoryImpl
 import org.memento.data.repositoryimpl.ScheduleRepositoryImpl
-import org.memento.data.repositoryimpl.UserInfoUpdateRepositoryImpl
 import org.memento.data.repositoryimpl.TodoRepositoryImpl
+import org.memento.data.repositoryimpl.UserInfoUpdateRepositoryImpl
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.LoginRepository
 import org.memento.domain.repository.ReqresRepository
 import org.memento.domain.repository.ScheduleRepository
-import org.memento.domain.repository.UserInfoUpdateRepository
 import org.memento.domain.repository.TodoRepository
+import org.memento.domain.repository.UserInfoUpdateRepository
 import javax.inject.Singleton
 
 @Module

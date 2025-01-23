@@ -8,8 +8,8 @@ import org.memento.data.service.AddPlanService
 import org.memento.data.service.LoginService
 import org.memento.data.service.ReqresService
 import org.memento.data.service.ScheduleService
-import org.memento.data.service.UserInfoUpdateService
 import org.memento.data.service.TodoService
+import org.memento.data.service.UserInfoUpdateService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

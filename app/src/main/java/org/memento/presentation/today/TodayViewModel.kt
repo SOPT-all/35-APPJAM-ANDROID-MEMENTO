@@ -83,68 +83,69 @@ constructor(
                 _uiState.value = UiState.Failure
             }
         }
+    }
 
-        fun getScheduleDetail(scheduleId: Int) {
-            viewModelScope.launch {
-                _detailScheduleState.value = UiState.Loading
-                val result = addPlanRepository.getScheduleDetail(scheduleId = scheduleId)
-                _detailScheduleState.value =
-                    result.fold(
-                        onSuccess = {
-                            UiState.Success(it)
-                        },
-                        onFailure = { throwable ->
-                            Timber.e(throwable, "Failed to post plan")
-                            UiState.Failure
-                        },
-                    )
-            }
+    fun getScheduleDetail(scheduleId: Int) {
+        viewModelScope.launch {
+            _detailScheduleState.value = UiState.Loading
+            val result = addPlanRepository.getScheduleDetail(scheduleId = scheduleId)
+            _detailScheduleState.value =
+                result.fold(
+                    onSuccess = {
+                        UiState.Success(it)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    },
+                )
         }
+    }
 
-        fun getTodoDetail(todoId: Int) {
-            viewModelScope.launch {
-                _detailTodoState.value = UiState.Loading
-                val result = addPlanRepository.getTodoDetail(todoId = todoId)
-                _detailTodoState.value =
-                    result.fold(
-                        onSuccess = {
-                            UiState.Success(it)
-                        },
-                        onFailure = { throwable ->
-                            Timber.e(throwable, "Failed to post plan")
-                            UiState.Failure
-                        },
-                    )
-            }
+    fun getTodoDetail(todoId: Int) {
+        viewModelScope.launch {
+            _detailTodoState.value = UiState.Loading
+            val result = addPlanRepository.getTodoDetail(todoId = todoId)
+            _detailTodoState.value =
+                result.fold(
+                    onSuccess = {
+                        UiState.Success(it)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    },
+                )
         }
+    }
 
-        // 일정 삭제 로직
-        fun deletePlan(
-            planId: Int,
-            dialogType: DialogType,
-        ) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = scheduleRepository.deleteSchedule(scheduleId = planId)
+    // 일정 삭제 로직
+    fun deletePlan(
+        planId: Int,
+        dialogType: DialogType,
+    ) {
+        when (dialogType) {
+            DialogType.SCHEDULE -> {
+                viewModelScope.launch {
+                    _deleteState.value = UiState.Loading
+                    val result = scheduleRepository.deleteSchedule(scheduleId = planId)
 
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
+                    _deleteState.value =
+                        result.fold(
+                            onSuccess = { UiState.Success(Unit) },
+                            onFailure = { throwable ->
+                                Timber.e(throwable, "Failed to delete schedule")
+                                UiState.Failure
+                            },
+                        )
                 }
+            }
 
-                else -> {
-                }
+            else -> {
             }
         }
     }
+
 
     fun getTodoDateList(date: String) {
         viewModelScope.launch {
@@ -175,4 +176,6 @@ constructor(
             }
         }
     }
+
 }
+

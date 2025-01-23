@@ -21,10 +21,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,12 +46,19 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.memento.R
+import org.memento.presentation.component.MementoAlertDialog
+import org.memento.presentation.component.MementoDialog
+import org.memento.presentation.component.MementoEditScheduleBottomSheet
+import org.memento.presentation.component.MementoEditTodoBottomSheet
 import org.memento.presentation.component.MementoScheduleItemWithLine
 import org.memento.presentation.component.MementoTodoItemWithLine
 import org.memento.presentation.component.MementoTopBar
 import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.today.component.AllDayScheduleTag
+import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -65,7 +74,6 @@ fun TodayScreen(
     viewModel: TodayViewModel = hiltViewModel(),
     padding: PaddingValues,
 ) {
-    val dummyDataState = remember { mutableStateListOf(*dummyData.toTypedArray()) }
     var draggedItemIndex by remember { mutableStateOf(-1) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
     var itemHeight by remember { mutableIntStateOf(0) }
@@ -78,7 +86,7 @@ fun TodayScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(13) }
+    var selectedPlanId by remember { mutableIntStateOf(3) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
     val today = LocalDate.now()

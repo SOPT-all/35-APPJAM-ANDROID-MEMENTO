@@ -13,22 +13,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import okhttp3.internal.immutableListOf
 import org.memento.R
 import org.memento.presentation.onboarding.component.OnboardingBottomButton
 import org.memento.presentation.onboarding.component.OnboardingQuestionBox
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
+import org.memento.presentation.onboarding.viewmodel.OnboardingViewModel
 import org.memento.presentation.type.OnboardingTopType
-import org.memento.presentation.type.YesNoButtonType
+import org.memento.presentation.util.toYesNoType
 
 @Composable
 fun OnboardingScreen3(
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToOnboardingScreen4: () -> Unit,
     popBackStack: () -> Unit,
 ) {
@@ -39,7 +42,20 @@ fun OnboardingScreen3(
             R.string.onboarding3_q3,
             R.string.onboarding3_q4,
         )
-    var selectedOptions by remember { mutableStateOf(List<YesNoButtonType?>(questionList.size) { null }) }
+
+    val isStressedUnorganizedSchedule by viewModel.isStressedUnorganizedSchedule.collectAsStateWithLifecycle()
+    val isForgetImportantThings by viewModel.isForgetImportantThings.collectAsStateWithLifecycle()
+    val isPreferReminder by viewModel.isPreferReminder.collectAsStateWithLifecycle()
+    val isImportantBreaks by viewModel.isImportantBreaks.collectAsStateWithLifecycle()
+
+    val selectedOptions =
+        listOf(
+            isStressedUnorganizedSchedule,
+            isForgetImportantThings,
+            isPreferReminder,
+            isImportantBreaks,
+        )
+
     val isAllSelected = selectedOptions.all { it != null }
 
     Box(
@@ -52,7 +68,10 @@ fun OnboardingScreen3(
             OnboardingTopAppBar(
                 type = OnboardingTopType.PAGE3,
                 onBackClick = popBackStack,
-                onSkipClick = navigateToOnboardingScreen4,
+                onSkipClick = {
+                    viewModel.fetchUserInfoUpdate()
+                    navigateToOnboardingScreen4()
+                },
             )
             Spacer(Modifier.height(20.dp))
             LazyColumn(
@@ -63,12 +82,9 @@ fun OnboardingScreen3(
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
                         question = item,
-                        selectedOption = selectedOptions[index],
+                        selectedOption = selectedOptions[index].toYesNoType(),
                         onOptionSelected = { newSelection ->
-                            selectedOptions =
-                                selectedOptions.toMutableList().apply {
-                                    set(index, newSelection)
-                                }
+                            viewModel.updateQuestionAnswer(index, newSelection)
                         },
                     )
                     Spacer(Modifier.height(18.dp))

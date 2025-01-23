@@ -8,14 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
 import org.memento.presentation.onboarding.component.OnboardingBottomButton
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
 import org.memento.presentation.onboarding.component.SocialLoginButton
+import org.memento.presentation.onboarding.viewmodel.OnboardingViewModel
 import org.memento.presentation.type.OnboardingTopType
 
 @Composable
 fun OnboardingScreen4(
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToMainScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {
@@ -39,7 +42,9 @@ fun OnboardingScreen4(
         OnboardingBottomButton(
             content = R.string.onboarding_start,
             isSelected = true,
-            onSelected = navigateToMainScreen,
+            onSelected = {
+                navigateToMainScreen()
+            },
             modifier =
                 Modifier
                     .padding(bottom = 10.dp),

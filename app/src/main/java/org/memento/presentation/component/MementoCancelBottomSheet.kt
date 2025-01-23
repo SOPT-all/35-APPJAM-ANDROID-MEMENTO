@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,11 +30,9 @@ import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
 import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
-import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.presentation.type.BottomSheetType
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -63,10 +60,10 @@ fun MementoCancelBottomSheet(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
-                    .imePadding(),
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 when (currentBottomSheet) {
                     BottomSheetType.MAIN ->
@@ -82,7 +79,7 @@ fun MementoCancelBottomSheet(
                             },
                             isEdit = true,
                             isEditDone = { currentBottomSheet = null },
-                            isEditCancel = { currentBottomSheet = null }
+                            isEditCancel = { currentBottomSheet = null },
                         )
 
                     BottomSheetType.DEADLINE ->
@@ -116,10 +113,10 @@ fun MementoCancelBottomSheet(
 fun MementoCancelBottomSheetPreview() {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(space = 50.dp),
     ) {
         val sheetRepeatState = rememberModalBottomSheetState()
@@ -141,49 +138,49 @@ fun MementoCancelBottomSheetPreview() {
         Text(
             text = selectedRepeatText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showRepeatBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showRepeatBottomSheet = true
+                    },
         )
 
         Text(
             text = selectedDateText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showDeadLineBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showDeadLineBottomSheet = true
+                    },
         )
 
         Text(
             text = "Tag",
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showTagBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTagBottomSheet = true
+                    },
         )
 
         Text(
             text = selectedTimeText,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(darkModeColors.gray04)
-                .padding(10.dp)
-                .noRippleClickable {
-                    showTimePickerBottomSheet = true
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .background(darkModeColors.gray04)
+                    .padding(10.dp)
+                    .noRippleClickable {
+                        showTimePickerBottomSheet = true
+                    },
         )
 
         MementoBottomSheet(

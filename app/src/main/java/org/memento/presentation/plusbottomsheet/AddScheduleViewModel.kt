@@ -2,7 +2,6 @@ package org.memento.presentation.plusbottomsheet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,9 +53,8 @@ class AddScheduleViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
-        fun patchAddSchedule(){
+        fun patchAddSchedule() {
             viewModelScope.launch {
-
             }
         }
 

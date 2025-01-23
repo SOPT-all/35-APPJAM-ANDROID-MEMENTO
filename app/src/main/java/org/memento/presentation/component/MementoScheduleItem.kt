@@ -120,7 +120,7 @@ fun MementoScheduleItemWithLine(
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
-    onClick : () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
         modifier =

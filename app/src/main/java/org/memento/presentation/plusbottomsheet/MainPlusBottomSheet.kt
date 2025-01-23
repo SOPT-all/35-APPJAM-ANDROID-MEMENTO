@@ -113,7 +113,7 @@ fun MainPlusBottomSheet(
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
                     onCloseBottomSheet = onCloseBottomSheet,
                     isEditDone = { },
-                    isEditCancel = { }
+                    isEditCancel = { },
                 )
         }
     }

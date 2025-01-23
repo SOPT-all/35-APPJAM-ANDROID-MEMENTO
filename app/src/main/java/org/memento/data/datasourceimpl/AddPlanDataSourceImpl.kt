@@ -18,14 +18,21 @@ class AddPlanDataSourceImpl
         override suspend fun postAddSchedule(requestAddScheduleDto: RequestAddScheduleDto): BaseResponse<Unit> =
             addPlanService.postAddSchedule(requestAddScheduleDto)
 
-        override suspend fun patchAddTodo(todoId: Int, requestAddTodoDto: RequestAddTodoDto): BaseResponse<Unit> =
+        override suspend fun patchAddTodo(
+            todoId: Int,
+            requestAddTodoDto: RequestAddTodoDto,
+        ): BaseResponse<Unit> =
             addPlanService.patchAddTodo(
-                todoId, requestAddTodoDto
+                todoId,
+                requestAddTodoDto,
             )
 
-        override suspend fun patchAddSchedule(scheduleId: Int, requestAddScheduleDto: RequestAddScheduleDto): BaseResponse<Unit> =
+        override suspend fun patchAddSchedule(
+            scheduleId: Int,
+            requestAddScheduleDto: RequestAddScheduleDto,
+        ): BaseResponse<Unit> =
             addPlanService.patchAddSchedule(
-                scheduleId, requestAddScheduleDto
+                scheduleId,
+                requestAddScheduleDto,
             )
-
-}
+    }

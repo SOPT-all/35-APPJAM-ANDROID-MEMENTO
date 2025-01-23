@@ -11,11 +11,11 @@ interface AddPlanDataSource {
 
     suspend fun patchAddTodo(
         todoId: Int,
-        requestAddTodoDto: RequestAddTodoDto
+        requestAddTodoDto: RequestAddTodoDto,
     ): BaseResponse<Unit>
 
     suspend fun patchAddSchedule(
         scheduleId: Int,
-        requestAddScheduleDto: RequestAddScheduleDto
+        requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 }

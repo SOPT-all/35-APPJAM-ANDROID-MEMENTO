@@ -1,6 +1,5 @@
 package org.memento.presentation.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,8 +51,8 @@ fun MementoDialog(
     onEdit: () -> Unit,
     dialogType: DialogType,
     planId: Int,
-    viewModel: TodayViewModel = hiltViewModel()
-    ) {
+    viewModel: TodayViewModel = hiltViewModel(),
+) {
     if (showDialog) {
         val todoData = viewModel.getTodoDialogData(planId)
         val scheduleData = viewModel.getScheduleDialogData(planId)
@@ -87,7 +86,7 @@ fun MementoDialog(
                                     tagColor = it.tagColor,
                                     tagText = it.tagText,
                                     platform = it.platform,
-                                    platFormText = it.platformText
+                                    platFormText = it.platformText,
                                 )
                             }
                         }
@@ -179,7 +178,7 @@ fun ToDoDialogComponent(
     title: String,
     tagColor: String,
     tagText: String,
-    urgentType: PriorityTagType
+    urgentType: PriorityTagType,
 ) {
     Row(
         modifier =
@@ -327,7 +326,7 @@ fun AddScheduleDialogComponent(
     tagColor: String,
     tagText: String,
     platform: Int,
-    platFormText: String
+    platFormText: String,
 ) {
     var isChecked by remember { mutableStateOf(false) }
 

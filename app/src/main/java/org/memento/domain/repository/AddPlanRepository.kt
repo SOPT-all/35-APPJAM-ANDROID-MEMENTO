@@ -10,12 +10,11 @@ interface AddPlanRepository {
 
     suspend fun patchAddTodo(
         todoId: Int,
-        addTodo: AddTodo
+        addTodo: AddTodo,
     ): Result<Unit>
 
     suspend fun patchAddSchedule(
         scheduleId: Int,
-        addSchedule: AddSchedule
+        addSchedule: AddSchedule,
     ): Result<Unit>
-
 }

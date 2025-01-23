@@ -29,7 +29,10 @@ class AddPlanRepositoryImpl
             }
         }
 
-        override suspend fun patchAddTodo(todoId: Int, addTodo: AddTodo): Result<Unit> {
+        override suspend fun patchAddTodo(
+            todoId: Int,
+            addTodo: AddTodo,
+        ): Result<Unit> {
             return runCatching {
                 addPlanDataSource.patchAddTodo(
                     todoId = todoId,
@@ -38,7 +41,10 @@ class AddPlanRepositoryImpl
             }
         }
 
-        override suspend fun patchAddSchedule(scheduleId: Int, addSchedule: AddSchedule): Result<Unit> {
+        override suspend fun patchAddSchedule(
+            scheduleId: Int,
+            addSchedule: AddSchedule,
+        ): Result<Unit> {
             return runCatching {
                 addPlanDataSource.patchAddSchedule(
                     scheduleId = scheduleId,
@@ -46,4 +52,4 @@ class AddPlanRepositoryImpl
                 ).handleBaseResponse().getOrThrow()
             }
         }
-}
+    }

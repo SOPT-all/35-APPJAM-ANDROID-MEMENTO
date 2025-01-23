@@ -15,6 +15,6 @@ interface ScheduleService {
 
     @DELETE("api/v1/schedules/{scheduleId}")
     suspend fun deleteSchedule(
-        @Path("scheduleId") scheduleId: Int
+        @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<Unit>
 }

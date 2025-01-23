@@ -1,7 +1,6 @@
 package org.memento.data.repositoryimpl
 
 import org.memento.data.datasource.ScheduleDataSource
-import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toDomain.toScheduleListModel
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.ScheduleList
@@ -19,11 +18,11 @@ class ScheduleRepositoryImpl
                 response?.toScheduleListModel() ?: throw Exception("null")
             }
 
-    override suspend fun deleteSchedule(scheduleId: Int): Result<Unit> {
-        return runCatching {
-            scheduleDataSource.deleteSchedule(
-                scheduleId = scheduleId
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun deleteSchedule(scheduleId: Int): Result<Unit> {
+            return runCatching {
+                scheduleDataSource.deleteSchedule(
+                    scheduleId = scheduleId,
+                ).handleBaseResponse().getOrThrow()
+            }
         }
     }
-}

@@ -23,14 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.memento.R
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.lineThrough
 import org.memento.presentation.util.noRippleClickable
-import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
@@ -176,7 +174,7 @@ fun MementoTodoItemWithLine(
     isFirstUndone: Boolean = false,
     deadline: String = "Today",
     modifier: Modifier = Modifier,
-    onClick : () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
         modifier =

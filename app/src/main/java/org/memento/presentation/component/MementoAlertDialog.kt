@@ -65,30 +65,3 @@ fun MementoAlertDialog(
                 .fillMaxWidth(),
     )
 }
-
-@Composable
-fun DeleteDialogTestScreen() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Button(onClick = { showDialog = true }) {
-            Text(text = stringResource(id = R.string.alert_delete))
-        }
-
-        if (showDialog) {
-            MementoAlertDialog(
-                content = R.string.alert_delete,
-                leftButtonText = R.string.alert_cancel_button,
-                rightButtonText = R.string.alert_delete_button,
-                onLeftButtonClick = { showDialog = false },
-                onRightButtonClick = {
-                    showDialog = false
-                },
-            )
-        }
-    }
-}

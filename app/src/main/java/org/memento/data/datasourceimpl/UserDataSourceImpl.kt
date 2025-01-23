@@ -7,8 +7,9 @@ import org.memento.data.service.UserInfoUpdateService
 import javax.inject.Inject
 
 class UserDataSourceImpl
-@Inject constructor(
-    private val userService: UserInfoUpdateService
-) : UserInfoDataSource {
-    override suspend fun fetchUserInfo(requestUserInfo: RequestUserInfoUpdateDto): BaseResponse<Unit> = userService.fetchUserInfo(requestUserInfo)
-}
+    @Inject
+    constructor(
+        private val userService: UserInfoUpdateService,
+    ) : UserInfoDataSource {
+        override suspend fun fetchUserInfo(requestUserInfo: RequestUserInfoUpdateDto): BaseResponse<Unit> = userService.fetchUserInfo(requestUserInfo)
+    }

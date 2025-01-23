@@ -28,4 +28,22 @@ class AddPlanRepositoryImpl
                 ).handleBaseResponse().getOrThrow()
             }
         }
-    }
+
+        override suspend fun patchAddTodo(todoId: Int, addTodo: AddTodo): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.patchAddTodo(
+                    todoId = todoId,
+                    requestAddTodoDto = addTodo.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
+        }
+
+        override suspend fun patchAddSchedule(scheduleId: Int, addSchedule: AddSchedule): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.patchAddSchedule(
+                    scheduleId = scheduleId,
+                    requestAddScheduleDto = addSchedule.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
+        }
+}

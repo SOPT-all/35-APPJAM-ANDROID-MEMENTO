@@ -7,4 +7,15 @@ interface AddPlanRepository {
     suspend fun postAddTodo(addTodo: AddTodo): Result<Unit>
 
     suspend fun postAddSchedule(addSchedule: AddSchedule): Result<Unit>
+
+    suspend fun patchAddTodo(
+        todoId: Int,
+        addTodo: AddTodo
+    ): Result<Unit>
+
+    suspend fun patchAddSchedule(
+        scheduleId: Int,
+        addSchedule: AddSchedule
+    ): Result<Unit>
+
 }

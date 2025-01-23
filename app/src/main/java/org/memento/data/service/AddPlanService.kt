@@ -4,7 +4,9 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import retrofit2.http.Body
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AddPlanService {
     @POST("/api/v1/todos")
@@ -14,6 +16,18 @@ interface AddPlanService {
 
     @POST("/api/v1/schedules")
     suspend fun postAddSchedule(
+        @Body requestAddScheduleDto: RequestAddScheduleDto,
+    ): BaseResponse<Unit>
+
+    @PATCH("/api/v1/todos/{toDoId}")
+    suspend fun patchAddTodo(
+        @Path("toDoId") toDoId: Int,
+        @Body requestAddTodoDto: RequestAddTodoDto,
+    ): BaseResponse<Unit>
+
+    @PATCH("/api/v1/schedules/{scheduleId}")
+    suspend fun patchAddSchedule(
+        @Path("scheduleId") scheduleId: Int,
         @Body requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 }

@@ -1,5 +1,6 @@
 package org.memento.presentation.today
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,6 +14,7 @@ import org.memento.domain.entity.ScheduleList
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +26,9 @@ constructor(
     private val _scheduleListState =
         MutableStateFlow<UiState<List<ScheduleList.ScheduleWithOrderInfo>>>(UiState.Loading)
     val scheduleListState get() = _scheduleListState.asStateFlow()
+
+    private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val deleteState get() = _deleteState.asStateFlow()
 
     fun getScheduleList(date: String) =
         viewModelScope.launch {
@@ -69,16 +74,26 @@ constructor(
     }
 
     // 일정 삭제 로직
-    fun deletePlan(planId: Int, dialogType: DialogType){
-        when(dialogType){
+    fun deletePlan(planId: Int, dialogType: DialogType) {
+        when (dialogType) {
             DialogType.SCHEDULE -> {
                 viewModelScope.launch {
-                    scheduleRepository.deleteSchedule(
-                        scheduleId = planId
-                    )
+                    _deleteState.value = UiState.Loading
+                    val result = scheduleRepository.deleteSchedule(scheduleId = planId)
+
+                    _deleteState.value =
+                        result.fold(
+                            onSuccess = { UiState.Success(Unit) },
+                            onFailure = { throwable ->
+                                Timber.e(throwable, "Failed to delete schedule")
+                                UiState.Failure
+                            }
+                        )
                 }
             }
-            else -> { }
+            else -> {
+
+            }
         }
     }
 

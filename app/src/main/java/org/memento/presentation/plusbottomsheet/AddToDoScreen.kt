@@ -56,6 +56,7 @@ fun AddToDoScreen(
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
     isEdit: Boolean = false,
+    planId: Int = 0,
     isEditDone: () -> Unit,
     isEditCancel: () -> Unit
 ) {

@@ -8,4 +8,14 @@ interface AddPlanDataSource {
     suspend fun postAddTodo(requestAddTodoDto: RequestAddTodoDto): BaseResponse<Unit>
 
     suspend fun postAddSchedule(requestAddScheduleDto: RequestAddScheduleDto): BaseResponse<Unit>
+
+    suspend fun patchAddTodo(
+        todoId: Int,
+        requestAddTodoDto: RequestAddTodoDto
+    ): BaseResponse<Unit>
+
+    suspend fun patchAddSchedule(
+        scheduleId: Int,
+        requestAddScheduleDto: RequestAddScheduleDto
+    ): BaseResponse<Unit>
 }

@@ -84,7 +84,7 @@ fun TodayScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     val sheetEditState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(0) }
+    var selectedPlanId by remember { mutableIntStateOf(10) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
 
@@ -288,7 +288,7 @@ fun TodayScreen(
                                         isNow = item.isNow,
                                         onClick = {
                                             // selectedPlanId = schedule.id
-                                            dialogType = DialogType.TO_DO
+                                            dialogType = DialogType.SCHEDULE
                                             showDetailDialog = true
                                         }
                                     )
@@ -359,6 +359,7 @@ fun TodayScreen(
                 rightButtonText = R.string.alert_delete_button,
                 onLeftButtonClick = { showDeleteDialog = false },
                 onRightButtonClick = {
+                    Log.d("dialogType", dialogType.toString())
                     viewModel.deletePlan(
                         planId = selectedPlanId,
                         dialogType = dialogType

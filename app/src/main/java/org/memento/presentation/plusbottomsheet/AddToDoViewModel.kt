@@ -52,6 +52,12 @@ class AddToDoViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
+        fun patchAddTodo(){
+            viewModelScope.launch {
+
+            }
+        }
+
         fun postAddTodo() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading

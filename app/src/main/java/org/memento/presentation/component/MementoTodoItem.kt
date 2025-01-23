@@ -169,7 +169,7 @@ fun MementoTodoItemWithLine(
     isDone: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     todoTitleText: String,
-    priorityTagType: PriorityTagType,
+    priorityTagType: PriorityTagType = PriorityTagType.None,
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
     deadline: String = "Today",

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.repository.TodoRepository
+import org.memento.presentation.today.MementoItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,24 +18,24 @@ constructor(
     private val todoRepository: TodoRepository,
 ) : ViewModel() {
 
-    private val _todoItems = MutableStateFlow<List<TodoItem>>(emptyList())
-    val todoItems: StateFlow<List<TodoItem>> = _todoItems
+    private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
+    val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
 
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val uiState: StateFlow<UiState<Unit>> = _uiState
 
     init {
-        fetchTodos()
+        getTodoList()
     }
 
-    private fun fetchTodos() {
+    private fun getTodoList() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             val response = todoRepository.getTodoList()
             response.onSuccess { data ->
                 val mappedData = data.map { response ->
-                    TodoItem(
-                        id = response.id.toLong(),
+                    MementoItem.TodoItem(
+                        id = response.id,
                         groupId = response.groupId,
                         description = response.description,
                         date = response.startDate,
@@ -42,10 +43,10 @@ constructor(
                         isCompleted = response.isCompleted,
                         priorityValue = response.priorityValue,
                         priorityType = response.priorityType,
-                        tagName = response.tagName.ifEmpty { "ㅎㅎ" },
-                        tagColor = response.tagColor.ifEmpty { "#CCCCCC" },
+                        tagName = response.tagName,
+                        tagColor = response.tagColor,
                         toDoType = response.toDoType,
-                        order = response.orderNum
+                        order = response.order
                     )
                 }
                 _todoItems.value = mappedData
@@ -56,7 +57,7 @@ constructor(
         }
     }
 
-    fun updateTodoCompletion(id: Long, isCompleted: Boolean) {
+    fun updateTodoCompletion(id: Int, isCompleted: Boolean) {
         viewModelScope.launch {
             _todoItems.value = _todoItems.value.map { todo ->
                 if (todo.id == id) todo.copy(isCompleted = isCompleted) else todo

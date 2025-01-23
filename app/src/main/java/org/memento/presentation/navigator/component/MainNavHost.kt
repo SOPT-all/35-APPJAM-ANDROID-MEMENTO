@@ -37,6 +37,7 @@ fun MainNavHost(
             )
 
             todayNavGraph(
+                padding = padding,
                 navigateToReqres = { navigator.navigateToReqres() },
             )
 

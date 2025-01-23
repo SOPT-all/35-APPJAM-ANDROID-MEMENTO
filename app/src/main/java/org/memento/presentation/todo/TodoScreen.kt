@@ -38,22 +38,9 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
+import timber.log.Timber
 import java.time.LocalDate
 
-data class TodoItem(
-    val id: Long,
-    val groupId: String,
-    val description: String,
-    val date: String,
-    val deadline: String,
-    val isCompleted: Boolean,
-    val priorityValue: Double,
-    val priorityType: String,
-    val tagName: String,
-    val tagColor: String,
-    val toDoType: String,
-    val order: Int,
-)
 
 @Composable
 fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValues) {

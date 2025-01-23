@@ -17,9 +17,16 @@ constructor(
             response?.toTodoListModel() ?: throw Exception("null")
         }
 
+    override suspend fun getTodoDateList(date: String): Result<List<TodoList.ToDoGetResponse>> =
+        runCatching {
+            val response = todoDataSource.getTodoDateList(date).data
+            response?.toTodoListModel() ?: throw Exception("null")
+        }
+
     override suspend fun patchTodoComplete(toDoId: Int): Result<Unit> =
         runCatching {
             todoDataSource.patchTodoComplete(toDoId)
         }
+
 }
 

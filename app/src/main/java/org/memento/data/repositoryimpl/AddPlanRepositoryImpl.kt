@@ -5,6 +5,7 @@ import org.memento.data.mapper.toData.toData
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.AddTodo
+import org.memento.domain.entity.BrainDump
 import org.memento.domain.repository.AddPlanRepository
 import javax.inject.Inject
 
@@ -25,6 +26,14 @@ class AddPlanRepositoryImpl
             return runCatching {
                 addPlanDataSource.postAddSchedule(
                     requestAddScheduleDto = addSchedule.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
+        }
+
+        override suspend fun postBrainDump(brainDump: BrainDump): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.postBrainDump(
+                    requestBrainDumpDto = brainDump.toData(),
                 ).handleBaseResponse().getOrThrow()
             }
         }

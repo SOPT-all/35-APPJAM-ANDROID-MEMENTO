@@ -4,118 +4,108 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.memento.R
 import org.memento.core.util.UiState
+import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.ScheduleList
+import org.memento.domain.entity.TodoDetail
+import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.presentation.type.DialogType
-import org.memento.presentation.type.PriorityTagType
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class TodayViewModel
-    @Inject
-    constructor(
-        private val scheduleRepository: ScheduleRepository,
-    ) : ViewModel() {
-        private val _scheduleListState =
-            MutableStateFlow<UiState<List<ScheduleList.ScheduleWithOrderInfo>>>(UiState.Loading)
-        val scheduleListState get() = _scheduleListState.asStateFlow()
+@Inject
+constructor(
+    private val scheduleRepository: ScheduleRepository,
+    private val addPlanRepository: AddPlanRepository
+) : ViewModel() {
+    private val _scheduleListState =
+        MutableStateFlow<UiState<List<ScheduleList.ScheduleWithOrderInfo>>>(UiState.Loading)
+    val scheduleListState get() = _scheduleListState.asStateFlow()
 
-        private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-        val deleteState get() = _deleteState.asStateFlow()
+    private val _detailScheduleState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
+    val detailScheduleState: StateFlow<UiState<ScheduleDetail>> = _detailScheduleState
 
-        fun getScheduleList(date: String) =
-            viewModelScope.launch {
-                scheduleRepository.getScheduleList(date)
-                    .onSuccess { scheduleRepository ->
-                        _scheduleListState.emit(UiState.Success(scheduleRepository))
-                    }
-                    .onFailure { exception ->
-                        _scheduleListState.value = UiState.Failure
-                    }
-            }
+    private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
+    val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
 
-        fun getTodoDialogData(planId: Int): TodoData? {
-            val schedule =
-                (_scheduleListState.value as? UiState.Success)?.data
-                    ?.find { it.id == planId }
-            return schedule?.let {
-                TodoData(
-                    isChecked = false,
-                    title = it.description,
-                    tagColor = it.tagColorCode,
-                    tagText = it.tagName,
-                    priorityType = PriorityTagType.None,
-                )
-            }
-        }
+    private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val deleteState: StateFlow<UiState<Unit>> = _deleteState
 
-        fun getScheduleDialogData(planId: Int): ScheduleData? {
-            val schedule =
-                (_scheduleListState.value as? UiState.Success)?.data
-                    ?.find { it.id == planId }
-            return schedule?.let {
-                ScheduleData(
-                    title = it.description,
-                    startDate = it.startDate,
-                    endDate = it.endDate,
-                    startTime = "8AM",
-                    endTime = "6PM",
-                    tagColor = it.tagColorCode,
-                    tagText = it.tagName,
-                    platform = R.drawable.ic_notion,
-                    platformText = "Notion",
-                )
-            }
-        }
-
-        // 일정 삭제 로직
-        fun deletePlan(
-            planId: Int,
-            dialogType: DialogType,
-        ) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = scheduleRepository.deleteSchedule(scheduleId = planId)
-
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
+    fun getScheduleList(date: String) =
+        viewModelScope.launch {
+            scheduleRepository.getScheduleList(date)
+                .onSuccess { scheduleRepository ->
+                    _scheduleListState.emit(UiState.Success(scheduleRepository))
                 }
-                else -> {
+                .onFailure { exception ->
+                    _scheduleListState.value = UiState.Failure
                 }
-            }
         }
 
-        data class TodoData(
-            val isChecked: Boolean,
-            val title: String,
-            val tagColor: String,
-            val tagText: String,
-            val priorityType: PriorityTagType,
-        )
-
-        data class ScheduleData(
-            val title: String,
-            val startDate: String,
-            val endDate: String,
-            val startTime: String,
-            val endTime: String,
-            val tagColor: String,
-            val tagText: String,
-            val platform: Int,
-            val platformText: String,
-        )
+    fun getScheduleDetail(scheduleId: Int) {
+        viewModelScope.launch {
+            _detailScheduleState.value = UiState.Loading
+            val result = addPlanRepository.getScheduleDetail(scheduleId = scheduleId)
+            _detailScheduleState.value =
+                result.fold(
+                    onSuccess = {
+                        UiState.Success(it)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    },
+                )
+        }
     }
+
+    fun getTodoDetail(todoId: Int) {
+        viewModelScope.launch {
+            _detailTodoState.value = UiState.Loading
+            val result = addPlanRepository.getTodoDetail(todoId = todoId)
+            _detailTodoState.value =
+                result.fold(
+                    onSuccess = {
+                        UiState.Success(it)
+                    },
+                    onFailure = { throwable ->
+                        Timber.e(throwable, "Failed to post plan")
+                        UiState.Failure
+                    },
+                )
+        }
+    }
+
+    // 일정 삭제 로직
+    fun deletePlan(
+        planId: Int,
+        dialogType: DialogType,
+    ) {
+        when (dialogType) {
+            DialogType.SCHEDULE -> {
+                viewModelScope.launch {
+                    _deleteState.value = UiState.Loading
+                    val result = scheduleRepository.deleteSchedule(scheduleId = planId)
+
+                    _deleteState.value =
+                        result.fold(
+                            onSuccess = { UiState.Success(Unit) },
+                            onFailure = { throwable ->
+                                Timber.e(throwable, "Failed to delete schedule")
+                                UiState.Failure
+                            },
+                        )
+                }
+            }
+
+            else -> {
+            }
+        }
+    }
+}

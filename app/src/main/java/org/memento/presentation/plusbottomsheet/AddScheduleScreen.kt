@@ -85,15 +85,6 @@ fun AddScheduleScreen(
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        if (isEdit)
-            {
-                viewModel.getScheduleDetail(scheduleId = planId)
-            } else {
-            viewModel.initialTimeValue()
-        }
-    }
-
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
         viewModel.validateTimeOrder()

@@ -61,3 +61,9 @@ fun createLocalDate(dateText: String): LocalDate {
         throw e
     }
 }
+
+fun formatTimeTo12Hour(time: String): String {
+    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+    val parsedTime = LocalDateTime.parse(time, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    return formatter.format(parsedTime)
+}

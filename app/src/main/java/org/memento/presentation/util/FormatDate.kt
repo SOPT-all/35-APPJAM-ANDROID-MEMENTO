@@ -22,6 +22,24 @@ fun formatTime(
     return formatter // 03:30 PM
 }
 
+fun String.to24HourFormat(): String {
+    val regex = """(\d{2}):(\d{2})\s?(AM|PM)""".toRegex()
+    val matchResult = regex.find(this) ?: return this
+
+    val (hourStr, minuteStr, period) = matchResult.destructured
+    var hour = hourStr.toInt()
+    val minute = minuteStr.toInt()
+
+    hour =
+        when {
+            period == "PM" && hour != 12 -> hour + 12
+            period == "AM" && hour == 12 -> 0
+            else -> hour
+        }
+
+    return "%02d:%02d".format(hour, minute)
+}
+
 fun parseDateTime(
     date: String,
     time: String,

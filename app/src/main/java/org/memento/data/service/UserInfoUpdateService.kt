@@ -8,6 +8,6 @@ import retrofit2.http.PATCH
 interface UserInfoUpdateService {
     @PATCH("/api/v1/members/personal-info")
     suspend fun fetchUserInfo(
-        @Body requestUserInfo: RequestUserInfoUpdateDto
+        @Body requestUserInfo: RequestUserInfoUpdateDto,
     ): BaseResponse<Unit>
 }

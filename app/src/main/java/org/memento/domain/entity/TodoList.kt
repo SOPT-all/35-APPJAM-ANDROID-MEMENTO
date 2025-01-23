@@ -9,7 +9,7 @@ data class TodoList(
         val groupId: String,
         val id: Int,
         val isCompleted: Boolean,
-        val orderNum: Int,
+        val order: Int,
         val priorityType: String,
         val priorityValue: Double,
         val startDate: String,

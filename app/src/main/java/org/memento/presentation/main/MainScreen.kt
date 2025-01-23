@@ -126,7 +126,6 @@ fun MainScreenContent(
     }
 
     Scaffold(
-        modifier = modifier.imePadding(),
         content = { padding ->
             MainNavHost(
                 navigator = navigator,

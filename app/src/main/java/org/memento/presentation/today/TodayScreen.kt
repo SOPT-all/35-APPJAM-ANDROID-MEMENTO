@@ -270,7 +270,7 @@ fun TodayScreen(
                                         isFirstUndone = item.isFirstUndone,
                                         isNow = item.isNow,
                                         onClick = {
-                                            // selectedPlanId = schedule.id
+                                            // selectedPlanId = item.id
                                             dialogType = DialogType.TO_DO
                                             showDetailDialog = true
                                         },

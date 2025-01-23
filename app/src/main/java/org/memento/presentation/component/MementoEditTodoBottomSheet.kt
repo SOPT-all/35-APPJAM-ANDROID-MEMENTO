@@ -10,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,11 +18,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
 import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
+import org.memento.presentation.plusbottomsheet.AddToDoViewModel
 import org.memento.presentation.type.BottomSheetType
 import org.memento.ui.theme.darkModeColors
 
@@ -33,11 +36,13 @@ fun MementoEditTodoBottomSheet(
     sheetState: SheetState,
     onConfirm: () -> Unit = {},
     planId: Int,
+    viewModel: AddToDoViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     var currentBottomSheet by remember { mutableStateOf<BottomSheetType?>(BottomSheetType.MAIN) }
 
     if (isOpenBottomSheet) {
+        viewModel.getTodoDetail(todoId = planId)
         coroutineScope.launch {
             sheetState.show()
         }
@@ -71,7 +76,9 @@ fun MementoEditTodoBottomSheet(
                             onCloseBottomSheet = { },
                             isEdit = true,
                             planId = planId,
-                            isEditDone = { currentBottomSheet = null },
+                            isEditDone = {
+                                viewModel.patchAddTodo(planId)
+                                currentBottomSheet = null },
                             isEditCancel = { currentBottomSheet = null },
                         )
 

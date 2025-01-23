@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,7 +55,7 @@ import org.memento.ui.theme.defaultMementoTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScheduleScreen(
-    viewModel: AddScheduleViewModel = viewModel(),
+    viewModel: AddScheduleViewModel = hiltViewModel(),
     onCloseBottomSheet: () -> Unit,
     isEdit: Boolean = false,
     isEditCancel: () -> Unit,

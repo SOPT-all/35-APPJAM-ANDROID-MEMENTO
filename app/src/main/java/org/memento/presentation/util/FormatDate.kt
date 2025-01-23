@@ -70,26 +70,28 @@ fun createLocalDateTime(
     }
 }
 
-fun createLocalDate(dateText: String): LocalDate {
-    return try {
-        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
-        LocalDate.parse(dateText, formatter)
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to parse LocalDate for input: $dateText")
-        throw e
-    }
+fun createLocalDate(dateString: String): LocalDate {
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
+    return LocalDate.parse(dateString, formatter)
 }
 
 fun formatDateString(dateString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+
     return try {
         val date = inputFormat.parse(dateString)
-        outputFormat.format(date ?: Date())
+
+        if (date != null) {
+            outputFormat.format(date)
+        } else {
+            dateString
+        }
     } catch (e: Exception) {
         dateString
     }
 }
+
 
 fun formatTimeTo12Hour(timeString: String): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)

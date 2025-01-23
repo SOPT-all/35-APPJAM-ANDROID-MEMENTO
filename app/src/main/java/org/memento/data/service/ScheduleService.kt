@@ -10,4 +10,5 @@ interface ScheduleService {
     suspend fun getScheduleLists(
         @Query("date") date: String,
     ): BaseResponse<ResponseScheduleDto>
+
 }

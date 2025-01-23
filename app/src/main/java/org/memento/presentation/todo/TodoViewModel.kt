@@ -4,31 +4,74 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
-import org.memento.domain.entity.TodoList
 import org.memento.domain.repository.TodoRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel
-    @Inject
-    constructor(
-        private val todoRepository: TodoRepository,
-    ) : ViewModel() {
-        private val _todoListState =
-            MutableStateFlow<UiState<List<TodoList.ToDoGetResponse>>>(UiState.Loading)
-        val todoListState get() = _todoListState.asStateFlow()
+@Inject
+constructor(
+    private val todoRepository: TodoRepository,
+) : ViewModel() {
 
-        fun getTodoList() =
-            viewModelScope.launch {
-                todoRepository.getTodoList()
-                    .onSuccess { scheduleRepository ->
-                        _todoListState.emit(UiState.Success(scheduleRepository))
-                    }
-                    .onFailure { exception ->
-                        _todoListState.value = UiState.Failure
-                    }
-            }
+    private val _todoItems = MutableStateFlow<List<TodoItem>>(emptyList())
+    val todoItems: StateFlow<List<TodoItem>> = _todoItems
+
+    private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+    val uiState: StateFlow<UiState<Unit>> = _uiState
+
+    init {
+        fetchTodos()
     }
+
+    private fun fetchTodos() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            val response = todoRepository.getTodoList()
+            response.onSuccess { data ->
+                val mappedData = data.map { response ->
+                    TodoItem(
+                        id = response.id.toLong(),
+                        groupId = response.groupId,
+                        description = response.description,
+                        date = response.startDate,
+                        deadline = response.endDate,
+                        isCompleted = response.isCompleted,
+                        priorityValue = response.priorityValue,
+                        priorityType = response.priorityType,
+                        tagName = response.tagName.ifEmpty { "ㅎㅎ" },
+                        tagColor = response.tagColor.ifEmpty { "#CCCCCC" },
+                        toDoType = response.toDoType,
+                        order = response.orderNum
+                    )
+                }
+                _todoItems.value = mappedData
+                _uiState.value = UiState.Success(Unit)
+            }.onFailure {
+                _uiState.value = UiState.Failure
+            }
+        }
+    }
+
+    fun updateTodoCompletion(id: Long, isCompleted: Boolean) {
+        viewModelScope.launch {
+            _todoItems.value = _todoItems.value.map { todo ->
+                if (todo.id == id) todo.copy(isCompleted = isCompleted) else todo
+            }
+
+            _uiState.value = UiState.Loading
+            val result = todoRepository.patchTodoComplete(id.toInt())
+            result.onSuccess {
+                _uiState.value = UiState.Success(Unit)
+            }.onFailure {
+                _todoItems.value = _todoItems.value.map { todo ->
+                    if (todo.id == id) todo.copy(isCompleted = !isCompleted) else todo
+                }
+                _uiState.value = UiState.Failure
+            }
+        }
+    }
+}

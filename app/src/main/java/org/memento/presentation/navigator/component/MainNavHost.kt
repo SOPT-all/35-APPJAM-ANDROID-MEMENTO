@@ -20,8 +20,8 @@ fun MainNavHost(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxSize(),
+        modifier
+            .fillMaxSize(),
     ) {
         NavHost(
             navController = navigator.navHostController,
@@ -41,6 +41,7 @@ fun MainNavHost(
             )
 
             todoGraph(
+                padding = padding,
                 navigateToReqres = { navigator.navigateToReqres() },
             )
 

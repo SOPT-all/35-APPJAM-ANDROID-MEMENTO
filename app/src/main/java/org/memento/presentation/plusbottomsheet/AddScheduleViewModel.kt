@@ -195,6 +195,14 @@ class AddScheduleViewModel
             }
         }
 
+        fun resetData() {
+            initialTimeValue()
+            _eventText.value = ""
+            _selectedTagText.value = "Untitled"
+            _selectedTagColor.value = "#F0F0F3"
+            _isAllDayChecked.value = false
+        }
+
         init {
             viewModelScope.launch {
                 initialTimeValue()

@@ -79,3 +79,26 @@ fun createLocalDate(dateText: String): LocalDate {
         throw e
     }
 }
+
+fun formatDateString(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+    return try {
+        val date = inputFormat.parse(dateString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatTimeTo12Hour(timeString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("h a", Locale.ENGLISH)
+
+    return try {
+        val date = inputFormat.parse(timeString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        timeString
+    }
+}

@@ -19,8 +19,11 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,10 +33,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
+import org.memento.core.util.UiState
+import org.memento.domain.entity.ScheduleDetail
+import org.memento.domain.entity.TodoDetail
+import org.memento.presentation.today.TodayViewModel
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.changeHexToColor
+import org.memento.presentation.util.formatDateString
+import org.memento.presentation.util.formatTimeTo12Hour
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -47,8 +58,47 @@ fun MementoDialog(
     onEdit: () -> Unit,
     dialogType: DialogType,
     planId: Int,
+    viewModel: TodayViewModel = hiltViewModel(),
 ) {
+    val scheduleDetailState by viewModel.detailScheduleState.collectAsStateWithLifecycle()
+    val todoDetailState by viewModel.detailTodoState.collectAsStateWithLifecycle()
+    var scheduleData by remember { mutableStateOf<ScheduleDetail?>(null) }
+    var todoData by remember { mutableStateOf<TodoDetail?>(null) }
+
     if (showDialog) {
+        LaunchedEffect(dialogType, planId) {
+            when (dialogType) {
+                DialogType.SCHEDULE -> {
+                    viewModel.getScheduleDetail(scheduleId = planId)
+                }
+
+                DialogType.TO_DO -> {
+                    viewModel.getTodoDetail(todoId = planId)
+                }
+            }
+        }
+
+        LaunchedEffect(scheduleDetailState, todoDetailState) {
+            when (val state = scheduleDetailState) {
+                is UiState.Success -> {
+                    scheduleData = state.data
+                }
+
+                else -> {
+                    scheduleData = null
+                }
+            }
+            when (val state = todoDetailState) {
+                is UiState.Success -> {
+                    todoData = state.data
+                }
+
+                else -> {
+                    todoData = null
+                }
+            }
+        }
+
         Dialog(
             onDismissRequest = onDismiss,
         ) {
@@ -67,8 +117,38 @@ fun MementoDialog(
                             .padding(horizontal = 16.dp, vertical = 20.dp),
                 ) {
                     when (dialogType) {
-                        DialogType.ADD_PLAN -> AddScheduleDialogComponent()
-                        DialogType.TO_DO -> ToDoDialogComponent()
+                        DialogType.SCHEDULE -> {
+                            scheduleData?.let {
+                                AddScheduleDialogComponent(
+                                    id = it.id,
+                                    description = it.description,
+                                    startDate = it.startDate,
+                                    endDate = it.endDate,
+                                    scheduleType = it.scheduleType,
+                                    tagId = it.tagId,
+                                )
+                            }
+                        }
+
+                        DialogType.TO_DO -> {
+                            todoData?.let {
+                                ToDoDialogComponent(
+                                    isChecked = it.isCompleted,
+                                    title = it.description,
+                                    tagColor = it.tagColor,
+                                    tagText = it.tagColor,
+                                    urgentType =
+                                        when (it.priorityType) {
+                                            "Immediate" -> PriorityTagType.Immediate
+                                            "None" -> PriorityTagType.None
+                                            "High" -> PriorityTagType.High
+                                            "Medium" -> PriorityTagType.Medium
+                                            "Low" -> PriorityTagType.Low
+                                            else -> PriorityTagType.None
+                                        },
+                                )
+                            }
+                        }
                     }
 
                     Row(
@@ -140,13 +220,13 @@ fun MementoDialog(
 }
 
 @Composable
-fun ToDoDialogComponent() {
-    val isChecked = remember { mutableStateOf(false) }
-    val title = "여기는 todo dialog"
-    val tagColor = "#FFFFFF"
-    val tagText = "SOPT"
-    val urgentType = PriorityTagType.High
-
+fun ToDoDialogComponent(
+    isChecked: Boolean,
+    title: String,
+    tagColor: String,
+    tagText: String,
+    urgentType: PriorityTagType,
+) {
     Row(
         modifier =
             Modifier
@@ -155,8 +235,8 @@ fun ToDoDialogComponent() {
     ) {
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
             Checkbox(
-                checked = isChecked.value,
-                onCheckedChange = { isChecked.value = it },
+                checked = isChecked,
+                onCheckedChange = { !isChecked },
                 colors =
                     CheckboxDefaults.colors(
                         uncheckedColor = darkModeColors.gray05,
@@ -178,7 +258,7 @@ fun ToDoDialogComponent() {
                     ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                textDecoration = if (isChecked.value) TextDecoration.LineThrough else null,
+                textDecoration = if (isChecked) TextDecoration.LineThrough else null,
             )
 
             Row(
@@ -284,17 +364,15 @@ fun ToDoDialogComponent() {
 }
 
 @Composable
-fun AddScheduleDialogComponent() {
-    val isChecked = remember { mutableStateOf(false) }
-    val title = "여기는 add plan 텍스트"
-    val startDate = "Jan 31,2025"
-    val endDate = "Feb 2,2025"
-    val startTime = "8AM"
-    val endTime = "8PM"
-    val tagColor = "#FFFFFF"
-    val tagText = "SOPT"
-    val platForm = R.drawable.ic_tag
-    val platFormText = "Notion"
+fun AddScheduleDialogComponent(
+    id: Int,
+    description: String,
+    startDate: String,
+    endDate: String,
+    scheduleType: String,
+    tagId: Int,
+) {
+    var isChecked by remember { mutableStateOf(false) }
 
     Row(
         modifier =
@@ -307,7 +385,8 @@ fun AddScheduleDialogComponent() {
             contentDescription = "일정 아이콘",
             tint = darkModeColors.white,
             modifier =
-                Modifier.padding(end = 10.dp)
+                Modifier
+                    .padding(end = 10.dp)
                     .padding(vertical = 2.dp),
         )
 
@@ -315,14 +394,14 @@ fun AddScheduleDialogComponent() {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = title,
+                text = description,
                 style =
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
                     ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                textDecoration = if (isChecked.value) TextDecoration.LineThrough else null,
+                textDecoration = if (isChecked) TextDecoration.LineThrough else null,
             )
 
             Row(
@@ -344,7 +423,7 @@ fun AddScheduleDialogComponent() {
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = startDate,
+                        text = formatDateString(startDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -353,7 +432,7 @@ fun AddScheduleDialogComponent() {
                     )
 
                     Text(
-                        text = startTime,
+                        text = formatTimeTo12Hour(startDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -381,7 +460,7 @@ fun AddScheduleDialogComponent() {
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = endDate,
+                        text = formatDateString(endDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -390,7 +469,7 @@ fun AddScheduleDialogComponent() {
                     )
 
                     Text(
-                        text = endTime,
+                        text = formatTimeTo12Hour(endDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -422,14 +501,14 @@ fun AddScheduleDialogComponent() {
                     Icon(
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
-                        tint = changeHexToColor(tagColor),
+                        tint = changeHexToColor("#FFFFFF"),
                         modifier = Modifier.padding(all = 2.dp),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
-                        text = tagText,
+                        text = "SOPT",
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -458,7 +537,7 @@ fun AddScheduleDialogComponent() {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        painter = painterResource(platForm),
+                        painter = painterResource(R.drawable.ic_notion),
                         contentDescription = "태그 색 표시",
                         tint = mementoColors.red,
                         modifier = Modifier.padding(all = 2.dp),
@@ -467,7 +546,13 @@ fun AddScheduleDialogComponent() {
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
-                        text = platFormText,
+                        text =
+                            when (scheduleType) {
+                                "NORMAL" -> "None"
+                                "NOTION" -> "Notion"
+                                "Google" -> "Google"
+                                else -> "None"
+                            },
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -502,7 +587,7 @@ fun MementoDialogPreview() {
             onDismiss = closeDialog,
             onDelete = { },
             onEdit = { },
-            dialogType = DialogType.ADD_PLAN,
+            dialogType = DialogType.SCHEDULE,
             planId = 1,
         )
     }

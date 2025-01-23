@@ -21,34 +21,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
 import org.memento.presentation.component.MementoWakeTimePicker
 import org.memento.presentation.onboarding.component.OnboardingBottomButton
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
+import org.memento.presentation.onboarding.viewmodel.OnboardingViewModel
 import org.memento.presentation.type.OnboardingTopType
 import org.memento.presentation.type.SelectorType
+import org.memento.presentation.type.SetTimeType
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
-
-enum class SETTIME {
-    WAKEUP,
-    WINDDOWN,
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen1(
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToOnboardingScreen2: () -> Unit,
     navigateToOnboardingScreen4: () -> Unit,
 ) {
     val initialTimeText = stringResource(id = R.string.time_example)
+
+    val selectedTimeTextWakeUp by viewModel.wakeUpTime.collectAsStateWithLifecycle(initialTimeText)
+    val selectedTimeTextWindDown by viewModel.windDownTime.collectAsStateWithLifecycle(initialTimeText)
+
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showTimePickerBottomSheet by remember { mutableStateOf(false) }
-
-    var selectedTimeTextWakeUp by remember { mutableStateOf(initialTimeText) }
-    var selectedTimeTextWindDown by remember { mutableStateOf(initialTimeText) }
 
     var isClickedWakeUp by remember { mutableStateOf(false) }
     var isClickedWindDown by remember { mutableStateOf(false) }
@@ -56,7 +57,7 @@ fun OnboardingScreen1(
     var isSelectedWakeUp by remember { mutableStateOf(false) }
     var isSelectedWindDown by remember { mutableStateOf(false) }
 
-    var currentActiveSelector by remember { mutableStateOf<SETTIME?>(null) }
+    var currentActiveSelector by remember { mutableStateOf<SetTimeType?>(null) }
 
     Column(
         modifier =
@@ -66,7 +67,10 @@ fun OnboardingScreen1(
     ) {
         OnboardingTopAppBar(
             type = OnboardingTopType.PAGE1,
-            onSkipClick = navigateToOnboardingScreen4,
+            onSkipClick = {
+                viewModel.fetchUserInfoUpdate()
+                navigateToOnboardingScreen4()
+            },
         )
         Spacer(Modifier.height(40.dp))
         Column {
@@ -89,10 +93,10 @@ fun OnboardingScreen1(
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
-                    content = selectedTimeTextWakeUp,
+                    content = selectedTimeTextWakeUp ?: initialTimeText,
                     isClicked = isClickedWakeUp,
                     onClickedChange = {
-                        currentActiveSelector = SETTIME.WAKEUP
+                        currentActiveSelector = SetTimeType.WAKEUP
                         showTimePickerBottomSheet = true
                     },
                 )
@@ -117,10 +121,10 @@ fun OnboardingScreen1(
                 )
                 MementoChipSelector(
                     selectorType = SelectorType.TIMESELECTOR,
-                    content = selectedTimeTextWindDown,
+                    content = selectedTimeTextWindDown ?: initialTimeText,
                     isClicked = isClickedWindDown,
                     onClickedChange = {
-                        currentActiveSelector = SETTIME.WINDDOWN
+                        currentActiveSelector = SetTimeType.WINDDOWN
                         showTimePickerBottomSheet = true
                     },
                 )
@@ -131,15 +135,15 @@ fun OnboardingScreen1(
                     MementoWakeTimePicker(
                         onTimeSelected = { selectedTime ->
                             when (currentActiveSelector) {
-                                SETTIME.WAKEUP -> {
-                                    selectedTimeTextWakeUp = selectedTime
+                                SetTimeType.WAKEUP -> {
+                                    viewModel.setWakeUpTime(selectedTime)
                                     isClickedWakeUp = true
                                     isClickedWindDown = false
                                     isSelectedWakeUp = true
                                 }
 
-                                SETTIME.WINDDOWN -> {
-                                    selectedTimeTextWindDown = selectedTime
+                                SetTimeType.WINDDOWN -> {
+                                    viewModel.setWindDownTime(selectedTime)
                                     isClickedWindDown = true
                                     isClickedWakeUp = false
                                 }
@@ -155,7 +159,7 @@ fun OnboardingScreen1(
                     isClickedWakeUp = false
                     isClickedWindDown = false
 
-                    if (currentActiveSelector == SETTIME.WINDDOWN) {
+                    if (currentActiveSelector == SetTimeType.WINDDOWN) {
                         isSelectedWindDown = true
                     }
                 },
@@ -165,7 +169,12 @@ fun OnboardingScreen1(
         OnboardingBottomButton(
             content = R.string.onboarding_next,
             isSelected = isSelectedWakeUp && isSelectedWindDown,
-            onSelected = { if (isSelectedWakeUp && isSelectedWindDown) navigateToOnboardingScreen2() },
+            onSelected = {
+                if (isSelectedWakeUp && isSelectedWindDown) {
+                    viewModel.fetchUserInfoUpdate()
+                    navigateToOnboardingScreen2()
+                }
+            },
         )
     }
 }

@@ -5,7 +5,7 @@ import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toDomain.toUserInfo
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.Login
-import org.memento.domain.entity.UserInfo
+import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ class LoginRepositoryImpl
     constructor(
         private val loginDataSource: LoginDataSource,
     ) : LoginRepository {
-        override suspend fun postLogin(login: Login): Result<UserInfo> {
+        override suspend fun postLogin(login: Login): Result<LoginInfo> {
             return runCatching {
                 loginDataSource.postLogin(
                     requestLoginDto = login.toData(),

@@ -3,11 +3,10 @@ package org.memento.data.service
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
-import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
+import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST

@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
-import org.memento.domain.entity.Tag
 import org.memento.domain.entity.ScheduleDetail
+import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
@@ -237,9 +237,9 @@ class AddScheduleViewModel
             _isAllDayChecked.value = false
         }
 
-    init {
-        viewModelScope.launch {
-            initialTimeValue()
+        init {
+            viewModelScope.launch {
+                initialTimeValue()
+            }
         }
-    }
     }

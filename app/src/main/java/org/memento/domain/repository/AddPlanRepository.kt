@@ -2,8 +2,8 @@ package org.memento.domain.repository
 
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.AddTodo
-import org.memento.domain.entity.Tag
 import org.memento.domain.entity.ScheduleDetail
+import org.memento.domain.entity.Tag
 import org.memento.domain.entity.TodoDetail
 
 interface AddPlanRepository {

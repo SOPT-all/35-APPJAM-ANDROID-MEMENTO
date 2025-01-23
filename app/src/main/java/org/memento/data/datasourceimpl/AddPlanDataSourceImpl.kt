@@ -4,6 +4,7 @@ import org.memento.data.datasource.AddPlanDataSource
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
+import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.service.AddPlanService
 import javax.inject.Inject
 
@@ -35,4 +36,7 @@ class AddPlanDataSourceImpl
                 scheduleId,
                 requestAddScheduleDto,
             )
-    }
+
+        override suspend fun getScheduleDetail(scheduleId: Int): BaseResponse<ResponseScheduleDetailDto> =
+            addPlanService.getScheduleDetail(scheduleId)
+}

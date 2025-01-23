@@ -2,9 +2,11 @@ package org.memento.data.repositoryimpl
 
 import org.memento.data.datasource.AddPlanDataSource
 import org.memento.data.mapper.toData.toData
+import org.memento.data.mapper.toDomain.toScheduleDetail
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.AddTodo
+import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.repository.AddPlanRepository
 import javax.inject.Inject
 
@@ -52,4 +54,12 @@ class AddPlanRepositoryImpl
                 ).handleBaseResponse().getOrThrow()
             }
         }
-    }
+
+        override suspend fun getScheduleDetail(scheduleId: Int): Result<ScheduleDetail> {
+            return runCatching {
+                addPlanDataSource.getScheduleDetail(
+                    scheduleId = scheduleId
+                ).handleBaseResponse().getOrThrow()?.toScheduleDetail() ?: throw Exception("Throw Exception Error")
+            }
+        }
+}

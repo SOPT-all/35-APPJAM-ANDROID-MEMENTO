@@ -56,6 +56,10 @@ import org.memento.ui.theme.defaultMementoTypography
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = viewModel(),
     onCloseBottomSheet: () -> Unit,
+    isEdit: Boolean = false,
+    isEditCancel: () -> Unit,
+    isEditDone: () -> Unit,
+    planId: Int = 0
 ) {
     val eventText by viewModel.eventText.collectAsStateWithLifecycle()
     val selectedStartDateText by viewModel.selectedStartDateText.collectAsStateWithLifecycle()
@@ -80,6 +84,14 @@ fun AddScheduleScreen(
     var isStartCalendarVisible by remember { mutableStateOf(false) }
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        if(isEdit){
+            viewModel.getScheduleDetail(scheduleId = planId)
+        } else {
+            viewModel.initialTimeValue()
+        }
+    }
 
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
         viewModel.updateAllDayCheck()
@@ -129,6 +141,42 @@ fun AddScheduleScreen(
                 .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
+        if (isEdit) {
+            Row(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp, vertical = 7.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = "Cancel",
+                    style =
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
+                    modifier =
+                    Modifier
+                        .noRippleClickable {
+                            isEditCancel()
+                        },
+                )
+
+                Text(
+                    text = "Done",
+                    style =
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
+                    modifier =
+                    Modifier
+                        .noRippleClickable {
+                            isEditDone()
+                        },
+                )
+            }
+        }
+
         Box(
             modifier =
                 Modifier
@@ -416,5 +464,7 @@ fun AddPlanSelectComponent(
 fun AddScheduleScreenPreview() {
     AddScheduleScreen(
         onCloseBottomSheet = { },
+        isEditDone = { },
+        isEditCancel = { }
     )
 }

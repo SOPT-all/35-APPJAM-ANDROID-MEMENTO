@@ -2,6 +2,7 @@ package org.memento.domain.repository
 
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.AddTodo
+import org.memento.domain.entity.ScheduleDetail
 
 interface AddPlanRepository {
     suspend fun postAddTodo(addTodo: AddTodo): Result<Unit>
@@ -17,4 +18,8 @@ interface AddPlanRepository {
         scheduleId: Int,
         addSchedule: AddSchedule,
     ): Result<Unit>
+
+    suspend fun getScheduleDetail(
+        scheduleId: Int,
+    ): Result<ScheduleDetail>
 }

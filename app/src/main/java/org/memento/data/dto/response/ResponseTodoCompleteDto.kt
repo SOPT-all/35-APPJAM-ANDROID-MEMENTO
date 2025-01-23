@@ -1,6 +1,5 @@
 package org.memento.data.dto.response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,6 +8,5 @@ data class ResponseTodoCompleteDto(
     @SerialName("id")
     val id: Int,
     @SerialName("isCompleted")
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
 )
-

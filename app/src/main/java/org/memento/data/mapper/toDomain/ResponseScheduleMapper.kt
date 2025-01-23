@@ -15,6 +15,6 @@ fun ResponseScheduleDto.toScheduleListModel(): List<ScheduleList.ScheduleWithOrd
             startDate = scheduleWithOrderInfo.startDate,
             tagColorCode = scheduleWithOrderInfo.tagColorCode,
             tagName = scheduleWithOrderInfo.tagName,
-            timeDuration = scheduleWithOrderInfo.timeDuration
+            timeDuration = scheduleWithOrderInfo.timeDuration,
         )
     }

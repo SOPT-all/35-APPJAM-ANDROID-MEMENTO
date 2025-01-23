@@ -6,7 +6,8 @@ import org.memento.data.dto.response.ResponseTodoDto
 
 interface TodoDataSource {
     suspend fun getTodoList(): BaseResponse<ResponseTodoDto>
-    suspend fun getTodoDateList(date: String): BaseResponse<ResponseTodoDto>
-    suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto>
 
+    suspend fun getTodoDateList(date: String): BaseResponse<ResponseTodoDto>
+
+    suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto>
 }

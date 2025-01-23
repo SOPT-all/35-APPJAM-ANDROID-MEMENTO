@@ -38,12 +38,13 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
-import timber.log.Timber
 import java.time.LocalDate
 
-
 @Composable
-fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValues) {
+fun TodoScreen(
+    viewModel: TodoViewModel = hiltViewModel(),
+    padding: PaddingValues,
+) {
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
 
@@ -56,7 +57,6 @@ fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValue
 
     when (uiState) {
         is UiState.Loading -> {
-
         }
 
         is UiState.Failure -> {
@@ -108,8 +108,8 @@ fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValue
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -132,8 +132,8 @@ fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValue
         ) {
             TodoBoxUp(
                 modifier =
-                Modifier
-                    .align(Alignment.TopCenter),
+                    Modifier
+                        .align(Alignment.TopCenter),
             )
             LazyColumn(
                 state = todolistState,
@@ -149,8 +149,8 @@ fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValue
                     val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                     Column(
                         modifier =
-                        Modifier
-                            .padding(horizontal = 16.dp),
+                            Modifier
+                                .padding(horizontal = 16.dp),
                     ) {
                         sortedTodos.forEachIndexed { index, todoItem ->
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -175,14 +175,14 @@ fun TodoScreen(viewModel: TodoViewModel = hiltViewModel(), padding: PaddingValue
             MementoAiFloatingButton(
                 onClick = {},
                 modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 20.dp, end = 20.dp),
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                Modifier
-                    .align(Alignment.BottomCenter),
+                    Modifier
+                        .align(Alignment.BottomCenter),
             )
         }
     }

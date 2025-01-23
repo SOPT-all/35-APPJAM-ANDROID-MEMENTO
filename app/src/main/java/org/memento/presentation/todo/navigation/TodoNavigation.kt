@@ -17,7 +17,7 @@ fun NavController.navigationTodo(navOptions: NavOptions) {
 
 fun NavGraphBuilder.todoGraph(
     navigateToReqres: () -> Unit,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     composable(TodoRoute.TODO) {
         TodoScreen(padding = padding)

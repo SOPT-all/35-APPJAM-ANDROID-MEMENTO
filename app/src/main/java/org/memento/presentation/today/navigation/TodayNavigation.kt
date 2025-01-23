@@ -17,7 +17,7 @@ fun NavController.navigationToday(navOptions: NavOptions) {
 
 fun NavGraphBuilder.todayNavGraph(
     navigateToReqres: () -> Unit,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     composable(TodayRoute.TODAY) {
         TodayScreen(padding = padding)

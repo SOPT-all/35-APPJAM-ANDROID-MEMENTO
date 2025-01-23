@@ -13,6 +13,6 @@ data class ScheduleList(
         val startDate: String,
         val tagColorCode: String,
         val tagName: String,
-        val timeDuration: String
+        val timeDuration: String,
     )
 }

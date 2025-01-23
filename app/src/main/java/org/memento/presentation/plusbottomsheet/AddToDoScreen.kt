@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -54,6 +55,10 @@ fun AddToDoScreen(
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
     onCloseBottomSheet: () -> Unit,
+    isEdit: Boolean = false,
+    planId: Int = 0,
+    isEditDone: () -> Unit,
+    isEditCancel: () -> Unit,
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
     val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
@@ -105,6 +110,41 @@ fun AddToDoScreen(
                     .fillMaxSize()
                     .padding(horizontal = 23.dp, vertical = 5.dp),
         ) {
+            if (isEdit) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 5.dp, vertical = 7.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Cancel",
+                        style =
+                            MementoTheme.typography.body_r_14.copy(
+                                color = darkModeColors.gray02,
+                            ),
+                        modifier =
+                            Modifier
+                                .noRippleClickable {
+                                    isEditCancel()
+                                },
+                    )
+
+                    Text(
+                        text = "Done",
+                        style =
+                            MementoTheme.typography.body_r_14.copy(
+                                color = darkModeColors.gray02,
+                            ),
+                        modifier =
+                            Modifier
+                                .noRippleClickable {
+                                    isEditDone()
+                                },
+                    )
+                }
+            }
             Row {
                 Text(
                     text = "Add to-do,",
@@ -242,24 +282,26 @@ fun AddToDoScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Box(
-                modifier =
-                    Modifier.background(
-                        shape = CircleShape,
-                        color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_send),
-                    contentDescription = "전송 버튼",
+            if (!isEdit) {
+                Box(
                     modifier =
-                        Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp)
-                            .noRippleClickable {
-                                viewModel.postAddTodo()
-                            },
-                )
+                        Modifier.background(
+                            shape = CircleShape,
+                            color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                        ),
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_send),
+                        contentDescription = "전송 버튼",
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 13.dp)
+                                .padding(top = 12.dp, bottom = 10.dp)
+                                .noRippleClickable {
+                                    viewModel.postAddTodo()
+                                },
+                    )
+                }
             }
         }
     }
@@ -273,5 +315,7 @@ fun AddToDoScreenPreview() {
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },
         onCloseBottomSheet = { },
+        isEditCancel = { },
+        isEditDone = { },
     )
 }

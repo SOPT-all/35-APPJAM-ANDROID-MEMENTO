@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.Tag
+import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
@@ -73,6 +74,26 @@ class AddScheduleViewModel
             }
         }
 
+        private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
+        val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
+
+        fun getScheduleDetail(scheduleId: Int) {
+            viewModelScope.launch {
+                _detailState.value = UiState.Loading
+                val result = addPlanRepository.getScheduleDetail(scheduleId = scheduleId)
+                _detailState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(it)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to post plan")
+                            UiState.Failure
+                        },
+                    )
+            }
+        }
+
         fun postAddSchedule() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
@@ -98,7 +119,7 @@ class AddScheduleViewModel
             }
         }
 
-        private fun initialTimeValue() {
+        fun initialTimeValue() {
             val currentTime = System.currentTimeMillis()
             val startDate = formatDate(currentTime)
 
@@ -216,9 +237,9 @@ class AddScheduleViewModel
             _isAllDayChecked.value = false
         }
 
-        init {
-            viewModelScope.launch {
-                initialTimeValue()
-            }
+    init {
+        viewModelScope.launch {
+            initialTimeValue()
         }
+    }
     }

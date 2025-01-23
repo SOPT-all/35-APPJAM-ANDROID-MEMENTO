@@ -13,4 +13,7 @@ class ScheduleDataSourceImpl
     ) : ScheduleDataSource {
         override suspend fun getScheduleList(date: String): BaseResponse<ResponseScheduleDto> =
             scheduleService.getScheduleLists(date)
+
+        override suspend fun deleteSchedule(scheduleId: Int): BaseResponse<Unit> =
+            scheduleService.deleteSchedule(scheduleId)
     }

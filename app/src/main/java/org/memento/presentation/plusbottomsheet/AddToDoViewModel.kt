@@ -71,6 +71,11 @@ class AddToDoViewModel
             }
         }
 
+        fun patchAddTodo() {
+            viewModelScope.launch {
+            }
+        }
+
         fun postAddTodo() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading

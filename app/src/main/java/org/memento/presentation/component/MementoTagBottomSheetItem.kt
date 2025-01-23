@@ -24,8 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentListOf
-import org.memento.presentation.type.ColorTagData
+import org.memento.domain.entity.Tag
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
@@ -76,10 +75,9 @@ fun MementoTagBottomSheetItem(
 @Composable
 fun TagSelectorContent(
     onTagSelected: (String, String) -> Unit,
+    tagList: List<Tag>? = emptyList(),
 ) {
     var activeIndex by remember { mutableIntStateOf(0) }
-
-    val options = getDummyTagData()
 
     var itemHeight by remember { mutableIntStateOf(0) }
     val maxHeight = if (itemHeight > 0) (itemHeight * 5.5).dp else 25.dp
@@ -93,34 +91,23 @@ fun TagSelectorContent(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {
-            itemsIndexed(options) { index, option ->
+            itemsIndexed(tagList.orEmpty()) { index, option ->
                 MementoTagBottomSheetItem(
-                    option = option.text,
+                    option = option.name,
                     isActive = activeIndex == index,
                     activeBgColor = darkModeColors.gray08,
                     activeContentColor = darkModeColors.gray02,
-                    tagColor = changeHexToColor(option.color),
+                    tagColor = changeHexToColor(option.colorCode),
                     onClick = {
                         if (activeIndex != index) {
                             activeIndex = index
-                            onTagSelected(option.color, option.text)
+                            onTagSelected(option.colorCode, option.name)
                         }
                     },
                 )
             }
         }
     }
-}
-
-fun getDummyTagData(): List<ColorTagData> {
-    return persistentListOf(
-        ColorTagData("Untitled", "#A9ADBB"),
-        ColorTagData("Family", "#FF0D45"),
-        ColorTagData("Hobby", "#FF8162"),
-        ColorTagData("Self-Development", "#149C95"),
-        ColorTagData("Work", "#6CA9E1"),
-        ColorTagData("Personal", "#3867FF"),
-    )
 }
 
 @Preview(showBackground = true)

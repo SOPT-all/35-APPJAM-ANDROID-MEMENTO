@@ -43,6 +43,7 @@ import org.memento.presentation.today.TodayViewModel
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.changeHexToColor
+import org.memento.presentation.util.formatDateString
 import org.memento.presentation.util.formatTimeTo12Hour
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
@@ -422,7 +423,7 @@ fun AddScheduleDialogComponent(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = startDate,
+                        text = formatDateString(startDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -459,7 +460,7 @@ fun AddScheduleDialogComponent(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = endDate,
+                        text = formatDateString(endDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,
@@ -545,7 +546,12 @@ fun AddScheduleDialogComponent(
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
-                        text = "노션",
+                        text = when(scheduleType){
+                            "NORMAL" -> "None"
+                            "NOTION" -> "Notion"
+                            "Google" -> "Google"
+                            else -> "None"
+                        },
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,

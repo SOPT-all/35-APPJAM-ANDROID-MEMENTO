@@ -83,7 +83,7 @@ fun TodayScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(5) }
+    var selectedPlanId by remember { mutableIntStateOf(13) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
     val today = LocalDate.now()

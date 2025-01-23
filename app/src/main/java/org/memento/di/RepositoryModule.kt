@@ -31,5 +31,5 @@ internal abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsUserRepository(userInfoUpdateRepositoryImpl: UserInfoUpdateRepositoryImpl):UserInfoUpdateRepository
+    abstract fun bindsUserRepository(userInfoUpdateRepositoryImpl: UserInfoUpdateRepositoryImpl): UserInfoUpdateRepository
 }

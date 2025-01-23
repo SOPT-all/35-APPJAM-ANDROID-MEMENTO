@@ -43,16 +43,16 @@ class TokenDataStore
         }
 
         companion object {
-            private const val TOKEN_KEY = "token_key"
+            private const val TOKEN_KEY = ""
             private val preferencesTokenKey = stringPreferencesKey(TOKEN_KEY)
 
-            private const val REFRESH_TOKEN_KEY = "refresh_token_key"
+            private const val REFRESH_TOKEN_KEY = ""
             private val preferencesRefreshTokenKey = stringPreferencesKey(REFRESH_TOKEN_KEY)
 
             val TEMPORARY_TOKEN: String
-                get() = BuildConfig.ACCESS_TOKEN.ifEmpty { "default_access_token" }
+                get() = BuildConfig.ACCESS_TOKEN.ifEmpty { "" }
 
             val TEMPORARY_REFRESH_TOKEN: String
-                get() = BuildConfig.REFRESH_TOKEN.ifEmpty { "default_refresh_token" }
+                get() = BuildConfig.REFRESH_TOKEN.ifEmpty { "" }
         }
     }

@@ -20,60 +20,74 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel
-    @Inject
-    constructor(
-        private val authRepository: AuthRepository,
-        private val loginRepository: LoginRepository,
-        private val tokenDataStore: TokenDataStore,
-    ) : ViewModel() {
-        private val _user = MutableStateFlow<FirebaseUser?>(null)
-        val user = _user.asStateFlow()
+@Inject
+constructor(
+    private val authRepository: AuthRepository,
+    private val loginRepository: LoginRepository,
+    private val tokenDataStore: TokenDataStore,
+) : ViewModel() {
+    private val _user = MutableStateFlow<FirebaseUser?>(null)
+    val user = _user.asStateFlow()
 
-        private val _uiState = MutableStateFlow<UiState<UserInfo>>(UiState.Loading)
-        val uiState: StateFlow<UiState<UserInfo>> = _uiState
+    private val _uiState = MutableStateFlow<UiState<UserInfo>>(UiState.Loading)
+    val uiState: StateFlow<UiState<UserInfo>> = _uiState
 
-        fun saveToken(
-            accessToken: String,
-            refreshToken: String,
-        ) {
-            viewModelScope.launch {
-                tokenDataStore.setAccessToken(accessToken)
-                tokenDataStore.setRefreshToken(refreshToken)
-            }
+    private val _token = MutableStateFlow<String?>(null)
+    val token: StateFlow<String?> = _token.asStateFlow()
+
+    init {
+        loadToken()
+    }
+
+    fun loadToken(
+    ) {
+        viewModelScope.launch {
+            _token.value = tokenDataStore.getAccessToken()
         }
+    }
 
-        fun postLogin(
-            idToken: String,
-            provider: String = "GOOGLE",
-        ) {
-            viewModelScope.launch {
-                _uiState.value = UiState.Loading
-                val result = loginRepository.postLogin(Login(idToken = idToken, provider = provider))
-                _uiState.value =
-                    result.fold(
-                        onSuccess = { data -> UiState.Success(data) },
-                        onFailure = { data ->
-                            Timber.tag("data").d(data.message.toString())
-                            UiState.Failure
-                        },
-                    )
-            }
+    fun saveToken(
+        accessToken: String,
+        refreshToken: String,
+    ) {
+        viewModelScope.launch {
+            tokenDataStore.setAccessToken(accessToken)
+            tokenDataStore.setRefreshToken(refreshToken)
         }
+    }
 
-        fun signInWithGoogle(idToken: String) {
-            viewModelScope.launch {
-                val result = authRepository.signInWithGoogle(idToken)
-                result.onSuccess { firebaseUser ->
-                    _user.update { firebaseUser }
-                }.onFailure {
-                    Timber.d("Google Login Failed ${it.message}")
-                }
-            }
+    fun postLogin(
+        idToken: String,
+        provider: String = "GOOGLE",
+    ) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            val result = loginRepository.postLogin(Login(idToken = idToken, provider = provider))
+            _uiState.value =
+                result.fold(
+                    onSuccess = { data -> UiState.Success(data) },
+                    onFailure = { data ->
+                        Timber.tag("data").d(data.message.toString())
+                        UiState.Failure
+                    },
+                )
         }
+    }
 
-        fun checkCurrentUser() {
-            viewModelScope.launch {
-                _user.update { authRepository.getCurrentUser() }
+    fun signInWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            val result = authRepository.signInWithGoogle(idToken)
+            result.onSuccess { firebaseUser ->
+                _user.update { firebaseUser }
+            }.onFailure {
+                Timber.d("Google Login Failed ${it.message}")
             }
         }
     }
+
+    fun checkCurrentUser() {
+        viewModelScope.launch {
+            _user.update { authRepository.getCurrentUser() }
+        }
+    }
+}

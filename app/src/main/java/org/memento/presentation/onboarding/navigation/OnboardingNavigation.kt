@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import org.memento.data.local.TokenDataStore
 import org.memento.presentation.onboarding.LoginScreen
 import org.memento.presentation.onboarding.OnboardingScreen1
 import org.memento.presentation.onboarding.OnboardingScreen2
@@ -37,6 +38,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     composable("LoginScreen") {
         LoginScreen(
             navigationToOnboardingScreen1 = navigateToOnboardingScreen1,
+            navigationToMainScreen = navigateToMainScreen,
         )
     }
     composable("OnboardingScreen1") {

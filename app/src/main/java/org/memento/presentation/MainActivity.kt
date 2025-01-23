@@ -28,9 +28,7 @@ class MainActivity : ComponentActivity() {
             var showSplash by remember { mutableStateOf(true) }
             val navigator: MainNavigator = rememberMainNavigator()
 
-            MEMENTOTheme(
-                darkTheme = isDarkMode,
-            ) {
+            MEMENTOTheme(darkTheme = isDarkMode) {
                 LaunchedEffect(Unit) {
                     delay(SPLASH_SCREEN_DELAY)
                     showSplash = false

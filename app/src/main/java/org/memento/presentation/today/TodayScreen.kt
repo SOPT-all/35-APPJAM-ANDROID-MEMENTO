@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,9 +23,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,6 +58,7 @@ import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.today.component.AllDayScheduleTag
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -69,8 +72,8 @@ fun TodayScreen(
     wakeUpTime: String = "8 AM",
     windDownTime: String = "22 PM",
     viewModel: TodayViewModel = hiltViewModel(),
+    padding: PaddingValues,
 ) {
-    val dummyDataState = remember { mutableStateListOf(*dummyData.toTypedArray()) }
     var draggedItemIndex by remember { mutableStateOf(-1) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
     var itemHeight by remember { mutableIntStateOf(0) }
@@ -83,7 +86,7 @@ fun TodayScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(13) }
+    var selectedPlanId by remember { mutableIntStateOf(3) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
     val today = LocalDate.now()
@@ -93,6 +96,13 @@ fun TodayScreen(
 
     val isDraggingEnabled = remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
+
+    LaunchedEffect(selectedDate.value) {
+        val selectedDate = selectedDate.value.toString()
+        viewModel.getTodoDateList(selectedDate)
+        viewModel.getScheduleList(selectedDate)
+    }
+    val combinedItems by viewModel.combinedItems.collectAsState()
 
     fun resetDraggingState() {
         draggedItemIndex = -1
@@ -149,7 +159,7 @@ fun TodayScreen(
             }
         }
 
-        if (dummyDataState.isEmpty()) {
+        if (combinedItems.isEmpty()) {
             Box(
                 modifier =
                     Modifier
@@ -207,7 +217,7 @@ fun TodayScreen(
                         }
                     }
 
-                    itemsIndexed(dummyDataState) { index, item ->
+                    itemsIndexed(combinedItems) { index, item ->
                         val isDragging = index == draggedItemIndex
                         val scale = animateFloatAsState(if (isDragging) 1.1f else 1f)
 
@@ -237,19 +247,19 @@ fun TodayScreen(
                                                             if (draggedOffsetY > 0) 1 else -1
                                                         val targetIndex =
                                                             (draggedItemIndex + moveDirection)
-                                                                .coerceIn(0, dummyDataState.size - 1)
+                                                                .coerceIn(0, combinedItems.size - 1)
 
-                                                        if (targetIndex != draggedItemIndex) {
-                                                            dummyDataState.move(
-                                                                draggedItemIndex,
-                                                                targetIndex,
-                                                            )
-                                                            draggedItemIndex = targetIndex
-                                                            draggedOffsetY -= moveDirection * itemHeightPx
-                                                        } else {
-                                                            draggedOffsetY = 0f
-                                                            break
-                                                        }
+//                                                    if (targetIndex != draggedItemIndex) {
+//                                                        combinedItems.move(
+//                                                            draggedItemIndex,
+//                                                            targetIndex,
+//                                                        )
+//                                                        draggedItemIndex = targetIndex
+//                                                        draggedOffsetY -= moveDirection * itemHeightPx
+//                                                    } else {
+//                                                        draggedOffsetY = 0f
+//                                                        break
+//                                                    }
                                                     }
                                                 }
                                             },
@@ -261,14 +271,13 @@ fun TodayScreen(
                             when (item) {
                                 is MementoItem.TodoItem -> {
                                     MementoTodoItemWithLine(
-                                        tagColor = Color.Red,
-                                        isDone = item.isChecked,
-                                        onCheckedChange = { },
-                                        todoTitleText = item.title,
-                                        priorityTagType = item.priority,
-                                        isConnected = item.isConnected,
-                                        isFirstUndone = item.isFirstUndone,
-                                        isNow = item.isNow,
+                                        tagColor = changeHexToColor(item.tagColor),
+                                        isDone = item.isCompleted,
+                                        onCheckedChange = {},
+                                        todoTitleText = item.description,
+                                        priorityTagType = PriorityTagType.None,
+                                        isConnected = item.toDoType.toBoolean(),
+                                        isNow = false,
                                         onClick = {
                                             // selectedPlanId = schedule.id
                                             dialogType = DialogType.TO_DO
@@ -280,10 +289,9 @@ fun TodayScreen(
                                 is MementoItem.ScheduleItem -> {
                                     MementoScheduleItemWithLine(
                                         tagColor = Color.Blue,
-                                        scheduleTitleText = item.title,
-                                        timeRange = item.timeRange,
-                                        isConnected = item.isConnected,
-                                        isNow = item.isNow,
+                                        scheduleTitleText = item.description,
+                                        timeRange = "dfdf",
+                                        isNow = false,
                                         onClick = {
 //                                            selectedPlanId = schedule.id
                                             dialogType = DialogType.SCHEDULE
@@ -393,95 +401,35 @@ fun <T> MutableList<T>.move(
 
 sealed class MementoItem {
     data class TodoItem(
-        val id: String,
-        val title: String,
-        val isChecked: Boolean,
-        val priority: PriorityTagType,
-        var order: Int,
-        val isConnected: Boolean,
-        val isFirstUndone: Boolean = false,
-        var isNow: Boolean = false,
+        val id: Int,
+        val groupId: String,
+        val description: String,
+        val date: String,
+        val deadline: String,
+        val isCompleted: Boolean,
+        val priorityValue: Double,
+        val priorityType: String,
+        val tagName: String,
+        val tagColor: String,
+        val toDoType: String,
+        val order: Int,
     ) : MementoItem()
 
     data class ScheduleItem(
-        val id: String,
-        val title: String,
-        val timeRange: String,
-        var order: Int,
-        val isConnected: Boolean,
-        var isNow: Boolean = false,
+        val description: String,
+        val endDate: String,
+        val id: Int,
+        val isAllDay: Boolean,
+        val order: Int,
+        val scheduleType: String,
+        val startDate: String,
+        val tagColorCode: String,
+        val tagName: String,
     ) : MementoItem()
 }
-
-val dummyData: List<MementoItem> =
-    listOf(
-        MementoItem.TodoItem(
-            id = "1",
-            title = "UXUI 과제",
-            isChecked = true,
-            priority = PriorityTagType.Immediate,
-            order = 6,
-            isConnected = true,
-            isFirstUndone = true,
-        ),
-        MementoItem.TodoItem(
-            id = "8",
-            title = "이건 마지막에",
-            isChecked = true,
-            priority = PriorityTagType.None,
-            order = 9,
-            isConnected = false,
-            isNow = true,
-        ),
-        MementoItem.TodoItem(
-            id = "8",
-            title = "이건 마지막에",
-            isChecked = true,
-            priority = PriorityTagType.None,
-            order = 9,
-            isConnected = false,
-        ),
-        MementoItem.ScheduleItem(
-            id = "2",
-            title = "3차 세미나",
-            timeRange = "12 PM - 4 PM (4h)",
-            order = 3,
-            isConnected = true,
-            isNow = false,
-        ),
-        MementoItem.ScheduleItem(
-            id = "2",
-            title = "3차 세미나",
-            timeRange = "12 PM - 4 PM (4h)",
-            order = 3,
-            isConnected = true,
-            isNow = false,
-        ),
-        MementoItem.ScheduleItem(
-            id = "2",
-            title = "3차 세미나",
-            timeRange = "12 PM - 4 PM (4h)",
-            order = 3,
-            isConnected = true,
-            isNow = false,
-        ),
-        MementoItem.ScheduleItem(
-            id = "2",
-            title = "3차 세미나",
-            timeRange = "12 PM - 4 PM (4h)",
-            order = 3,
-            isConnected = true,
-            isNow = false,
-        ),
-    ).sortedBy { item ->
-        when (item) {
-            is MementoItem.TodoItem -> item.order
-            is MementoItem.ScheduleItem -> item.order
-        }
-    }
 
 @Preview(showBackground = true)
 @Composable
 private fun previewToday() {
-    TodayScreen()
+//    TodayScreen(x
 }

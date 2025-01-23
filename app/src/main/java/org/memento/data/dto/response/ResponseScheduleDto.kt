@@ -26,7 +26,9 @@ data class ResponseScheduleDto(
         val tagColorCode: String,
         @SerialName("tagName")
         val tagName: String,
-        @SerialName("orderNum")
-        val orderNum: Int,
+        @SerialName("order")
+        val order: Int,
+        @SerialName("timeDuration")
+        val timeDuration: String,
     )
 }

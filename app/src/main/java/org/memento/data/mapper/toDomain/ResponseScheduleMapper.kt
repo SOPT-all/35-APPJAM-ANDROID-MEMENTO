@@ -10,10 +10,11 @@ fun ResponseScheduleDto.toScheduleListModel(): List<ScheduleList.ScheduleWithOrd
             endDate = scheduleWithOrderInfo.endDate,
             id = scheduleWithOrderInfo.id,
             isAllDay = scheduleWithOrderInfo.isAllDay,
-            orderNum = scheduleWithOrderInfo.orderNum,
+            order = scheduleWithOrderInfo.order,
             scheduleType = scheduleWithOrderInfo.scheduleType,
             startDate = scheduleWithOrderInfo.startDate,
             tagColorCode = scheduleWithOrderInfo.tagColorCode,
             tagName = scheduleWithOrderInfo.tagName,
+            timeDuration = scheduleWithOrderInfo.timeDuration,
         )
     }

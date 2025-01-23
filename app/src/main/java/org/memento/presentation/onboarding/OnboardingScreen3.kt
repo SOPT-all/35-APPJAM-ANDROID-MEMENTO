@@ -13,8 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +27,6 @@ import org.memento.presentation.onboarding.component.OnboardingQuestionBox
 import org.memento.presentation.onboarding.component.OnboardingTopAppBar
 import org.memento.presentation.onboarding.viewmodel.OnboardingViewModel
 import org.memento.presentation.type.OnboardingTopType
-import org.memento.presentation.type.YesNoButtonType
 import org.memento.presentation.util.toYesNoType
 
 @Composable
@@ -51,32 +48,36 @@ fun OnboardingScreen3(
     val isPreferReminder by viewModel.isPreferReminder.collectAsStateWithLifecycle()
     val isImportantBreaks by viewModel.isImportantBreaks.collectAsStateWithLifecycle()
 
-    val selectedOptions = listOf(
-        isStressedUnorganizedSchedule,
-        isForgetImportantThings,
-        isPreferReminder,
-        isImportantBreaks
-    )
+    val selectedOptions =
+        listOf(
+            isStressedUnorganizedSchedule,
+            isForgetImportantThings,
+            isPreferReminder,
+            isImportantBreaks,
+        )
 
     val isAllSelected = selectedOptions.all { it != null }
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
                 type = OnboardingTopType.PAGE3,
                 onBackClick = popBackStack,
-                onSkipClick = navigateToOnboardingScreen4,
+                onSkipClick = {
+                    viewModel.fetchUserInfoUpdate()
+                    navigateToOnboardingScreen4()
+                },
             )
             Spacer(Modifier.height(20.dp))
             LazyColumn(
                 modifier =
-                Modifier
-                    .padding(horizontal = 14.dp),
+                    Modifier
+                        .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
                     OnboardingQuestionBox(
@@ -91,10 +92,10 @@ fun OnboardingScreen3(
                 item {
                     Box(
                         modifier =
-                        Modifier
-                            .height(50.dp)
-                            .fillMaxWidth()
-                            .background(color = Color.Transparent),
+                            Modifier
+                                .height(50.dp)
+                                .fillMaxWidth()
+                                .background(color = Color.Transparent),
                     )
                 }
             }
@@ -104,9 +105,9 @@ fun OnboardingScreen3(
             isSelected = isAllSelected,
             onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
             modifier =
-            Modifier
-                .align(androidx.compose.ui.Alignment.BottomCenter)
-                .padding(bottom = 10.dp),
+                Modifier
+                    .align(androidx.compose.ui.Alignment.BottomCenter)
+                    .padding(bottom = 10.dp),
         )
     }
 }

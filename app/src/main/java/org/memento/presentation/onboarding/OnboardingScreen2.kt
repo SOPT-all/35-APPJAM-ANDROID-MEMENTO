@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,17 +38,18 @@ fun OnboardingScreen2(
     navigateToOnboardingScreen4: () -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val jobItems = immutableListOf(
-        JobItem("TECHNOLOGY", stringResource(R.string.onboarding2_tech)),
-        JobItem("DATA_ANALYTICS", stringResource(R.string.onboarding2_data)),
-        JobItem("DESIGN_CREATIVITY", stringResource(R.string.onboarding2_design)),
-        JobItem("BUSINESS_MANAGEMENT", stringResource(R.string.onboarding2_business)),
-        JobItem("EDUCATION_TRAINING", stringResource(R.string.onboarding2_edu)),
-        JobItem("HEALTHCARE_WELLNESS", stringResource(R.string.onboarding2_health)),
-        JobItem("FREELANCE_SELF_EMPLOYMENT", stringResource(R.string.onboarding2_free)),
-        JobItem("SERVICE_HOSPITALITY", stringResource(R.string.onboarding2_service)),
-        JobItem("ENGINEERING_MANUFACTURING", stringResource(R.string.onboarding2_engineer)),
-    )
+    val jobItems =
+        immutableListOf(
+            JobItem("TECHNOLOGY", stringResource(R.string.onboarding2_tech)),
+            JobItem("DATA_ANALYTICS", stringResource(R.string.onboarding2_data)),
+            JobItem("DESIGN_CREATIVITY", stringResource(R.string.onboarding2_design)),
+            JobItem("BUSINESS_MANAGEMENT", stringResource(R.string.onboarding2_business)),
+            JobItem("EDUCATION_TRAINING", stringResource(R.string.onboarding2_edu)),
+            JobItem("HEALTHCARE_WELLNESS", stringResource(R.string.onboarding2_health)),
+            JobItem("FREELANCE_SELF_EMPLOYMENT", stringResource(R.string.onboarding2_free)),
+            JobItem("SERVICE_HOSPITALITY", stringResource(R.string.onboarding2_service)),
+            JobItem("ENGINEERING_MANUFACTURING", stringResource(R.string.onboarding2_engineer)),
+        )
 
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var textFieldValue by remember { mutableStateOf<String>("") }
@@ -61,21 +61,24 @@ fun OnboardingScreen2(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
         Column {
             OnboardingTopAppBar(
                 type = OnboardingTopType.PAGE2,
-                onSkipClick = { navigateToOnboardingScreen4() },
+                onSkipClick = {
+                    viewModel.fetchUserInfoUpdate()
+                    navigateToOnboardingScreen4()
+                },
                 onBackClick = { popBackStack() },
             )
             Spacer(Modifier.height(20.dp))
             LazyColumn(
                 modifier =
-                Modifier
-                    .weight(1f),
+                    Modifier
+                        .weight(1f),
             ) {
                 itemsIndexed(jobItems, key = { index, _ -> index }) { index, item ->
                     RoundCheckboxWithText(
@@ -93,7 +96,7 @@ fun OnboardingScreen2(
                 }
                 item(key = R.string.onboarding2_other) {
                     CheckboxWithTextField(
-                        isChecked = (isCheckedTextField==true),
+                        isChecked = (isCheckedTextField == true),
                         onCheckedChange = { isChecked ->
                             viewModel.setJob("OTHER")
                             viewModel.setJobOtherDetail(textFieldValue)
@@ -105,8 +108,8 @@ fun OnboardingScreen2(
                         onTextChange = { textFieldValue = it },
                         placeholder = stringResource(id = R.string.onboarding2_placeholder),
                         modifier =
-                        Modifier
-                            .padding(bottom = 16.dp),
+                            Modifier
+                                .padding(bottom = 16.dp),
                     )
                 }
             }

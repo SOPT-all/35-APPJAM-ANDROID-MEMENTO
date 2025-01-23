@@ -57,7 +57,7 @@ fun LoginScreen(
 ) {
     val token by viewModel.token.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(token) {
         Log.e("Loginscree",token.toString())
         if (!token.isNullOrEmpty()) {
             navigationToMainScreen()

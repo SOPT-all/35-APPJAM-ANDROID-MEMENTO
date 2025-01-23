@@ -43,10 +43,10 @@ class TokenDataStore
         }
 
         companion object {
-            private const val TOKEN_KEY = ""
+            private const val TOKEN_KEY = "TOKEN_KEY"
             private val preferencesTokenKey = stringPreferencesKey(TOKEN_KEY)
 
-            private const val REFRESH_TOKEN_KEY = ""
+            private const val REFRESH_TOKEN_KEY = "REFRESH_KEY"
             private val preferencesRefreshTokenKey = stringPreferencesKey(REFRESH_TOKEN_KEY)
 
             val TEMPORARY_TOKEN: String

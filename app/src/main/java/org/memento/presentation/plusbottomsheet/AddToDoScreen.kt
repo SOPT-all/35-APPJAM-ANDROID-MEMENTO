@@ -53,6 +53,7 @@ fun AddToDoScreen(
     onNavigateDeadLineSetting: () -> Unit,
     onNavigateTagSetting: () -> Unit,
     onNavigateEisenHourSetting: () -> Unit,
+    onCloseBottomSheet: () -> Unit,
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
     val addToDoText by viewModel.addToDoText.collectAsStateWithLifecycle()
@@ -79,6 +80,7 @@ fun AddToDoScreen(
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
+                onCloseBottomSheet()
             }
 
             is UiState.Failure -> {
@@ -270,5 +272,6 @@ fun AddToDoScreenPreview() {
         onNavigateDeadLineSetting = { },
         onNavigateTagSetting = { },
         onNavigateEisenHourSetting = { },
+        onCloseBottomSheet = { },
     )
 }

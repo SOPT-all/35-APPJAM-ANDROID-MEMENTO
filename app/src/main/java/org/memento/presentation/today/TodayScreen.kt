@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -37,15 +39,22 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.memento.R
+import org.memento.presentation.component.MementoAlertDialog
+import org.memento.presentation.component.MementoDialog
+import org.memento.presentation.component.MementoEditScheduleBottomSheet
+import org.memento.presentation.component.MementoEditTodoBottomSheet
 import org.memento.presentation.component.MementoScheduleItemWithLine
 import org.memento.presentation.component.MementoTodoItemWithLine
 import org.memento.presentation.component.MementoTopBar
 import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.today.component.AllDayScheduleTag
+import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
@@ -53,11 +62,13 @@ import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
     modifier: Modifier = Modifier,
     wakeUpTime: String = "8 AM",
     windDownTime: String = "22 PM",
+    viewModel: TodayViewModel = hiltViewModel(),
 ) {
     val dummyDataState = remember { mutableStateListOf(*dummyData.toTypedArray()) }
     var draggedItemIndex by remember { mutableStateOf(-1) }
@@ -65,6 +76,15 @@ fun TodayScreen(
     var itemHeight by remember { mutableIntStateOf(0) }
     var listHeight by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
+
+    var showDetailDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val sheetEditTodoState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showEditTodoBottomSheet by remember { mutableStateOf(false) }
+    val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
+    var selectedPlanId by remember { mutableIntStateOf(13) }
+    var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
@@ -249,6 +269,11 @@ fun TodayScreen(
                                         isConnected = item.isConnected,
                                         isFirstUndone = item.isFirstUndone,
                                         isNow = item.isNow,
+                                        onClick = {
+                                            // selectedPlanId = schedule.id
+                                            dialogType = DialogType.TO_DO
+                                            showDetailDialog = true
+                                        },
                                     )
                                 }
 
@@ -259,6 +284,11 @@ fun TodayScreen(
                                         timeRange = item.timeRange,
                                         isConnected = item.isConnected,
                                         isNow = item.isNow,
+                                        onClick = {
+//                                            selectedPlanId = schedule.id
+                                            dialogType = DialogType.SCHEDULE
+                                            showDetailDialog = true
+                                        },
                                     )
                                 }
                             }
@@ -310,6 +340,45 @@ fun TodayScreen(
                 ) {}
             }
         }
+
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+            dialogType = dialogType,
+            planId = selectedPlanId,
+        )
+
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(
+                        planId = selectedPlanId,
+                        dialogType = dialogType,
+                    )
+                    showDeleteDialog = false
+                },
+            )
+        }
+
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onConfirm = { showEditTodoBottomSheet = false },
+            planId = selectedPlanId,
+        )
+
+        MementoEditScheduleBottomSheet(
+            isOpenBottomSheet = showEditScheduleBottomSheet,
+            sheetState = sheetEditScheduleState,
+            onConfirm = { showEditScheduleBottomSheet = false },
+            planId = selectedPlanId,
+        )
     }
 }
 

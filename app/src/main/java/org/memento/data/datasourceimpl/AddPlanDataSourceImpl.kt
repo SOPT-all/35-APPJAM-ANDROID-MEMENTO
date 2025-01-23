@@ -5,6 +5,8 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.request.RequestBrainDumpDto
+import org.memento.data.dto.response.ResponseScheduleDetailDto
+import org.memento.data.dto.response.ResponseTodoDetailDto
 import org.memento.data.service.AddPlanService
 import javax.inject.Inject
 
@@ -21,4 +23,28 @@ class AddPlanDataSourceImpl
 
         override suspend fun postBrainDump(requestBrainDumpDto: RequestBrainDumpDto): BaseResponse<Unit> =
             addPlanService.postBrainDump(requestBrainDumpDto)
+
+        override suspend fun patchAddTodo(
+            todoId: Int,
+            requestAddTodoDto: RequestAddTodoDto,
+        ): BaseResponse<Unit> =
+            addPlanService.patchAddTodo(
+                todoId,
+                requestAddTodoDto,
+            )
+
+        override suspend fun patchAddSchedule(
+            scheduleId: Int,
+            requestAddScheduleDto: RequestAddScheduleDto,
+        ): BaseResponse<Unit> =
+            addPlanService.patchAddSchedule(
+                scheduleId,
+                requestAddScheduleDto,
+            )
+
+        override suspend fun getScheduleDetail(scheduleId: Int): BaseResponse<ResponseScheduleDetailDto> =
+            addPlanService.getScheduleDetail(scheduleId)
+
+        override suspend fun getTodoDetail(todoId: Int): BaseResponse<ResponseTodoDetailDto> =
+            addPlanService.getTodoDetail(todoId)
     }

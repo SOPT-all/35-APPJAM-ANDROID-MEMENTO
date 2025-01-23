@@ -22,6 +22,24 @@ fun formatTime(
     return formatter // 03:30 PM
 }
 
+fun String.to24HourFormat(): String {
+    val regex = """(\d{2}):(\d{2})\s?(AM|PM)""".toRegex()
+    val matchResult = regex.find(this) ?: return this
+
+    val (hourStr, minuteStr, period) = matchResult.destructured
+    var hour = hourStr.toInt()
+    val minute = minuteStr.toInt()
+
+    hour =
+        when {
+            period == "PM" && hour != 12 -> hour + 12
+            period == "AM" && hour == 12 -> 0
+            else -> hour
+        }
+
+    return "%02d:%02d".format(hour, minute)
+}
+
 fun parseDateTime(
     date: String,
     time: String,
@@ -59,5 +77,28 @@ fun createLocalDate(dateText: String): LocalDate {
     } catch (e: Exception) {
         Timber.e(e, "Failed to parse LocalDate for input: $dateText")
         throw e
+    }
+}
+
+fun formatDateString(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+    return try {
+        val date = inputFormat.parse(dateString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatTimeTo12Hour(timeString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("h a", Locale.ENGLISH)
+
+    return try {
+        val date = inputFormat.parse(timeString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        timeString
     }
 }

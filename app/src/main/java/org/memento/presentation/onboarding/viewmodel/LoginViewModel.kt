@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.data.local.TokenDataStore
 import org.memento.domain.entity.Login
-import org.memento.domain.entity.UserInfo
+import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.AuthRepository
 import org.memento.domain.repository.LoginRepository
 import timber.log.Timber
@@ -29,8 +29,21 @@ class LoginViewModel
         private val _user = MutableStateFlow<FirebaseUser?>(null)
         val user = _user.asStateFlow()
 
-        private val _uiState = MutableStateFlow<UiState<UserInfo>>(UiState.Loading)
-        val uiState: StateFlow<UiState<UserInfo>> = _uiState
+        private val _uiState = MutableStateFlow<UiState<LoginInfo>>(UiState.Loading)
+        val uiState: StateFlow<UiState<LoginInfo>> = _uiState
+
+        private val _token = MutableStateFlow<String?>(null)
+        val token: StateFlow<String?> = _token.asStateFlow()
+
+        init {
+            loadToken()
+        }
+
+        fun loadToken() {
+            viewModelScope.launch {
+                _token.value = tokenDataStore.getAccessToken()
+            }
+        }
 
         fun saveToken(
             accessToken: String,

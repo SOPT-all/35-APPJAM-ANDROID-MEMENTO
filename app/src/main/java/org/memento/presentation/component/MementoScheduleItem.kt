@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
 import org.memento.presentation.type.PriorityTagType
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MEMENTOTheme
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -119,12 +120,16 @@ fun MementoScheduleItemWithLine(
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
+    onClick: () -> Unit,
 ) {
     Row(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp)
+                .noRippleClickable {
+                    onClick()
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

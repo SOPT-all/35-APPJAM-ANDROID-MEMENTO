@@ -38,7 +38,7 @@ import com.google.android.gms.common.api.ApiException
 import org.memento.BuildConfig
 import org.memento.R
 import org.memento.core.util.UiState
-import org.memento.domain.entity.UserInfo
+import org.memento.domain.entity.LoginInfo
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.noRippleClickable
@@ -49,7 +49,15 @@ import org.memento.ui.theme.defaultMementoTypography
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navigationToOnboardingScreen1: () -> Unit,
+    navigationToMainScreen: () -> Unit,
 ) {
+    val token by viewModel.token.collectAsState()
+
+    LaunchedEffect(token) {
+        if (!token.isNullOrEmpty()) {
+            navigationToMainScreen()
+        }
+    }
     var webViewVisible by remember { mutableStateOf(false) }
 
     val user by viewModel.user.collectAsState()
@@ -61,7 +69,7 @@ fun LoginScreen(
     when (uiState) {
         is UiState.Loading -> {}
         is UiState.Success -> {
-            val data = (uiState as UiState.Success<UserInfo>).data
+            val data = (uiState as UiState.Success<LoginInfo>).data
             viewModel.saveToken(
                 accessToken = data.accessToken,
                 refreshToken = data.refreshToken,

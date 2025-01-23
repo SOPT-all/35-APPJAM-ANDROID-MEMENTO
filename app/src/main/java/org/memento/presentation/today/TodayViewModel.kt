@@ -100,22 +100,22 @@ class TodayViewModel
         }
 
         data class TodoData(
-            val isChecked: Boolean, // 체크 여부
-            val title: String, // 할 일 제목
-            val tagColor: String, // 태그 색상
-            val tagText: String, // 태그 이름
-            val priorityType: PriorityTagType, // 우선순위
+            val isChecked: Boolean,
+            val title: String,
+            val tagColor: String,
+            val tagText: String,
+            val priorityType: PriorityTagType,
         )
 
         data class ScheduleData(
-            val title: String, // 일정 제목
-            val startDate: String, // 시작 날짜
-            val endDate: String, // 종료 날짜
-            val startTime: String, // 시작 시간
-            val endTime: String, // 종료 시간
-            val tagColor: String, // 태그 색상
-            val tagText: String, // 태그 이름
-            val platform: Int, // 플랫폼
-            val platformText: String, // 플랫폼 이름
+            val title: String,
+            val startDate: String,
+            val endDate: String,
+            val startTime: String,
+            val endTime: String,
+            val tagColor: String,
+            val tagText: String,
+            val platform: Int,
+            val platformText: String,
         )
     }

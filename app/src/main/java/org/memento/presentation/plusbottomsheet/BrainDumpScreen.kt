@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
@@ -153,7 +154,10 @@ fun BrainDumpScreen(
                     modifier =
                         Modifier
                             .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp),
+                            .padding(top = 12.dp, bottom = 10.dp)
+                            .noRippleClickable {
+                                viewModel.postBrainDump()
+                            },
                 )
             }
         }

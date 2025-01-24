@@ -42,6 +42,7 @@ fun AddToDoTagScreen(
 ) {
     val tempTagColor by viewModel.tempTagColor.collectAsStateWithLifecycle()
     val tempTagText by viewModel.tempTagText.collectAsStateWithLifecycle()
+    val tagList by viewModel.tagList.collectAsStateWithLifecycle()
 
     Column(
         modifier =
@@ -109,6 +110,7 @@ fun AddToDoTagScreen(
                     selectorType = SelectorType.TAG,
                     isClicked = showTagBottomSheet,
                     onClickedChange = {
+                        viewModel.getTagList()
                         showTagBottomSheet = true
                     },
                     content = tempTagText,
@@ -126,6 +128,7 @@ fun AddToDoTagScreen(
                                 tempTagText = tag,
                             )
                         },
+                        tagList = tagList,
                     )
                 },
                 sheetState = sheetTagState,

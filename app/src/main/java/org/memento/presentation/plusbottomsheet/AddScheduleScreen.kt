@@ -70,6 +70,7 @@ fun AddScheduleScreen(
     val selectedTagColor by viewModel.selectedTagColor.collectAsStateWithLifecycle()
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
     val isTimeValid by viewModel.isTimeValid.collectAsStateWithLifecycle()
+    val tagList by viewModel.tagList.collectAsStateWithLifecycle()
 
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
@@ -282,7 +283,10 @@ fun AddScheduleScreen(
         AddPlanSelectComponent(
             title = "Tag",
             dateText = selectedTagText,
-            onDateClick = { showTagBottomSheet = true },
+            onDateClick = {
+                viewModel.getTagList()
+                showTagBottomSheet = true
+            },
             timeText = null,
             onTimeClick = null,
             tagColor = selectedTagColor,
@@ -362,6 +366,7 @@ fun AddScheduleScreen(
                 onTagSelected = { color, tag ->
                     viewModel.updateTag(tag = tag, color = color)
                 },
+                tagList = tagList,
             )
         },
         sheetState = sheetTagState,

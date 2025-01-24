@@ -105,7 +105,7 @@ class AddToDoViewModel
                 }
 
             val endDate =
-                if (_deadLineText.value == "Add DeadLine") {
+                if (_deadLineText.value == "Add DeadLine" || _deadLineText.value == "Today") {
                     LocalDate.now().toString()
                 } else {
                     createLocalDate(_deadLineText.value).toString()

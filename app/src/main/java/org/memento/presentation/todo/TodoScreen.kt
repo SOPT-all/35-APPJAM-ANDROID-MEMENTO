@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -37,6 +38,7 @@ import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.component.MementoAlertDialog
+import org.memento.presentation.component.MementoAnimatedGlowBorder
 import org.memento.presentation.component.MementoDialog
 import org.memento.presentation.component.MementoEditTodoBottomSheet
 import org.memento.presentation.component.MementoTodoItem
@@ -109,9 +111,7 @@ fun TodoScreen(
             return
         }
 
-        is UiState.Success -> {
-            Timber.tag("dd")
-        }
+        is UiState.Success -> {}
     }
 
     val todoList =
@@ -151,137 +151,152 @@ fun TodoScreen(
         scrollToDate(selectedDate)
     }
 
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
-    ) {
-        MementoTopBar(
-            date = todoFormatDate(today),
-            year = nowYear,
-            onDateClick = {
-                viewModel.updateSelectedDate(today)
-            },
-            onIconClick = {},
-        )
-        MementoWeeklyCalendar(
-            selectedDate = selectedDate,
-            onDateClick = { newDate ->
-                viewModel.updateSelectedDate(newDate)
-                coroutineScope.launch { scrollToDate(newDate) }
-            },
-        )
-
-        Box(
-            contentAlignment = Alignment.Center,
+    Box(modifier = Modifier.fillMaxSize()) {
+        MementoAnimatedGlowBorder(
+            modifier =
+                Modifier
+                    .padding(padding),
+            isShowAnimation = isShowAnimation,
+            borderWidth = 4.dp,
+            cornerRadius = 8.dp,
         ) {
-            TodoBoxUp(
-                modifier =
-                    Modifier
-                        .align(Alignment.TopCenter),
-            )
-            LazyColumn(
-                state = todolistState,
-            ) {
-                items(todoList, key = { it }) { date ->
-                    TodoDateLine(date)
-                    Spacer(Modifier.height(8.dp))
-                    val filteredTodos =
-                        todoItems.filter {
-                            it.date.toLocalDate() == date
-                        }
-                    val sortedTodos = filteredTodos.sortedBy { it.isCompleted }
-                    val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
-                    Column(
-                        modifier =
-                            Modifier
-                                .padding(horizontal = 16.dp),
-                    ) {
-                        sortedTodos.forEachIndexed { index, todoItem ->
-                            val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
+                ) {
+                    MementoTopBar(
+                        date = todoFormatDate(today),
+                        year = nowYear,
+                        onDateClick = {
+                            viewModel.updateSelectedDate(today)
+                        },
+                        onIconClick = {},
+                    )
+                    MementoWeeklyCalendar(
+                        selectedDate = selectedDate,
+                        onDateClick = { newDate ->
+                            viewModel.updateSelectedDate(newDate)
+                            coroutineScope.launch { scrollToDate(newDate) }
+                        },
+                    )
 
-                            MementoTodoItem(
-                                tagColor = changeHexToColor(todoItem.tagColor),
-                                isChecked = todoItem.isCompleted,
-                                onCheckedChange = { newChecked ->
-                                    viewModel.updateTodoCompletion(todoItem.id, newChecked)
-                                },
-                                todoTitleText = todoItem.description,
-                                priorityTagType = todoItem.priorityType.toPriorityTagType(),
-                                isConnected = false,
-                                isFirstUndone = (todoItem.id == firstUndoneTodoId),
-                                deadline = deadline,
-                                onClick = {
-                                    selectedPlanId = todoItem.id
-                                    showDetailDialog = true
-                                },
-                            )
-                            Spacer(Modifier.height(10.dp))
+                    Box(
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        TodoBoxUp(
+                            modifier =
+                                Modifier
+                                    .align(Alignment.TopCenter),
+                        )
+                        Column(modifier = Modifier.wrapContentSize()) {
+                            LazyColumn(
+                                state = todolistState,
+                            ) {
+                                items(todoList, key = { it }) { date ->
+                                    TodoDateLine(date)
+                                    Spacer(Modifier.height(8.dp))
+                                    val filteredTodos =
+                                        todoItems.filter {
+                                            it.date.toLocalDate() == date
+                                        }
+                                    val sortedTodos = filteredTodos.sortedBy { it.isCompleted }
+                                    val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
+                                    Column(
+                                        modifier =
+                                            Modifier
+                                                .padding(horizontal = 16.dp),
+                                    ) {
+                                        sortedTodos.forEachIndexed { index, todoItem ->
+                                            val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
+
+                                            MementoTodoItem(
+                                                tagColor = changeHexToColor(todoItem.tagColor),
+                                                isChecked = todoItem.isCompleted,
+                                                onCheckedChange = { newChecked ->
+                                                    viewModel.updateTodoCompletion(todoItem.id, newChecked)
+                                                },
+                                                todoTitleText = todoItem.description,
+                                                priorityTagType = todoItem.priorityType.toPriorityTagType(),
+                                                isConnected = false,
+                                                isFirstUndone = (todoItem.id == firstUndoneTodoId),
+                                                deadline = deadline,
+                                                onClick = {
+                                                    selectedPlanId = todoItem.id
+                                                    showDetailDialog = true
+                                                },
+                                            )
+                                            Spacer(Modifier.height(10.dp))
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        MementoAiFloatingButton(
+                            isClicked = isClickedAiButton,
+                            onClick = {
+                                isClickedAiButton = !isClickedAiButton
+                                if (isClickedAiButton) {
+                                    isShowAnimation = true
+                                    viewModel.postPriorityTodo()
+                                }
+                            },
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 20.dp, end = 20.dp),
+                        )
+                        TodoBoxDown(
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomCenter),
+                        )
                     }
+
+                    MementoDialog(
+                        showDialog = showDetailDialog,
+                        onDismiss = { showDetailDialog = false },
+                        onDelete = { showDeleteDialog = true },
+                        onEdit = { showEditTodoBottomSheet = true },
+                        dialogType = DialogType.TO_DO,
+                        planId = selectedPlanId,
+                    )
+
+                    if (showDeleteDialog) {
+                        MementoAlertDialog(
+                            content = R.string.alert_delete,
+                            leftButtonText = R.string.alert_cancel_button,
+                            rightButtonText = R.string.alert_delete_button,
+                            onLeftButtonClick = { showDeleteDialog = false },
+                            onRightButtonClick = {
+                                viewModel.deletePlan(
+                                    planId = selectedPlanId,
+                                    dialogType = DialogType.TO_DO,
+                                )
+                                showDeleteDialog = false
+                            },
+                        )
+                    }
+
+                    MementoEditTodoBottomSheet(
+                        isOpenBottomSheet = showEditTodoBottomSheet,
+                        sheetState = sheetEditTodoState,
+                        onConfirm = { showEditTodoBottomSheet = false },
+                        planId = selectedPlanId,
+                    )
+                }
+                if (isShowToast) {
+                    MementoToast(LocalContext.current).makeText(
+                        message = "Failed to load ToDos. Please try again.",
+                        icon = R.drawable.ic_toast,
+                        duration = Toast.LENGTH_SHORT,
+                        lifecycleOwner = LocalLifecycleOwner.current,
+                    )
+                    isShowToast = false
                 }
             }
-            MementoAiFloatingButton(
-                isClicked = isClickedAiButton,
-                onClick = {
-                    isClickedAiButton = !isClickedAiButton
-                    if (isClickedAiButton) {
-                        viewModel.postPriorityTodo()
-                    }
-                },
-                modifier =
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 20.dp, end = 20.dp),
-            )
-            TodoBoxDown(
-                modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter),
-            )
         }
-
-        MementoDialog(
-            showDialog = showDetailDialog,
-            onDismiss = { showDetailDialog = false },
-            onDelete = { showDeleteDialog = true },
-            onEdit = { showEditTodoBottomSheet = true },
-            dialogType = DialogType.TO_DO,
-            planId = selectedPlanId,
-        )
-
-        if (showDeleteDialog) {
-            MementoAlertDialog(
-                content = R.string.alert_delete,
-                leftButtonText = R.string.alert_cancel_button,
-                rightButtonText = R.string.alert_delete_button,
-                onLeftButtonClick = { showDeleteDialog = false },
-                onRightButtonClick = {
-                    viewModel.deletePlan(
-                        planId = selectedPlanId,
-                        dialogType = DialogType.TO_DO,
-                    )
-                    showDeleteDialog = false
-                },
-            )
-        }
-
-        MementoEditTodoBottomSheet(
-            isOpenBottomSheet = showEditTodoBottomSheet,
-            sheetState = sheetEditTodoState,
-            onConfirm = { showEditTodoBottomSheet = false },
-            planId = selectedPlanId,
-        )
-    }
-    if (isShowToast) {
-        MementoToast(LocalContext.current).makeText(
-            message = "Failed to load ToDos. Please try again.",
-            icon = R.drawable.ic_toast,
-            duration = Toast.LENGTH_SHORT,
-            lifecycleOwner = LocalLifecycleOwner.current,
-        )
-        isShowToast = false
     }
 }
 

@@ -53,7 +53,7 @@ fun MementoEditScheduleBottomSheet(
                 AddScheduleScreen(
                     onCloseBottomSheet = { },
                     isEdit = true,
-                    isEditCancel = { onConfirm() },
+                    isEditCancel = { onCancel() },
                     isEditDone = { onConfirm() },
                     planId = planId,
                 )

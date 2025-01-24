@@ -140,7 +140,7 @@ fun formatEditTime(dateString: String): String {
 }
 
 fun formatTimeTo12Hour(timeString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
     val outputFormat = SimpleDateFormat("h a", Locale.ENGLISH)
 
     return try {

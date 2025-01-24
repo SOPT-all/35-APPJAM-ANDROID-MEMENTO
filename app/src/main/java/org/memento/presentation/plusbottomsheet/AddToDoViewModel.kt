@@ -1,5 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,9 @@ class AddToDoViewModel
         private val _addToDoText = MutableStateFlow("")
         val addToDoText: StateFlow<String> = _addToDoText
 
+        private val _addTagId = MutableStateFlow(0)
+        val addTagId: StateFlow<Int> = _addTagId
+
         private val _addTagColor = MutableStateFlow("#F0F0F3")
         val addTagColor: StateFlow<String> = _addTagColor
 
@@ -42,6 +46,9 @@ class AddToDoViewModel
 
         private val _tempDeadLineText = MutableStateFlow("Today")
         val tempDeadLineText: StateFlow<String> = _tempDeadLineText
+
+        private val _tempTagId = MutableStateFlow(0)
+        val tempTagId: StateFlow<Int> = _tempTagId
 
         private val _tempTagColor = MutableStateFlow("#F0F0F3")
         val tempTagColor: StateFlow<String> = _tempTagColor
@@ -195,6 +202,10 @@ class AddToDoViewModel
             _selectedDateText.value = newDate
         }
 
+        fun saveTagId() {
+            _addTagId.value = _tempTagId.value
+        }
+
         fun saveTagColor() {
             _addTagColor.value = _tempTagColor.value
         }
@@ -216,11 +227,14 @@ class AddToDoViewModel
         }
 
         fun updateTempTagData(
+            tempTagId: Int,
             tempTagColor: String,
             tempTagText: String,
         ) {
+            _tempTagId.value = tempTagId
             _tempTagColor.value = tempTagColor
             _tempTagText.value = tempTagText
+            Log.e("AddToDoViewModel", _tempTagId.value.toString())
         }
 
         fun resetData() {

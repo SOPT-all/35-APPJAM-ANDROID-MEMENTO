@@ -2,6 +2,7 @@ package org.memento.domain.repository
 
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.AddTodo
+import org.memento.domain.entity.AllDay
 import org.memento.domain.entity.BrainDump
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.Tag
@@ -33,4 +34,6 @@ interface AddPlanRepository {
     suspend fun getTodoDetail(
         todoId: Int,
     ): Result<TodoDetail>
+
+    suspend fun getAllDay(): Result<List<AllDay.AllDaySchedules>>
 }

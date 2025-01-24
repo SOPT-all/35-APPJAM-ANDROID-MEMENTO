@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
+import org.memento.domain.entity.AllDay
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.TodoDetail
 import org.memento.domain.repository.AddPlanRepository
@@ -38,6 +39,9 @@ class TodayViewModel
 
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
+
+        private val _allDayItems = MutableStateFlow<List<AllDay.AllDaySchedules>>(emptyList())
+        val allDayItems: StateFlow<List<AllDay.AllDaySchedules>> = _allDayItems
 
         private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val deleteState: StateFlow<UiState<Unit>> = _deleteState
@@ -75,6 +79,7 @@ class TodayViewModel
                                 startDate = response.startDate,
                                 tagColorCode = response.tagColorCode,
                                 tagName = response.tagName,
+                                timeDuration = response.timeDuration,
                             )
                         }
                     _scheduleItems.value = mappedData
@@ -116,6 +121,32 @@ class TodayViewModel
                             UiState.Failure
                         },
                     )
+            }
+        }
+
+        fun getAllDay() {
+            viewModelScope.launch {
+                _uiState.value = UiState.Loading
+                val response = addPlanRepository.getAllDay()
+                response.onSuccess { data ->
+                    val mappedData =
+                        data.map { response ->
+                            AllDay.AllDaySchedules(
+                                description = response.description,
+                                endDate = response.endDate,
+                                id = response.id,
+                                isAllDay = response.isAllDay,
+                                scheduleType = response.scheduleType,
+                                startDate = response.startDate,
+                                tagColorCode = response.tagColorCode,
+                                tagName = response.tagName,
+                            )
+                        }
+                    _allDayItems.value = mappedData
+                    _uiState.value = UiState.Success(Unit)
+                }.onFailure {
+                    _uiState.value = UiState.Failure
+                }
             }
         }
 
@@ -171,6 +202,30 @@ class TodayViewModel
                     _todoItems.value = mappedData
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
+                    _uiState.value = UiState.Failure
+                }
+            }
+        }
+
+        fun updateTodoCompletion(
+            id: Int,
+            isCompleted: Boolean,
+        ) {
+            viewModelScope.launch {
+                _todoItems.value =
+                    _todoItems.value.map { todo ->
+                        if (todo.id == id) todo.copy(isCompleted = isCompleted) else todo
+                    }
+
+                _uiState.value = UiState.Loading
+                val result = todoRepository.patchTodoComplete(id.toInt())
+                result.onSuccess {
+                    _uiState.value = UiState.Success(Unit)
+                }.onFailure {
+                    _todoItems.value =
+                        _todoItems.value.map { todo ->
+                            if (todo.id == id) todo.copy(isCompleted = !isCompleted) else todo
+                        }
                     _uiState.value = UiState.Failure
                 }
             }

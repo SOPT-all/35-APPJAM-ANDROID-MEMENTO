@@ -79,7 +79,7 @@ class TodayViewModel
                                 startDate = response.startDate,
                                 tagColorCode = response.tagColorCode,
                                 tagName = response.tagName,
-                                timeDuration = response.timeDuration
+                                timeDuration = response.timeDuration,
                             )
                         }
                     _scheduleItems.value = mappedData

@@ -18,84 +18,84 @@ import org.memento.domain.repository.AddPlanRepository
 import javax.inject.Inject
 
 class AddPlanRepositoryImpl
-@Inject
-constructor(
-    private val addPlanDataSource: AddPlanDataSource,
-) : AddPlanRepository {
-    override suspend fun postAddTodo(addTodo: AddTodo): Result<Unit> {
-        return runCatching {
-            addPlanDataSource.postAddTodo(
-                requestAddTodoDto = addTodo.toData(),
-            ).handleBaseResponse().getOrThrow()
+    @Inject
+    constructor(
+        private val addPlanDataSource: AddPlanDataSource,
+    ) : AddPlanRepository {
+        override suspend fun postAddTodo(addTodo: AddTodo): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.postAddTodo(
+                    requestAddTodoDto = addTodo.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun postAddSchedule(addSchedule: AddSchedule): Result<Unit> {
-        return runCatching {
-            addPlanDataSource.postAddSchedule(
-                requestAddScheduleDto = addSchedule.toData(),
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun postAddSchedule(addSchedule: AddSchedule): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.postAddSchedule(
+                    requestAddScheduleDto = addSchedule.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun postBrainDump(brainDump: BrainDump): Result<Unit> {
-        return runCatching {
-            addPlanDataSource.postBrainDump(
-                requestBrainDumpDto = brainDump.toData(),
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun postBrainDump(brainDump: BrainDump): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.postBrainDump(
+                    requestBrainDumpDto = brainDump.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun getTagList(): Result<List<Tag>> {
-        return runCatching {
-            val response = addPlanDataSource.getTagList()
-            response.data?.map { it.toTag() } ?: emptyList()
+        override suspend fun getTagList(): Result<List<Tag>> {
+            return runCatching {
+                val response = addPlanDataSource.getTagList()
+                response.data?.map { it.toTag() } ?: emptyList()
+            }
         }
-    }
 
-    override suspend fun patchAddTodo(
-        todoId: Int,
-        addTodo: AddTodo,
-    ): Result<Unit> {
-        return runCatching {
-            addPlanDataSource.patchAddTodo(
-                todoId = todoId,
-                requestAddTodoDto = addTodo.toData(),
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun patchAddTodo(
+            todoId: Int,
+            addTodo: AddTodo,
+        ): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.patchAddTodo(
+                    todoId = todoId,
+                    requestAddTodoDto = addTodo.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun patchAddSchedule(
-        scheduleId: Int,
-        addSchedule: AddSchedule,
-    ): Result<Unit> {
-        return runCatching {
-            addPlanDataSource.patchAddSchedule(
-                scheduleId = scheduleId,
-                requestAddScheduleDto = addSchedule.toData(),
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun patchAddSchedule(
+            scheduleId: Int,
+            addSchedule: AddSchedule,
+        ): Result<Unit> {
+            return runCatching {
+                addPlanDataSource.patchAddSchedule(
+                    scheduleId = scheduleId,
+                    requestAddScheduleDto = addSchedule.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun getScheduleDetail(scheduleId: Int): Result<ScheduleDetail> {
-        return runCatching {
-            addPlanDataSource.getScheduleDetail(
-                scheduleId = scheduleId,
-            ).handleBaseResponse().getOrThrow()?.toScheduleDetail() ?: throw Exception("Throw Exception Error")
+        override suspend fun getScheduleDetail(scheduleId: Int): Result<ScheduleDetail> {
+            return runCatching {
+                addPlanDataSource.getScheduleDetail(
+                    scheduleId = scheduleId,
+                ).handleBaseResponse().getOrThrow()?.toScheduleDetail() ?: throw Exception("Throw Exception Error")
+            }
         }
-    }
 
-    override suspend fun getTodoDetail(todoId: Int): Result<TodoDetail> {
-        return runCatching {
-            addPlanDataSource.getTodoDetail(
-                todoId = todoId,
-            ).handleBaseResponse().getOrThrow()?.toTodoDetail() ?: throw Exception("Throw Exception Error")
+        override suspend fun getTodoDetail(todoId: Int): Result<TodoDetail> {
+            return runCatching {
+                addPlanDataSource.getTodoDetail(
+                    todoId = todoId,
+                ).handleBaseResponse().getOrThrow()?.toTodoDetail() ?: throw Exception("Throw Exception Error")
+            }
         }
-    }
 
-    override suspend fun getAllDay(): Result<List<AllDay.AllDaySchedules>> =
-        runCatching {
-            val response = addPlanDataSource.getAllDay().data
-            response?.toAllDay() ?: throw Exception("null")
-        }
-}
+        override suspend fun getAllDay(): Result<List<AllDay.AllDaySchedules>> =
+            runCatching {
+                val response = addPlanDataSource.getAllDay().data
+                response?.toAllDay() ?: throw Exception("null")
+            }
+    }

@@ -26,7 +26,7 @@ interface TodoService {
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoCompleteDto>
 
-    @POST("/api/v1/todos/prioritization/weekly")
+    @POST("/api/v1/todos/prioritization/daily")
     suspend fun postPriorityTodo(
         @Body requestPriorityDto: RequestPriorityDto,
     ): BaseResponse<ResponsePriorityTodoDto>

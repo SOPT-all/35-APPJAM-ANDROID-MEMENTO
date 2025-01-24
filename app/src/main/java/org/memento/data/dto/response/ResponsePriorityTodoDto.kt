@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponsePriorityTodoDto(
     @SerialName("todos")
-    val todos: List<List<ResponseTodos>>,
+    val todos: List<ResponseTodos>,
 )
 
 @Serializable

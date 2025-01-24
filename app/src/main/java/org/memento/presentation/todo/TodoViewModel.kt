@@ -48,23 +48,21 @@ class TodoViewModel
                     )
                 response.onSuccess { data ->
                     val mappedData =
-                        data.priorityTodoList.flatMap { todoList ->
-                            todoList.toDoGetResponses.map { response ->
-                                MementoItem.TodoItem(
-                                    id = response.id,
-                                    description = response.description,
-                                    date = response.startDate,
-                                    deadline = response.endDate,
-                                    isCompleted = response.isCompleted,
-                                    priorityValue = response.priorityValue,
-                                    priorityType = response.priorityType,
-                                    tagName = response.tagName,
-                                    tagColor = response.tagColor,
-                                    toDoType = response.toDoType,
-                                    order = response.order,
-                                    groupId = response.groupId,
-                                )
-                            }
+                        data.priorityTodoList.toDoGetResponses.map { response ->
+                            MementoItem.TodoItem(
+                                id = response.id,
+                                description = response.description,
+                                date = response.startDate,
+                                deadline = response.endDate,
+                                isCompleted = response.isCompleted,
+                                priorityValue = response.priorityValue,
+                                priorityType = response.priorityType,
+                                tagName = response.tagName,
+                                tagColor = response.tagColor,
+                                toDoType = response.toDoType,
+                                order = response.order,
+                                groupId = response.groupId,
+                            )
                         }
                     _todoItems.value = mappedData
                     _uiAIState.value = UiState.Success(Unit)

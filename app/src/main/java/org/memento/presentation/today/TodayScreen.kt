@@ -89,6 +89,7 @@ fun TodayScreen(
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
     var selectedPlanId by remember { mutableIntStateOf(3) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
+    var refreshTrigger by remember { mutableStateOf(false) }
 
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
@@ -98,12 +99,34 @@ fun TodayScreen(
     var isDraggingEnabled by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
+    val closeTodoBottomSheet = {
+        showEditTodoBottomSheet = false
+        coroutineScope.launch {
+            sheetEditTodoState.hide()
+        }
+    }
+
+    val closeScheduleBottomSheet = {
+        showEditScheduleBottomSheet = false
+        coroutineScope.launch {
+            sheetEditScheduleState.hide()
+        }
+    }
+
     LaunchedEffect(selectedDate.value) {
         val selectedDate = selectedDate.value.toString()
         viewModel.getTodoDateList(selectedDate)
         viewModel.getScheduleList(selectedDate)
         viewModel.getAllDay()
     }
+
+
+    LaunchedEffect(refreshTrigger) {
+        viewModel.getScheduleList(selectedDate.value.toString())
+        viewModel.getTodoDateList(selectedDate.value.toString())
+        viewModel.getAllDay()
+    }
+
     val combinedItems by viewModel.combinedItems.collectAsState()
     val allDayItems by viewModel.allDayItems.collectAsState()
 
@@ -121,12 +144,16 @@ fun TodayScreen(
         }
     }
 
+    fun triggerRefresh() {
+        refreshTrigger = !refreshTrigger
+    }
+
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black)
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black)
+            .padding(padding),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -145,9 +172,9 @@ fun TodayScreen(
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+            Modifier
+                .fillMaxWidth()
+                .heightIn(max = (5 * 30).dp),
         ) {
             val state = rememberLazyListState()
             LazyColumn(
@@ -165,9 +192,9 @@ fun TodayScreen(
         if (combinedItems.isEmpty()) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(top = 150.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 150.dp),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 Text(
@@ -183,12 +210,12 @@ fun TodayScreen(
             ) {
                 LazyColumn(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .onGloballyPositioned { it ->
-                                listHeight = it.size.height
-                            },
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .onGloballyPositioned { it ->
+                            listHeight = it.size.height
+                        },
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     userScrollEnabled = !isDraggingEnabled,
                 ) {
@@ -199,11 +226,11 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .onGloballyPositioned { it ->
+                                        itemHeight = it.size.height
+                                    },
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -211,11 +238,11 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .onGloballyPositioned { it ->
+                                        itemHeight = it.size.height
+                                    },
                             )
                         }
                     }
@@ -226,45 +253,45 @@ fun TodayScreen(
 
                         Box(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .graphicsLayer(
-                                        scaleX = scale.value,
-                                        scaleY = scale.value,
-                                        translationY = if (isDragging) draggedOffsetY else 0f,
-                                    )
-                                    .pointerInput(Unit) {
-                                        detectDragGesturesAfterLongPress(
-                                            onDragStart = {
-                                                draggedItemIndex = index
-                                                isDraggingEnabled = true
-                                            },
-                                            onDrag = { change, dragAmount ->
-                                                if (isDraggingEnabled) {
-                                                    change.consume()
-                                                    draggedOffsetY += dragAmount.y
-                                                    val itemHeightPx = with(density) { 60.dp.toPx() }
+                            Modifier
+                                .fillMaxWidth()
+                                .graphicsLayer(
+                                    scaleX = scale.value,
+                                    scaleY = scale.value,
+                                    translationY = if (isDragging) draggedOffsetY else 0f,
+                                )
+                                .pointerInput(Unit) {
+                                    detectDragGesturesAfterLongPress(
+                                        onDragStart = {
+                                            draggedItemIndex = index
+                                            isDraggingEnabled = true
+                                        },
+                                        onDrag = { change, dragAmount ->
+                                            if (isDraggingEnabled) {
+                                                change.consume()
+                                                draggedOffsetY += dragAmount.y
+                                                val itemHeightPx = with(density) { 60.dp.toPx() }
 
-                                                    while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                        val moveDirection = if (draggedOffsetY > 0) 1 else -1
-                                                        val targetIndex =
-                                                            (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
+                                                while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
+                                                    val moveDirection = if (draggedOffsetY > 0) 1 else -1
+                                                    val targetIndex =
+                                                        (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
 
-                                                        if (targetIndex != draggedItemIndex) {
+                                                    if (targetIndex != draggedItemIndex) {
 //                                                viewModel.updateItemOrder(draggedItemIndex, targetIndex)
-                                                            draggedItemIndex = targetIndex
-                                                            draggedOffsetY -= moveDirection * itemHeightPx
-                                                        } else {
-                                                            draggedOffsetY = 0f
-                                                            break
-                                                        }
+                                                        draggedItemIndex = targetIndex
+                                                        draggedOffsetY -= moveDirection * itemHeightPx
+                                                    } else {
+                                                        draggedOffsetY = 0f
+                                                        break
                                                     }
                                                 }
-                                            },
-                                            onDragEnd = { resetDraggingState() },
-                                            onDragCancel = { resetDraggingState() },
-                                        )
-                                    },
+                                            }
+                                        },
+                                        onDragEnd = { resetDraggingState() },
+                                        onDragCancel = { resetDraggingState() },
+                                    )
+                                },
                         ) {
                             when (item) {
                                 is MementoItem.TodoItem -> {
@@ -310,8 +337,8 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
+                                Modifier
+                                    .padding(bottom = 16.dp),
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -319,75 +346,82 @@ fun TodayScreen(
                                 style = MementoTheme.typography.detail_b_12,
                                 color = darkModeColors.gray07,
                                 modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
+                                Modifier
+                                    .padding(bottom = 16.dp),
                             )
                         }
                     }
                 }
                 Column(
                     modifier =
-                        Modifier
-                            .offset(x = 28.dp)
-                            .width(1.dp)
-                            .height(with(density) { listHeight.toDp() })
-                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
-                            .background(
-                                brush =
-                                    Brush.linearGradient(
-                                        colors =
-                                            listOf(
-                                                Color.Transparent,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                Color.Transparent,
-                                            ),
-                                    ),
+                    Modifier
+                        .offset(x = 28.dp)
+                        .width(1.dp)
+                        .height(with(density) { listHeight.toDp() })
+                        .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                        .background(
+                            brush =
+                            Brush.linearGradient(
+                                colors =
+                                listOf(
+                                    Color.Transparent,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    mementoColors.progressBar,
+                                    Color.Transparent,
+                                ),
                             ),
+                        ),
                 ) {}
             }
         }
+    }
 
-        MementoDialog(
-            showDialog = showDetailDialog,
-            onDismiss = { showDetailDialog = false },
-            onDelete = { showDeleteDialog = true },
-            onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
-            dialogType = dialogType,
-            planId = selectedPlanId,
-        )
+    MementoDialog(
+        showDialog = showDetailDialog,
+        onDismiss = { showDetailDialog = false },
+        onDelete = { showDeleteDialog = true },
+        onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+        dialogType = dialogType,
+        planId = selectedPlanId,
+    )
 
-        if (showDeleteDialog) {
-            MementoAlertDialog(
-                content = R.string.alert_delete,
-                leftButtonText = R.string.alert_cancel_button,
-                rightButtonText = R.string.alert_delete_button,
-                onLeftButtonClick = { showDeleteDialog = false },
-                onRightButtonClick = {
-                    viewModel.deletePlan(
-                        planId = selectedPlanId,
-                        dialogType = dialogType,
-                    )
-                    showDeleteDialog = false
-                },
-            )
-        }
-
-        MementoEditTodoBottomSheet(
-            isOpenBottomSheet = showEditTodoBottomSheet,
-            sheetState = sheetEditTodoState,
-            onConfirm = { showEditTodoBottomSheet = false },
-            planId = selectedPlanId,
-        )
-
-        MementoEditScheduleBottomSheet(
-            isOpenBottomSheet = showEditScheduleBottomSheet,
-            sheetState = sheetEditScheduleState,
-            onConfirm = { showEditScheduleBottomSheet = false },
-            planId = selectedPlanId,
+    if (showDeleteDialog) {
+        MementoAlertDialog(
+            content = R.string.alert_delete,
+            leftButtonText = R.string.alert_cancel_button,
+            rightButtonText = R.string.alert_delete_button,
+            onLeftButtonClick = { showDeleteDialog = false },
+            onRightButtonClick = {
+                viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType,)
+                showDeleteDialog = false
+                showDetailDialog = false
+                triggerRefresh()
+            },
         )
     }
+
+    MementoEditTodoBottomSheet(
+        isOpenBottomSheet = showEditTodoBottomSheet,
+        sheetState = sheetEditTodoState,
+        onCancel = { closeTodoBottomSheet() },
+        onConfirm = {
+            triggerRefresh()
+            closeTodoBottomSheet()
+        },
+        planId = selectedPlanId,
+    )
+
+    MementoEditScheduleBottomSheet(
+        isOpenBottomSheet = showEditScheduleBottomSheet,
+        sheetState = sheetEditScheduleState,
+        onCancel = { closeScheduleBottomSheet() },
+        onConfirm = {
+            triggerRefresh()
+            closeScheduleBottomSheet()
+        },
+        planId = selectedPlanId,
+    )
 }
 
 fun <T> MutableList<T>.move(

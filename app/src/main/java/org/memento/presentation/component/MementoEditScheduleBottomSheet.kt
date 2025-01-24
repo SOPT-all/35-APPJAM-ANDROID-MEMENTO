@@ -25,6 +25,7 @@ import org.memento.ui.theme.darkModeColors
 fun MementoEditScheduleBottomSheet(
     isOpenBottomSheet: Boolean,
     sheetState: SheetState,
+    onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
     planId: Int,
 ) {
@@ -44,10 +45,10 @@ fun MementoEditScheduleBottomSheet(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.73f)
-                        .imePadding(),
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.73f)
+                    .imePadding(),
             ) {
                 AddScheduleScreen(
                     onCloseBottomSheet = { },

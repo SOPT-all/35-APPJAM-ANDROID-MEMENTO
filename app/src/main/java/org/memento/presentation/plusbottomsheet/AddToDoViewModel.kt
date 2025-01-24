@@ -66,11 +66,20 @@ class AddToDoViewModel
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
 
+        private val _patchState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+        val patchState: StateFlow<UiState<Unit>> = _patchState
+
         private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
         val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
 
         init {
             getTagList()
+        }
+
+        fun setLoadingState() {
+            _patchState.value = UiState.Loading
+            _uiState.value = UiState.Loading
+            _detailTodoState.value = UiState.Loading
         }
 
         fun getTagList() {

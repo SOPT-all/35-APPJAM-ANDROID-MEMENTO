@@ -20,4 +20,7 @@ class TodoDataSourceImpl
 
         override suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto> =
             todoService.patchTodoCompleted(toDoId)
+
+        override suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit> =
+            todoService.deleteTodo(toDoId)
     }

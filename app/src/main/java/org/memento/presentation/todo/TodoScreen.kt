@@ -74,7 +74,6 @@ fun TodoScreen(
     var isClickedAiButton by remember { mutableStateOf(false) }
     val uiAIState by viewModel.uiAIState.collectAsState()
 
-
     LaunchedEffect(uiAIState) {
         when (uiAIState) {
             is UiState.Loading -> {
@@ -154,9 +153,9 @@ fun TodoScreen(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(padding),
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -179,8 +178,8 @@ fun TodoScreen(
         ) {
             TodoBoxUp(
                 modifier =
-                Modifier
-                    .align(Alignment.TopCenter),
+                    Modifier
+                        .align(Alignment.TopCenter),
             )
             LazyColumn(
                 state = todolistState,
@@ -196,8 +195,8 @@ fun TodoScreen(
                     val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                     Column(
                         modifier =
-                        Modifier
-                            .padding(horizontal = 16.dp),
+                            Modifier
+                                .padding(horizontal = 16.dp),
                     ) {
                         sortedTodos.forEachIndexed { index, todoItem ->
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -232,14 +231,14 @@ fun TodoScreen(
                     }
                 },
                 modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 20.dp, end = 20.dp),
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                Modifier
-                    .align(Alignment.BottomCenter),
+                    Modifier
+                        .align(Alignment.BottomCenter),
             )
         }
 

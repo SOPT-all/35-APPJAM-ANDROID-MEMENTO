@@ -5,5 +5,5 @@ data class AddSchedule(
     val startDate: String,
     val endDate: String,
     val isAllDay: Boolean,
-    val tagId: Long? = null,
+    val tagId: Int,
 )

@@ -5,6 +5,7 @@ import org.memento.data.dto.request.RequestPriorityDto
 import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
 import org.memento.data.dto.response.ResponseTodoDto
+import retrofit2.http.DELETE
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -20,6 +21,11 @@ interface TodoService {
     suspend fun getTodoDateList(
         @Query("date") date: String,
     ): BaseResponse<ResponseTodoDto>
+
+    @DELETE("/api/v1/todos/{toDoId}")
+    suspend fun deleteTodo(
+        @Path("toDoId") toDoId: Int,
+    ): BaseResponse<Unit>
 
     @PATCH("/api/v1/todos/{toDoId}/completion")
     suspend fun patchTodoCompleted(

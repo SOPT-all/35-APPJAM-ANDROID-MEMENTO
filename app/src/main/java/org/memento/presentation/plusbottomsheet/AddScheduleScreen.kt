@@ -87,6 +87,10 @@ fun AddScheduleScreen(
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.getTagList()
+    }
+
     LaunchedEffect(isEdit) {
         if (isEdit) {
             planId.let {
@@ -179,6 +183,7 @@ fun AddScheduleScreen(
                     modifier =
                         Modifier
                             .noRippleClickable {
+                                viewModel.patchAddSchedule(planId)
                                 isEditDone()
                             },
                 )
@@ -285,7 +290,6 @@ fun AddScheduleScreen(
             title = "Tag",
             dateText = selectedTagText,
             onDateClick = {
-                viewModel.getTagList()
                 showTagBottomSheet = true
             },
             timeText = null,

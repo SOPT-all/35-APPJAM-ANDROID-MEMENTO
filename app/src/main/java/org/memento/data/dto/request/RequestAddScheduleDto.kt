@@ -14,5 +14,5 @@ data class RequestAddScheduleDto(
     @SerialName("isAllDay")
     val isAllDay: Boolean,
     @SerialName("tagId")
-    val tagId: Long? = null,
+    val tagId: Int,
 )

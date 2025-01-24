@@ -11,6 +11,8 @@ interface TodoDataSource {
 
     suspend fun getTodoDateList(date: String): BaseResponse<ResponseTodoDto>
 
+    suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit>
+
     suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto>
 
     suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto>

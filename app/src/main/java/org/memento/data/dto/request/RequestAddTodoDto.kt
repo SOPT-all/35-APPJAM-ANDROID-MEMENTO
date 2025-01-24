@@ -12,7 +12,7 @@ data class RequestAddTodoDto(
     @SerialName("endDate")
     val endDate: String?,
     @SerialName("tagId")
-    val tagId: Long?,
+    val tagId: Int,
     @SerialName("priorityUrgency")
     val priorityUrgency: Double?,
     @SerialName("priorityImportance")

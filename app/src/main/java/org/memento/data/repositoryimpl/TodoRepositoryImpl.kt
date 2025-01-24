@@ -4,6 +4,7 @@ import org.memento.data.datasource.TodoDataSource
 import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toDomain.toDomain
 import org.memento.data.mapper.toDomain.toTodoListModel
+import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.PriorityTodoList
 import org.memento.domain.entity.TargetDate
 import org.memento.domain.entity.TodoList
@@ -26,6 +27,14 @@ class TodoRepositoryImpl
                 val response = todoDataSource.getTodoDateList(date).data
                 response?.toTodoListModel() ?: throw Exception("null")
             }
+
+        override suspend fun deleteTodo(toDoId: Int): Result<Unit> {
+            return runCatching {
+                todoDataSource.deleteTodo(
+                    toDoId = toDoId,
+                ).handleBaseResponse().getOrThrow()
+            }
+        }
 
         override suspend fun patchTodoComplete(toDoId: Int): Result<Unit> =
             runCatching {

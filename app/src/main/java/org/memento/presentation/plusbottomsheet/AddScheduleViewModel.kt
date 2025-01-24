@@ -1,6 +1,5 @@
 package org.memento.presentation.plusbottomsheet
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +16,7 @@ import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatEditString
 import org.memento.presentation.util.formatEditTime
+import org.memento.presentation.util.formatTextLocalDateTime
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
 import timber.log.Timber
@@ -65,6 +65,9 @@ class AddScheduleViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
+        private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
+        val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
+
         init {
             getTagList()
         }
@@ -74,18 +77,42 @@ class AddScheduleViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
+                        if (_selectedTagId.value == 0) {
+                            _selectedTagId.value = tags[0].id
+                        }
                     }
                     .onFailure { throwable ->
                     }
             }
         }
 
-        private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
-        val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
-
-        init {
+        fun patchAddSchedule(scheduleId: Int) {
             viewModelScope.launch {
-                initialTimeValue()
+                val addSchedule =
+                    AddSchedule(
+                        description = _eventText.value,
+                        startDate = formatTextLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
+                        endDate = formatTextLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
+                        isAllDay = _isAllDayChecked.value,
+                        tagId = _selectedTagId.value,
+                    )
+
+                val result =
+                    addPlanRepository.patchAddSchedule(
+                        scheduleId = scheduleId,
+                        addSchedule = addSchedule,
+                    )
+
+                _uiState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(Unit)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to update schedule")
+                            UiState.Failure
+                        },
+                    )
             }
         }
 
@@ -104,11 +131,6 @@ class AddScheduleViewModel
                             } else {
                                 initialTimeValue()
                             }
-
-                            Log.d("startDateText", _selectedStartDateText.value)
-                            Log.d("startTimeText", _selectedStartTimeText.value)
-                            Log.d("endDateText", _selectedEndDateText.value)
-                            Log.d("endTimeText", _selectedEndTimeText.value)
 
                             _eventText.value = scheduleDetail.description
                             UiState.Success(scheduleDetail)
@@ -131,6 +153,7 @@ class AddScheduleViewModel
                             startDate = createLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
                             endDate = createLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
                             isAllDay = _isAllDayChecked.value,
+                            tagId = _selectedTagId.value,
                         ),
                     )
                 _uiState.value =
@@ -213,9 +236,6 @@ class AddScheduleViewModel
             _selectedTagId.value = id
             _selectedTagText.value = tag
             _selectedTagColor.value = color
-
-            Log.e("AddScheduleViewModel", _selectedTagId.value.toString())
-            Log.e("AddScheduleViewModel", id.toString())
         }
 
         fun updateStartDate(newDate: String) {

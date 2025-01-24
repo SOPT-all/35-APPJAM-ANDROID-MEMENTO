@@ -51,6 +51,7 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
+import timber.log.Timber
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +73,7 @@ fun TodoScreen(
     var isShowToast by remember { mutableStateOf(false) }
     var isClickedAiButton by remember { mutableStateOf(false) }
     val uiAIState by viewModel.uiAIState.collectAsState()
+
 
     LaunchedEffect(uiAIState) {
         when (uiAIState) {
@@ -108,7 +110,9 @@ fun TodoScreen(
             return
         }
 
-        is UiState.Success -> {}
+        is UiState.Success -> {
+            Timber.tag("dd")
+        }
     }
 
     val todoList =
@@ -135,7 +139,7 @@ fun TodoScreen(
             }
     }
 
-    suspend fun scrollToDate(date: LocalDate) {
+    fun scrollToDate(date: LocalDate) {
         coroutineScope.launch {
             val index = todoList.indexOf(date)
             if (index != -1) {
@@ -150,9 +154,9 @@ fun TodoScreen(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -175,8 +179,8 @@ fun TodoScreen(
         ) {
             TodoBoxUp(
                 modifier =
-                    Modifier
-                        .align(Alignment.TopCenter),
+                Modifier
+                    .align(Alignment.TopCenter),
             )
             LazyColumn(
                 state = todolistState,
@@ -192,8 +196,8 @@ fun TodoScreen(
                     val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                     Column(
                         modifier =
-                            Modifier
-                                .padding(horizontal = 16.dp),
+                        Modifier
+                            .padding(horizontal = 16.dp),
                     ) {
                         sortedTodos.forEachIndexed { index, todoItem ->
                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -228,14 +232,14 @@ fun TodoScreen(
                     }
                 },
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 20.dp, end = 20.dp),
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp, end = 20.dp),
             )
             TodoBoxDown(
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter),
+                Modifier
+                    .align(Alignment.BottomCenter),
             )
         }
 

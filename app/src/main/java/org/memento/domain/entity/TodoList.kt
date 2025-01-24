@@ -10,7 +10,7 @@ data class TodoList(
     data class ToDoGetResponse(
         val description: String,
         val endDate: String,
-        val groupId: String,
+        val groupId: String? = null,
         val id: Int,
         val isCompleted: Boolean,
         val order: Int,

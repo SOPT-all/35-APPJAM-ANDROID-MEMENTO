@@ -14,7 +14,7 @@ data class ResponseTodoDto(
         @SerialName("endDate")
         val endDate: String,
         @SerialName("groupId")
-        val groupId: String,
+        val groupId: String? = null,
         @SerialName("id")
         val id: Int,
         @SerialName("isCompleted")

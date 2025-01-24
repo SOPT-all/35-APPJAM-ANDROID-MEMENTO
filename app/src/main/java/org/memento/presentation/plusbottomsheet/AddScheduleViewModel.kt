@@ -44,7 +44,11 @@ class AddScheduleViewModel
         private val _selectedEndTimeText = MutableStateFlow("")
         val selectedEndTimeText: StateFlow<String> = _selectedEndTimeText
 
-        private val _selectedTagText = MutableStateFlow("Untitled")
+    private val _selectedTagId = MutableStateFlow(0)
+    val selectedTagId: StateFlow<Int> = _selectedTagId
+
+
+    private val _selectedTagText = MutableStateFlow("Untitled")
         val selectedTagText: StateFlow<String> = _selectedTagText
 
         private val _selectedTagColor = MutableStateFlow("#F0F0F3")
@@ -203,11 +207,16 @@ class AddScheduleViewModel
         }
 
         fun updateTag(
+            id:Int,
             tag: String,
             color: String,
         ) {
+            _selectedTagId.value=id
             _selectedTagText.value = tag
             _selectedTagColor.value = color
+
+            Log.e("AddScheduleViewModel",_selectedTagId.value.toString())
+            Log.e("AddScheduleViewModel",id.toString())
         }
 
         fun updateStartDate(newDate: String) {

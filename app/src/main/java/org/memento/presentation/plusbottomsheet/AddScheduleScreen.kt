@@ -66,6 +66,7 @@ fun AddScheduleScreen(
     val selectedEndDateText by viewModel.selectedEndDateText.collectAsStateWithLifecycle()
     val selectedStartTimeText by viewModel.selectedStartTimeText.collectAsStateWithLifecycle()
     val selectedEndTimeText by viewModel.selectedEndTimeText.collectAsStateWithLifecycle()
+    val selectedTagId by viewModel.selectedTagId.collectAsStateWithLifecycle()
     val selectedTagText by viewModel.selectedTagText.collectAsStateWithLifecycle()
     val selectedTagColor by viewModel.selectedTagColor.collectAsStateWithLifecycle()
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
@@ -363,8 +364,8 @@ fun AddScheduleScreen(
         isOpenBottomSheet = showTagBottomSheet,
         content = {
             TagSelectorContent(
-                onTagSelected = { color, tag ->
-                    viewModel.updateTag(tag = tag, color = color)
+                onTagSelected = { id, color, tag ->
+                    viewModel.updateTag(id = id, tag = tag, color = color)
                 },
                 tagList = tagList,
             )

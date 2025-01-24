@@ -5,6 +5,7 @@ import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.request.RequestBrainDumpDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
+import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,6 +28,9 @@ interface AddPlanService {
     suspend fun postBrainDump(
         @Body requestBrainDumpDto: RequestBrainDumpDto,
     ): BaseResponse<Unit>
+
+    @GET("/api/v1/tags")
+    suspend fun getTagList(): BaseResponse<List<ResponseTagDto>>
 
     @PATCH("/api/v1/todos/{toDoId}")
     suspend fun patchAddTodo(

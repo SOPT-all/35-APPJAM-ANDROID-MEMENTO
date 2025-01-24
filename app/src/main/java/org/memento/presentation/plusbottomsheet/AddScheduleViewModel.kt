@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.ScheduleDetail
+import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
@@ -51,8 +53,26 @@ class AddScheduleViewModel
         private val _isTimeValid = MutableStateFlow(true)
         val isTimeValid: StateFlow<Boolean> = _isTimeValid
 
+        private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
+        val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
+
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
+
+        init {
+            getTagList()
+        }
+
+        fun getTagList() {
+            viewModelScope.launch {
+                addPlanRepository.getTagList()
+                    .onSuccess { tags ->
+                        _tagList.value = tags
+                    }
+                    .onFailure { throwable ->
+                    }
+            }
+        }
 
         private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
         val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
@@ -221,5 +241,11 @@ class AddScheduleViewModel
             _selectedTagText.value = "Untitled"
             _selectedTagColor.value = "#F0F0F3"
             _isAllDayChecked.value = false
+        }
+
+        init {
+            viewModelScope.launch {
+                initialTimeValue()
+            }
         }
     }

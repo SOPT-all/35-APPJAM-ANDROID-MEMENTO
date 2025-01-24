@@ -109,7 +109,8 @@ fun TodoScreen(
     Column(
         modifier =
             Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(padding),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),

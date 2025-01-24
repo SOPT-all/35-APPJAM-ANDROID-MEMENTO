@@ -117,13 +117,13 @@ fun MementoTodoItem(
                             text = todoTitleText,
                             style = MementoTheme.typography.body_b_16,
                             color = darkModeColors.white,
-                            modifier = Modifier
-                                .lineThrough(isChecked)
-                                .widthIn(max = 200.dp),
+                            modifier =
+                                Modifier
+                                    .lineThrough(isChecked)
+                                    .widthIn(max = 200.dp),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
-
 
                         Spacer(modifier = Modifier.weight(1f))
                         MementoUrgentChip(priorityTagType)

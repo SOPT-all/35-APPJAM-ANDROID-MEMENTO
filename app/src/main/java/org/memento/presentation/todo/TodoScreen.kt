@@ -53,7 +53,6 @@ import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
-import timber.log.Timber
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)

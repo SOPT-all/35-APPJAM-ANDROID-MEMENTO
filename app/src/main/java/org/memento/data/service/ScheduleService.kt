@@ -2,6 +2,7 @@ package org.memento.data.service
 
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.response.ResponseScheduleDto
+import org.memento.data.dto.response.ResponseUpTimeDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +20,5 @@ interface ScheduleService {
     ): BaseResponse<Unit>
 
     @GET("/api/v1/members/personal-info/uptime")
-    suspend fun getUpTime(
-        @Query("date") date: String,
-    ): BaseResponse<ResponseScheduleDto>
+    suspend fun getUpTime(): BaseResponse<ResponseUpTimeDto>
 }

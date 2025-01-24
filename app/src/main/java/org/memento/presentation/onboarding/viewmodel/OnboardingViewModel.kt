@@ -106,4 +106,5 @@ class OnboardingViewModel
                 3 -> _isImportantBreaks.value = value
             }
         }
+
     }

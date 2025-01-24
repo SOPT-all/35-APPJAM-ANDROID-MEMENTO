@@ -8,17 +8,16 @@ import org.memento.data.service.ScheduleService
 import javax.inject.Inject
 
 class ScheduleDataSourceImpl
-@Inject
-constructor(
-    private val scheduleService: ScheduleService,
-) : ScheduleDataSource {
-    override suspend fun getScheduleList(date: String): BaseResponse<ResponseScheduleDto> =
-        scheduleService.getScheduleLists(date)
+    @Inject
+    constructor(
+        private val scheduleService: ScheduleService,
+    ) : ScheduleDataSource {
+        override suspend fun getScheduleList(date: String): BaseResponse<ResponseScheduleDto> =
+            scheduleService.getScheduleLists(date)
 
-    override suspend fun deleteSchedule(scheduleId: Int): BaseResponse<Unit> =
-        scheduleService.deleteSchedule(scheduleId)
+        override suspend fun deleteSchedule(scheduleId: Int): BaseResponse<Unit> =
+            scheduleService.deleteSchedule(scheduleId)
 
-    override suspend fun getUpTime(): BaseResponse<ResponseUpTimeDto> =
-        scheduleService.getUpTime()
-
-}
+        override suspend fun getUpTime(): BaseResponse<ResponseUpTimeDto> =
+            scheduleService.getUpTime()
+    }

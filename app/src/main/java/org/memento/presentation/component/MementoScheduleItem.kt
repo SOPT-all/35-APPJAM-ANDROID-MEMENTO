@@ -35,34 +35,34 @@ fun MementoScheduleItem(
     scheduleTitleText: String,
     timeRange: String,
     isConnected: Boolean = false,
-    isChecked: Boolean = false
+    isChecked: Boolean = false,
 ) {
     val fraction = 3f / 300f
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.navy)
-            .clip(RoundedCornerShape(2.dp)),
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.navy)
+                .clip(RoundedCornerShape(2.dp)),
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth(),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth(fraction = fraction)
-                    .aspectRatio(3f / 68f)
-                    .background(color = tagColor),
+                    Modifier
+                        .fillMaxWidth(fraction = fraction)
+                        .aspectRatio(3f / 68f)
+                        .background(color = tagColor),
             )
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(top = 12.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 12.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -87,9 +87,9 @@ fun MementoScheduleItem(
 
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(modifier = Modifier.padding(start = 46.dp))
@@ -122,16 +122,16 @@ fun MementoScheduleItemWithLine(
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
     onClick: () -> Unit,
-    isChecked: Boolean = false
+    isChecked: Boolean = false,
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .noRippleClickable {
-                onClick()
-            },
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .noRippleClickable {
+                    onClick()
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -139,9 +139,9 @@ fun MementoScheduleItemWithLine(
             contentDescription = null,
             tint = Color.Unspecified,
             modifier =
-            Modifier
-                .padding(end = 10.dp)
-                .alpha(if (isNow) 1f else 0f),
+                Modifier
+                    .padding(end = 10.dp)
+                    .alpha(if (isNow) 1f else 0f),
         )
 
         MementoScheduleItem(
@@ -149,7 +149,7 @@ fun MementoScheduleItemWithLine(
             scheduleTitleText = scheduleTitleText,
             timeRange = timeRange,
             isConnected = isConnected,
-            isChecked = isChecked
+            isChecked = isChecked,
         )
     }
 }

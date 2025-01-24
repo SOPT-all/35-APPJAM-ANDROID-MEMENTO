@@ -56,7 +56,7 @@ import org.memento.ui.theme.defaultMementoTypography
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = hiltViewModel(),
     onCloseBottomSheet: () -> Unit,
-    isEdit: Boolean,
+    isEdit: Boolean = false,
     isEditCancel: () -> Unit,
     isEditDone: () -> Unit,
     planId: Int = 0,
@@ -124,6 +124,7 @@ fun AddScheduleScreen(
     LaunchedEffect(uiState) {
         when (uiState) {
             is UiState.Success -> {
+                viewModel.setLoadingState()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
@@ -134,6 +135,7 @@ fun AddScheduleScreen(
             }
 
             is UiState.Failure -> {
+                viewModel.setLoadingState()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = ErrorType.NETWORK_ERROR.message,
@@ -300,34 +302,36 @@ fun AddScheduleScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.gray10)
-                    .padding(horizontal = 20.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
+        if (!isEdit) {
+            Row(
                 modifier =
                     Modifier
-                        .background(
-                            shape = CircleShape,
-                            color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                        )
-                        .noRippleClickable {
-                            viewModel.postAddSchedule()
-                        },
+                        .fillMaxWidth()
+                        .background(color = darkModeColors.gray10)
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_send),
-                    contentDescription = "전송 버튼",
+                Box(
                     modifier =
                         Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp),
-                )
+                            .background(
+                                shape = CircleShape,
+                                color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                            )
+                            .noRippleClickable {
+                                viewModel.postAddSchedule()
+                            },
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_send),
+                        contentDescription = "전송 버튼",
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 13.dp)
+                                .padding(top = 12.dp, bottom = 10.dp),
+                    )
+                }
             }
         }
     }

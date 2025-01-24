@@ -90,5 +90,16 @@
     <string name="alert_cancel_button">Cancel</string>
     <string name="alert_delete_button">Delete</string>
 
+    <!--    Toast-->
+    <string name="toast_login_failed">Login failed. Please check your network and account.</string>
+    <string name="toast_sign_in_canceled">Sign-in canceled. Please try again.</string>
+    <string name="toast_no_internet_connection">No internet connection. Please check your network.</string>
+    <string name="toast_a_temporary_error">A temporary error occurred. Please try again later.</string>
+    <string name="toast_sign_in_failed">Sign-in failed. Please try again later.</string>
+    <string name="toast_session_expired">Session expired. Please sign in again.</string>
+    <string name="toast_sign_in_is_currently_unavailable">Sign-in is currently unavailable. Please try again.</string>
+    <string name="toast_network_error">Network error. Please check your internet connection.</string>
+
+
 
 </resources>

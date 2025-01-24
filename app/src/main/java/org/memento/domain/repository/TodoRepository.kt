@@ -1,6 +1,5 @@
 package org.memento.domain.repository
 
-import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.domain.entity.PriorityTodoList
 import org.memento.domain.entity.TargetDate
 import org.memento.domain.entity.TodoList

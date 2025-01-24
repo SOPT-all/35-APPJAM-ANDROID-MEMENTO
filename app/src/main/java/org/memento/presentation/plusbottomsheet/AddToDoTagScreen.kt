@@ -1,5 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ fun AddToDoTagScreen(
     onClose: () -> Unit,
     onDone: () -> Unit,
 ) {
+    val tempTagId by viewModel.tempTagId.collectAsStateWithLifecycle()
     val tempTagColor by viewModel.tempTagColor.collectAsStateWithLifecycle()
     val tempTagText by viewModel.tempTagText.collectAsStateWithLifecycle()
     val tagList by viewModel.tagList.collectAsStateWithLifecycle()
@@ -122,14 +124,16 @@ fun AddToDoTagScreen(
                 isOpenBottomSheet = showTagBottomSheet,
                 content = {
                     TagSelectorContent(
-                        onTagSelected = { color, tag ->
+                        onTagSelected = { id, color, tag ->
                             viewModel.updateTempTagData(
+                                tempTagId = id,
                                 tempTagColor = color,
                                 tempTagText = tag,
                             )
                         },
                         tagList = tagList,
                     )
+                    Log.e("AddTodoTagScreen", tempTagId.toString())
                 },
                 sheetState = sheetTagState,
                 onConfirm = {

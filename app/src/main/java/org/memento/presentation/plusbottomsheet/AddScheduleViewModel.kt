@@ -72,6 +72,11 @@ class AddScheduleViewModel
             getTagList()
         }
 
+        fun setLoadingState() {
+            _detailState.value = UiState.Loading
+            _uiState.value = UiState.Loading
+        }
+
         fun getTagList() {
             viewModelScope.launch {
                 addPlanRepository.getTagList()

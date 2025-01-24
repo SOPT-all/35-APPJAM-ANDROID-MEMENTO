@@ -3,6 +3,7 @@ package org.memento.data.datasource
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
+import org.memento.data.dto.response.ResponseAllDayDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
 
@@ -24,4 +25,6 @@ interface AddPlanDataSource {
     suspend fun getScheduleDetail(scheduleId: Int): BaseResponse<ResponseScheduleDetailDto>
 
     suspend fun getTodoDetail(todoId: Int): BaseResponse<ResponseTodoDetailDto>
+
+    suspend fun getAllDay(): BaseResponse<ResponseAllDayDto>
 }

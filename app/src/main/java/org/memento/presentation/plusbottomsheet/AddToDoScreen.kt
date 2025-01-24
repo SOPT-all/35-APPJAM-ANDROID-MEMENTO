@@ -140,6 +140,7 @@ fun AddToDoScreen(
                         modifier =
                             Modifier
                                 .noRippleClickable {
+                                    viewModel.patchAddTodo(planId)
                                     isEditDone()
                                 },
                     )

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -140,11 +141,11 @@ fun MementoDialog(
                                     tagText = it.tagName,
                                     urgentType =
                                         when (it.priorityType) {
-                                            "Immediate" -> PriorityTagType.Immediate
-                                            "None" -> PriorityTagType.None
-                                            "High" -> PriorityTagType.High
-                                            "Medium" -> PriorityTagType.Medium
-                                            "Low" -> PriorityTagType.Low
+                                            "IMMEDIATE" -> PriorityTagType.Immediate
+                                            "NONE" -> PriorityTagType.None
+                                            "HIGH" -> PriorityTagType.High
+                                            "MEDIUM" -> PriorityTagType.Medium
+                                            "LOW" -> PriorityTagType.Low
                                             else -> PriorityTagType.None
                                         },
                                 )
@@ -326,10 +327,9 @@ fun ToDoDialogComponent(
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
                         tint = changeHexToColor(tagColor),
-                        modifier = Modifier.padding(all = 2.dp),
                     )
 
-                    Spacer(modifier = Modifier.width(2.dp))
+                    Spacer(modifier = Modifier.width(3.dp))
 
                     Text(
                         text = tagText,
@@ -508,7 +508,6 @@ fun AddScheduleDialogComponent(
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
                         tint = changeHexToColor("#FFFFFF"),
-                        modifier = Modifier.padding(all = 2.dp),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
@@ -542,21 +541,33 @@ fun AddScheduleDialogComponent(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_notion),
-                        contentDescription = "태그 색 표시",
-                        tint = mementoColors.red,
-                        modifier = Modifier.padding(all = 2.dp),
-                    )
+                    if(scheduleType != "NORMAL") {
+                        if(scheduleType == "NOTION") {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_notion),
+                                contentDescription = "태그 색 표시",
+                                tint = mementoColors.red,
+                                modifier = Modifier.padding(all = 2.dp),
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(R.drawable.img_google),
+                                contentDescription = "태그 색 표시",
+                                tint = mementoColors.red,
+                                modifier = Modifier.size(17.dp)
+                                    .padding(all = 2.dp),
+                            )
+                        }
 
-                    Spacer(modifier = Modifier.width(2.dp))
+                        Spacer(modifier = Modifier.width(2.dp))
+                    }
 
                     Text(
                         text =
                             when (scheduleType) {
                                 "NORMAL" -> "None"
                                 "NOTION" -> "Notion"
-                                "Google" -> "Google"
+                                "GOOGLE" -> "Google"
                                 else -> "None"
                             },
                         style =

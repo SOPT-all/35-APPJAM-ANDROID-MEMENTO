@@ -15,6 +15,7 @@ import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.createLocalDate
 import org.memento.presentation.util.formatDateString
+import org.memento.presentation.util.formatDateTime
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -75,11 +76,6 @@ class AddToDoViewModel
             }
         }
 
-        fun patchAddTodo() {
-            viewModelScope.launch {
-            }
-        }
-
         private fun createAddTodo(): AddTodo {
             val startDate =
                 if (_selectedDateText.value == "Today") {
@@ -104,8 +100,8 @@ class AddToDoViewModel
                     PriorityTagType.Low -> 0.25 to 0.25
                 }
 
-            val formattedStartDate = formatDateString(startDate)
-            val formattedEndDate = endDate?.let { formatDateString(it) }
+            val formattedStartDate = formatDateTime(startDate)
+            val formattedEndDate = endDate?.let { formatDateTime(it) }
 
             return AddTodo(
                 startDate = formattedStartDate,

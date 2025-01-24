@@ -76,7 +76,6 @@ fun MementoEditTodoBottomSheet(
                             isEdit = true,
                             planId = planId,
                             isEditDone = {
-                                viewModel.patchAddTodo(planId)
                                 currentBottomSheet = null
                             },
                             isEditCancel = { currentBottomSheet = null },

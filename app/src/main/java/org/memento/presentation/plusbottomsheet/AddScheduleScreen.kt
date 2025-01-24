@@ -178,6 +178,7 @@ fun AddScheduleScreen(
                     modifier =
                         Modifier
                             .noRippleClickable {
+                                viewModel.patchAddSchedule(planId)
                                 isEditDone()
                             },
                 )

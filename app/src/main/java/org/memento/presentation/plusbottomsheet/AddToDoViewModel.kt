@@ -97,7 +97,7 @@ class AddToDoViewModel
 
             val endDate =
                 if (_deadLineText.value == "Add DeadLine") {
-                    null
+                    LocalDate.now().toString()
                 } else {
                     createLocalDate(_deadLineText.value).toString()
                 }
@@ -112,7 +112,7 @@ class AddToDoViewModel
                 }
 
             val formattedStartDate = formatDateTime(startDate)
-            val formattedEndDate = endDate?.let { formatDateTime(it) }
+            val formattedEndDate = formatDateTime(endDate)
 
             return AddTodo(
                 startDate = formattedStartDate,

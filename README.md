@@ -12,6 +12,8 @@ Memento는 사용자가 할 일을 입력하면 AI가 이를 자동으로 정렬
 
 <br>
 
+## 🖤 ScreenShot 🖤
+
 
 ## 🖤 Coding 𝘾𝙤𝙣𝙫𝙚𝙣𝙩𝙞𝙤𝙣
 📕 [Coding Convention](https://testmanzi.notion.site/Coding-Convention-16d67bb5c6cf81099420ca94b1625e1a?pvs=74)

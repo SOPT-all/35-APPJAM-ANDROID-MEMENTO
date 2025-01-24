@@ -42,6 +42,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -70,8 +71,6 @@ import java.time.LocalDate
 @Composable
 fun TodayScreen(
     modifier: Modifier = Modifier,
-    wakeUpTime: String = "8 AM",
-    windDownTime: String = "22 PM",
     viewModel: TodayViewModel = hiltViewModel(),
     padding: PaddingValues,
 ) {
@@ -118,6 +117,7 @@ fun TodayScreen(
         viewModel.getTodoDateList(selectedDate)
         viewModel.getScheduleList(selectedDate)
         viewModel.getAllDay()
+        viewModel.getUpTime()
     }
 
     LaunchedEffect(refreshTrigger) {
@@ -128,6 +128,17 @@ fun TodayScreen(
 
     val combinedItems by viewModel.combinedItems.collectAsState()
     val allDayItems by viewModel.allDayItems.collectAsState()
+    val upTimeState by viewModel.upTimeState.collectAsState()
+
+    val wakeUpTime by viewModel.wakeUpTime.collectAsState()
+    val windDownTime by viewModel.windDownTime.collectAsState()
+
+    val filteredAllDayItems =
+        allDayItems.filter { item ->
+            val startDate = LocalDate.parse(item.startDate.substring(0, 10))
+            val endDate = LocalDate.parse(item.endDate.substring(0, 10))
+            selectedDate.value in startDate..endDate
+        }
 
     fun resetDraggingState() {
         draggedItemIndex = -1
@@ -147,280 +158,286 @@ fun TodayScreen(
         refreshTrigger = !refreshTrigger
     }
 
-    Column(
+    Box(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(color = darkModeColors.black)
                 .padding(padding),
     ) {
-        MementoTopBar(
-            date = todoFormatDate(today),
-            year = nowYear,
-            onDateClick = { selectedDate.value = today },
-            onIconClick = {},
-        )
-
-        MementoWeeklyCalendar(
-            onDateClick = { newDate ->
-                selectedDate.value = newDate
-                coroutineScope.launch { }
-            },
-            selectedDate = selectedDate.value,
-        )
-
-        Box(
+        Column(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+                    .fillMaxSize()
+                    .background(color = darkModeColors.black),
         ) {
-            val state = rememberLazyListState()
-            LazyColumn(
-                state = state,
-            ) {
-                items(allDayItems, key = { it.id }) { item ->
-                    AllDayScheduleTag(
-                        allDayText = item.description,
-                        tagColor = changeHexToColor(item.tagColorCode),
-                    )
-                }
-            }
-        }
+            MementoTopBar(
+                date = todoFormatDate(today),
+                year = nowYear,
+                onDateClick = { selectedDate.value = today },
+                onIconClick = {},
+            )
 
-        if (combinedItems.isEmpty()) {
+            MementoWeeklyCalendar(
+                onDateClick = { newDate ->
+                    selectedDate.value = newDate
+                    coroutineScope.launch { }
+                },
+                selectedDate = selectedDate.value,
+            )
+
             Box(
                 modifier =
                     Modifier
-                        .fillMaxSize()
-                        .padding(top = 150.dp),
-                contentAlignment = Alignment.TopCenter,
+                        .fillMaxWidth()
+                        .heightIn(max = (5 * 30).dp),
             ) {
-                Text(
-                    text = "No plans yet? Add one now!",
-                    style = MementoTheme.typography.title_b_22,
-                    color = darkModeColors.gray08,
-                )
-            }
-        } else {
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
-                onRefresh = { refreshData() },
-            ) {
+                val state = rememberLazyListState()
                 LazyColumn(
+                    state = state,
+                ) {
+                    items(filteredAllDayItems, key = { it.id }) { item ->
+                        AllDayScheduleTag(
+                            allDayText = item.description,
+                            tagColor = changeHexToColor(item.tagColorCode),
+                        )
+                    }
+                }
+            }
+
+            if (combinedItems.isEmpty()) {
+                Box(
                     modifier =
                         Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .onGloballyPositioned { it ->
-                                listHeight = it.size.height
-                            },
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    userScrollEnabled = !isDraggingEnabled,
+                            .fillMaxSize()
+                            .padding(top = 150.dp),
+                    contentAlignment = Alignment.TopCenter,
                 ) {
-                    item {
-                        Row {
-                            Text(
-                                text = wakeUpTime,
-                                style = MementoTheme.typography.detail_b_12,
-                                color = darkModeColors.gray07,
-                                modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = "Wake Up",
-                                style = MementoTheme.typography.detail_b_12,
-                                color = darkModeColors.gray07,
-                                modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
-                            )
-                        }
-                    }
-
-                    itemsIndexed(combinedItems, key = { _, item -> item.hashCode() }) { index, item ->
-                        val isDragging = index == draggedItemIndex
-                        val scale = animateFloatAsState(if (isDragging) 1.1f else 1f)
-
-                        Box(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .graphicsLayer(
-                                        scaleX = scale.value,
-                                        scaleY = scale.value,
-                                        translationY = if (isDragging) draggedOffsetY else 0f,
-                                    )
-                                    .pointerInput(Unit) {
-                                        detectDragGesturesAfterLongPress(
-                                            onDragStart = {
-                                                draggedItemIndex = index
-                                                isDraggingEnabled = true
+                    Text(
+                        text = "No plans yet? Add one now!",
+                        style = MementoTheme.typography.title_b_22,
+                        color = darkModeColors.gray08,
+                    )
+                }
+            } else {
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = { refreshData() },
+                ) {
+                    LazyColumn(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .onGloballyPositioned { it ->
+                                    listHeight = it.size.height
+                                },
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        userScrollEnabled = !isDraggingEnabled,
+                    ) {
+                        item {
+                            Row {
+                                Text(
+                                    text = wakeUpTime ?: "8:00",
+                                    style = MementoTheme.typography.detail_b_12,
+                                    color = darkModeColors.gray07,
+                                    modifier =
+                                        Modifier
+                                            .padding(top = 16.dp)
+                                            .onGloballyPositioned { it ->
+                                                itemHeight = it.size.height
                                             },
-                                            onDrag = { change, dragAmount ->
-                                                if (isDraggingEnabled) {
-                                                    change.consume()
-                                                    draggedOffsetY += dragAmount.y
-                                                    val itemHeightPx = with(density) { 60.dp.toPx() }
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    text = "Wake Up",
+                                    style = MementoTheme.typography.detail_b_12,
+                                    color = darkModeColors.gray07,
+                                    modifier =
+                                        Modifier
+                                            .padding(top = 16.dp)
+                                            .onGloballyPositioned { it ->
+                                                itemHeight = it.size.height
+                                            },
+                                )
+                            }
+                        }
 
-                                                    while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                        val moveDirection = if (draggedOffsetY > 0) 1 else -1
-                                                        val targetIndex =
-                                                            (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
+                        itemsIndexed(combinedItems, key = { _, item -> item.hashCode() }) { index, item ->
+                            val isDragging = index == draggedItemIndex
+                            val scale by animateFloatAsState(if (isDragging) 1.1f else 1f)
 
-                                                        if (targetIndex != draggedItemIndex) {
-//                                                viewModel.updateItemOrder(draggedItemIndex, targetIndex)
-                                                            draggedItemIndex = targetIndex
-                                                            draggedOffsetY -= moveDirection * itemHeightPx
-                                                        } else {
-                                                            draggedOffsetY = 0f
-                                                            break
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .graphicsLayer(
+                                            scaleX = scale,
+                                            scaleY = scale,
+                                            translationY = if (isDragging) draggedOffsetY else 0f,
+                                        )
+                                        .zIndex(if (isDragging) 1f else 0f)
+                                        .pointerInput(Unit) {
+                                            detectDragGesturesAfterLongPress(
+                                                onDragStart = {
+                                                    draggedItemIndex = index
+                                                    isDraggingEnabled = true
+                                                },
+                                                onDrag = { change, dragAmount ->
+                                                    if (isDraggingEnabled) {
+                                                        change.consume()
+                                                        draggedOffsetY += dragAmount.y
+
+                                                        val itemHeightPx = with(density) { 60.dp.toPx() }
+                                                        while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
+                                                            val moveDirection = if (draggedOffsetY > 0) 1 else -1
+                                                            val targetIndex = (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
+
+                                                            if (targetIndex != draggedItemIndex) {
+                                                                draggedItemIndex = targetIndex
+                                                                draggedOffsetY -= moveDirection * itemHeightPx
+                                                            } else {
+                                                                draggedOffsetY = 0f
+                                                                break
+                                                            }
                                                         }
                                                     }
-                                                }
+                                                },
+                                                onDragEnd = {
+                                                    resetDraggingState()
+                                                },
+                                                onDragCancel = {
+                                                    resetDraggingState()
+                                                },
+                                            )
+                                        },
+                            ) {
+                                when (item) {
+                                    is MementoItem.TodoItem -> {
+                                        MementoTodoItemWithLine(
+                                            tagColor = changeHexToColor(item.tagColor),
+                                            isDone = item.isCompleted,
+                                            onCheckedChange = { newChecked ->
+                                                viewModel.updateTodoCompletion(item.id, newChecked)
                                             },
-                                            onDragEnd = { resetDraggingState() },
-                                            onDragCancel = { resetDraggingState() },
+                                            todoTitleText = item.description,
+                                            priorityTagType = item.priorityType.toPriorityTagType(),
+                                            isConnected = item.toDoType.toBoolean(),
+                                            onClick = {
+                                                selectedPlanId = item.id
+                                                dialogType = DialogType.TO_DO
+                                                showDetailDialog = true
+                                            },
                                         )
-                                    },
-                        ) {
-                            when (item) {
-                                is MementoItem.TodoItem -> {
-                                    MementoTodoItemWithLine(
-                                        tagColor = changeHexToColor(item.tagColor),
-                                        isDone = item.isCompleted,
-                                        onCheckedChange = { newChecked ->
-                                            viewModel.updateTodoCompletion(item.id, newChecked)
-                                        },
-                                        todoTitleText = item.description,
-                                        priorityTagType = item.priorityType.toPriorityTagType(),
-                                        isConnected = item.toDoType.toBoolean(),
-                                        isNow = false,
-                                        onClick = {
-                                            selectedPlanId = item.id
-                                            dialogType = DialogType.TO_DO
-                                            showDetailDialog = true
-                                        },
-                                    )
-                                }
+                                    }
 
-                                is MementoItem.ScheduleItem -> {
-                                    MementoScheduleItemWithLine(
-                                        tagColor = Color.Blue,
-                                        scheduleTitleText = item.description,
-                                        timeRange = item.timeDuration,
-                                        isNow = false,
-                                        onClick = {
-                                            selectedPlanId = item.id
-                                            dialogType = DialogType.SCHEDULE
-                                            showDetailDialog = true
-                                        },
-                                    )
+                                    is MementoItem.ScheduleItem -> {
+                                        MementoScheduleItemWithLine(
+                                            tagColor = Color.Blue,
+                                            scheduleTitleText = item.description,
+                                            timeRange = item.timeDuration,
+                                            onClick = {
+                                                selectedPlanId = item.id
+                                                dialogType = DialogType.SCHEDULE
+                                                showDetailDialog = true
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    item {
-                        Row {
-                            Text(
-                                text = windDownTime,
-                                style = MementoTheme.typography.detail_b_12,
-                                color = darkModeColors.gray07,
-                                modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = "Wind down",
-                                style = MementoTheme.typography.detail_b_12,
-                                color = darkModeColors.gray07,
-                                modifier =
-                                    Modifier
-                                        .padding(bottom = 16.dp),
-                            )
+                        item {
+                            Row {
+                                Text(
+                                    text = windDownTime ?: "22:00",
+                                    style = MementoTheme.typography.detail_b_12,
+                                    color = darkModeColors.gray07,
+                                    modifier =
+                                        Modifier
+                                            .padding(bottom = 16.dp),
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    text = "Wind down",
+                                    style = MementoTheme.typography.detail_b_12,
+                                    color = darkModeColors.gray07,
+                                    modifier =
+                                        Modifier
+                                            .padding(bottom = 16.dp),
+                                )
+                            }
                         }
                     }
+                    Column(
+                        modifier =
+                            Modifier
+                                .offset(x = 28.dp)
+                                .width(1.dp)
+                                .height(with(density) { listHeight.toDp() })
+                                .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                                .background(
+                                    brush =
+                                        Brush.linearGradient(
+                                            colors =
+                                                listOf(
+                                                    Color.Transparent,
+                                                    mementoColors.progressBar,
+                                                    mementoColors.progressBar,
+                                                    mementoColors.progressBar,
+                                                    Color.Transparent,
+                                                ),
+                                        ),
+                                ),
+                    ) {}
                 }
-                Column(
-                    modifier =
-                        Modifier
-                            .offset(x = 28.dp)
-                            .width(1.dp)
-                            .height(with(density) { listHeight.toDp() })
-                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
-                            .background(
-                                brush =
-                                    Brush.linearGradient(
-                                        colors =
-                                            listOf(
-                                                Color.Transparent,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                mementoColors.progressBar,
-                                                Color.Transparent,
-                                            ),
-                                    ),
-                            ),
-                ) {}
             }
         }
-    }
 
-    MementoDialog(
-        showDialog = showDetailDialog,
-        onDismiss = { showDetailDialog = false },
-        onDelete = { showDeleteDialog = true },
-        onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
-        dialogType = dialogType,
-        planId = selectedPlanId,
-    )
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+            dialogType = dialogType,
+            planId = selectedPlanId,
+        )
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
+                    showDeleteDialog = false
+                    showDetailDialog = false
+                    triggerRefresh()
+                },
+            )
+        }
 
-    if (showDeleteDialog) {
-        MementoAlertDialog(
-            content = R.string.alert_delete,
-            leftButtonText = R.string.alert_cancel_button,
-            rightButtonText = R.string.alert_delete_button,
-            onLeftButtonClick = { showDeleteDialog = false },
-            onRightButtonClick = {
-                viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
-                showDeleteDialog = false
-                showDetailDialog = false
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onCancel = { closeTodoBottomSheet() },
+            onConfirm = {
                 triggerRefresh()
+                closeTodoBottomSheet()
             },
+            planId = selectedPlanId,
+        )
+
+        MementoEditScheduleBottomSheet(
+            isOpenBottomSheet = showEditScheduleBottomSheet,
+            sheetState = sheetEditScheduleState,
+            onCancel = { closeScheduleBottomSheet() },
+            onConfirm = {
+                triggerRefresh()
+                closeScheduleBottomSheet()
+            },
+            planId = selectedPlanId,
         )
     }
-
-    MementoEditTodoBottomSheet(
-        isOpenBottomSheet = showEditTodoBottomSheet,
-        sheetState = sheetEditTodoState,
-        onCancel = { closeTodoBottomSheet() },
-        onConfirm = {
-            triggerRefresh()
-            closeTodoBottomSheet()
-        },
-        planId = selectedPlanId,
-    )
-
-    MementoEditScheduleBottomSheet(
-        isOpenBottomSheet = showEditScheduleBottomSheet,
-        sheetState = sheetEditScheduleState,
-        onCancel = { closeScheduleBottomSheet() },
-        onConfirm = {
-            triggerRefresh()
-            closeScheduleBottomSheet()
-        },
-        planId = selectedPlanId,
-    )
 }
 
 fun <T> MutableList<T>.move(

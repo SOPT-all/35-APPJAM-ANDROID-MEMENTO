@@ -13,6 +13,7 @@ import org.memento.core.util.UiState
 import org.memento.domain.entity.AllDay
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.TodoDetail
+import org.memento.domain.entity.UpTime
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
@@ -45,6 +46,15 @@ class TodayViewModel
 
         private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val deleteState: StateFlow<UiState<Unit>> = _deleteState
+
+        private val _upTimeState = MutableStateFlow<UiState<UpTime>>(UiState.Loading)
+        val upTimeState: StateFlow<UiState<UpTime>> = _upTimeState
+
+        private val _wakeUpTime = MutableStateFlow<String?>(null)
+        val wakeUpTime: StateFlow<String?> = _wakeUpTime
+
+        private val _windDownTime = MutableStateFlow<String?>(null)
+        val windDownTime: StateFlow<String?> = _windDownTime
 
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
@@ -239,6 +249,22 @@ class TodayViewModel
                         _todoItems.value.map { todo ->
                             if (todo.id == id) todo.copy(isCompleted = !isCompleted) else todo
                         }
+                    _uiState.value = UiState.Failure
+                }
+            }
+        }
+
+        fun getUpTime() {
+            viewModelScope.launch {
+                _uiState.value = UiState.Loading
+                val response = scheduleRepository.getUpTime()
+                response.onSuccess { data ->
+                    UpTime(
+                        wakeUpTime = data.wakeUpTime,
+                        windDownTime = data.windDownTime,
+                    )
+                }.onFailure { throwable ->
+                    _upTimeState.value = UiState.Failure
                     _uiState.value = UiState.Failure
                 }
             }

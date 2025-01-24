@@ -17,7 +17,7 @@ interface TodoService {
     @GET("/api/v1/todos")
     suspend fun getTodoList(): BaseResponse<ResponseTodoDto>
 
-    @GET("/api/v1/todos")
+    @GET("/api/v1/todos/date")
     suspend fun getTodoDateList(
         @Query("date") date: String,
     ): BaseResponse<ResponseTodoDto>

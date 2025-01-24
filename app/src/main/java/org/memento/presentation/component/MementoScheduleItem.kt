@@ -35,6 +35,7 @@ fun MementoScheduleItem(
     scheduleTitleText: String,
     timeRange: String,
     isConnected: Boolean = false,
+    isChecked: Boolean = false,
 ) {
     val fraction = 3f / 300f
     Column(
@@ -121,6 +122,7 @@ fun MementoScheduleItemWithLine(
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
     onClick: () -> Unit,
+    isChecked: Boolean = false,
 ) {
     Row(
         modifier =
@@ -147,6 +149,7 @@ fun MementoScheduleItemWithLine(
             scheduleTitleText = scheduleTitleText,
             timeRange = timeRange,
             isConnected = isConnected,
+            isChecked = isChecked,
         )
     }
 }

@@ -3,6 +3,7 @@ package org.memento.data.datasourceimpl
 import org.memento.data.datasource.ScheduleDataSource
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.response.ResponseScheduleDto
+import org.memento.data.dto.response.ResponseUpTimeDto
 import org.memento.data.service.ScheduleService
 import javax.inject.Inject
 
@@ -16,4 +17,7 @@ class ScheduleDataSourceImpl
 
         override suspend fun deleteSchedule(scheduleId: Int): BaseResponse<Unit> =
             scheduleService.deleteSchedule(scheduleId)
+
+        override suspend fun getUpTime(): BaseResponse<ResponseUpTimeDto> =
+            scheduleService.getUpTime()
     }

@@ -2,6 +2,8 @@ package org.memento.data.datasourceimpl
 
 import org.memento.data.datasource.TodoDataSource
 import org.memento.data.dto.BaseResponse
+import org.memento.data.dto.request.RequestPriorityDto
+import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
 import org.memento.data.dto.response.ResponseTodoDto
 import org.memento.data.service.TodoService
@@ -20,4 +22,10 @@ class TodoDataSourceImpl
 
         override suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto> =
             todoService.patchTodoCompleted(toDoId)
+
+        override suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit> =
+            todoService.deleteTodo(toDoId)
+
+        override suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto> =
+            todoService.postPriorityTodo(requestPriorityDto)
     }

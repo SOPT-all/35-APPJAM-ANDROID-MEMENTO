@@ -16,6 +16,7 @@ import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.createLocalDate
 import org.memento.presentation.util.formatDateString
+import org.memento.presentation.util.formatDateTime
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -64,6 +65,10 @@ class AddToDoViewModel
 
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
+
+        private val _patchState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+        val patchState: StateFlow<UiState<Unit>> = _patchState
+
         private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
         val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
 
@@ -71,19 +76,23 @@ class AddToDoViewModel
             getTagList()
         }
 
+        fun setLoadingState() {
+            _patchState.value = UiState.Loading
+            _uiState.value = UiState.Loading
+            _detailTodoState.value = UiState.Loading
+        }
+
         fun getTagList() {
             viewModelScope.launch {
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
+                        if (_addTagId.value == 0) {
+                            _addTagId.value = tags[0].id
+                        }
                     }
                     .onFailure { throwable ->
                     }
-            }
-        }
-
-        fun patchAddTodo() {
-            viewModelScope.launch {
             }
         }
 
@@ -97,28 +106,28 @@ class AddToDoViewModel
 
             val endDate =
                 if (_deadLineText.value == "Add DeadLine") {
-                    null
+                    LocalDate.now().toString()
                 } else {
                     createLocalDate(_deadLineText.value).toString()
                 }
 
             val (priorityUrgency, priorityImportance) =
                 when (_addPriorityType.value) {
-                    PriorityTagType.None -> null to null
+                    PriorityTagType.None -> 0.00 to 0.00
                     PriorityTagType.High -> 0.25 to 0.75
                     PriorityTagType.Immediate -> 0.75 to 0.75
                     PriorityTagType.Medium -> 0.75 to 0.25
                     PriorityTagType.Low -> 0.25 to 0.25
                 }
 
-            val formattedStartDate = formatDateString(startDate)
-            val formattedEndDate = endDate?.let { formatDateString(it) }
+            val formattedStartDate = formatDateTime(startDate)
+            val formattedEndDate = formatDateTime(endDate)
 
             return AddTodo(
                 startDate = formattedStartDate,
                 description = _addToDoText.value,
                 endDate = formattedEndDate,
-                tagId = 19,
+                tagId = _addTagId.value,
                 priorityUrgency = priorityUrgency,
                 priorityImportance = priorityImportance,
             )

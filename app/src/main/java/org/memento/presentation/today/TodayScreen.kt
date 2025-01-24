@@ -89,6 +89,7 @@ fun TodayScreen(
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
     var selectedPlanId by remember { mutableIntStateOf(3) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
+    var refreshTrigger by remember { mutableStateOf(false) }
 
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
@@ -98,6 +99,20 @@ fun TodayScreen(
     var isDraggingEnabled by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
+    val closeTodoBottomSheet = {
+        showEditTodoBottomSheet = false
+        coroutineScope.launch {
+            sheetEditTodoState.hide()
+        }
+    }
+
+    val closeScheduleBottomSheet = {
+        showEditScheduleBottomSheet = false
+        coroutineScope.launch {
+            sheetEditScheduleState.hide()
+        }
+    }
+
     LaunchedEffect(selectedDate.value) {
         val selectedDate = selectedDate.value.toString()
         viewModel.getTodoDateList(selectedDate)
@@ -105,6 +120,13 @@ fun TodayScreen(
         viewModel.getAllDay()
         viewModel.getUpTime()
     }
+
+    LaunchedEffect(refreshTrigger) {
+        viewModel.getScheduleList(selectedDate.value.toString())
+        viewModel.getTodoDateList(selectedDate.value.toString())
+        viewModel.getAllDay()
+    }
+
     val combinedItems by viewModel.combinedItems.collectAsState()
     val allDayItems by viewModel.allDayItems.collectAsState()
     val upTimeState by viewModel.upTimeState.collectAsState()
@@ -133,6 +155,11 @@ fun TodayScreen(
         }
     }
 
+    fun triggerRefresh() {
+        refreshTrigger = !refreshTrigger
+    }
+
+    Column(
     Box(
         modifier =
             Modifier
@@ -366,54 +393,100 @@ fun TodayScreen(
                     ) {}
                 }
             }
-
-            MementoDialog(
-                showDialog = showDetailDialog,
-                onDismiss = { showDetailDialog = false },
-                onDelete = { showDeleteDialog = true },
-                onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
-                dialogType = dialogType,
-                planId = selectedPlanId,
-            )
-
-            if (showDeleteDialog) {
-                MementoAlertDialog(
-                    content = R.string.alert_delete,
-                    leftButtonText = R.string.alert_cancel_button,
-                    rightButtonText = R.string.alert_delete_button,
-                    onLeftButtonClick = { showDeleteDialog = false },
-                    onRightButtonClick = {
-                        viewModel.deletePlan(
-                            planId = selectedPlanId,
-                            dialogType = dialogType,
-                        )
-                        showDeleteDialog = false
-                    },
-                )
+                    item {
+                        Row {
+                            Text(
+                                text = windDownTime,
+                                style = MementoTheme.typography.detail_b_12,
+                                color = darkModeColors.gray07,
+                                modifier =
+                                    Modifier
+                                        .padding(bottom = 16.dp),
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Wind down",
+                                style = MementoTheme.typography.detail_b_12,
+                                color = darkModeColors.gray07,
+                                modifier =
+                                    Modifier
+                                        .padding(bottom = 16.dp),
+                            )
+                        }
+                    }
+                }
+                Column(
+                    modifier =
+                        Modifier
+                            .offset(x = 28.dp)
+                            .width(1.dp)
+                            .height(with(density) { listHeight.toDp() })
+                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                            .background(
+                                brush =
+                                    Brush.linearGradient(
+                                        colors =
+                                            listOf(
+                                                Color.Transparent,
+                                                mementoColors.progressBar,
+                                                mementoColors.progressBar,
+                                                mementoColors.progressBar,
+                                                Color.Transparent,
+                                            ),
+                                    ),
+                            ),
+                ) {}
             }
-
-            MementoEditTodoBottomSheet(
-                isOpenBottomSheet = showEditTodoBottomSheet,
-                sheetState = sheetEditTodoState,
-                onConfirm = { showEditTodoBottomSheet = false },
-                planId = selectedPlanId,
-            )
-
-            MementoEditScheduleBottomSheet(
-                isOpenBottomSheet = showEditScheduleBottomSheet,
-                sheetState = sheetEditScheduleState,
-                onConfirm = { showEditScheduleBottomSheet = false },
-                planId = selectedPlanId,
-            )
         }
-        MementoAiFloatingButton(
-            onClick = { },
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(20.dp),
+    }
+
+    MementoDialog(
+        showDialog = showDetailDialog,
+        onDismiss = { showDetailDialog = false },
+        onDelete = { showDeleteDialog = true },
+        onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+        dialogType = dialogType,
+        planId = selectedPlanId,
+    )
+
+    if (showDeleteDialog) {
+        MementoAlertDialog(
+            content = R.string.alert_delete,
+            leftButtonText = R.string.alert_cancel_button,
+            rightButtonText = R.string.alert_delete_button,
+            onLeftButtonClick = { showDeleteDialog = false },
+            onRightButtonClick = {
+                viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
+                showDeleteDialog = false
+                showDetailDialog = false
+                triggerRefresh()
+            },
         )
     }
+
+    MementoEditTodoBottomSheet(
+        isOpenBottomSheet = showEditTodoBottomSheet,
+        sheetState = sheetEditTodoState,
+        onCancel = { closeTodoBottomSheet() },
+        onConfirm = {
+            triggerRefresh()
+            closeTodoBottomSheet()
+        },
+        planId = selectedPlanId,
+    )
+
+    MementoEditScheduleBottomSheet(
+        isOpenBottomSheet = showEditScheduleBottomSheet,
+        sheetState = sheetEditScheduleState,
+        onCancel = { closeScheduleBottomSheet() },
+        onConfirm = {
+            triggerRefresh()
+            closeScheduleBottomSheet()
+        },
+        planId = selectedPlanId,
+    )
+
+
 }
 
 fun <T> MutableList<T>.move(

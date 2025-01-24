@@ -160,7 +160,7 @@ private fun preview2() {
     MEMENTOTheme {
         Column {
             MementoScheduleItem(tagColor = Color.Red, scheduleTitleText = "ddddd", timeRange = "12:00", isConnected = true)
-            MementoTodoItem(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isChecked = true)
+            MementoTodoItem(tagColor = Color.Red, todoTitleText = "ddddd", priorityTagType = PriorityTagType.Low, isConnected = true, isChecked = true, onClick = { })
         }
     }
 }

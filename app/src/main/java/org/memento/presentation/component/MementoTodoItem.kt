@@ -43,6 +43,7 @@ fun MementoTodoItem(
     isConnected: Boolean = false,
     isFirstUndone: Boolean = false,
     deadline: String = "Today",
+    onClick: () -> Unit,
 ) {
     val fraction = 3f / 300f
     val backgroundModifier =
@@ -63,7 +64,10 @@ fun MementoTodoItem(
     Box(
         modifier =
             Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .noRippleClickable {
+                    onClick()
+                },
     ) {
         Column(
             modifier =
@@ -205,6 +209,7 @@ fun MementoTodoItemWithLine(
             isConnected = isConnected,
             isFirstUndone = isFirstUndone,
             deadline = deadline,
+            onClick = onClick,
         )
     }
 }

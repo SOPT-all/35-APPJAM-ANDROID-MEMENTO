@@ -30,6 +30,9 @@ class TodoViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
+        private val _uiAIState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
+        val uiAIState: StateFlow<UiState<Unit>> = _uiAIState
+
         init {
             getTodoList()
         }
@@ -64,9 +67,10 @@ class TodoViewModel
                             }
                         }
                     _todoItems.value = mappedData
-                    _uiState.value = UiState.Success(Unit)
+                    _uiAIState.value = UiState.Success(Unit)
                 }.onFailure { throwable ->
                     Log.e("TodoViewModel", "Error fetching priority todo", throwable)
+                    _uiAIState.value = UiState.Failure
                 }
             }
         }

@@ -129,12 +129,11 @@ fun AddToDoTagScreen(
                                 tempTagId = id,
                                 tempTagColor = color,
                                 tempTagText = tag,
-
                             )
                         },
                         tagList = tagList,
                     )
-                    Log.e("AddTodoTagScreen",tempTagId.toString())
+                    Log.e("AddTodoTagScreen", tempTagId.toString())
                 },
                 sheetState = sheetTagState,
                 onConfirm = {

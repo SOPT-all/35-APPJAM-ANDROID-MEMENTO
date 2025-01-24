@@ -1,7 +1,7 @@
 package org.memento.domain.entity
 
 data class AllDay(
-    val allDaySchedulesList: List<AllDaySchedules>
+    val allDaySchedulesList: List<AllDaySchedules>,
 ) {
     data class AllDaySchedules(
         val description: String,
@@ -11,6 +11,6 @@ data class AllDay(
         val scheduleType: String,
         val startDate: String,
         val tagColorCode: String,
-        val tagName: String
+        val tagName: String,
     )
 }

@@ -1,13 +1,12 @@
 package org.memento.data.dto.response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseAllDayDto(
     @SerialName("allDaySchedulesList")
-    val allDaySchedulesList: List<AllDaySchedules>
+    val allDaySchedulesList: List<AllDaySchedules>,
 ) {
     @Serializable
     data class AllDaySchedules(
@@ -26,7 +25,6 @@ data class ResponseAllDayDto(
         @SerialName("tagColorCode")
         val tagColorCode: String,
         @SerialName("tagName")
-        val tagName: String
+        val tagName: String,
     )
 }
-

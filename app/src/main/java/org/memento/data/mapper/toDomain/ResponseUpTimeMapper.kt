@@ -6,7 +6,5 @@ import org.memento.domain.entity.UpTime
 fun ResponseUpTimeDto.toUpTime(): UpTime =
     UpTime(
         wakeUpTime = wakeUpTime,
-        windDownTime = windDownTime
+        windDownTime = windDownTime,
     )
-
-

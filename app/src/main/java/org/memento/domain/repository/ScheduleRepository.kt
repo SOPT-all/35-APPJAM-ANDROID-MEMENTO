@@ -7,4 +7,3 @@ interface ScheduleRepository {
 
     suspend fun deleteSchedule(scheduleId: Int): Result<Unit>
 }
-

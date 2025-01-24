@@ -541,8 +541,8 @@ fun AddScheduleDialogComponent(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if(scheduleType != "NORMAL") {
-                        if(scheduleType == "NOTION") {
+                    if (scheduleType != "NORMAL") {
+                        if (scheduleType == "NOTION") {
                             Icon(
                                 painter = painterResource(R.drawable.ic_notion),
                                 contentDescription = "태그 색 표시",
@@ -554,8 +554,9 @@ fun AddScheduleDialogComponent(
                                 painter = painterResource(R.drawable.img_google),
                                 contentDescription = "태그 색 표시",
                                 tint = mementoColors.red,
-                                modifier = Modifier.size(17.dp)
-                                    .padding(all = 2.dp),
+                                modifier =
+                                    Modifier.size(17.dp)
+                                        .padding(all = 2.dp),
                             )
                         }
 

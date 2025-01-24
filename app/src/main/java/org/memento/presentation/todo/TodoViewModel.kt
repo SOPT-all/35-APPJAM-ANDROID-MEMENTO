@@ -19,7 +19,7 @@ class TodoViewModel
     @Inject
     constructor(
         private val todoRepository: TodoRepository,
-        private val scheduleRepository: ScheduleRepository
+        private val scheduleRepository: ScheduleRepository,
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems

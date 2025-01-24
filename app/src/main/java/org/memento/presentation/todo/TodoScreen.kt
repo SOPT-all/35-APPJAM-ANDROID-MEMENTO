@@ -71,7 +71,6 @@ fun TodoScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     var selectedPlanId by remember { mutableIntStateOf(3) }
 
-
     when (uiState) {
         is UiState.Loading -> {
         }
@@ -186,7 +185,7 @@ fun TodoScreen(
                                 onClick = {
                                     selectedPlanId = todoItem.id
                                     showDetailDialog = true
-                                }
+                                },
                             )
                             Spacer(Modifier.height(10.dp))
                         }

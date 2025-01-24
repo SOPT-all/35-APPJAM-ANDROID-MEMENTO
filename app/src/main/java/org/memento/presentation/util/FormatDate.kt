@@ -94,8 +94,8 @@ fun formatDateString(dateString: String): String {
 }
 
 fun formatDateTime(dateString: String): String {
-    val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)  // "Jan 25, 2025" 형식
-    val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)   // "2025-01-25" 형식
+    val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH) // "Jan 25, 2025" 형식
+    val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH) // "2025-01-25" 형식
     return try {
         val date = inputFormat.parse(dateString)
         outputFormat.format(date ?: Date())

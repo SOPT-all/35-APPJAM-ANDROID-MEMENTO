@@ -10,15 +10,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,20 +30,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
+import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.presentation.component.MementoAiFloatingButton
+import org.memento.presentation.component.MementoAlertDialog
+import org.memento.presentation.component.MementoDialog
+import org.memento.presentation.component.MementoEditTodoBottomSheet
 import org.memento.presentation.component.MementoTodoItem
 import org.memento.presentation.component.MementoTopBar
 import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.todo.component.TodoBoxDown
 import org.memento.presentation.todo.component.TodoBoxUp
 import org.memento.presentation.todo.component.TodoDateLine
+import org.memento.presentation.type.DialogType
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoScreen(
     viewModel: TodoViewModel = hiltViewModel(),
@@ -54,6 +64,13 @@ fun TodoScreen(
 
     val todoItems by viewModel.todoItems.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+
+    var showDetailDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val sheetEditTodoState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showEditTodoBottomSheet by remember { mutableStateOf(false) }
+    var selectedPlanId by remember { mutableIntStateOf(3) }
+
 
     when (uiState) {
         is UiState.Loading -> {
@@ -166,6 +183,10 @@ fun TodoScreen(
                                 isConnected = false,
                                 isFirstUndone = (todoItem.id == firstUndoneTodoId),
                                 deadline = deadline,
+                                onClick = {
+                                    selectedPlanId = todoItem.id
+                                    showDetailDialog = true
+                                }
                             )
                             Spacer(Modifier.height(10.dp))
                         }
@@ -185,6 +206,38 @@ fun TodoScreen(
                         .align(Alignment.BottomCenter),
             )
         }
+
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { showEditTodoBottomSheet = true },
+            dialogType = DialogType.TO_DO,
+            planId = selectedPlanId,
+        )
+
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(
+                        planId = selectedPlanId,
+                        dialogType = DialogType.TO_DO,
+                    )
+                    showDeleteDialog = false
+                },
+            )
+        }
+
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onConfirm = { showEditTodoBottomSheet = false },
+            planId = selectedPlanId,
+        )
     }
 }
 

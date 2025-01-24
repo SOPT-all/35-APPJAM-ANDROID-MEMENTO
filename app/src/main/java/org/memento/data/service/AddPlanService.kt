@@ -49,7 +49,7 @@ interface AddPlanService {
         @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<ResponseScheduleDetailDto>
 
-    @GET("/api/v1/todos/{todDoId}")
+    @GET("/api/v1/todos/{toDoId}")
     suspend fun getTodoDetail(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoDetailDto>

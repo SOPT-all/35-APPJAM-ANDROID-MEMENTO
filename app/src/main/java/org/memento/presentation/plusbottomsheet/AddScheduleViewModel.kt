@@ -1,5 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,8 @@ import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
+import org.memento.presentation.util.formatEditString
+import org.memento.presentation.util.formatEditTime
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
 import timber.log.Timber
@@ -89,11 +92,26 @@ class AddScheduleViewModel
                 val result = addPlanRepository.getScheduleDetail(scheduleId = scheduleId)
                 _detailState.value =
                     result.fold(
-                        onSuccess = {
-                            UiState.Success(it)
+                        onSuccess = { scheduleDetail ->
+                            if (scheduleDetail.startDate.isNotBlank() && scheduleDetail.endDate.isNotBlank()) {
+                                _selectedStartDateText.value = formatEditString(scheduleDetail.startDate)
+                                _selectedEndDateText.value = formatEditString(scheduleDetail.endDate)
+                                _selectedStartTimeText.value = formatEditTime(scheduleDetail.startDate)
+                                _selectedEndTimeText.value = formatEditTime(scheduleDetail.endDate)
+                            } else {
+                                initialTimeValue()
+                            }
+
+                            Log.d("startDateText", _selectedStartDateText.value)
+                            Log.d("startTimeText", _selectedStartTimeText.value)
+                            Log.d("endDateText", _selectedEndDateText.value)
+                            Log.d("endTimeText", _selectedEndTimeText.value)
+
+                            _eventText.value = scheduleDetail.description
+                            UiState.Success(scheduleDetail)
                         },
                         onFailure = { throwable ->
-                            Timber.e(throwable, "Failed to post plan")
+                            Timber.e(throwable, "Failed to get schedule detail")
                             UiState.Failure
                         },
                     )

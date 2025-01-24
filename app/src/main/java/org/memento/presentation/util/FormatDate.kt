@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -70,22 +71,57 @@ fun createLocalDateTime(
     }
 }
 
-fun createLocalDate(dateText: String): LocalDate {
-    return try {
-        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
-        LocalDate.parse(dateText, formatter)
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to parse LocalDate for input: $dateText")
-        throw e
-    }
+fun createLocalDate(dateString: String): LocalDate {
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
+    return LocalDate.parse(dateString, formatter)
 }
 
 fun formatDateString(dateString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+
+    return try {
+        val date = inputFormat.parse(dateString)
+
+        if (date != null) {
+            outputFormat.format(date)
+        } else {
+            dateString
+        }
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatEditString(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
     val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
     return try {
         val date = inputFormat.parse(dateString)
         outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatEditTime(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("h:mm a", Locale.ENGLISH)
+
+    return try {
+        val date = inputFormat.parse(dateString)
+        val calendar = Calendar.getInstance().apply { time = date ?: Date() }
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val roundedMinute =
+            if (minute in 0..15) {
+                0
+            } else {
+                30
+            }
+
+        calendar.set(Calendar.MINUTE, roundedMinute)
+        outputFormat.format(calendar.time)
     } catch (e: Exception) {
         dateString
     }

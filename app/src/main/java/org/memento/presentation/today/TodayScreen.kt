@@ -279,7 +279,7 @@ fun TodayScreen(
                                         isConnected = item.toDoType.toBoolean(),
                                         isNow = false,
                                         onClick = {
-                                            // selectedPlanId = schedule.id
+                                            selectedPlanId = item.id
                                             dialogType = DialogType.TO_DO
                                             showDetailDialog = true
                                         },
@@ -293,7 +293,7 @@ fun TodayScreen(
                                         timeRange = "dfdf",
                                         isNow = false,
                                         onClick = {
-//                                            selectedPlanId = schedule.id
+                                            selectedPlanId = item.id
                                             dialogType = DialogType.SCHEDULE
                                             showDetailDialog = true
                                         },

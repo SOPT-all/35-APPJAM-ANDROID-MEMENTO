@@ -16,6 +16,7 @@ import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatEditString
 import org.memento.presentation.util.formatEditTime
+import org.memento.presentation.util.formatTextLocalDateTime
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
 import timber.log.Timber
@@ -84,8 +85,8 @@ class AddScheduleViewModel
                 val addSchedule =
                     AddSchedule(
                         description = _eventText.value,
-                        startDate = createLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
-                        endDate = createLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
+                        startDate = formatTextLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
+                        endDate = formatTextLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
                         isAllDay = _isAllDayChecked.value,
                         tagId = 22,
                     )

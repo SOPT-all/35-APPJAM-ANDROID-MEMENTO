@@ -149,3 +149,9 @@ fun formatTimeTo12Hour(timeString: String): String {
         timeString
     }
 }
+
+fun formatTextLocalDateTime(dateString: String, timeString: String): LocalDateTime {
+    val dateTimeString = "$dateString $timeString"
+    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm a", Locale.ENGLISH)
+    return LocalDateTime.parse(dateTimeString, formatter)
+}

@@ -1,5 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
@@ -51,13 +51,14 @@ import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = hiltViewModel(),
     onCloseBottomSheet: () -> Unit,
-    isEdit: Boolean = false,
+    isEdit: Boolean,
     isEditCancel: () -> Unit,
     isEditDone: () -> Unit,
     planId: Int = 0,
@@ -86,10 +87,25 @@ fun AddScheduleScreen(
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
-        viewModel.updateAllDayCheck()
-        viewModel.validateTimeOrder()
+    LaunchedEffect(isEdit) {
+        if (isEdit) {
+            planId.let {
+                viewModel.getScheduleDetail(it)
+            }
+        } else {
+            viewModel.initialTimeValue()
+        }
     }
+
+    LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
+        if (selectedStartDateText.isNotBlank() && selectedEndDateText.isNotBlank() &&
+            selectedStartTimeText.isNotBlank() && selectedEndTimeText.isNotBlank()) {
+
+            viewModel.updateAllDayCheck()
+            viewModel.validateTimeOrder()
+        }
+    }
+
 
     LaunchedEffect(isTimeValid) {
         if (!isTimeValid) {
@@ -129,52 +145,52 @@ fun AddScheduleScreen(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 6.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         if (isEdit) {
             Row(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 5.dp, vertical = 7.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp, vertical = 7.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = "Cancel",
                     style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
                     modifier =
-                        Modifier
-                            .noRippleClickable {
-                                isEditCancel()
-                            },
+                    Modifier
+                        .noRippleClickable {
+                            isEditCancel()
+                        },
                 )
 
                 Text(
                     text = "Done",
                     style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
                     modifier =
-                        Modifier
-                            .noRippleClickable {
-                                isEditDone()
-                            },
+                    Modifier
+                        .noRippleClickable {
+                            isEditDone()
+                        },
                 )
             }
         }
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 3.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 3.dp),
         ) {
             BasicTextField(
                 value = eventText,
@@ -182,14 +198,14 @@ fun AddScheduleScreen(
                     viewModel.updateEventText(newText)
                 },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .background(color = darkModeColors.gray10)
-                        .padding(horizontal = 6.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.gray10)
+                    .padding(horizontal = 6.dp),
                 textStyle =
-                    MementoTheme.typography.body_b_18.copy(
-                        color = darkModeColors.white,
-                    ),
+                MementoTheme.typography.body_b_18.copy(
+                    color = darkModeColors.white,
+                ),
                 cursorBrush = remember { Brush.verticalGradient(colors = listOf(darkModeColors.white, darkModeColors.white)) },
                 singleLine = true,
             )
@@ -199,18 +215,18 @@ fun AddScheduleScreen(
                     text = "Add your event",
                     modifier = Modifier.padding(horizontal = 6.dp),
                     style =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.gray07,
-                        ),
+                    MementoTheme.typography.body_b_18.copy(
+                        color = darkModeColors.gray07,
+                    ),
                 )
             }
         }
 
         HorizontalDivider(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(darkModeColors.gray07),
+            Modifier
+                .fillMaxWidth()
+                .background(darkModeColors.gray07),
             thickness = 2.dp,
         )
 
@@ -250,18 +266,18 @@ fun AddScheduleScreen(
                     viewModel.toggleAllDay(isChecked)
                 },
                 colors =
-                    CheckboxDefaults.colors(
-                        uncheckedColor = darkModeColors.gray05,
-                        checkedColor = darkModeColors.gray05,
-                        checkmarkColor = darkModeColors.black,
-                    ),
+                CheckboxDefaults.colors(
+                    uncheckedColor = darkModeColors.gray05,
+                    checkedColor = darkModeColors.gray05,
+                    checkmarkColor = darkModeColors.black,
+                ),
             )
             Text(
                 text = "All-day",
                 style =
-                    defaultMementoTypography.body_r_14.copy(
-                        darkModeColors.gray05,
-                    ),
+                defaultMementoTypography.body_r_14.copy(
+                    darkModeColors.gray05,
+                ),
             )
         }
 
@@ -280,31 +296,31 @@ fun AddScheduleScreen(
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.gray10)
-                    .padding(horizontal = 20.dp, vertical = 16.dp),
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.gray10)
+                .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .background(
-                            shape = CircleShape,
-                            color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                        )
-                        .noRippleClickable {
-                            viewModel.postAddSchedule()
-                        },
+                Modifier
+                    .background(
+                        shape = CircleShape,
+                        color = if (eventText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                    )
+                    .noRippleClickable {
+                        viewModel.postAddSchedule()
+                    },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                        Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp),
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp),
                 )
             }
         }
@@ -405,28 +421,28 @@ fun AddPlanSelectComponent(
         Text(
             text = title,
             style =
-                MementoTheme.typography.body_r_16.copy(
-                    color = darkModeColors.gray05,
-                ),
+            MementoTheme.typography.body_r_16.copy(
+                color = darkModeColors.gray05,
+            ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         MementoChipSelector(
             selectorType =
-                when (title) {
-                    "Repeat", "End Repeat" -> {
-                        SelectorType.BASIC
-                    }
+            when (title) {
+                "Repeat", "End Repeat" -> {
+                    SelectorType.BASIC
+                }
 
-                    "Tag" -> {
-                        SelectorType.TAG
-                    }
+                "Tag" -> {
+                    SelectorType.TAG
+                }
 
-                    else -> {
-                        SelectorType.DATESELECTOR
-                    }
-                },
+                else -> {
+                    SelectorType.DATESELECTOR
+                }
+            },
             isClicked = false,
             onClickedChange = {
                 onDateClick()
@@ -459,5 +475,6 @@ fun AddScheduleScreenPreview() {
         onCloseBottomSheet = { },
         isEditDone = { },
         isEditCancel = { },
+        isEdit = false
     )
 }

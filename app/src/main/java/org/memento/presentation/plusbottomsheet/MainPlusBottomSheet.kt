@@ -101,6 +101,7 @@ fun MainPlusBottomSheet(
                     onCloseBottomSheet = onCloseBottomSheet,
                     isEditDone = { },
                     isEditCancel = { },
+                    isEdit = false
                 )
 
             2 ->

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -87,6 +88,39 @@ fun formatDateString(dateString: String): String {
         } else {
             dateString
         }
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatEditString(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+    return try {
+        val date = inputFormat.parse(dateString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        dateString
+    }
+}
+
+fun formatEditTime(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("h:mm a", Locale.ENGLISH)
+
+    return try {
+        val date = inputFormat.parse(dateString)
+        val calendar = Calendar.getInstance().apply { time = date ?: Date() }
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val roundedMinute = if (minute in 0..15) {
+            0
+        } else {
+            30
+        }
+
+        calendar.set(Calendar.MINUTE, roundedMinute)
+        outputFormat.format(calendar.time)
     } catch (e: Exception) {
         dateString
     }

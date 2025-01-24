@@ -9,8 +9,6 @@ interface TodoRepository {
 
     suspend fun getTodoDateList(date: String): Result<List<TodoList.ToDoGetResponse>>
 
-    suspend fun deleteTodo(toDoId: Int): Result<Unit>
-
     suspend fun patchTodoComplete(toDoId: Int): Result<Unit>
 
     suspend fun postPriorityTodo(targetDate: TargetDate): Result<PriorityTodoList>

@@ -173,19 +173,6 @@ class TodayViewModel
                 }
 
                 else -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = todoRepository.deleteTodo(toDoId = planId)
-
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
                 }
             }
         }

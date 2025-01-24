@@ -93,9 +93,9 @@ fun formatDateString(dateString: String): String {
     }
 }
 
-fun formatDateTime(dateString: String): String {
-    val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH) // "Jan 25, 2025" 형식
-    val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH) // "2025-01-25" 형식
+fun formatEditString(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
     return try {
         val date = inputFormat.parse(dateString)
         outputFormat.format(date ?: Date())
@@ -104,35 +104,23 @@ fun formatDateTime(dateString: String): String {
     }
 }
 
-fun formatEditString(dateString: String): String {
-    val inputFormatWithMillis = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
-    val inputFormatWithoutMillis = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
-
-    return try {
-        val date =
-            when {
-                dateString.contains(".") -> inputFormatWithMillis.parse(dateString)
-                else -> inputFormatWithoutMillis.parse(dateString)
-            }
-        outputFormat.format(date ?: Date())
-    } catch (e: Exception) {
-        dateString
-    }
-}
-
 fun formatEditTime(dateString: String): String {
-    val inputFormatWithoutMillis = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
     val outputFormat = SimpleDateFormat("h:mm a", Locale.ENGLISH)
 
     return try {
-        val date = inputFormatWithoutMillis.parse(dateString)
+        val date = inputFormat.parse(dateString)
         val calendar = Calendar.getInstance().apply { time = date ?: Date() }
-
         val minute = calendar.get(Calendar.MINUTE)
-        val roundedMinute = if (minute in 0..15) 0 else 30
-        calendar.set(Calendar.MINUTE, roundedMinute)
 
+        val roundedMinute =
+            if (minute in 0..15) {
+                0
+            } else {
+                30
+            }
+
+        calendar.set(Calendar.MINUTE, roundedMinute)
         outputFormat.format(calendar.time)
     } catch (e: Exception) {
         dateString
@@ -149,13 +137,4 @@ fun formatTimeTo12Hour(timeString: String): String {
     } catch (e: Exception) {
         timeString
     }
-}
-
-fun formatTextLocalDateTime(
-    dateString: String,
-    timeString: String,
-): LocalDateTime {
-    val dateTimeString = "$dateString $timeString"
-    val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm a", Locale.ENGLISH)
-    return LocalDateTime.parse(dateTimeString, formatter)
 }

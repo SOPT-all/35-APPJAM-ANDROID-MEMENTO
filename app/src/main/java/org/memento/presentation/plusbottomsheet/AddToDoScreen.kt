@@ -71,36 +71,14 @@ fun AddToDoScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusRequester = remember { FocusRequester() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val patchState by viewModel.patchState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        viewModel.getTagList()
-    }
-
-    LaunchedEffect(patchState) {
-        when (patchState) {
-            is UiState.Success -> {
-                viewModel.setLoadingState()
-                isEditDone()
-            }
-            is UiState.Failure -> {
-                viewModel.setLoadingState()
-                val toast = MementoToast(context)
-                toast.makeText(
-                    message = ErrorType.NETWORK_ERROR.message,
-                    icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner,
-                )
-            }
-            else -> Unit
-        }
     }
 
     LaunchedEffect(uiState) {
         when (uiState) {
             is UiState.Success -> {
-                viewModel.setLoadingState()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
@@ -112,7 +90,6 @@ fun AddToDoScreen(
 
             is UiState.Failure -> {
                 val toast = MementoToast(context)
-                viewModel.setLoadingState()
                 toast.makeText(
                     message = ErrorType.NETWORK_ERROR.message,
                     icon = R.drawable.ic_toast,
@@ -163,7 +140,6 @@ fun AddToDoScreen(
                         modifier =
                             Modifier
                                 .noRippleClickable {
-                                    viewModel.patchAddTodo(planId)
                                     isEditDone()
                                 },
                     )

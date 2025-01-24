@@ -33,7 +33,6 @@ import org.memento.ui.theme.darkModeColors
 fun MementoEditTodoBottomSheet(
     isOpenBottomSheet: Boolean,
     sheetState: SheetState,
-    onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
     planId: Int,
     viewModel: AddToDoViewModel = hiltViewModel(),
@@ -77,11 +76,10 @@ fun MementoEditTodoBottomSheet(
                             isEdit = true,
                             planId = planId,
                             isEditDone = {
-                                onConfirm()
+                                viewModel.patchAddTodo(planId)
+                                currentBottomSheet = null
                             },
-                            isEditCancel = {
-                                onCancel()
-                            },
+                            isEditCancel = { currentBottomSheet = null },
                         )
 
                     BottomSheetType.DEADLINE ->

@@ -25,7 +25,6 @@ import org.memento.ui.theme.darkModeColors
 fun MementoEditScheduleBottomSheet(
     isOpenBottomSheet: Boolean,
     sheetState: SheetState,
-    onCancel: () -> Unit = {},
     onConfirm: () -> Unit = {},
     planId: Int,
 ) {

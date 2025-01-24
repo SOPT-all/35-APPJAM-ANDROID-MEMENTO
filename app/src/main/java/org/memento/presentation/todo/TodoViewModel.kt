@@ -8,12 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
-import org.memento.domain.repository.ScheduleRepository
+import org.memento.domain.entity.TargetDate
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.today.MementoItem
-import org.memento.presentation.type.DialogType
 import timber.log.Timber
-import org.memento.domain.entity.TargetDate
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -22,15 +20,11 @@ class TodoViewModel
     @Inject
     constructor(
         private val todoRepository: TodoRepository,
-        private val scheduleRepository: ScheduleRepository,
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
 
-        private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
-        val deleteState: StateFlow<UiState<Unit>> = _deleteState
-
-      private val _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
+        private val _selectedDate = MutableStateFlow<LocalDate>(LocalDate.now())
         val selectedDate: StateFlow<LocalDate> = _selectedDate
 
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
@@ -43,28 +37,6 @@ class TodoViewModel
             getTodoList()
         }
 
-        fun deletePlan(
-            planId: Int,
-            dialogType: DialogType,
-        ) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = scheduleRepository.deleteSchedule(scheduleId = planId)
-
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
-                }
-
-                else -> {
         fun postPriorityTodo() {
             Timber.e("TodoViewModel", _selectedDate.value.toString())
             viewModelScope.launch {

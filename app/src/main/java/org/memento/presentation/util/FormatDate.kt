@@ -113,11 +113,12 @@ fun formatEditTime(dateString: String): String {
         val calendar = Calendar.getInstance().apply { time = date ?: Date() }
         val minute = calendar.get(Calendar.MINUTE)
 
-        val roundedMinute = if (minute in 0..15) {
-            0
-        } else {
-            30
-        }
+        val roundedMinute =
+            if (minute in 0..15) {
+                0
+            } else {
+                30
+            }
 
         calendar.set(Calendar.MINUTE, roundedMinute)
         outputFormat.format(calendar.time)
@@ -125,7 +126,6 @@ fun formatEditTime(dateString: String): String {
         dateString
     }
 }
-
 
 fun formatTimeTo12Hour(timeString: String): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)

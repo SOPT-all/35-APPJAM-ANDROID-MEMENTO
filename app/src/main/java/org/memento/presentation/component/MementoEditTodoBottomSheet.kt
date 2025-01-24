@@ -10,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +35,7 @@ fun MementoEditTodoBottomSheet(
     sheetState: SheetState,
     onConfirm: () -> Unit = {},
     planId: Int,
-    viewModel: AddToDoViewModel = hiltViewModel()
+    viewModel: AddToDoViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     var currentBottomSheet by remember { mutableStateOf<BottomSheetType?>(BottomSheetType.MAIN) }
@@ -78,7 +77,8 @@ fun MementoEditTodoBottomSheet(
                             planId = planId,
                             isEditDone = {
                                 viewModel.patchAddTodo(planId)
-                                currentBottomSheet = null },
+                                currentBottomSheet = null
+                            },
                             isEditCancel = { currentBottomSheet = null },
                         )
 

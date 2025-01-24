@@ -77,6 +77,12 @@ class AddScheduleViewModel
         private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
         val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
 
+        init {
+            viewModelScope.launch {
+                initialTimeValue()
+            }
+        }
+
         fun getScheduleDetail(scheduleId: Int) {
             viewModelScope.launch {
                 _detailState.value = UiState.Loading

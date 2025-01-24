@@ -3,6 +3,7 @@ package org.memento.data.service
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
+import org.memento.data.dto.request.RequestBrainDumpDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
@@ -21,6 +22,11 @@ interface AddPlanService {
     @POST("/api/v1/schedules")
     suspend fun postAddSchedule(
         @Body requestAddScheduleDto: RequestAddScheduleDto,
+    ): BaseResponse<Unit>
+
+    @POST("/api/v1/braindump")
+    suspend fun postBrainDump(
+        @Body requestBrainDumpDto: RequestBrainDumpDto,
     ): BaseResponse<Unit>
 
     @GET("/api/v1/tags")

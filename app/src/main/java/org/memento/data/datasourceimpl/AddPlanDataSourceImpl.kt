@@ -4,6 +4,7 @@ import org.memento.data.datasource.AddPlanDataSource
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
+import org.memento.data.dto.request.RequestBrainDumpDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
@@ -23,6 +24,9 @@ class AddPlanDataSourceImpl
 
         override suspend fun getTagList(): BaseResponse<List<ResponseTagDto>> =
             addPlanService.getTagList()
+
+        override suspend fun postBrainDump(requestBrainDumpDto: RequestBrainDumpDto): BaseResponse<Unit> =
+            addPlanService.postBrainDump(requestBrainDumpDto)
 
         override suspend fun patchAddTodo(
             todoId: Int,

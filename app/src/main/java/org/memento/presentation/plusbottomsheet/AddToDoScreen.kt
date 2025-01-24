@@ -74,6 +74,7 @@ fun AddToDoScreen(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+        viewModel.getTagList()
     }
 
     LaunchedEffect(uiState) {

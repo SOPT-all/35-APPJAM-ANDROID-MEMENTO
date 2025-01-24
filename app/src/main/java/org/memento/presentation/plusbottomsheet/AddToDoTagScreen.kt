@@ -77,6 +77,7 @@ fun AddToDoTagScreen(
                         .padding(horizontal = 18.dp, vertical = 12.dp)
                         .noRippleClickable {
                             viewModel.saveTagColor()
+                            viewModel.saveTagId()
                             onDone()
                         },
                 style =
@@ -112,7 +113,6 @@ fun AddToDoTagScreen(
                     selectorType = SelectorType.TAG,
                     isClicked = showTagBottomSheet,
                     onClickedChange = {
-                        viewModel.getTagList()
                         showTagBottomSheet = true
                     },
                     content = tempTagText,

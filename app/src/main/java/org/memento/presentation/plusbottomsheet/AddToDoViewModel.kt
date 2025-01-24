@@ -65,6 +65,7 @@ class AddToDoViewModel
 
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
+
         private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
         val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
 
@@ -77,6 +78,9 @@ class AddToDoViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
+                        if (_addTagId.value == 0 ) {
+                            _addTagId.value = tags[0].id
+                        }
                     }
                     .onFailure { throwable ->
                     }
@@ -114,7 +118,7 @@ class AddToDoViewModel
                 startDate = formattedStartDate,
                 description = _addToDoText.value,
                 endDate = formattedEndDate,
-                tagId = 19,
+                tagId = _addTagId.value,
                 priorityUrgency = priorityUrgency,
                 priorityImportance = priorityImportance,
             )

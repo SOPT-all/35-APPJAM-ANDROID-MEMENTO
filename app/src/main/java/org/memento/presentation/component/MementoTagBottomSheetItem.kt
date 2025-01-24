@@ -74,7 +74,7 @@ fun MementoTagBottomSheetItem(
 
 @Composable
 fun TagSelectorContent(
-    onTagSelected: (String, String) -> Unit,
+    onTagSelected: (Int, String, String) -> Unit,
     tagList: List<Tag>? = emptyList(),
 ) {
     var activeIndex by remember { mutableIntStateOf(0) }
@@ -101,7 +101,7 @@ fun TagSelectorContent(
                     onClick = {
                         if (activeIndex != index) {
                             activeIndex = index
-                            onTagSelected(option.colorCode, option.name)
+                            onTagSelected(option.id, option.colorCode, option.name)
                         }
                     },
                 )
@@ -121,7 +121,7 @@ fun MementoTagBottomSheetItemPreview() {
         verticalArrangement = Arrangement.spacedBy(space = 5.dp),
     ) {
         TagSelectorContent(
-            onTagSelected = { color, tag ->
+            onTagSelected = { id, color, tag ->
             },
         )
     }

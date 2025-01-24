@@ -208,7 +208,7 @@ fun MementoDateSelectorPreview() {
             isOpenBottomSheet = showTagBottomSheet,
             content = {
                 TagSelectorContent(
-                    onTagSelected = { color, tag ->
+                    onTagSelected = { id, color, tag ->
                     },
                 )
             },

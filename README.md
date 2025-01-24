@@ -21,7 +21,8 @@ Memento는 사용자가 할 일을 입력하면 AI가 이를 자동으로 정렬
 📘 [Github Convention](https://testmanzi.notion.site/Git-Convention-16d67bb5c6cf81c999c8d3cebdc27036?pvs=74)
 ## 🖤 Issue & PR 𝘾𝙤𝙣𝙫𝙚𝙣𝙩𝙞𝙤𝙣
 📙 [Issue & PR Convention](https://testmanzi.notion.site/Issue-PR-Convention-16d67bb5c6cf818fa89ce10e16e22026?pvs=74)
-
+## 🖤 프로젝트 구조
+📕 [Project Structure](https://testmanzi.notion.site/Project-Structure-18567bb5c6cf80a0b88dea6e325a6945)
 <br>
 
 ## 🖤 Notion
@@ -57,7 +58,3 @@ Memento는 사용자가 할 일을 입력하면 AI가 이를 자동으로 정렬
 
 ### 🔨 MVVM
 - **도입 이유**: 상태를 효율적으로 관리하는 MVVM은 팀원들에게 익숙한 구조입니다. 아키텍처에 대한 깊은 이해를 바탕으로 프로젝트의 생산성을 높이고자 했습니다. 이후 MVI와 같은 고도화된 아키텍처로 확장할 수 있는 기반을 마련하기 위한 선택이기도 합니다.
-
-
-## 🖤 프로젝트 구조
-📕 [Project Structure](https://testmanzi.notion.site/Project-Structure-18567bb5c6cf80a0b88dea6e325a6945)

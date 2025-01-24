@@ -1,5 +1,9 @@
 package org.memento.domain.entity
 
+data class PriorityTodoList(
+    val priorityTodoList: List<TodoList>,
+)
+
 data class TodoList(
     val toDoGetResponses: List<ToDoGetResponse>,
 ) {

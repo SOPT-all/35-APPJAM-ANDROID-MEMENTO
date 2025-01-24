@@ -65,6 +65,10 @@ object NetworkModule {
         authInterceptor: Interceptor,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .connectTimeout(300, java.util.concurrent.TimeUnit.SECONDS)  // 연결 타임아웃 30초
+            .readTimeout(300, java.util.concurrent.TimeUnit.SECONDS)     // 읽기 타임아웃 30초
+            .writeTimeout(300, java.util.concurrent.TimeUnit.SECONDS)    // 쓰기 타임아웃 30초
+            .callTimeout(300, java.util.concurrent.TimeUnit.SECONDS)     // 전체 호출 타임아웃 30초
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
         builder.addInterceptor(authInterceptor)
         return builder.build()

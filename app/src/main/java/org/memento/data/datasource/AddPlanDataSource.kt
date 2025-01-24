@@ -5,6 +5,7 @@ import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.request.RequestBrainDumpDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
+import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
 
 interface AddPlanDataSource {

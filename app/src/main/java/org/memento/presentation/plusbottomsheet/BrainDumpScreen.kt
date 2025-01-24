@@ -20,9 +20,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
+import org.memento.core.util.UiState
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -47,7 +50,21 @@ fun BrainDumpScreen(
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
-    val isShowAnimation by remember { mutableStateOf(true) }
+    var isShowAnimation by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is UiState.Loading -> {
+            }
+            is UiState.Success -> {
+                isShowAnimation = false
+            }
+            is UiState.Failure -> {
+                isShowAnimation = false
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -157,6 +174,7 @@ fun BrainDumpScreen(
                             .padding(top = 12.dp, bottom = 10.dp)
                             .noRippleClickable {
                                 viewModel.postBrainDump()
+                                isShowAnimation = true
                             },
                 )
             }

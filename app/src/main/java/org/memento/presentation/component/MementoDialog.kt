@@ -135,8 +135,9 @@ fun MementoDialog(
                                 ToDoDialogComponent(
                                     isChecked = it.isCompleted,
                                     title = it.description,
+                                    endDate = it.endDate,
                                     tagColor = it.tagColor,
-                                    tagText = it.tagColor,
+                                    tagText = it.tagName,
                                     urgentType =
                                         when (it.priorityType) {
                                             "Immediate" -> PriorityTagType.Immediate
@@ -223,10 +224,13 @@ fun MementoDialog(
 fun ToDoDialogComponent(
     isChecked: Boolean,
     title: String,
+    endDate: String,
     tagColor: String,
     tagText: String,
     urgentType: PriorityTagType,
 ) {
+    var checkedChange by remember { mutableStateOf(isChecked) }
+
     Row(
         modifier =
             Modifier
@@ -235,8 +239,10 @@ fun ToDoDialogComponent(
     ) {
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
             Checkbox(
-                checked = isChecked,
-                onCheckedChange = { !isChecked },
+                checked = checkedChange,
+                onCheckedChange = { newCheckedChange ->
+                    checkedChange = newCheckedChange
+                },
                 colors =
                     CheckboxDefaults.colors(
                         uncheckedColor = darkModeColors.gray05,
@@ -258,7 +264,7 @@ fun ToDoDialogComponent(
                     ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                textDecoration = if (isChecked) TextDecoration.LineThrough else null,
+                textDecoration = if (checkedChange) TextDecoration.LineThrough else null,
             )
 
             Row(
@@ -288,7 +294,7 @@ fun ToDoDialogComponent(
                     Spacer(modifier = Modifier.width(3.dp))
 
                     Text(
-                        text = "날짜 데이터",
+                        text = formatDateString(endDate),
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,

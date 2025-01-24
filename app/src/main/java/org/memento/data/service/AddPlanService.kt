@@ -4,7 +4,9 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.response.ResponseAllDayDto
+import org.memento.data.dto.request.RequestBrainDumpDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
+import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,6 +25,14 @@ interface AddPlanService {
         @Body requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 
+    @POST("/api/v1/braindump")
+    suspend fun postBrainDump(
+        @Body requestBrainDumpDto: RequestBrainDumpDto,
+    ): BaseResponse<Unit>
+
+    @GET("/api/v1/tags")
+    suspend fun getTagList(): BaseResponse<List<ResponseTagDto>>
+
     @PATCH("/api/v1/todos/{toDoId}")
     suspend fun patchAddTodo(
         @Path("toDoId") toDoId: Int,
@@ -40,7 +50,7 @@ interface AddPlanService {
         @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<ResponseScheduleDetailDto>
 
-    @GET("/api/v1/todos/{todDoId}")
+    @GET("/api/v1/todos/{toDoId}")
     suspend fun getTodoDetail(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoDetailDto>

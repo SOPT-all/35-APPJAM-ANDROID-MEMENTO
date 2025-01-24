@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
@@ -54,9 +54,9 @@ import org.memento.ui.theme.defaultMementoTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScheduleScreen(
-    viewModel: AddScheduleViewModel = viewModel(),
+    viewModel: AddScheduleViewModel = hiltViewModel(),
     onCloseBottomSheet: () -> Unit,
-    isEdit: Boolean = false,
+    isEdit: Boolean,
     isEditCancel: () -> Unit,
     isEditDone: () -> Unit,
     planId: Int = 0,
@@ -70,6 +70,7 @@ fun AddScheduleScreen(
     val selectedTagColor by viewModel.selectedTagColor.collectAsStateWithLifecycle()
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
     val isTimeValid by viewModel.isTimeValid.collectAsStateWithLifecycle()
+    val tagList by viewModel.tagList.collectAsStateWithLifecycle()
 
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
@@ -85,9 +86,23 @@ fun AddScheduleScreen(
     var isEndCalendarVisible by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(isEdit) {
+        if (isEdit) {
+            planId.let {
+                viewModel.getScheduleDetail(it)
+            }
+        } else {
+            viewModel.initialTimeValue()
+        }
+    }
+
     LaunchedEffect(selectedStartDateText, selectedEndDateText, selectedStartTimeText, selectedEndTimeText) {
-        viewModel.updateAllDayCheck()
-        viewModel.validateTimeOrder()
+        if (selectedStartDateText.isNotBlank() && selectedEndDateText.isNotBlank() &&
+            selectedStartTimeText.isNotBlank() && selectedEndTimeText.isNotBlank()
+        ) {
+            viewModel.updateAllDayCheck()
+            viewModel.validateTimeOrder()
+        }
     }
 
     LaunchedEffect(isTimeValid) {
@@ -268,7 +283,10 @@ fun AddScheduleScreen(
         AddPlanSelectComponent(
             title = "Tag",
             dateText = selectedTagText,
-            onDateClick = { showTagBottomSheet = true },
+            onDateClick = {
+                viewModel.getTagList()
+                showTagBottomSheet = true
+            },
             timeText = null,
             onTimeClick = null,
             tagColor = selectedTagColor,
@@ -348,6 +366,7 @@ fun AddScheduleScreen(
                 onTagSelected = { color, tag ->
                     viewModel.updateTag(tag = tag, color = color)
                 },
+                tagList = tagList,
             )
         },
         sheetState = sheetTagState,
@@ -458,5 +477,6 @@ fun AddScheduleScreenPreview() {
         onCloseBottomSheet = { },
         isEditDone = { },
         isEditCancel = { },
+        isEdit = false,
     )
 }

@@ -64,7 +64,6 @@ import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
-import timber.log.Timber
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -280,7 +279,6 @@ fun TodayScreen(
                                         isConnected = item.toDoType.toBoolean(),
                                         isNow = false,
                                         onClick = {
-                                            Timber.tag("ss").d(item.id.toString())
                                             selectedPlanId = item.id
                                             dialogType = DialogType.TO_DO
                                             showDetailDialog = true
@@ -295,7 +293,6 @@ fun TodayScreen(
                                         timeRange = "dfdf",
                                         isNow = false,
                                         onClick = {
-                                            Timber.tag("ss").d(item.id.toString())
                                             selectedPlanId = item.id
                                             dialogType = DialogType.SCHEDULE
                                             showDetailDialog = true

@@ -25,6 +25,7 @@ class TodoDataSourceImpl
 
         override suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit> =
             todoService.deleteTodo(toDoId)
+
         override suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto> =
             todoService.postPriorityTodo(requestPriorityDto)
     }

@@ -4,6 +4,7 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.request.RequestBrainDumpDto
+import org.memento.data.dto.response.ResponseAllDayDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
@@ -53,4 +54,7 @@ interface AddPlanService {
     suspend fun getTodoDetail(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoDetailDto>
+
+    @GET("/api/v1/schedules/all-days")
+    suspend fun getAllDay(): BaseResponse<ResponseAllDayDto>
 }

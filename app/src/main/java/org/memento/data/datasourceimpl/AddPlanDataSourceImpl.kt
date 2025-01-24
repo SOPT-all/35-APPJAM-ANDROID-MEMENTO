@@ -5,6 +5,7 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddScheduleDto
 import org.memento.data.dto.request.RequestAddTodoDto
 import org.memento.data.dto.request.RequestBrainDumpDto
+import org.memento.data.dto.response.ResponseAllDayDto
 import org.memento.data.dto.response.ResponseScheduleDetailDto
 import org.memento.data.dto.response.ResponseTagDto
 import org.memento.data.dto.response.ResponseTodoDetailDto
@@ -51,4 +52,7 @@ class AddPlanDataSourceImpl
 
         override suspend fun getTodoDetail(todoId: Int): BaseResponse<ResponseTodoDetailDto> =
             addPlanService.getTodoDetail(todoId)
+
+        override suspend fun getAllDay(): BaseResponse<ResponseAllDayDto> =
+            addPlanService.getAllDay()
     }

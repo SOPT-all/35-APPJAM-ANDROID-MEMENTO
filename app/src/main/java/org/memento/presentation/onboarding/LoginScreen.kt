@@ -1,6 +1,7 @@
 package org.memento.presentation.onboarding
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -31,16 +32,19 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
+import kotlinx.coroutines.delay
 import org.memento.BuildConfig
 import org.memento.R
 import org.memento.core.util.UiState
 import org.memento.domain.entity.LoginInfo
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
@@ -64,7 +68,16 @@ fun LoginScreen(
     val context = LocalContext.current
     val oneTapClient = remember { Identity.getSignInClient(context) }
 
+    var showErrorToast by remember { mutableStateOf(false) }
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(showErrorToast) {
+        if (showErrorToast) {
+            delay(2000)
+            showErrorToast = false
+        }
+    }
 
     when (uiState) {
         is UiState.Loading -> {}
@@ -76,7 +89,9 @@ fun LoginScreen(
             )
         }
 
-        is UiState.Failure -> {}
+        is UiState.Failure -> {
+            showErrorToast = true
+        }
     }
 
     val launcher =
@@ -91,6 +106,7 @@ fun LoginScreen(
                         viewModel.postLogin(idToken)
                     }
                 } catch (e: ApiException) {
+                    showErrorToast = true
                 }
             }
         }
@@ -144,6 +160,7 @@ fun LoginScreen(
                         launcher.launch(intentSenderRequest)
                     }
                     .addOnFailureListener { e ->
+                        showErrorToast = true
                     }
             },
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -167,6 +184,15 @@ fun LoginScreen(
                         },
             )
         }
+    }
+
+    if (showErrorToast) {
+        MementoToast(LocalContext.current).makeText(
+            message = stringResource(id = R.string.toast_login_failed),
+            icon = R.drawable.toast_icon_error,
+            duration = Toast.LENGTH_SHORT,
+            lifecycleOwner = LocalLifecycleOwner.current,
+        )
     }
 
     if (webViewVisible) {

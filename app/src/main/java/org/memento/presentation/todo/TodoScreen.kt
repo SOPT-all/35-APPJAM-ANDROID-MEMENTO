@@ -1,5 +1,6 @@
 package org.memento.presentation.todo
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,9 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import org.memento.R
 import org.memento.core.util.UiState
@@ -43,6 +46,7 @@ import org.memento.presentation.todo.component.TodoBoxDown
 import org.memento.presentation.todo.component.TodoBoxUp
 import org.memento.presentation.todo.component.TodoDateLine
 import org.memento.presentation.type.DialogType
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.changeHexToColor
 import org.memento.presentation.util.toLocalDate
 import org.memento.presentation.util.toPriorityTagType
@@ -59,11 +63,33 @@ fun TodoScreen(
     val nowYear = LocalDate.now().year.toString()
 
     val todolistState = rememberLazyListState()
-    val selectedDate = remember { mutableStateOf(today) }
     val coroutineScope = rememberCoroutineScope()
 
+    val selectedDate by viewModel.selectedDate.collectAsState()
     val todoItems by viewModel.todoItems.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+    var isShowAnimation by remember { mutableStateOf(false) }
+    var isShowToast by remember { mutableStateOf(false) }
+    var isClickedAiButton by remember { mutableStateOf(false) }
+    val uiAIState by viewModel.uiAIState.collectAsState()
+
+    LaunchedEffect(uiAIState) {
+        when (uiAIState) {
+            is UiState.Loading -> {
+            }
+
+            is UiState.Success -> {
+                isShowAnimation = false
+                isClickedAiButton = true
+            }
+
+            is UiState.Failure -> {
+                isShowToast = true
+                isShowAnimation = false
+                isClickedAiButton = false
+            }
+        }
+    }
 
     var showDetailDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -118,8 +144,8 @@ fun TodoScreen(
         }
     }
 
-    LaunchedEffect(selectedDate.value) {
-        scrollToDate(selectedDate.value)
+    LaunchedEffect(selectedDate) {
+        scrollToDate(selectedDate)
     }
 
     Column(
@@ -132,14 +158,14 @@ fun TodoScreen(
             date = todoFormatDate(today),
             year = nowYear,
             onDateClick = {
-                selectedDate.value = today
+                viewModel.updateSelectedDate(today)
             },
             onIconClick = {},
         )
         MementoWeeklyCalendar(
-            selectedDate = selectedDate.value,
+            selectedDate = selectedDate,
             onDateClick = { newDate ->
-                selectedDate.value = newDate
+                viewModel.updateSelectedDate(newDate)
                 coroutineScope.launch { scrollToDate(newDate) }
             },
         )
@@ -194,7 +220,13 @@ fun TodoScreen(
                 }
             }
             MementoAiFloatingButton(
-                onClick = {},
+                isClicked = isClickedAiButton,
+                onClick = {
+                    isClickedAiButton = !isClickedAiButton
+                    if (isClickedAiButton) {
+                        viewModel.postPriorityTodo()
+                    }
+                },
                 modifier =
                     Modifier
                         .align(Alignment.BottomEnd)
@@ -238,6 +270,15 @@ fun TodoScreen(
             onConfirm = { showEditTodoBottomSheet = false },
             planId = selectedPlanId,
         )
+    }
+    if (isShowToast) {
+        MementoToast(LocalContext.current).makeText(
+            message = "Failed to load ToDos. Please try again.",
+            icon = R.drawable.ic_toast,
+            duration = Toast.LENGTH_SHORT,
+            lifecycleOwner = LocalLifecycleOwner.current,
+        )
+        isShowToast = false
     }
 }
 

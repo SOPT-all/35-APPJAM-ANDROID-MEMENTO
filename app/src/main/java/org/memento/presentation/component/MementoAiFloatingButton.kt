@@ -7,8 +7,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +19,10 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun MementoAiFloatingButton(
+    isClicked: Boolean = false,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isClicked by remember { mutableStateOf(false) }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier =
@@ -35,7 +32,7 @@ fun MementoAiFloatingButton(
                     shape = CircleShape,
                 )
                 .noRippleClickable {
-                    isClicked = !isClicked
+                    !isClicked
                     onClick()
                 }
                 .padding(12.dp),

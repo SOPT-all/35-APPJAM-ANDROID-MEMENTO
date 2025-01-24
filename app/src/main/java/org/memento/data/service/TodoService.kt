@@ -1,11 +1,15 @@
 package org.memento.data.service
 
 import org.memento.data.dto.BaseResponse
+import org.memento.data.dto.request.RequestPriorityDto
+import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
 import org.memento.data.dto.response.ResponseTodoDto
 import retrofit2.http.DELETE
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -27,4 +31,9 @@ interface TodoService {
     suspend fun patchTodoCompleted(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoCompleteDto>
+
+    @POST("/api/v1/todos/prioritization/daily")
+    suspend fun postPriorityTodo(
+        @Body requestPriorityDto: RequestPriorityDto,
+    ): BaseResponse<ResponsePriorityTodoDto>
 }

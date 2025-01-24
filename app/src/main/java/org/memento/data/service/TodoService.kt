@@ -5,8 +5,8 @@ import org.memento.data.dto.request.RequestPriorityDto
 import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
 import org.memento.data.dto.response.ResponseTodoDto
-import retrofit2.http.DELETE
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST

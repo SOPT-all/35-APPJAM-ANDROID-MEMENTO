@@ -49,9 +49,9 @@ fun TodoScreen(
     val nowYear = LocalDate.now().year.toString()
 
     val todolistState = rememberLazyListState()
-    val selectedDate = remember { mutableStateOf(today) }
     val coroutineScope = rememberCoroutineScope()
 
+    val selectedDate by viewModel.selectedDate.collectAsState()
     val todoItems by viewModel.todoItems.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -102,8 +102,8 @@ fun TodoScreen(
         }
     }
 
-    LaunchedEffect(selectedDate.value) {
-        scrollToDate(selectedDate.value)
+    LaunchedEffect(selectedDate) {
+        scrollToDate(selectedDate)
     }
 
     Column(
@@ -115,14 +115,14 @@ fun TodoScreen(
             date = todoFormatDate(today),
             year = nowYear,
             onDateClick = {
-                selectedDate.value = today
+                viewModel.updateSelectedDate(today)
             },
             onIconClick = {},
         )
         MementoWeeklyCalendar(
-            selectedDate = selectedDate.value,
+            selectedDate = selectedDate,
             onDateClick = { newDate ->
-                selectedDate.value = newDate
+                viewModel.updateSelectedDate(newDate)
                 coroutineScope.launch { scrollToDate(newDate) }
             },
         )
@@ -173,7 +173,9 @@ fun TodoScreen(
                 }
             }
             MementoAiFloatingButton(
-                onClick = {},
+                onClick = {
+                    viewModel.postPriorityTodo()
+                },
                 modifier =
                     Modifier
                         .align(Alignment.BottomEnd)

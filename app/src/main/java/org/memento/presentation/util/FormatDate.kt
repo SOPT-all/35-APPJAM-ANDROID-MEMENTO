@@ -151,7 +151,6 @@ fun formatTimeTo12Hour(timeString: String): String {
     }
 }
 
-
 fun formatTextLocalDateTime(
     dateString: String,
     timeString: String,

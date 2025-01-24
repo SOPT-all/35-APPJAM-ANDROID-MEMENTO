@@ -17,4 +17,9 @@ interface ScheduleService {
     suspend fun deleteSchedule(
         @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<Unit>
+
+    @GET("/api/v1/members/personal-info/uptime")
+    suspend fun getUpTime(
+        @Query("date") date: String,
+    ): BaseResponse<ResponseScheduleDto>
 }

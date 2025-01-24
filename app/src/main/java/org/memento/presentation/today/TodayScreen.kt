@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,8 +58,8 @@ import org.memento.presentation.component.MementoTopBar
 import org.memento.presentation.component.MementoWeeklyCalendar
 import org.memento.presentation.today.component.AllDayScheduleTag
 import org.memento.presentation.type.DialogType
-import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.changeHexToColor
+import org.memento.presentation.util.toPriorityTagType
 import org.memento.presentation.util.todoFormatDate
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -94,20 +95,22 @@ fun TodayScreen(
     val selectedDate = remember { mutableStateOf(today) }
     val coroutineScope = rememberCoroutineScope()
 
-    val isDraggingEnabled = remember { mutableStateOf(false) }
+    var isDraggingEnabled by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     LaunchedEffect(selectedDate.value) {
         val selectedDate = selectedDate.value.toString()
         viewModel.getTodoDateList(selectedDate)
         viewModel.getScheduleList(selectedDate)
+        viewModel.getAllDay()
     }
     val combinedItems by viewModel.combinedItems.collectAsState()
+    val allDayItems by viewModel.allDayItems.collectAsState()
 
     fun resetDraggingState() {
         draggedItemIndex = -1
         draggedOffsetY = 0f
-        isDraggingEnabled.value = false
+        isDraggingEnabled = false
     }
 
     fun refreshData() {
@@ -122,7 +125,8 @@ fun TodayScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(color = darkModeColors.black),
+                .background(color = darkModeColors.black)
+                .padding(padding),
     ) {
         MementoTopBar(
             date = todoFormatDate(today),
@@ -148,12 +152,11 @@ fun TodayScreen(
             val state = rememberLazyListState()
             LazyColumn(
                 state = state,
-                modifier = Modifier.fillMaxWidth(),
             ) {
-                items(2) { index ->
+                items(allDayItems, key = { it.id }) { item ->
                     AllDayScheduleTag(
-                        allDayText = "디자인 가정방문 Day $index",
-                        tagColor = if (index % 2 == 0) Color.Red else Color.Blue,
+                        allDayText = item.description,
+                        tagColor = changeHexToColor(item.tagColorCode),
                     )
                 }
             }
@@ -187,7 +190,7 @@ fun TodayScreen(
                                 listHeight = it.size.height
                             },
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    userScrollEnabled = !isDraggingEnabled.value,
+                    userScrollEnabled = !isDraggingEnabled,
                 ) {
                     item {
                         Row {
@@ -217,7 +220,7 @@ fun TodayScreen(
                         }
                     }
 
-                    itemsIndexed(combinedItems) { index, item ->
+                    itemsIndexed(combinedItems, key = { _, item -> item.hashCode() }) { index, item ->
                         val isDragging = index == draggedItemIndex
                         val scale = animateFloatAsState(if (isDragging) 1.1f else 1f)
 
@@ -234,32 +237,27 @@ fun TodayScreen(
                                         detectDragGesturesAfterLongPress(
                                             onDragStart = {
                                                 draggedItemIndex = index
-                                                isDraggingEnabled.value = true
+                                                isDraggingEnabled = true
                                             },
                                             onDrag = { change, dragAmount ->
-                                                if (isDraggingEnabled.value) {
+                                                if (isDraggingEnabled) {
                                                     change.consume()
                                                     draggedOffsetY += dragAmount.y
                                                     val itemHeightPx = with(density) { 60.dp.toPx() }
 
                                                     while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                        val moveDirection =
-                                                            if (draggedOffsetY > 0) 1 else -1
+                                                        val moveDirection = if (draggedOffsetY > 0) 1 else -1
                                                         val targetIndex =
-                                                            (draggedItemIndex + moveDirection)
-                                                                .coerceIn(0, combinedItems.size - 1)
+                                                            (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
 
-//                                                    if (targetIndex != draggedItemIndex) {
-//                                                        combinedItems.move(
-//                                                            draggedItemIndex,
-//                                                            targetIndex,
-//                                                        )
-//                                                        draggedItemIndex = targetIndex
-//                                                        draggedOffsetY -= moveDirection * itemHeightPx
-//                                                    } else {
-//                                                        draggedOffsetY = 0f
-//                                                        break
-//                                                    }
+                                                        if (targetIndex != draggedItemIndex) {
+//                                                viewModel.updateItemOrder(draggedItemIndex, targetIndex)
+                                                            draggedItemIndex = targetIndex
+                                                            draggedOffsetY -= moveDirection * itemHeightPx
+                                                        } else {
+                                                            draggedOffsetY = 0f
+                                                            break
+                                                        }
                                                     }
                                                 }
                                             },
@@ -273,9 +271,11 @@ fun TodayScreen(
                                     MementoTodoItemWithLine(
                                         tagColor = changeHexToColor(item.tagColor),
                                         isDone = item.isCompleted,
-                                        onCheckedChange = {},
+                                        onCheckedChange = { newChecked ->
+                                            viewModel.updateTodoCompletion(item.id, newChecked)
+                                        },
                                         todoTitleText = item.description,
-                                        priorityTagType = PriorityTagType.None,
+                                        priorityTagType = item.priorityType.toPriorityTagType(),
                                         isConnected = item.toDoType.toBoolean(),
                                         isNow = false,
                                         onClick = {
@@ -290,7 +290,7 @@ fun TodayScreen(
                                     MementoScheduleItemWithLine(
                                         tagColor = Color.Blue,
                                         scheduleTitleText = item.description,
-                                        timeRange = "dfdf",
+                                        timeRange = item.timeDuration,
                                         isNow = false,
                                         onClick = {
                                             selectedPlanId = item.id
@@ -425,6 +425,7 @@ sealed class MementoItem {
         val startDate: String,
         val tagColorCode: String,
         val tagName: String,
+        val timeDuration: String,
     ) : MementoItem()
 }
 

@@ -110,10 +110,11 @@ fun formatEditString(dateString: String): String {
     val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
 
     return try {
-        val date = when {
-            dateString.contains(".") -> inputFormatWithMillis.parse(dateString)
-            else -> inputFormatWithoutMillis.parse(dateString)
-        }
+        val date =
+            when {
+                dateString.contains(".") -> inputFormatWithMillis.parse(dateString)
+                else -> inputFormatWithoutMillis.parse(dateString)
+            }
         outputFormat.format(date ?: Date())
     } catch (e: Exception) {
         dateString
@@ -137,8 +138,6 @@ fun formatEditTime(dateString: String): String {
         dateString
     }
 }
-
-
 
 fun formatTimeTo12Hour(timeString: String): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)

@@ -87,7 +87,7 @@ class AddToDoViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
-                        if (_addTagId.value == 0 ) {
+                        if (_addTagId.value == 0) {
                             _addTagId.value = tags[0].id
                         }
                     }

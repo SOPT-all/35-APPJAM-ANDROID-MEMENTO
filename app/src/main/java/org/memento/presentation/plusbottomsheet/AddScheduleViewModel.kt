@@ -1,6 +1,5 @@
 package org.memento.presentation.plusbottomsheet
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -78,7 +77,7 @@ class AddScheduleViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
-                        if (_selectedTagId.value == 0 ) {
+                        if (_selectedTagId.value == 0) {
                             _selectedTagId.value = tags[0].id
                         }
                     }
@@ -154,7 +153,7 @@ class AddScheduleViewModel
                             startDate = createLocalDateTime(_selectedStartDateText.value, _selectedStartTimeText.value).toString(),
                             endDate = createLocalDateTime(_selectedEndDateText.value, _selectedEndTimeText.value).toString(),
                             isAllDay = _isAllDayChecked.value,
-                            tagId = _selectedTagId.value
+                            tagId = _selectedTagId.value,
                         ),
                     )
                 _uiState.value =

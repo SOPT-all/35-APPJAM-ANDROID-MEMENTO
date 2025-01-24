@@ -45,10 +45,10 @@ fun MementoEditScheduleBottomSheet(
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.73f)
-                    .imePadding(),
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.73f)
+                        .imePadding(),
             ) {
                 AddScheduleScreen(
                     onCloseBottomSheet = { },

@@ -32,9 +32,8 @@ class TodoRepositoryImpl
             }
         }
 
-
         override suspend fun patchTodoComplete(toDoId: Int): Result<Unit> =
-                runCatching {
-                    todoDataSource.patchTodoComplete(toDoId)
-                }
+            runCatching {
+                todoDataSource.patchTodoComplete(toDoId)
+            }
     }

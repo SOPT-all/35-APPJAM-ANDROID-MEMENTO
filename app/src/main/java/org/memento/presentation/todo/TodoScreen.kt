@@ -110,8 +110,7 @@ fun TodoScreen(
             return
         }
 
-        is UiState.Success -> {
-        }
+        is UiState.Success -> {}
     }
 
     val todoList =
@@ -138,7 +137,7 @@ fun TodoScreen(
             }
     }
 
-    suspend fun scrollToDate(date: LocalDate) {
+    fun scrollToDate(date: LocalDate) {
         coroutineScope.launch {
             val index = todoList.indexOf(date)
             if (index != -1) {

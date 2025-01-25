@@ -49,6 +49,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.memento.R
+import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.component.MementoAlertDialog
 import org.memento.presentation.component.MementoDialog
 import org.memento.presentation.component.MementoEditScheduleBottomSheet
@@ -437,6 +438,15 @@ fun TodayScreen(
             },
             planId = selectedPlanId,
         )
+        // ai 버튼
+        MementoAiFloatingButton(
+            onClick = {
+            },
+            modifier =
+                Modifier
+                    .padding(20.dp)
+                    .align(Alignment.BottomEnd),
+        )
     }
 }
 
@@ -452,7 +462,7 @@ fun <T> MutableList<T>.move(
 sealed class MementoItem {
     data class TodoItem(
         val id: Int,
-        val groupId: String,
+        val groupId: String? = null,
         val description: String,
         val date: String,
         val deadline: String,

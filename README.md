@@ -7,7 +7,7 @@ Memento는 사용자가 할 일을 입력하면 AI가 이를 자동으로 정렬
 
 |               **[🐑 Hyoeun Joo 🐑](https://github.com/hyoeunjoo)**               |               **[🐑 Taejung Kim 🐑](https://github.com/imtaejugkim)**               |               **[🐑 Hwiwon Jo 🐑](https://github.com/hwidung)**               |
 |:--------------------------------------------------------------------------:|:---------------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
-| ![memento](https://avatars.githubusercontent.com/u/137873124?v=4) | ![memento](https://avatars.githubusercontent.com/u/92737123?v=4) | ![memento](https://avatars.githubusercontent.com/u/118262343?v=4) |
+|![앞 (3)](https://github.com/user-attachments/assets/34414265-02bf-4d47-a420-2603f53223d5) | ![앞 (5)](https://github.com/user-attachments/assets/90f524f6-95e4-43e0-bb1e-4e8392e6ce5f) | ![앞 (4)](https://github.com/user-attachments/assets/3b563234-0809-4a47-97dd-0d209860aa48) |
 |            투데이뷰               |                 일정/투두/브레인덤프뷰                  |       온보딩뷰, 투두 리스트뷰          |
 
 <br>

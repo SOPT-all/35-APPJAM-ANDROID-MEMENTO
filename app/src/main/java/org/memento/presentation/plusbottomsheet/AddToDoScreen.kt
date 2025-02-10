@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -215,6 +216,8 @@ fun AddToDoScreen(
                 },
                 modifier =
                     Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.9f)
                         .background(color = Color.Transparent)
                         .focusRequester(focusRequester)
                         .padding(top = 16.dp),
@@ -231,8 +234,6 @@ fun AddToDoScreen(
                         capitalization = KeyboardCapitalization.Sentences,
                     ),
             )
-
-            Spacer(modifier = Modifier.weight(1f))
         }
 
         Row(

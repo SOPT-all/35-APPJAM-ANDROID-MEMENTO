@@ -100,7 +100,7 @@ fun AddToDoTagScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Deadline",
+                    text = "Tag",
                     style =
                         MementoTheme.typography.body_r_16.copy(
                             color = darkModeColors.gray05,

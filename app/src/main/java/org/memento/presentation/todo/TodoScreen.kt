@@ -274,6 +274,7 @@ fun TodoScreen(
                                     dialogType = DialogType.TO_DO,
                                 )
                                 showDeleteDialog = false
+                                showDetailDialog = false
                             },
                         )
                     }

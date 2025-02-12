@@ -122,9 +122,9 @@ fun BrainDumpAITextField(
                     color = darkModeColors.white,
                 ),
             cursorBrush =
-            Brush.verticalGradient(
-                listOf(darkModeColors.green, darkModeColors.green),
-            ),
+                Brush.verticalGradient(
+                    listOf(darkModeColors.green, darkModeColors.green),
+                ),
         )
 
         if (value.isEmpty()) {

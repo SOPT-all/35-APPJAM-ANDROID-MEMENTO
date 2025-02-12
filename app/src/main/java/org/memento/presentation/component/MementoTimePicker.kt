@@ -31,7 +31,7 @@ fun MementoTimePicker(
 
     val hourState = rememberFWheelPickerState(initialIndex = hourMinute[0].toInt())
     val minuteState = rememberFWheelPickerState(initialIndex = hourMinute[1].toInt())
-    val periodState = rememberFWheelPickerState(initialIndex = if(timeParts[1]=="AM") 0 else 1)
+    val periodState = rememberFWheelPickerState(initialIndex = if (timeParts[1] == "AM") 0 else 1)
 
     val periods = listOf("AM", "PM")
 

@@ -238,7 +238,7 @@ fun TodayScreen(
                         item {
                             Row {
                                 Text(
-                                    text = wakeUpTime ?: "8:00",
+                                    text = upTimeState?.wakeUpTime ?: "8:00",
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -350,7 +350,7 @@ fun TodayScreen(
                         item {
                             Row {
                                 Text(
-                                    text = windDownTime ?: "22:00",
+                                    text = upTimeState?.windDownTime ?: "22:00",
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =

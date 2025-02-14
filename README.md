@@ -13,6 +13,18 @@ Memento는 사용자가 할 일을 입력하면 AI가 이를 자동으로 정렬
 <br>
 
 ## 🖤 ScreenShot 🖤
+                
+| <img width="250" src="https://github.com/user-attachments/assets/6b5c84a0-39d5-4d2a-90ad-265455a0cf9c"/> | <img width="250" src="https://github.com/user-attachments/assets/a2bc93a0-12b4-455c-b882-2db300ce6c9b"/> | <img width="250" src="https://github.com/user-attachments/assets/a8416913-599f-4eac-b27e-f5ca1e2565e6"/> |
+|:----------------------:|:----------------------:|:----------------------:|
+|         **온보딩**         |         **투데이뷰**         |         **투두뷰**         |
+
+| <img width="250" src="https://github.com/user-attachments/assets/8f78fdeb-1bbb-409b-94e0-a2d6815e3137"/> | <img width="250" src="https://github.com/user-attachments/assets/a01f7387-2276-4ec3-9a77-79f5f296d3ac"/> | <img width="250" src="https://github.com/user-attachments/assets/5b924378-7250-4db6-beaf-a153e4ea4094"/> |
+|:----------------------:|:----------------------:|:----------------------:|
+|         **투두추가**         |         **일정추가**         |         **브레인덤뷰**         |
+
+| <img width="250" src="https://github.com/user-attachments/assets/e8a7df8a-5fab-4ce8-a648-5a5ebf382240"/> | <img width="250" src="https://github.com/user-attachments/assets/0d1fbcb5-5c1c-441b-9ca0-f841afbd062d"/> |
+|:----------------------:|:----------------------:|
+|     **투두수정/삭제**     |     **일정수정/삭제**     |
 
 
 ## 🖤 Coding 𝘾𝙤𝙣𝙫𝙚𝙣𝙩𝙞𝙤𝙣

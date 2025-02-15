@@ -102,13 +102,13 @@ fun AddToDoScreen(
         when (uiState) {
             is UiState.Success -> {
                 viewModel.setLoadingState()
+                onCloseBottomSheet()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
-                onCloseBottomSheet()
             }
 
             is UiState.Failure -> {

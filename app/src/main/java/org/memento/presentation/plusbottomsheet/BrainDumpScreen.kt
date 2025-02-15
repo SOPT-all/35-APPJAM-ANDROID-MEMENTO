@@ -29,15 +29,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.core.util.UiState
+import org.memento.domain.type.SuccessType
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -50,16 +54,25 @@ fun BrainDumpScreen(
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     var isShowAnimation by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState) {
         when (uiState) {
-            is UiState.Loading -> {
-            }
+            is UiState.Loading -> {}
             is UiState.Success -> {
                 isShowAnimation = false
+                onCloseBottomSheet()
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = SuccessType.CREATE_SUCCESS.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
             }
+
             is UiState.Failure -> {
                 isShowAnimation = false
             }
@@ -71,51 +84,51 @@ fun BrainDumpScreen(
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
         ) {
             BrainDumpAITextField(
                 value = inputText,
                 onValueChange = { viewModel.updateInputText(it) },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.9f)
-                        .padding(top = 8.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.9f)
+                    .padding(top = 8.dp),
                 placeholder = "Got any plans? I’ll summarize it for you.",
                 isShowAnimation = isShowAnimation,
             )
 
             LazyRow(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(viewModel.dummyTexts) { text ->
                     Text(
                         text = stringResource(text),
                         style =
-                            MementoTheme.typography.detail_r_12.copy(
-                                color = darkModeColors.gray06,
-                            ),
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray06,
+                        ),
                         modifier =
-                            Modifier
-                                .width(195.dp)
-                                .background(
-                                    brush =
-                                        Brush.verticalGradient(
-                                            colors =
-                                                listOf(
-                                                    mementoColors.brainDumpExStart,
-                                                    mementoColors.brainDumpExEnd,
-                                                ),
-                                        ),
-                                )
-                                .border(width = 0.5.dp, color = darkModeColors.gray07, shape = RoundedCornerShape(2.dp))
-                                .padding(horizontal = 10.dp, vertical = 7.dp),
+                        Modifier
+                            .width(195.dp)
+                            .background(
+                                brush =
+                                Brush.verticalGradient(
+                                    colors =
+                                    listOf(
+                                        mementoColors.brainDumpExStart,
+                                        mementoColors.brainDumpExEnd,
+                                    ),
+                                ),
+                            )
+                            .border(width = 0.5.dp, color = darkModeColors.gray07, shape = RoundedCornerShape(2.dp))
+                            .padding(horizontal = 10.dp, vertical = 7.dp),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -127,55 +140,55 @@ fun BrainDumpScreen(
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.gray10)
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                    .align(alignment = Alignment.BottomCenter),
+            Modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.gray10)
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier =
-                    Modifier.background(
-                        color = darkModeColors.gray08,
-                        shape = RoundedCornerShape(100.dp),
-                    ),
+                Modifier.background(
+                    color = darkModeColors.gray08,
+                    shape = RoundedCornerShape(100.dp),
+                ),
             ) {
                 Text(
                     text = "Paste",
                     style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray02,
+                    ),
                     modifier =
-                        Modifier
-                            .padding(horizontal = 54.dp, vertical = 11.dp)
-                            .clickable {
-                                val clipboardText = clipboardManager.getText()?.text
-                                viewModel.pasteCipBoard(clipboardText)
-                            },
+                    Modifier
+                        .padding(horizontal = 54.dp, vertical = 11.dp)
+                        .clickable {
+                            val clipboardText = clipboardManager.getText()?.text
+                            viewModel.pasteCipBoard(clipboardText)
+                        },
                 )
             }
 
             Box(
                 modifier =
-                    Modifier.background(
-                        shape = CircleShape,
-                        color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                    ),
+                Modifier.background(
+                    shape = CircleShape,
+                    color = if (inputText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                ),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "전송 버튼",
                     modifier =
-                        Modifier
-                            .padding(horizontal = 13.dp)
-                            .padding(top = 12.dp, bottom = 10.dp)
-                            .noRippleClickable {
-                                viewModel.postBrainDump()
-                                isShowAnimation = true
-                            },
+                    Modifier
+                        .padding(horizontal = 13.dp)
+                        .padding(top = 12.dp, bottom = 10.dp)
+                        .noRippleClickable {
+                            viewModel.postBrainDump()
+                            isShowAnimation = true
+                        },
                 )
             }
         }

@@ -201,34 +201,32 @@ fun TodayScreen(
                 }
             }
 
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing),
+                onRefresh = {
+                    refreshData()
+                    viewModel.getScheduleList(selectedDate.value.toString())
+                    viewModel.getTodoDateList(selectedDate.value.toString())
+                    viewModel.getAllDay()
+                },
+            ) {
+                if (combinedItems.isEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(150.dp))
+                            Text(
+                                text = "No plans yet? Add one now!",
+                                style = MementoTheme.typography.title_b_22,
+                                color = darkModeColors.gray08,
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+                    }
+                } else {
 
-            if (combinedItems.isEmpty()) {
-                Box(
-                    modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(top = 150.dp),
-                    contentAlignment = Alignment.TopCenter,
-                ) {
-
-                    Text(
-                        text = "No plans yet? Add one now!",
-                        style = MementoTheme.typography.title_b_22,
-                        color = darkModeColors.gray08,
-                    )
-                }
-
-
-            } else {
-                SwipeRefresh(
-                    state = rememberSwipeRefreshState(isRefreshing),
-                    onRefresh = {
-                        refreshData()
-                        viewModel.getScheduleList(selectedDate.value.toString())
-                        viewModel.getTodoDateList(selectedDate.value.toString())
-                        viewModel.getAllDay()
-                    },
-                ) {
                     LazyColumn(
                         modifier =
                         Modifier
@@ -395,6 +393,7 @@ fun TodayScreen(
                                 ),
                             ),
                     ) {}
+
                 }
             }
         }

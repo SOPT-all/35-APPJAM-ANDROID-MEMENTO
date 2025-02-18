@@ -141,7 +141,6 @@ fun TodayScreen(
     fun resetDraggingState() {
         draggedItemIndex = -1
         draggedOffsetY = 0f
-        isDraggingEnabled = false
     }
 
     fun refreshData() {
@@ -287,30 +286,36 @@ fun TodayScreen(
                                                 isDraggingEnabled = true
                                             },
                                             onDrag = { change, dragAmount ->
-                                                if (isDraggingEnabled) {
-                                                    change.consume()
-                                                    draggedOffsetY += dragAmount.y
+                                            if (isDraggingEnabled) {
+                                                change.consume()
+                                                draggedOffsetY += dragAmount.y
 
-                                                    val itemHeightPx = with(density) { 60.dp.toPx() }
-                                                    while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                        val moveDirection = if (draggedOffsetY > 0) 1 else -1
-                                                        val targetIndex = (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
+                                                val itemHeightPx = with(density) { 60.dp.toPx() }
+                                                while (true) {
+                                                    val deltaIndices = (draggedOffsetY / itemHeightPx).toInt()
+                                                    if (deltaIndices == 0) break
 
-                                                        if (targetIndex != draggedItemIndex) {
-                                                            draggedItemIndex = targetIndex
-                                                            draggedOffsetY -= moveDirection * itemHeightPx
-                                                        } else {
-                                                            draggedOffsetY = 0f
-                                                            break
-                                                        }
+                                                    val targetIndex = (draggedItemIndex + deltaIndices)
+                                                        .coerceIn(0, combinedItems.size - 1)
+
+                                                    if (targetIndex != draggedItemIndex) {
+                                                        viewModel.reorderItems(draggedItemIndex, targetIndex)
+                                                        draggedItemIndex = targetIndex
+                                                        draggedOffsetY %= itemHeightPx
+                                                    } else {
+                                                        draggedOffsetY = 0f
+                                                        break
                                                     }
                                                 }
-                                            },
-                                            onDragEnd = {
+                                            }
+                                        },
+                                        onDragEnd = {
                                                 resetDraggingState()
+                                                isDraggingEnabled = false
                                             },
                                             onDragCancel = {
                                                 resetDraggingState()
+                                                isDraggingEnabled = false
                                             },
                                         )
                                     },
@@ -336,7 +341,7 @@ fun TodayScreen(
 
                                     is MementoItem.ScheduleItem -> {
                                         MementoScheduleItemWithLine(
-                                            tagColor = Color.Blue,
+                                            tagColor =  changeHexToColor(item.tagColorCode),
                                             scheduleTitleText = item.description,
                                             timeRange = item.timeDuration,
                                             onClick = {
@@ -442,7 +447,6 @@ fun TodayScreen(
             },
             planId = selectedPlanId,
         )
-        // ai 버튼
         MementoAiFloatingButton(
             onClick = {
             },

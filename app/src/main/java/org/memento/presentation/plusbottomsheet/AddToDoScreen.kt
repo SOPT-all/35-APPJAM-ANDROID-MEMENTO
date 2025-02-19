@@ -83,10 +83,10 @@ fun AddToDoScreen(
         when (patchState) {
             is UiState.Success -> {
                 viewModel.setLoadingState()
-                val toast = MementoToast(context)
                 isEditDone()
+                val toast = MementoToast(context)
                 toast.makeText(
-                    message = ErrorType.NETWORK_ERROR.message,
+                    message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )

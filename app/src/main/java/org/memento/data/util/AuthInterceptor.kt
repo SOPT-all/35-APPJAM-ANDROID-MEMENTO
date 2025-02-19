@@ -9,7 +9,7 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import okio.IOException
-import org.memento.TokenManager
+import org.memento.core.util.TokenManager
 import org.memento.data.datastore.TokenDataStore
 import timber.log.Timber
 import javax.inject.Inject

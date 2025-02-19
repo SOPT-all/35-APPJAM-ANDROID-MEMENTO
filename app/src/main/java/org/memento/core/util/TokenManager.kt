@@ -1,4 +1,4 @@
-package org.memento
+package org.memento.core.util
 
 import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.RefreshTokenRepository

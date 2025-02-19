@@ -1,4 +1,4 @@
-package org.memento
+package org.memento.data.util
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -9,6 +9,7 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import okio.IOException
+import org.memento.TokenManager
 import org.memento.data.datastore.TokenDataStore
 import timber.log.Timber
 import javax.inject.Inject

@@ -9,7 +9,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.memento.AuthInterceptor
+import org.memento.data.util.AuthInterceptor
 import org.memento.BuildConfig
 import org.memento.TokenManager
 import org.memento.data.datastore.TokenDataStoreImpl

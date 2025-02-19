@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
-import org.memento.data.local.TokenDataStore
+import org.memento.data.datastore.TokenDataStore
 import org.memento.domain.entity.Login
 import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.AuthRepository
@@ -41,7 +41,7 @@ class LoginViewModel
 
         fun loadToken() {
             viewModelScope.launch {
-                _token.value = tokenDataStore.getAccessToken()
+                _token.value = tokenDataStore.accessToken
             }
         }
 
@@ -50,8 +50,8 @@ class LoginViewModel
             refreshToken: String,
         ) {
             viewModelScope.launch {
-                tokenDataStore.setAccessToken(accessToken)
-                tokenDataStore.setRefreshToken(refreshToken)
+                tokenDataStore.accessToken = accessToken
+                tokenDataStore.refreshToken = refreshToken
             }
         }
 

@@ -28,7 +28,7 @@ class TokenDataStoreImpl
                 return refreshToken
             }
             set(value) {
-                Timber.d("TokenDataStore: Saving accessToken = $value")
+                Timber.d("TokenDataStore: Saving RefreshToken = $value")
                 sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
             }
 

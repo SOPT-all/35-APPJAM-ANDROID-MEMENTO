@@ -23,7 +23,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val CONTENT_TYPE = "application/json"
-    private val BASE_URL = BuildConfig.BASE_URL
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     @Singleton
     @Provides

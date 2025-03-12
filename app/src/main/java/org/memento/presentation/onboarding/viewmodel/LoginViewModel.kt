@@ -48,10 +48,12 @@ class LoginViewModel
         fun saveToken(
             accessToken: String,
             refreshToken: String,
+            isNewUser: Boolean,
         ) {
             viewModelScope.launch {
                 tokenDataStore.accessToken = accessToken
                 tokenDataStore.refreshToken = refreshToken
+                tokenDataStore.isNewUser = isNewUser
             }
         }
 
@@ -81,12 +83,6 @@ class LoginViewModel
                 }.onFailure {
                     Timber.d("Google Login Failed ${it.message}")
                 }
-            }
-        }
-
-        fun checkCurrentUser() {
-            viewModelScope.launch {
-                _user.update { authRepository.getCurrentUser() }
             }
         }
     }

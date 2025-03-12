@@ -10,13 +10,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.memento.BuildConfig
-import org.memento.core.util.TokenManager
 import org.memento.data.datastore.TokenDataStoreImpl
 import org.memento.data.util.AuthInterceptor
-import org.memento.domain.repository.RefreshTokenRepository
 import retrofit2.Retrofit
 import timber.log.Timber
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -38,10 +35,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAuthInterceptor(
+        json: Json,
         tokenDataStore: TokenDataStoreImpl,
-        tokenManager: Provider<TokenManager>,
     ): AuthInterceptor {
-        return AuthInterceptor(tokenDataStore, tokenManager)
+        return AuthInterceptor(json, tokenDataStore)
     }
 
     @Singleton
@@ -82,13 +79,5 @@ object NetworkModule {
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory(CONTENT_TYPE.toMediaType()))
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideTokenManger(
-        tokenRepository: RefreshTokenRepository,
-    ): TokenManager {
-        return TokenManager(tokenRepository)
     }
 }

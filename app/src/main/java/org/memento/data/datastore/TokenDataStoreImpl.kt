@@ -32,6 +32,17 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
             }
 
+        override var isNewUser: Boolean
+            get() {
+                val isNewUser = sharedPreferences.getBoolean(IS_NEW_USER, true)
+                Timber.d("TokenDataStore: Loaded isNewUser = $isNewUser")
+                return isNewUser
+            }
+            set(value) {
+                Timber.d("TokenDataStore: Saving isNewUser = $value")
+                sharedPreferences.edit().putBoolean(IS_NEW_USER, value).apply()
+            }
+
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
         }
@@ -39,5 +50,6 @@ class TokenDataStoreImpl
         companion object {
             private const val ACCESS_TOKEN = "ACCESS_TOKEN"
             private const val REFRESH_TOKEN = "REFRESH_TOKEN"
+            private const val IS_NEW_USER = "IS_NEW_USER"
         }
     }

@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "301410211395-jsqb055dope3narkbnkjd8iu8d0ns7bs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.memento",
+            "certificate_hash": "229cbc79e0a664799179f744b2f0df3ae416f8bf"
+          }
+        },
+        {
+          "client_id": "301410211395-kj55c3qucd5agq5b518h5stc63bb168t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.memento",
+            "certificate_hash": "66b6a17f12060e88c2f3880eff99869ee294023d"
+          }
+        },
+        {
           "client_id": "301410211395-msfvcj0rgira8939vs7hacrfhph8ji13.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

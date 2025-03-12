@@ -1,131 +1,106 @@
 package org.memento.data.util
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okio.IOException
-import org.memento.core.util.TokenManager
+import org.memento.BuildConfig
 import org.memento.data.datastore.TokenDataStore
+import org.memento.data.dto.BaseResponse
+import org.memento.data.dto.response.ResponseRefreshDto
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Provider
 
 class AuthInterceptor
     @Inject
     constructor(
+        private val json: Json,
         private val tokenDataStore: TokenDataStore,
-        private val tokenManagerProvider: Provider<TokenManager>,
     ) : Interceptor {
-        val mutex = Mutex()
-        var tokenRefreshJob: Deferred<Boolean>? = null
-
         override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request()
-            val url = request.url.toString()
+            val originalRequest = chain.request()
 
-            return if (shouldAddAccessToken(url)) {
-                val response = proceedWithAuthorization(chain, request)
-                if (response.code == TOKEN_EXPIRED_CODE) {
-                    response.close()
-                    return handleTokenExpiration(chain, request)
-                }
-                response
-            } else {
-                chain.proceed(request)
-            }
-        }
+            Timber.d("🔍 Original Request: ${originalRequest.url}")
 
-        private fun shouldAddAccessToken(url: String): Boolean {
-            return !url.contains("/api/v1/auth/login") &&
-                !url.contains("/api/v1/auth/token/refresh")
-        }
-
-        private fun addAuthorizationHeader(request: Request): Request {
-            return request.newBuilder()
-                .header(AUTHORIZATION, "$BEARER ${tokenDataStore.accessToken}")
-                .build()
-        }
-
-        private fun proceedWithAuthorization(
-            chain: Interceptor.Chain,
-            request: Request,
-        ): Response {
-            val authRequest = addAuthorizationHeader(request)
-            return chain.proceed(authRequest)
-        }
-
-        private fun handleTokenExpiration(
-            chain: Interceptor.Chain,
-            request: Request,
-        ): Response {
-            return runBlocking {
-                mutex.withLock {
-                    if (tokenRefreshJob?.isCompleted != false) {
-                        tokenRefreshJob =
-                            async {
-                                tryReissueToken()
-                            }
-                    }
-                }
-                val tokenRefreshed = tokenRefreshJob?.await() ?: false
-
-                if (tokenRefreshed) {
-                    proceedWithAuthorization(chain, request)
+            val authRequest =
+                if (!tokenDataStore.isNewUser) {
+                    Timber.d("🔑 Using access token: ${tokenDataStore.accessToken}")
+                    originalRequest.newAuthBuilder()
                 } else {
-                    clearUserInfoAndNavigateToLogin()
-                    throw IOException("Token expired and reissue failed")
+                    Timber.d("❌ No access token found.")
+                    originalRequest
                 }
-            }
-        }
 
-        private fun tryReissueToken(): Boolean {
-            val reissueTokenRepository = tokenManagerProvider.get()
-            return try {
-                runBlocking {
-                    reissueTokenRepository.postRefreshToken().onSuccess { data ->
-                        Timber.d("tryReissueToken : Token : ${data.accessToken}")
-                        Timber.d("tryReissueToken : RefreshToken : ${data.refreshToken}")
-                        if (data.accessToken.isEmpty() || data.refreshToken.isEmpty()) {
-                            Timber.e("Token reissue returned empty tokens")
-                            clearUserInfoAndNavigateToLogin()
-                        } else {
-                            updateToken(data.accessToken, data.refreshToken)
+            val response = chain.proceed(authRequest)
+
+            Timber.d("📬 Response received with status code: ${response.code}")
+
+            when (response.code) {
+                TOKEN_EXPIRED_CODE -> {
+                    Timber.d("⏳ Token expired, trying to refresh token.")
+                    Timber.d("🔑 Current refreshToken: ${tokenDataStore.refreshToken}")
+
+                    val refreshTokenRequest =
+                        originalRequest.newBuilder()
+                            .url("${BuildConfig.BASE_URL}/api/v1/auth/token/refresh")
+                            .post("{}".toRequestBody("application/json".toMediaType()))
+                            .addHeader(AUTHORIZATION, "$BEARER ${tokenDataStore.refreshToken}")
+                            .build()
+
+                    Timber.d("🔄 Sending refresh token request: ${refreshTokenRequest.url}")
+                    Timber.d("🔄 Request headers: ${refreshTokenRequest.headers}")
+
+                    response.close()
+
+                    val refreshTokenResponse = chain.proceed(refreshTokenRequest)
+
+                    Timber.d("📬 Response from refresh token request: ${refreshTokenResponse.code}")
+                    Timber.d("🔄 Response body: ${refreshTokenResponse.peekBody(Long.MAX_VALUE).string()}")
+
+                    if (refreshTokenResponse.isSuccessful) {
+                        Timber.d("✅ Token refresh successful.")
+
+                        val responseBodyString = refreshTokenResponse.peekBody(Long.MAX_VALUE).string()
+                        Timber.d("🔑 Refresh token response: $responseBodyString")
+
+                        val responseRefresh = json.decodeFromString<BaseResponse<ResponseRefreshDto>>(responseBodyString)
+                        Timber.d("🔄 Parsed response: $responseRefresh")
+
+                        Timber.d("🎉 Old accessToken: ${tokenDataStore.accessToken}")
+                        Timber.d("🎉 Old refreshToken: ${tokenDataStore.refreshToken}")
+
+                        with(tokenDataStore) {
+                            accessToken = responseRefresh.data!!.accessToken
+                            refreshToken = responseRefresh.data.refreshToken
                         }
-                    }.onFailure { exception: Throwable ->
-                        Timber.e("Token reissue failed: ${exception.message}")
-                        Timber.e("failed but checking : token : ${tokenDataStore.accessToken}")
-                        Timber.e("failed but checking : refreshtoken : ${tokenDataStore.refreshToken}")
-                        clearUserInfoAndNavigateToLogin()
+
+                        Timber.d("🎉 Updated accessToken: ${tokenDataStore.accessToken}")
+                        Timber.d("🎉 Updated refreshToken: ${tokenDataStore.refreshToken}")
+
+                        refreshTokenResponse.close()
+
+                        val newRequest = originalRequest.newAuthBuilder()
+                        Timber.d("🚀 Sending new request with updated access token.")
+
+                        return chain.proceed(newRequest)
+                    } else {
+                        Timber.d("❌ Failed to refresh token, response: ${refreshTokenResponse.code}")
+                        Timber.d("❌ Error body: ${refreshTokenResponse.peekBody(Long.MAX_VALUE).string()}")
+                        refreshTokenResponse.close()
+                        throw IOException("Failed to refresh token")
                     }
                 }
-                true
-            } catch (t: Throwable) {
-                Timber.e("Unexpected error during token reissue: ${t.message}")
-                clearUserInfoAndNavigateToLogin()
-                false
             }
+            return response
         }
 
-        private fun updateToken(
-            newAccessToken: String,
-            newRefreshToken: String,
-        ) {
-            Timber.d("New Access Token: $newAccessToken")
-            Timber.d("New Refresh Token: $newRefreshToken")
-            tokenDataStore.apply {
-                accessToken = newAccessToken
-                refreshToken = newRefreshToken
-            }
-        }
+        private fun Request.newAuthBuilder() = this.newBuilder().addHeader(AUTHORIZATION, "$BEARER ${tokenDataStore.accessToken}").build()
 
-        private fun clearUserInfoAndNavigateToLogin() {
+        private fun clearUserInfo() {
             tokenDataStore.clearInfo()
-            // todo : 로그인 화면으로 이동
         }
 
         companion object {

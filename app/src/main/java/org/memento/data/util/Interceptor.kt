@@ -14,7 +14,7 @@ import org.memento.data.dto.response.ResponseRefreshDto
 import timber.log.Timber
 import javax.inject.Inject
 
-class AuthInterceptor
+class Interceptor
     @Inject
     constructor(
         private val json: Json,

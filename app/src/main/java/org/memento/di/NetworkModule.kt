@@ -10,8 +10,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.memento.BuildConfig
-import org.memento.data.datastore.TokenDataStoreImpl
-import org.memento.data.util.AuthInterceptor
+import org.memento.data.datastore.TokenDataStore
+import org.memento.data.util.Interceptor
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Singleton
@@ -34,11 +34,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(
+    fun provideInterceptor(
         json: Json,
-        tokenDataStore: TokenDataStoreImpl,
-    ): AuthInterceptor {
-        return AuthInterceptor(json, tokenDataStore)
+        tokenDataStore: TokenDataStore,
+    ): Interceptor {
+        return Interceptor(json, tokenDataStore)
     }
 
     @Singleton
@@ -55,7 +55,7 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
+        interceptor: Interceptor,
     ): OkHttpClient {
         val builder =
             OkHttpClient.Builder()
@@ -64,7 +64,7 @@ object NetworkModule {
                 .writeTimeout(300, java.util.concurrent.TimeUnit.SECONDS) // 쓰기 타임아웃 30초
                 .callTimeout(300, java.util.concurrent.TimeUnit.SECONDS) // 전체 호출 타임아웃 30초
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
-        builder.addInterceptor(authInterceptor)
+        builder.addInterceptor(interceptor)
         return builder.build()
     }
 

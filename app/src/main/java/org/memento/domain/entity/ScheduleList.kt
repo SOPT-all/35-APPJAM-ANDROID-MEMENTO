@@ -8,7 +8,7 @@ data class ScheduleList(
         val endDate: String,
         val id: Int,
         val isAllDay: Boolean,
-        val order: Int,
+        val order: Double,
         val scheduleType: String,
         val startDate: String,
         val tagColorCode: String,

@@ -58,12 +58,10 @@ class AuthInterceptor
                     val refreshTokenResponse = chain.proceed(refreshTokenRequest)
 
                     Timber.d("📬 Response from refresh token request: ${refreshTokenResponse.code}")
-                    Timber.d("🔄 Response body: ${refreshTokenResponse.peekBody(Long.MAX_VALUE).string()}")
+                    val responseBodyString = refreshTokenResponse.peekBody(Long.MAX_VALUE).string()
 
                     if (refreshTokenResponse.isSuccessful) {
                         Timber.d("✅ Token refresh successful.")
-
-                        val responseBodyString = refreshTokenResponse.peekBody(Long.MAX_VALUE).string()
                         Timber.d("🔑 Refresh token response: $responseBodyString")
 
                         val responseRefresh = json.decodeFromString<BaseResponse<ResponseRefreshDto>>(responseBodyString)
@@ -72,9 +70,11 @@ class AuthInterceptor
                         Timber.d("🎉 Old accessToken: ${tokenDataStore.accessToken}")
                         Timber.d("🎉 Old refreshToken: ${tokenDataStore.refreshToken}")
 
-                        with(tokenDataStore) {
-                            accessToken = responseRefresh.data!!.accessToken
-                            refreshToken = responseRefresh.data.refreshToken
+                        responseRefresh.data?.let {
+                            with(tokenDataStore) {
+                                accessToken = responseRefresh.data.accessToken
+                                refreshToken = responseRefresh.data.refreshToken
+                            }
                         }
 
                         Timber.d("🎉 Updated accessToken: ${tokenDataStore.accessToken}")
@@ -88,7 +88,7 @@ class AuthInterceptor
                         return chain.proceed(newRequest)
                     } else {
                         Timber.d("❌ Failed to refresh token, response: ${refreshTokenResponse.code}")
-                        Timber.d("❌ Error body: ${refreshTokenResponse.peekBody(Long.MAX_VALUE).string()}")
+                        Timber.d("❌ Error body: $responseBodyString")
                         refreshTokenResponse.close()
                         throw IOException("Failed to refresh token")
                     }

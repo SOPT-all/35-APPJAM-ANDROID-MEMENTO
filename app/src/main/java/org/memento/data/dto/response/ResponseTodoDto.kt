@@ -20,7 +20,7 @@ data class ResponseTodoDto(
         @SerialName("isCompleted")
         val isCompleted: Boolean,
         @SerialName("orderNum")
-        val orderNum: Int,
+        val orderNum: Double,
         @SerialName("priorityType")
         val priorityType: String,
         @SerialName("priorityValue")

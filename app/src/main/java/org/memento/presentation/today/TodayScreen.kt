@@ -480,7 +480,7 @@ sealed class MementoItem {
         val tagName: String,
         val tagColor: String,
         val toDoType: String,
-        val order: Int,
+        val order: Double,
     ) : MementoItem()
 
     data class ScheduleItem(
@@ -488,7 +488,7 @@ sealed class MementoItem {
         val endDate: String,
         val id: Int,
         val isAllDay: Boolean,
-        val order: Int,
+        val order: Double,
         val scheduleType: String,
         val startDate: String,
         val tagColorCode: String,

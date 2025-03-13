@@ -27,7 +27,7 @@ data class ResponseScheduleDto(
         @SerialName("tagName")
         val tagName: String,
         @SerialName("order")
-        val order: Int,
+        val order: Double,
         @SerialName("timeDuration")
         val timeDuration: String,
     )

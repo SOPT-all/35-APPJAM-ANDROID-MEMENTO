@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -231,10 +232,7 @@ fun AddToDoScreen(
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
                     ),
-                cursorBrush =
-                    Brush.verticalGradient(
-                        listOf(darkModeColors.green, darkModeColors.green),
-                    ),
+                cursorBrush = SolidColor(darkModeColors.green),
                 keyboardOptions =
                     KeyboardOptions.Default.copy(
                         capitalization = KeyboardCapitalization.Sentences,

@@ -45,7 +45,7 @@ class Interceptor
 
                     val refreshTokenRequest =
                         originalRequest.newBuilder()
-                            .url("${BuildConfig.BASE_URL}/api/v1/auth/token/refresh")
+                            .url("${BuildConfig.BASE_URL}api/v1/auth/token/refresh")
                             .post("{}".toRequestBody("application/json".toMediaType()))
                             .addHeader(AUTHORIZATION, "$BEARER ${tokenDataStore.refreshToken}")
                             .build()

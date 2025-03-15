@@ -36,6 +36,10 @@ class BrainDumpViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
+        fun setLoadingState() {
+            _uiState.value = UiState.Loading
+        }
+
         fun updateInputText(newText: String) {
             _inputText.value = newText
         }

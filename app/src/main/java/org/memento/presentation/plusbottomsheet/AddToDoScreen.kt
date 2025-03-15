@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,8 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -83,6 +84,12 @@ fun AddToDoScreen(
             is UiState.Success -> {
                 viewModel.setLoadingState()
                 isEditDone()
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = SuccessType.CREATE_SUCCESS.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
             }
             is UiState.Failure -> {
                 viewModel.setLoadingState()
@@ -101,13 +108,13 @@ fun AddToDoScreen(
         when (uiState) {
             is UiState.Success -> {
                 viewModel.setLoadingState()
+                onCloseBottomSheet()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
-                onCloseBottomSheet()
             }
 
             is UiState.Failure -> {
@@ -215,6 +222,8 @@ fun AddToDoScreen(
                 },
                 modifier =
                     Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.9f)
                         .background(color = Color.Transparent)
                         .focusRequester(focusRequester)
                         .padding(top = 16.dp),
@@ -222,17 +231,12 @@ fun AddToDoScreen(
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
                     ),
-                cursorBrush =
-                    Brush.verticalGradient(
-                        listOf(darkModeColors.green, darkModeColors.green),
-                    ),
+                cursorBrush = SolidColor(darkModeColors.green),
                 keyboardOptions =
                     KeyboardOptions.Default.copy(
                         capitalization = KeyboardCapitalization.Sentences,
                     ),
             )
-
-            Spacer(modifier = Modifier.weight(1f))
         }
 
         Row(

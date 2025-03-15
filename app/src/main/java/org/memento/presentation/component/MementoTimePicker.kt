@@ -1,5 +1,6 @@
 package org.memento.presentation.component
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,9 +26,12 @@ fun MementoTimePicker(
     selectedTime: String,
     onTimeSelected: (String) -> Unit,
 ) {
-    val hourState = rememberFWheelPickerState(initialIndex = 0)
-    val minuteState = rememberFWheelPickerState(initialIndex = 0)
-    val periodState = rememberFWheelPickerState(initialIndex = 0)
+    val timeParts = selectedTime.split(" ")
+    val hourMinute = timeParts[0].split(":")
+
+    val hourState = rememberFWheelPickerState(initialIndex = hourMinute[0].toInt())
+    val minuteState = rememberFWheelPickerState(initialIndex = hourMinute[1].toInt())
+    val periodState = rememberFWheelPickerState(initialIndex = if (timeParts[1] == "AM") 0 else 1)
 
     val periods = listOf("AM", "PM")
 
@@ -41,6 +45,7 @@ fun MementoTimePicker(
     }
 
     LaunchedEffect(hourState.currentIndex, minuteState.currentIndex, periodState.currentIndex) {
+        Log.d("selectedTime", selectedTime)
         delay(200)
         onTimeSelected(getFormattedTime())
     }

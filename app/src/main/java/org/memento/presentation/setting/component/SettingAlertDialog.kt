@@ -25,6 +25,12 @@ import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 
+/*
+    setting 화면의 모든 alertDialog 를 포함합니다.
+    subContent를 포함하지 않고 작성하면, 메인 Content만 작성됩니다.
+    onLeftButtonClick, onRightButtonClick 함수 정의해서 넣어주시면 됩니다.
+ */
+
 @Composable
 fun SettingAlertDialog(
     @StringRes content: Int,

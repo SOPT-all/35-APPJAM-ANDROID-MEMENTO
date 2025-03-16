@@ -20,10 +20,13 @@ import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
-/*
-    setting 화면의 모든 소셜 칩 컴포넌트 입니다.
-    onClick 시에 add의 유무에 따라 다이얼로그 출력 혹은 연동화면 출력해주시면 됩니다.
+/**
+ * @param icon 플랫폼 이미지
+ * @param content 플랫폼 텍스트
+ * @param onClick 클릭 시, 다이얼로그 출력 혹은 플랫폼 연동
+ * @param modifier modifier 수정 시 사용
  */
+
 @Composable
 fun SettingSocialChip(
     @DrawableRes icon: Int,

@@ -36,17 +36,17 @@ fun SettingSocialChip(
 ) {
     Box(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .background(
-                color = darkModeColors.gray10,
-                shape = RoundedCornerShape(size = 4.dp)
-            )
-            .padding(vertical = 10.dp, horizontal = 8.dp)
-            .noRippleClickable {
-                onClick()
-            },
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(size = 4.dp),
+                )
+                .padding(vertical = 10.dp, horizontal = 8.dp)
+                .noRippleClickable {
+                    onClick()
+                },
     ) {
         Image(
             painter = painterResource(id = icon),
@@ -57,7 +57,7 @@ fun SettingSocialChip(
             text = content,
             style = defaultMementoTypography.body_r_14,
             color = darkModeColors.gray03,
-            modifier = Modifier.align(alignment = Alignment.Center)
+            modifier = Modifier.align(alignment = Alignment.Center),
         )
     }
 }

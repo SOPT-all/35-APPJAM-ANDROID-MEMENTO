@@ -89,6 +89,12 @@
     <string name="alert_delete">Do you really want to delete this event?</string>
     <string name="alert_cancel_button">Cancel</string>
     <string name="alert_delete_button">Delete</string>
+    <string name="alert_log_out_button">Logout</string>
+    <string name="alert_delete_account_button">Delete account</string>
+    <string name="alert_setting_delete_account_title">Would you like to delete account?</string>
+    <string name="alert_setting_delete_account_subtitle">Permanently delete the account and remove access from all workspaces.</string>
+    <string name="alert_setting_delete">Do you really want to delete?</string>
+    <string name="alert_setting_log_out">Would you like to Logout?</string>
 
     <!--    Toast-->
     <string name="toast_login_failed">Login failed. Please check your network and account.</string>

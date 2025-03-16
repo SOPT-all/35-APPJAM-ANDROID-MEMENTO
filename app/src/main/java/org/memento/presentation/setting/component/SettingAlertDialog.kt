@@ -1,4 +1,4 @@
-package org.memento.presentation.component
+package org.memento.presentation.setting.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 
 @Composable
-fun MementoSettingAlertDialog(
+fun SettingAlertDialog(
     @StringRes content: Int,
     @StringRes subContent: Int? = null,
     @StringRes leftButtonText: Int,
@@ -120,8 +120,8 @@ fun MementoSettingAlertDialog(
 
 @Preview
 @Composable
-fun MementoSettingAlertDialogPreview() {
-    MementoSettingAlertDialog(
+fun SettingAlertDialogPreview() {
+    SettingAlertDialog(
         content = R.string.alert_setting_delete_account_title,
         subContent = R.string.alert_setting_delete_account_subtitle,
         leftButtonText = R.string.alert_cancel_button,

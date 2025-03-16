@@ -39,77 +39,82 @@ fun MementoSettingAlertDialog(
         onDismissRequest = { onLeftButtonClick() },
         text = {
             Text(
-                text = buildAnnotatedString {
-                    append(AnnotatedString(text = stringResource(id = content)))
-                    subContent?.let {
-                        append("\n")
-                        append(
-                            AnnotatedString(
-                                text = stringResource(id = subContent),
-                                spanStyle = SpanStyle(
-                                    color = darkModeColors.gray07
-                                )
+                text =
+                    buildAnnotatedString {
+                        append(AnnotatedString(text = stringResource(id = content)))
+                        subContent?.let {
+                            append("\n")
+                            append(
+                                AnnotatedString(
+                                    text = stringResource(id = subContent),
+                                    spanStyle =
+                                        SpanStyle(
+                                            color = darkModeColors.gray07,
+                                        ),
+                                ),
                             )
-                        )
-                    }
-                },
+                        }
+                    },
                 color = darkModeColors.gray03,
                 style = MementoTheme.typography.body_r_14,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         },
         confirmButton = {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            color = darkModeColors.gray08,
-                            shape = RoundedCornerShape(size = 4.dp)
-                        )
-                        .padding(vertical = 8.dp)
-                        .noRippleClickable {
-                            onLeftButtonClick()
-                        },
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = darkModeColors.gray08,
+                                shape = RoundedCornerShape(size = 4.dp),
+                            )
+                            .padding(vertical = 8.dp)
+                            .noRippleClickable {
+                                onLeftButtonClick()
+                            },
                 ) {
                     Text(
                         text = stringResource(id = leftButtonText),
                         color = darkModeColors.gray05,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            color = mementoColors.red,
-                            shape = RoundedCornerShape(size = 4.dp)
-                        )
-                        .padding(vertical = 8.dp)
-                        .noRippleClickable {
-                            onRightButtonClick()
-                        }
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = mementoColors.red,
+                                shape = RoundedCornerShape(size = 4.dp),
+                            )
+                            .padding(vertical = 8.dp)
+                            .noRippleClickable {
+                                onRightButtonClick()
+                            },
                 ) {
                     Text(
                         text = stringResource(id = rightButtonText),
                         color = darkModeColors.black,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
         },
         containerColor = darkModeColors.gray09,
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth(),
+            Modifier
+                .then(modifier)
+                .fillMaxWidth(),
     )
 }
 

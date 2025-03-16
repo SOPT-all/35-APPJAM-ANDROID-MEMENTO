@@ -35,8 +35,6 @@ import org.memento.ui.theme.mementoColors
  *  @param modifier modifier 수정 사항
  */
 
-
-// TODO: 소셜 플랫폼 타입 정의에 따라 dialog에 인자를 전달하셔서 수정하면 될 것 같습니다.
 @Composable
 fun SettingAlertDialog(
     @StringRes content: Int,
@@ -46,6 +44,7 @@ fun SettingAlertDialog(
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    // TODO: 소셜 플랫폼 타입 정의에 따라 dialog에 인자를 전달하셔서 수정하면 될 것 같습니다.
 ) {
     AlertDialog(
         onDismissRequest = { onLeftButtonClick() },

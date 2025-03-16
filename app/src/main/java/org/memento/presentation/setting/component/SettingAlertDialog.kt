@@ -25,12 +25,17 @@ import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 
-/*
-    setting 화면의 모든 alertDialog 를 포함합니다.
-    subContent를 포함하지 않고 작성하면, 메인 Content만 작성됩니다.
-    onLeftButtonClick, onRightButtonClick 함수 정의해서 넣어주시면 됩니다.
+/**
+ *  @param content 다이얼로그 주 텍스트
+ *  @param message 다이얼로그 보조 텍스트
+ *  @param leftButtonText 취소 버튼 텍스트
+ *  @param rightButtonText 삭제, 계정 삭제, 로그 아웃 버튼 텍스트
+ *  @param onLeftButtonClick 취소 버튼 클릭 시 동작
+ *  @param onRightButtonClick 삭제, 계정 삭제, 로그 아웃 버튼 클릭 시 동작
+ *  @param modifier modifier 수정 사항
  */
 
+// TODO: 소셜 플랫폼 타입 정의에 따라 dialog에 인자를 전달하셔서 수정하면 될 것 같습니다.
 @Composable
 fun SettingAlertDialog(
     @StringRes content: Int,

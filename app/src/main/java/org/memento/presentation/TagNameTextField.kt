@@ -24,7 +24,9 @@ import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 
 /**
- *
+ * @param text 외부 Screen 에서 현재 TextField 에 입력된 값
+ * @param onTextValueChange 외부 Screen 에서 사용자가 입력할 때 값이 변경되는 이벤트
+ * @param modifier 외부 Screen 에서 padding 등을 적용할 수 있도록 하는 modifier
  */
 
 @Composable

@@ -29,15 +29,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.core.util.UiState
+import org.memento.domain.type.SuccessType
+import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -50,16 +54,25 @@ fun BrainDumpScreen(
 ) {
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     var isShowAnimation by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState) {
         when (uiState) {
-            is UiState.Loading -> {
-            }
+            is UiState.Loading -> {}
             is UiState.Success -> {
                 isShowAnimation = false
+                onCloseBottomSheet()
+                val toast = MementoToast(context)
+                toast.makeText(
+                    message = SuccessType.CREATE_SUCCESS.message,
+                    icon = R.drawable.ic_toast,
+                    lifecycleOwner = lifecycleOwner,
+                )
             }
+
             is UiState.Failure -> {
                 isShowAnimation = false
             }

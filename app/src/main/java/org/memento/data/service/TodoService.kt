@@ -14,25 +14,25 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TodoService {
-    @GET("/api/v1/todos")
+    @GET("api/v1/todos")
     suspend fun getTodoList(): BaseResponse<ResponseTodoDto>
 
-    @GET("/api/v1/todos/date")
+    @GET("api/v1/todos/date")
     suspend fun getTodoDateList(
         @Query("date") date: String,
     ): BaseResponse<ResponseTodoDto>
 
-    @DELETE("/api/v1/todos/{toDoId}")
+    @DELETE("api/v1/todos/{toDoId}")
     suspend fun deleteTodo(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<Unit>
 
-    @PATCH("/api/v1/todos/{toDoId}/completion")
+    @PATCH("api/v1/todos/{toDoId}/completion")
     suspend fun patchTodoCompleted(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoCompleteDto>
 
-    @POST("/api/v1/todos/prioritization/daily")
+    @POST("api/v1/todos/prioritization/daily")
     suspend fun postPriorityTodo(
         @Body requestPriorityDto: RequestPriorityDto,
     ): BaseResponse<ResponsePriorityTodoDto>

@@ -15,46 +15,46 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AddPlanService {
-    @POST("/api/v1/todos")
+    @POST("api/v1/todos")
     suspend fun postAddToDo(
         @Body requestAddTodoDto: RequestAddTodoDto,
     ): BaseResponse<Unit>
 
-    @POST("/api/v1/schedules")
+    @POST("api/v1/schedules")
     suspend fun postAddSchedule(
         @Body requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 
-    @POST("/api/v1/braindump")
+    @POST("api/v1/braindump")
     suspend fun postBrainDump(
         @Body requestBrainDumpDto: RequestBrainDumpDto,
     ): BaseResponse<Unit>
 
-    @GET("/api/v1/tags")
+    @GET("api/v1/tags")
     suspend fun getTagList(): BaseResponse<List<ResponseTagDto>>
 
-    @PATCH("/api/v1/todos/{toDoId}")
+    @PATCH("api/v1/todos/{toDoId}")
     suspend fun patchAddTodo(
         @Path("toDoId") toDoId: Int,
         @Body requestAddTodoDto: RequestAddTodoDto,
     ): BaseResponse<Unit>
 
-    @PATCH("/api/v1/schedules/{scheduleId}")
+    @PATCH("api/v1/schedules/{scheduleId}")
     suspend fun patchAddSchedule(
         @Path("scheduleId") scheduleId: Int,
         @Body requestAddScheduleDto: RequestAddScheduleDto,
     ): BaseResponse<Unit>
 
-    @GET("/api/v1/schedules/{scheduleId}")
+    @GET("api/v1/schedules/{scheduleId}")
     suspend fun getScheduleDetail(
         @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<ResponseScheduleDetailDto>
 
-    @GET("/api/v1/todos/{toDoId}")
+    @GET("api/v1/todos/{toDoId}")
     suspend fun getTodoDetail(
         @Path("toDoId") toDoId: Int,
     ): BaseResponse<ResponseTodoDetailDto>
 
-    @GET("/api/v1/schedules/all-days")
+    @GET("api/v1/schedules/all-days")
     suspend fun getAllDay(): BaseResponse<ResponseAllDayDto>
 }

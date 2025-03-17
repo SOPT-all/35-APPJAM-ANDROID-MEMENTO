@@ -113,7 +113,7 @@ class AddToDoViewModel
 
             val (priorityUrgency, priorityImportance) =
                 when (_addPriorityType.value) {
-                    PriorityTagType.None -> 0.00 to 0.00
+                    PriorityTagType.None -> null to null
                     PriorityTagType.High -> 0.25 to 0.75
                     PriorityTagType.Immediate -> 0.75 to 0.75
                     PriorityTagType.Medium -> 0.75 to 0.25

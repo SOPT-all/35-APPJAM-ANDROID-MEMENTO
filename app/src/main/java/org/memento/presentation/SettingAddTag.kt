@@ -34,24 +34,24 @@ fun SettingAddTag(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .background(
-                color = darkModeColors.gray10,
-                shape = RoundedCornerShape(size = 4.dp),
-            )
-            .noRippleClickable {
-                onClick()
-            },
-        verticalAlignment = Alignment.CenterVertically
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(size = 4.dp),
+                )
+                .noRippleClickable {
+                    onClick()
+                },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Row(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -62,31 +62,28 @@ fun SettingAddTag(
             )
             Text(
                 text = "Add",
-                style = MementoTheme.typography.body_r_14.copy(
-                    color = darkModeColors.gray05,
-                ),
+                style =
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
-
         }
     }
 }
-
 
 @Preview
 @Composable
 private fun SettingTagPreview() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(horizontal = 20.dp)
-            .padding(top = 20.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp),
     ) {
-
-
         SettingAddTag(
             onClick = { },
-
-            )
+        )
     }
 }

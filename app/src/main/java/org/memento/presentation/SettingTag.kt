@@ -29,7 +29,6 @@ import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
-
 /**
  *  @param tagColor 태그 색상 (Hexcode)
  *  @param tagName 테그 이름
@@ -46,79 +45,80 @@ fun SettingTag(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .background(
-                color = darkModeColors.gray10,
-                shape = RoundedCornerShape(size = 4.dp),
-            )
-            .noRippleClickable {
-                onClick()
-            },
-        verticalAlignment = Alignment.CenterVertically
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(size = 4.dp),
+                )
+                .noRippleClickable {
+                    onClick()
+                },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth(0.025f)
-                .fillMaxHeight()
-                .background(
-                    color = changeHexToColor(tagColor),
-                    shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp)
-                )
+            modifier =
+                Modifier
+                    .fillMaxWidth(0.025f)
+                    .fillMaxHeight()
+                    .background(
+                        color = changeHexToColor(tagColor),
+                        shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
+                    ),
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         Row(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = tagName,
-                style = MementoTheme.typography.body_r_14.copy(
-                    color = darkModeColors.gray05,
-                ),
+                style =
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_right_26),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier.padding(end = 4.dp),
             )
         }
     }
 }
 
-
 @Preview
 @Composable
 private fun SettingTagPreview() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(horizontal = 20.dp)
-            .padding(top = 20.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp),
     ) {
-
-
         SettingTag(
             tagName = "Family",
             onClick = { },
-            tagColor = "#FF426E"
+            tagColor = "#FF426E",
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         SettingTag(
             tagName = "Hobby",
             onClick = { },
-            tagColor = "#FF8162"
+            tagColor = "#FF8162",
         )
     }
 }

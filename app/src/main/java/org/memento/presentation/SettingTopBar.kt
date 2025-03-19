@@ -35,56 +35,57 @@ import org.memento.ui.theme.darkModeColors
  *  @param modifier modifier 수정 사항
  */
 
-
 @Composable
 fun SettingTopBar(
     type: SettingTopBarType,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     onDoneClick: () -> Unit,
-    isDoneVisible: Boolean = false
+    isDoneVisible: Boolean = false,
 ) {
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = darkModeColors.black)
-                .padding(end = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.black)
+                    .padding(end = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = null,
-                modifier = Modifier
-                    .noRippleClickable { onBackClick() },
+                modifier =
+                    Modifier
+                        .noRippleClickable { onBackClick() },
                 tint = Color.Unspecified,
             )
 
             Text(
                 text = type.text,
-                style = MementoTheme.typography.body_b_14.copy(
-                    color = darkModeColors.gray04,
-                ),
+                style =
+                    MementoTheme.typography.body_b_14.copy(
+                        color = darkModeColors.gray04,
+                    ),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             Text(
                 text = stringResource(R.string.done),
-                style = MementoTheme.typography.body_r_14.copy(
-                    color = darkModeColors.gray04,
-                ),
-                modifier = Modifier
-                    .noRippleClickable { onDoneClick() }
-                    .alpha(if (isDoneVisible) 1f else 0f)
-
+                style =
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray04,
+                    ),
+                modifier =
+                    Modifier
+                        .noRippleClickable { onDoneClick() }
+                        .alpha(if (isDoneVisible) 1f else 0f),
             )
-
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -102,7 +103,7 @@ fun PreviewSettingTopBar() {
             type = SettingTopBarType.TAG,
             onBackClick = {},
             onDoneClick = {},
-            isDoneVisible = true
+            isDoneVisible = true,
         )
     }
 }

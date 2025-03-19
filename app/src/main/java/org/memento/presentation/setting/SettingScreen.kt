@@ -10,6 +10,6 @@ fun SettingScreen() {
 
 @Preview
 @Composable
-fun SettingScreenPreview(){
+fun SettingScreenPreview() {
     SettingScreen()
 }

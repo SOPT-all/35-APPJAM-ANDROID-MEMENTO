@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.memento.R
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
@@ -51,21 +53,28 @@ fun SettingAlertDialog(
         text = {
             Text(
                 text =
-                    buildAnnotatedString {
-                        append(AnnotatedString(text = stringResource(id = content)))
-                        subContent?.let {
-                            append("\n")
-                            append(
-                                AnnotatedString(
-                                    text = stringResource(id = subContent),
-                                    spanStyle =
-                                        SpanStyle(
-                                            color = darkModeColors.gray07,
-                                        ),
-                                ),
+                buildAnnotatedString {
+                    append(
+                        AnnotatedString(
+                            text = stringResource(id = content),
+                            paragraphStyle = ParagraphStyle(
+                                lineHeight = 5.sp
                             )
-                        }
-                    },
+                        )
+                    )
+                    subContent?.let {
+                        append("\n")
+                        append(
+                            AnnotatedString(
+                                text = stringResource(id = subContent),
+                                spanStyle =
+                                SpanStyle(
+                                    color = darkModeColors.gray07,
+                                ),
+                            ),
+                        )
+                    }
+                },
                 color = darkModeColors.gray03,
                 style = MementoTheme.typography.body_r_14,
                 modifier = Modifier.fillMaxWidth(),
@@ -75,22 +84,22 @@ fun SettingAlertDialog(
         confirmButton = {
             Row(
                 modifier =
-                    Modifier
-                        .fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .weight(1f)
-                            .background(
-                                color = darkModeColors.gray08,
-                                shape = RoundedCornerShape(size = 4.dp),
-                            )
-                            .padding(vertical = 8.dp)
-                            .noRippleClickable {
-                                onLeftButtonClick()
-                            },
+                    Modifier
+                        .weight(1f)
+                        .background(
+                            color = darkModeColors.gray08,
+                            shape = RoundedCornerShape(size = 4.dp),
+                        )
+                        .padding(vertical = 8.dp)
+                        .noRippleClickable {
+                            onLeftButtonClick()
+                        },
                 ) {
                     Text(
                         text = stringResource(id = leftButtonText),
@@ -101,16 +110,16 @@ fun SettingAlertDialog(
                 }
                 Box(
                     modifier =
-                        Modifier
-                            .weight(1f)
-                            .background(
-                                color = mementoColors.red,
-                                shape = RoundedCornerShape(size = 4.dp),
-                            )
-                            .padding(vertical = 8.dp)
-                            .noRippleClickable {
-                                onRightButtonClick()
-                            },
+                    Modifier
+                        .weight(1f)
+                        .background(
+                            color = mementoColors.red,
+                            shape = RoundedCornerShape(size = 4.dp),
+                        )
+                        .padding(vertical = 8.dp)
+                        .noRippleClickable {
+                            onRightButtonClick()
+                        },
                 ) {
                     Text(
                         text = stringResource(id = rightButtonText),
@@ -123,9 +132,9 @@ fun SettingAlertDialog(
         },
         containerColor = darkModeColors.gray09,
         modifier =
-            Modifier
-                .then(modifier)
-                .fillMaxWidth(),
+        Modifier
+            .then(modifier)
+            .fillMaxWidth(),
     )
 }
 

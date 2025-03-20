@@ -47,8 +47,8 @@ class TodayViewModel
         private val _deleteState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val deleteState: StateFlow<UiState<Unit>> = _deleteState
 
-        private val _upTimeState = MutableStateFlow<UiState<UpTime>>(UiState.Loading)
-        val upTimeState: StateFlow<UiState<UpTime>> = _upTimeState
+        private val _upTimeState = MutableStateFlow<UpTime?>(null)
+        val upTimeState: StateFlow<UpTime?> = _upTimeState
 
         private val _wakeUpTime = MutableStateFlow<String?>(null)
         val wakeUpTime: StateFlow<String?> = _wakeUpTime
@@ -71,6 +71,36 @@ class TodayViewModel
                     }
                 }
             }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+        fun reorderItems(
+            fromIndex: Int,
+            toIndex: Int,
+        ) {
+            val currentList =
+                (scheduleItems.value + todoItems.value)
+                    .sortedBy { item ->
+                        when (item) {
+                            is MementoItem.TodoItem -> item.order
+                            is MementoItem.ScheduleItem -> item.order
+                            else -> 0.0
+                        }
+                    }
+                    .toMutableList()
+
+            val movedItem = currentList.removeAt(fromIndex)
+            currentList.add(toIndex, movedItem)
+
+            val updatedList =
+                currentList.mapIndexed { index, item ->
+                    when (item) {
+                        is MementoItem.TodoItem -> item.copy(order = index.toDouble())
+                        is MementoItem.ScheduleItem -> item.copy(order = index.toDouble())
+                    }
+                }
+
+            _todoItems.value = updatedList.filterIsInstance<MementoItem.TodoItem>()
+            _scheduleItems.value = updatedList.filterIsInstance<MementoItem.ScheduleItem>()
+        }
 
         fun getScheduleList(date: String) {
             viewModelScope.launch {
@@ -259,12 +289,13 @@ class TodayViewModel
                 _uiState.value = UiState.Loading
                 val response = scheduleRepository.getUpTime()
                 response.onSuccess { data ->
-                    UpTime(
-                        wakeUpTime = data.wakeUpTime,
-                        windDownTime = data.windDownTime,
-                    )
+                    _upTimeState.value =
+                        UpTime(
+                            wakeUpTime = data.wakeUpTime,
+                            windDownTime = data.windDownTime,
+                        )
+                    _uiState.value = UiState.Success(Unit)
                 }.onFailure { throwable ->
-                    _upTimeState.value = UiState.Failure
                     _uiState.value = UiState.Failure
                 }
             }

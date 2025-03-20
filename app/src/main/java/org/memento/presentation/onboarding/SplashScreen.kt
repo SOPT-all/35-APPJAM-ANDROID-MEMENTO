@@ -21,7 +21,7 @@ fun SplashScreen() {
         Alignment.Center,
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.logo_memento_green),
+            imageVector = ImageVector.vectorResource(id = R.drawable.logo_memento_white),
             contentDescription = stringResource(id = R.string.onboarding_logo),
         )
     }

@@ -34,5 +34,5 @@ data class ResponseTodos(
     @SerialName("toDoType")
     val toDoType: String,
     @SerialName("orderNum")
-    val orderNum: Int,
+    val orderNum: Double,
 )

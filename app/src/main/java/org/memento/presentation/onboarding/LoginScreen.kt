@@ -85,6 +85,7 @@ fun LoginScreen(
             viewModel.saveToken(
                 accessToken = data.accessToken,
                 refreshToken = data.refreshToken,
+                isNewUser = data.isNewUser,
             )
         }
 

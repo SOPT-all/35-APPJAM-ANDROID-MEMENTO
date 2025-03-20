@@ -5,14 +5,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.memento.BuildConfig
-import org.memento.data.local.TokenDataStore
+import org.memento.data.datastore.TokenDataStore
+import org.memento.data.util.Interceptor
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Singleton
@@ -21,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val CONTENT_TYPE = "application/json"
-    private val BASE_URL = BuildConfig.BASE_URL
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     @Singleton
     @Provides
@@ -35,17 +34,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(tokenDataStore: TokenDataStore): Interceptor {
-        return Interceptor { chain ->
-            val token = runBlocking { tokenDataStore.getAccessToken() }
-            val requestBuilder = chain.request().newBuilder()
-
-            token?.let {
-                requestBuilder.addHeader("Authorization", "Bearer $it")
-            }
-
-            chain.proceed(requestBuilder.build())
-        }
+    fun provideInterceptor(
+        json: Json,
+        tokenDataStore: TokenDataStore,
+    ): Interceptor {
+        return Interceptor(json, tokenDataStore)
     }
 
     @Singleton
@@ -62,7 +55,7 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: Interceptor,
+        interceptor: Interceptor,
     ): OkHttpClient {
         val builder =
             OkHttpClient.Builder()
@@ -71,7 +64,7 @@ object NetworkModule {
                 .writeTimeout(300, java.util.concurrent.TimeUnit.SECONDS) // 쓰기 타임아웃 30초
                 .callTimeout(300, java.util.concurrent.TimeUnit.SECONDS) // 전체 호출 타임아웃 30초
         if (BuildConfig.DEBUG) builder.addInterceptor(loggingInterceptor)
-        builder.addInterceptor(authInterceptor)
+        builder.addInterceptor(interceptor)
         return builder.build()
     }
 

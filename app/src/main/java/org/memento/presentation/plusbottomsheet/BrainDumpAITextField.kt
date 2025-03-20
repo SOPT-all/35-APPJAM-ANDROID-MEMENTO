@@ -121,6 +121,10 @@ fun BrainDumpAITextField(
                 MementoTheme.typography.body_b_16.copy(
                     color = darkModeColors.white,
                 ),
+            cursorBrush =
+                Brush.verticalGradient(
+                    listOf(darkModeColors.green, darkModeColors.green),
+                ),
         )
 
         if (value.isEmpty()) {

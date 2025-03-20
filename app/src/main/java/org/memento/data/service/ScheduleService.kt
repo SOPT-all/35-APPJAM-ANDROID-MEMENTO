@@ -9,7 +9,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScheduleService {
-    @GET("/api/v1/schedules")
+    @GET("api/v1/schedules")
     suspend fun getScheduleLists(
         @Query("date") date: String,
     ): BaseResponse<ResponseScheduleDto>
@@ -19,6 +19,6 @@ interface ScheduleService {
         @Path("scheduleId") scheduleId: Int,
     ): BaseResponse<Unit>
 
-    @GET("/api/v1/members/personal-info/uptime")
+    @GET("api/v1/members/personal-info/uptime")
     suspend fun getUpTime(): BaseResponse<ResponseUpTimeDto>
 }

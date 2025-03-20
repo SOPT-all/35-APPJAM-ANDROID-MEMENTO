@@ -44,6 +44,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -148,9 +149,6 @@ fun TodayScreen(
     val allDayItems by viewModel.allDayItems.collectAsState()
     val upTimeState by viewModel.upTimeState.collectAsState()
 
-    val wakeUpTime by viewModel.wakeUpTime.collectAsState()
-    val windDownTime by viewModel.windDownTime.collectAsState()
-
     val filteredAllDayItems =
         allDayItems.filter { item ->
             val startDate = LocalDate.parse(item.startDate.substring(0, 10))
@@ -161,13 +159,12 @@ fun TodayScreen(
     fun resetDraggingState() {
         draggedItemIndex = -1
         draggedOffsetY = 0f
-        isDraggingEnabled = false
     }
 
     fun refreshData() {
         coroutineScope.launch {
             isRefreshing = true
-            delay(1000)
+            delay(2000)
             isRefreshing = false
         }
     }
@@ -202,7 +199,6 @@ fun TodayScreen(
                 },
                 selectedDate = selectedDate.value,
             )
-
             Box(
                 modifier =
                     Modifier
@@ -222,25 +218,31 @@ fun TodayScreen(
                 }
             }
 
-            if (combinedItems.isEmpty()) {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(top = 150.dp),
-                    contentAlignment = Alignment.TopCenter,
-                ) {
-                    Text(
-                        text = "No plans yet? Add one now!",
-                        style = MementoTheme.typography.title_b_22,
-                        color = darkModeColors.gray08,
-                    )
-                }
-            } else {
-                SwipeRefresh(
-                    state = rememberSwipeRefreshState(isRefreshing),
-                    onRefresh = { refreshData() },
-                ) {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing),
+                onRefresh = {
+                    refreshData()
+                    viewModel.getScheduleList(selectedDate.value.toString())
+                    viewModel.getTodoDateList(selectedDate.value.toString())
+                    viewModel.getAllDay()
+                },
+            ) {
+                if (combinedItems.isEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(150.dp))
+                            Text(
+                                text = stringResource(R.string.today_empty_view_text),
+                                style = MementoTheme.typography.title_b_22,
+                                color = darkModeColors.gray08,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            )
+                        }
+                    }
+                } else {
                     LazyColumn(
                         modifier =
                             Modifier
@@ -255,7 +257,7 @@ fun TodayScreen(
                         item {
                             Row {
                                 Text(
-                                    text = wakeUpTime ?: "8:00",
+                                    text = upTimeState?.wakeUpTime ?: "8:00",
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -267,7 +269,7 @@ fun TodayScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "Wake Up",
+                                    text = stringResource(R.string.wake_up),
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -306,13 +308,18 @@ fun TodayScreen(
                                                         draggedOffsetY += dragAmount.y
 
                                                         val itemHeightPx = with(density) { 60.dp.toPx() }
-                                                        while (kotlin.math.abs(draggedOffsetY) >= itemHeightPx) {
-                                                            val moveDirection = if (draggedOffsetY > 0) 1 else -1
-                                                            val targetIndex = (draggedItemIndex + moveDirection).coerceIn(0, combinedItems.size - 1)
+                                                        while (true) {
+                                                            val deltaIndices = (draggedOffsetY / itemHeightPx).toInt()
+                                                            if (deltaIndices == 0) break
+
+                                                            val targetIndex =
+                                                                (draggedItemIndex + deltaIndices)
+                                                                    .coerceIn(0, combinedItems.size - 1)
 
                                                             if (targetIndex != draggedItemIndex) {
+                                                                viewModel.reorderItems(draggedItemIndex, targetIndex)
                                                                 draggedItemIndex = targetIndex
-                                                                draggedOffsetY -= moveDirection * itemHeightPx
+                                                                draggedOffsetY %= itemHeightPx
                                                             } else {
                                                                 draggedOffsetY = 0f
                                                                 break
@@ -322,9 +329,11 @@ fun TodayScreen(
                                                 },
                                                 onDragEnd = {
                                                     resetDraggingState()
+                                                    isDraggingEnabled = false
                                                 },
                                                 onDragCancel = {
                                                     resetDraggingState()
+                                                    isDraggingEnabled = false
                                                 },
                                             )
                                         },
@@ -350,7 +359,7 @@ fun TodayScreen(
 
                                     is MementoItem.ScheduleItem -> {
                                         MementoScheduleItemWithLine(
-                                            tagColor = Color.Blue,
+                                            tagColor = changeHexToColor(item.tagColorCode),
                                             scheduleTitleText = item.description,
                                             timeRange = item.timeDuration,
                                             onClick = {
@@ -367,7 +376,7 @@ fun TodayScreen(
                         item {
                             Row {
                                 Text(
-                                    text = windDownTime ?: "22:00",
+                                    text = upTimeState?.windDownTime ?: "22:00",
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -376,7 +385,7 @@ fun TodayScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "Wind down",
+                                    text = stringResource(R.string.wind_down),
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -455,7 +464,6 @@ fun TodayScreen(
             },
             planId = selectedPlanId,
         )
-        // ai 버튼
         MementoAiFloatingButton(
             onClick = {
             },
@@ -489,7 +497,7 @@ sealed class MementoItem {
         val tagName: String,
         val tagColor: String,
         val toDoType: String,
-        val order: Int,
+        val order: Double,
     ) : MementoItem()
 
     data class ScheduleItem(
@@ -497,7 +505,7 @@ sealed class MementoItem {
         val endDate: String,
         val id: Int,
         val isAllDay: Boolean,
-        val order: Int,
+        val order: Double,
         val scheduleType: String,
         val startDate: String,
         val tagColorCode: String,

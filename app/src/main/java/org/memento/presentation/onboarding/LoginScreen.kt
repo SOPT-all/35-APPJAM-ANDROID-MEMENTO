@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -134,23 +133,23 @@ fun LoginScreen(
     Column(
         modifier =
             Modifier
-                .fillMaxSize()
-                .padding(top = 130.dp, bottom = 176.dp),
+                .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.weight(130 / 703f))
         Text(
             text = stringResource(id = R.string.onboarding_login_title),
             style = defaultMementoTypography.title_b_24,
             color = darkModeColors.white,
             textAlign = TextAlign.Center,
         )
-        Spacer(Modifier.height(70.dp))
+        Spacer(modifier = Modifier.weight(70 / 703f))
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.logo_memento_white),
             contentDescription = stringResource(id = R.string.onboarding_google_login),
         )
-        Spacer(Modifier.height(74.dp))
+        Spacer(modifier = Modifier.weight(74 / 703f))
         SocialLoginButton(
             icon = R.drawable.img_google,
             content = stringResource(id = R.string.onboarding_google_login),
@@ -166,7 +165,7 @@ fun LoginScreen(
             },
             modifier = Modifier.padding(horizontal = 16.dp),
         )
-        Spacer(Modifier.height(18.dp))
+        Spacer(modifier = Modifier.weight(18 / 703f))
         Row {
             Text(
                 text = stringResource(id = R.string.onboarding_login_contract),
@@ -185,6 +184,7 @@ fun LoginScreen(
                         },
             )
         }
+        Spacer(modifier = Modifier.weight(176 / 703f))
     }
 
     if (showErrorToast) {

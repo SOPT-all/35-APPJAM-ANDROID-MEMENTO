@@ -1,7 +1,5 @@
 package org.memento.presentation.onboarding
 
-import android.text.Layout.Alignment
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -73,10 +70,11 @@ fun OnboardingScreen3(
                     navigateToOnboardingScreen4()
                 },
             )
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.weight(20 / 708f))
             LazyColumn(
                 modifier =
                     Modifier
+                        .weight(1f)
                         .padding(horizontal = 14.dp),
             ) {
                 itemsIndexed(questionList, key = { index, _ -> index }) { index, item ->
@@ -89,25 +87,15 @@ fun OnboardingScreen3(
                     )
                     Spacer(Modifier.height(18.dp))
                 }
-                item {
-                    Box(
-                        modifier =
-                            Modifier
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .background(color = Color.Transparent),
-                    )
-                }
             }
+            OnboardingBottomButton(
+                content = R.string.onboarding_next,
+                isSelected = isAllSelected,
+                onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
+            )
         }
-        OnboardingBottomButton(
-            content = R.string.onboarding_next,
-            isSelected = isAllSelected,
-            onSelected = { if (isAllSelected) navigateToOnboardingScreen4() },
-            modifier =
-                Modifier
-                    .align(androidx.compose.ui.Alignment.BottomCenter)
-                    .padding(bottom = 10.dp),
-        )
     }
 }

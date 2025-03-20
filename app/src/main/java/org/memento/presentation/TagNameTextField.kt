@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ fun TagNameTextField(
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_eraser),
-                contentDescription = "clear text",
+                contentDescription = stringResource(id = R.string.tag_text_field_clear),
                 tint = darkModeColors.gray05,
                 modifier =
                     Modifier

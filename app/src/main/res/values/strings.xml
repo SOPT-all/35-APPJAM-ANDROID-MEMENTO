@@ -5,6 +5,9 @@
 
     <!--    today-->
     <string name="today">today</string>
+    <string name="today_empty_view_text">No plans yet? Add one now!</string>
+    <string name="wake_up">Wake Up</string>
+    <string name="wind_down">Wind down</string>
 
     <!--    calendar-->
     <string name="calendar">calendar</string>
@@ -103,6 +106,7 @@
     <!--    Setting-->
     <string name="setting">Setting</string>
     <string name="done">Done</string>
+    <string name="tag_text_field_clear">Clear Text Field</string>
 
 
 </resources>

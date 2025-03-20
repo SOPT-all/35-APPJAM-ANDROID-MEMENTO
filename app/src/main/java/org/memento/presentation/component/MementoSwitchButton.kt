@@ -21,18 +21,19 @@ import org.memento.ui.theme.darkModeColors
 fun MementoSwitchButton(
     modifier: Modifier = Modifier,
     isSwitchOn: Boolean,
-    onSwitchChange: (Boolean) -> Unit
+    onSwitchChange: (Boolean) -> Unit,
 ) {
     Switch(
         checked = isSwitchOn,
         onCheckedChange = onSwitchChange,
         modifier = modifier,
-        colors = SwitchDefaults.colors(
-            checkedThumbColor = darkModeColors.white,
-            checkedTrackColor = darkModeColors.gray08,
-            uncheckedThumbColor = darkModeColors.gray06,
-            uncheckedTrackColor = darkModeColors.gray07,
-        ),
+        colors =
+            SwitchDefaults.colors(
+                checkedThumbColor = darkModeColors.white,
+                checkedTrackColor = darkModeColors.gray08,
+                uncheckedThumbColor = darkModeColors.gray06,
+                uncheckedTrackColor = darkModeColors.gray07,
+            ),
     )
 }
 
@@ -46,8 +47,8 @@ fun MementoSwitchButtonPreview() {
         onSwitchChange = { isToggled ->
             isSwitchOn = isToggled
             if (isSwitchOn) {
-               // TODO(): 자연어 처리, 공지 알림 로직 구현
+                // TODO(): 자연어 처리, 공지 알림 로직 구현
             }
-        }
+        },
     )
 }

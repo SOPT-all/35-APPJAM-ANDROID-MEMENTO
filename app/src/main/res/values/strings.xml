@@ -103,4 +103,8 @@
     <string name="toast_sign_in_is_currently_unavailable">Sign-in is currently unavailable. Please try again.</string>
     <string name="toast_network_error">Network error. Please check your internet connection.</string>
 
+    <!--    Setting-->
+    <string name="tag_text_field_clear">Clear Text Field</string>
+
+
 </resources>

@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -217,7 +218,7 @@ fun TodayScreen(
                         item {
                             Spacer(modifier = Modifier.height(150.dp))
                             Text(
-                                text = "No plans yet? Add one now!",
+                                text = stringResource(R.string.today_empty_view_text),
                                 style = MementoTheme.typography.title_b_22,
                                 color = darkModeColors.gray08,
                                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -251,7 +252,7 @@ fun TodayScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "Wake Up",
+                                    text = stringResource(R.string.wake_up),
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
@@ -367,7 +368,7 @@ fun TodayScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "Wind down",
+                                    text = stringResource(R.string.wind_down),
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =

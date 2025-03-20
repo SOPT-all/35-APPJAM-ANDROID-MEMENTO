@@ -5,6 +5,9 @@
 
     <!--    today-->
     <string name="today">today</string>
+    <string name="today_empty_view_text">No plans yet? Add one now!</string>
+    <string name="wake_up">Wake Up</string>
+    <string name="wind_down">Wind down</string>
 
     <!--    calendar-->
     <string name="calendar">calendar</string>
@@ -99,7 +102,5 @@
     <string name="toast_session_expired">Session expired. Please sign in again.</string>
     <string name="toast_sign_in_is_currently_unavailable">Sign-in is currently unavailable. Please try again.</string>
     <string name="toast_network_error">Network error. Please check your internet connection.</string>
-
-
 
 </resources>

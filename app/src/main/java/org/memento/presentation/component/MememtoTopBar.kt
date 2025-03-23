@@ -25,7 +25,7 @@ fun MementoTopBar(
     date: String,
     year: String,
     onDateClick: () -> Unit,
-    onIconClick: () -> Unit,
+    onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -60,7 +60,7 @@ fun MementoTopBar(
                 tint = Color.Unspecified,
                 modifier =
                     Modifier
-                        .noRippleClickable { onIconClick() },
+                        .noRippleClickable { onSettingClick() },
             )
         }
     }
@@ -73,6 +73,6 @@ fun TopBarComponentPreview() {
         date = "Jan 3",
         year = "2025",
         onDateClick = {},
-        onIconClick = {},
+        onSettingClick = {},
     )
 }

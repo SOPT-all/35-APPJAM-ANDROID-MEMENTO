@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import org.memento.presentation.navigator.MainNavigator
 import org.memento.presentation.onboarding.navigation.onboardingNavGraph
 import org.memento.presentation.reqres.navigation.reqresNavGraph
+import org.memento.presentation.setting.navigation.settingNavGraph
 import org.memento.presentation.today.navigation.todayNavGraph
 import org.memento.presentation.todo.navigation.todoGraph
 
@@ -38,7 +39,7 @@ fun MainNavHost(
 
             todayNavGraph(
                 padding = padding,
-                navigateToReqres = { navigator.navigateToReqres() },
+                navigateToSetting = { navigator.navigateToSetting() },
             )
 
             todoGraph(
@@ -47,6 +48,10 @@ fun MainNavHost(
             )
 
             reqresNavGraph(
+                navigateBack = { navigator.navHostController.popBackStack() },
+            )
+
+            settingNavGraph(
                 navigateBack = { navigator.navHostController.popBackStack() },
             )
         }

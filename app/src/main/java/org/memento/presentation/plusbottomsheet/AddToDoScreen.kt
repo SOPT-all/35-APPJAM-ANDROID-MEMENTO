@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,6 +42,7 @@ import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
 import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModal
+import org.memento.presentation.component.MementoSwitchButton
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.changeHexToColor
@@ -67,6 +69,7 @@ fun AddToDoScreen(
     val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
     val addPriorityType by viewModel.addPriorityType.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
+    var isSwitchOn by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -176,38 +179,70 @@ fun AddToDoScreen(
                     )
                 }
             }
-            Row {
-                Text(
-                    text = "Add to-do,",
-                    style =
-                        MementoTheme.typography.body_b_18.copy(
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Add to-do,",
+                        style =
+                        MementoTheme.typography.body_r_14.copy(
                             color = darkModeColors.gray07,
                         ),
-                )
+                    )
 
-                Text(
-                    text = selectedDateText,
-                    modifier =
+                    Text(
+                        text = selectedDateText,
+                        modifier =
                         Modifier
-                            .padding(start = 5.dp)
                             .noRippleClickable {
                                 isCalendarVisible = true
                             },
-                    style =
-                        MementoTheme.typography.body_b_18.copy(
+                        style =
+                        MementoTheme.typography.body_r_14.copy(
                             color = darkModeColors.white,
                         ),
-                )
+                    )
 
-                if (isCalendarVisible) {
-                    DatePickerModal(
-                        onDateSelected = { selectedDate ->
-                            selectedDate?.let {
-                                viewModel.updateSelectedDateText(formatDate(it))
+                    if (isCalendarVisible) {
+                        DatePickerModal(
+                            onDateSelected = { selectedDate ->
+                                selectedDate?.let {
+                                    viewModel.updateSelectedDateText(formatDate(it))
+                                }
+                            },
+                            onDismiss = {
+                                isCalendarVisible = false
+                            },
+                        )
+                    }
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(11.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Text(
+                        text = "자연어로 입력",
+                        style =
+                        MementoTheme.typography.detail_b_11.copy(
+                            color = darkModeColors.gray07,
+                        ),
+                    )
+
+                    MementoSwitchButton(
+                        modifier = Modifier.width(width = 40.dp)
+                            .aspectRatio(ratio = 1.73f),
+                        isSwitchOn = isSwitchOn,
+                        onSwitchChange = { isToggled ->
+                            isSwitchOn = isToggled
+                            if (isSwitchOn) {
+                                // TODO(): 자연어 처리, 공지 알림 로직 구현
                             }
-                        },
-                        onDismiss = {
-                            isCalendarVisible = false
                         },
                     )
                 }

@@ -24,6 +24,7 @@ import org.memento.ui.theme.mementoColors
 
 /**
  *  @param onBack  뒤로가기
+ *  @param navigateToSettingTag Setting Tag Screen으로 이동
  *  @param userMail 사용자 mail값
  *  @param modifier modifier 수정 사항
  */
@@ -31,31 +32,32 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun SettingScreen(
     onBack: () -> Unit,
+    navigateToSettingTag: () -> Unit,
     userMail: String = "memento@gmail.com",
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(top = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(top = 16.dp),
     ) {
-        SettingTopBar(type = SettingTopBarType.SETTING, onBackClick = {}, onDoneClick = {})
+        SettingTopBar(type = SettingTopBarType.SETTING, onBackClick = { onBack() }, onDoneClick = {})
 
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 26.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             SettingMailBar(usermail = userMail)
             Spacer(modifier = modifier.padding(top = 12.dp))
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.notifications))
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.tag))
+            SettingOptions(onClick = { navigateToSettingTag() }, optionName = stringResource(R.string.tag))
             SettingOptions(onClick = {}, optionName = stringResource(R.string.time))
 
             Divider(modifier = Modifier.drawHorizontalLine())
@@ -71,7 +73,6 @@ fun SettingScreen(
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.logout), textColor = mementoColors.red)
             SettingOptions(onClick = {}, optionName = stringResource(R.string.delete_my_account), textColor = mementoColors.red)
-
         }
     }
 }
@@ -79,5 +80,5 @@ fun SettingScreen(
 @Preview
 @Composable
 fun SettingScreenPreview() {
-    SettingScreen(onBack = {}, userMail = "memento@gmail.com")
+//    SettingScreen(onBack = {}, userMail = "memento@gmail.com")
 }

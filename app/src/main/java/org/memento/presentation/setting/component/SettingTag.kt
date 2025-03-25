@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ import org.memento.ui.theme.darkModeColors
  *  @param tagColor 태그 색상 (Hexcode)
  *  @param tagName 테그 이름
  *  @param onClick  Tag 수정/삭제 뷰로 이동
+ *  @param isEditable  Tag 수정 가능여부
  *  @param modifier modifier 수정 사항
  */
 
@@ -41,57 +43,60 @@ fun SettingTag(
     tagColor: String,
     tagName: String,
     onClick: () -> Unit,
+    isEditable: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
-            Modifier
-                .then(modifier)
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .background(
-                    color = darkModeColors.gray10,
-                    shape = RoundedCornerShape(size = 4.dp),
-                )
-                .noRippleClickable {
-                    onClick()
-                },
+        Modifier
+            .then(modifier)
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+            .background(
+                color = darkModeColors.gray10,
+                shape = RoundedCornerShape(size = 4.dp),
+            )
+            .noRippleClickable {
+                onClick()
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth(0.025f)
-                    .fillMaxHeight()
-                    .background(
-                        color = changeHexToColor(tagColor),
-                        shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
-                    ),
+            Modifier
+                .fillMaxWidth(0.025f)
+                .fillMaxHeight()
+                .background(
+                    color = changeHexToColor(tagColor),
+                    shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
+                ),
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         Row(
             modifier =
-                Modifier
-                    .padding(vertical = 8.dp)
-                    .weight(1f),
+            Modifier
+                .padding(vertical = 8.dp)
+                .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = tagName,
                 style =
-                    MementoTheme.typography.body_r_14.copy(
-                        color = darkModeColors.gray05,
-                    ),
+                MementoTheme.typography.body_r_14.copy(
+                    color = darkModeColors.gray05,
+                ),
             )
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_right_26),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.padding(end = 4.dp),
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .alpha(if (isEditable) 1f else 0f),
             )
         }
     }
@@ -102,11 +107,11 @@ fun SettingTag(
 private fun SettingTagPreview() {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black)
-                .padding(horizontal = 20.dp)
-                .padding(top = 20.dp),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black)
+            .padding(horizontal = 20.dp)
+            .padding(top = 20.dp),
     ) {
         SettingTag(
             tagName = "Family",

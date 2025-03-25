@@ -1,6 +1,5 @@
 package org.memento.presentation.setting.component
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
@@ -29,17 +30,19 @@ fun SettingOptions(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = darkModeColors.black)
-            .padding(top = 8.dp, bottom = 4.dp, start = 10.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.black)
+                .padding(top = 8.dp, bottom = 4.dp, start = 10.dp)
+                .noRippleClickable { onClick() },
     ) {
         Text(
             text = optionName,
             style =
-            MementoTheme.typography.body_r_14.copy(
-                color = textColor,
-            ),
+                MementoTheme.typography.body_r_14.copy(
+                    color = textColor,
+                ),
         )
     }
 }

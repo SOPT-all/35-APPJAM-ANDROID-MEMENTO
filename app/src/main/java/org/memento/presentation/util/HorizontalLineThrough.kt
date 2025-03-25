@@ -10,12 +10,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.memento.ui.theme.darkModeColors
 
-
 fun Modifier.drawHorizontalLine(
     color: Color = darkModeColors.gray09,
     thickness: Dp = 1.dp,
     horizontalPadding: Dp = 3.dp,
-    verticalPadding: Dp = 5.dp
+    verticalPadding: Dp = 5.dp,
 ): Modifier {
     return this
         .fillMaxWidth()

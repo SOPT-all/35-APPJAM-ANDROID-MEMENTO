@@ -20,6 +20,8 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun SettingIntegrationsScreen() {
+    val dummyData = dummyIntegrations
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,6 +90,18 @@ fun SettingIntegrationsScreen() {
         }
     }
 }
+
+data class IntegrationDummy(
+    val name: String,
+    val isConnected: Boolean,
+)
+
+val dummyIntegrations =
+    listOf(
+        IntegrationDummy(name = "google", isConnected = true),
+        IntegrationDummy(name = "notion", isConnected = false),
+        IntegrationDummy(name = "notion", isConnected = false)
+    )
 
 @Preview
 @Composable

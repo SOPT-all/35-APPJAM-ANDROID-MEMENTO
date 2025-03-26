@@ -21,6 +21,8 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun SettingIntegrationsScreen() {
     val dummyData = dummyIntegrations
+    val connected = dummyData.filter{ it.isConnected }
+    val notConnected = dummyData.filter { !it.isConnected }
 
     Column(
         modifier =
@@ -42,8 +44,9 @@ fun SettingIntegrationsScreen() {
             textAlign = TextAlign.Center,
         )
 
-        Column(
-            modifier =
+        if (connected.isNotEmpty()) {
+            Column(
+                modifier =
                 Modifier
                     .fillMaxWidth()
                     .background(
@@ -51,21 +54,24 @@ fun SettingIntegrationsScreen() {
                         shape = RoundedCornerShape(size = 4.dp),
                     )
                     .padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-        ) {
-            Text(
-                text = "Connected",
-                style =
+                verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+            ) {
+                Text(
+                    text = "Connected",
+                    style =
                     MementoTheme.typography.detail_r_12.copy(
                         color = darkModeColors.gray05,
                     ),
-            )
+                )
 
-            SettingSocialChip(
-                icon = R.drawable.img_google,
-                content = "Google Calendar",
-                onClick = { },
-            )
+                connected.forEach { data ->
+                    SettingSocialChip(
+                        icon = nameToIcon(data.name),
+                        content = data.name,
+                        onClick = { },
+                    )
+                }
+            }
         }
 
         Column(
@@ -83,18 +89,22 @@ fun SettingIntegrationsScreen() {
                     ),
             )
 
-            SettingSocialChip(
-                icon = R.drawable.ic_notion,
-                content = "Notion",
-                onClick = { },
-            )
-
-            SettingSocialChip(
-                icon = R.drawable.ic_notion,
-                content = "Notion",
-                onClick = { },
-            )
+            notConnected.forEach { data ->
+                SettingSocialChip(
+                    icon = nameToIcon(data.name),
+                    content = data.name,
+                    onClick = { },
+                )
+            }
         }
+    }
+}
+
+fun nameToIcon(name: String): Int {
+    return when (name){
+        "Google Calendar" -> R.drawable.img_google
+        "Notion" -> R.drawable.ic_notion
+        else -> R.drawable.img_google
     }
 }
 
@@ -105,9 +115,9 @@ data class IntegrationDummy(
 
 val dummyIntegrations =
     listOf(
-        IntegrationDummy(name = "google", isConnected = true),
-        IntegrationDummy(name = "notion", isConnected = false),
-        IntegrationDummy(name = "notion", isConnected = false),
+        IntegrationDummy(name = "Google Calendar", isConnected = true),
+        IntegrationDummy(name = "Notion", isConnected = false),
+        IntegrationDummy(name = "Notion", isConnected = false),
     )
 
 @Preview

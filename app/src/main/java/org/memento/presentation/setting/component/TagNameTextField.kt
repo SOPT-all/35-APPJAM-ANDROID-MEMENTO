@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
+import org.memento.presentation.util.isKorean
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
@@ -47,10 +49,25 @@ fun TagNameTextField(
         ) {
             BasicTextField(
                 value = text,
-                onValueChange = onTextValueChange,
-                textStyle = defaultMementoTypography.body_b_14.copy(color = darkModeColors.gray03),
+                onValueChange = { newText ->
+                    val koreanCharCount = newText.count { it.isKorean() }
+                    val isValid =
+                        if (koreanCharCount > 0) {
+                            newText.length <= 17
+                        } else {
+                            newText.length <= 35
+                        }
+
+                    if (isValid) {
+                        onTextValueChange(newText)
+                    }
+                },
+                textStyle = defaultMementoTypography.body_r_14.copy(color = darkModeColors.gray03),
                 singleLine = true,
-                modifier = Modifier.weight(1f),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 4.dp)
+                        .weight(1f),
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_eraser),

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ import org.memento.ui.theme.darkModeColors
  *  @param tagColor 태그 색상 (Hexcode)
  *  @param tagName 테그 이름
  *  @param onClick  Tag 수정/삭제 뷰로 이동
+ *  @param isEditable  Tag 수정 가능여부
  *  @param modifier modifier 수정 사항
  */
 
@@ -41,6 +43,7 @@ fun SettingTag(
     tagColor: String,
     tagName: String,
     onClick: () -> Unit,
+    isEditable: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -91,7 +94,10 @@ fun SettingTag(
                 painter = painterResource(id = R.drawable.ic_right_26),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.padding(end = 4.dp),
+                modifier =
+                    Modifier
+                        .padding(end = 4.dp)
+                        .alpha(if (isEditable) 1f else 0f),
             )
         }
     }

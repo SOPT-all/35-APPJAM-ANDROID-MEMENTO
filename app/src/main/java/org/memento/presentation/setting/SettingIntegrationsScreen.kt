@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +24,7 @@ import org.memento.ui.theme.darkModeColors
 @Composable
 fun SettingIntegrationsScreen() {
     val dummyData = dummyIntegrations
-    val connected = dummyData.filter{ it.isConnected }
+    val connected = dummyData.filter { it.isConnected }
     val notConnected = dummyData.filter { !it.isConnected }
     var showConnectedDialog by remember { mutableStateOf(false) }
 
@@ -51,21 +51,21 @@ fun SettingIntegrationsScreen() {
         if (connected.isNotEmpty()) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = darkModeColors.gray09,
-                        shape = RoundedCornerShape(size = 4.dp),
-                    )
-                    .padding(vertical = 12.dp, horizontal = 16.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = darkModeColors.gray09,
+                            shape = RoundedCornerShape(size = 4.dp),
+                        )
+                        .padding(vertical = 12.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(space = 8.dp),
             ) {
                 Text(
                     text = "Connected",
                     style =
-                    MementoTheme.typography.detail_r_12.copy(
-                        color = darkModeColors.gray05,
-                    ),
+                        MementoTheme.typography.detail_r_12.copy(
+                            color = darkModeColors.gray05,
+                        ),
                 )
 
                 connected.forEach { data ->
@@ -115,13 +115,13 @@ fun SettingIntegrationsScreen() {
             onRightButtonClick = {
                 // TODO: 삭제 로직
                 showConnectedDialog = false
-            }
+            },
         )
     }
 }
 
 fun nameToIcon(name: String): Int {
-    return when (name){
+    return when (name) {
         "Google Calendar" -> R.drawable.img_google
         "Notion" -> R.drawable.ic_notion
         "Slack" -> R.drawable.ic_notion

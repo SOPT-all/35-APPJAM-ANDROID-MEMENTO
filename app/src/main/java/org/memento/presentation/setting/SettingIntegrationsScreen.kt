@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.memento.R
+import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingSocialChip
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
@@ -23,6 +26,7 @@ fun SettingIntegrationsScreen() {
     val dummyData = dummyIntegrations
     val connected = dummyData.filter{ it.isConnected }
     val notConnected = dummyData.filter { !it.isConnected }
+    var showConnectedDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier =
@@ -68,7 +72,7 @@ fun SettingIntegrationsScreen() {
                     SettingSocialChip(
                         icon = nameToIcon(data.name),
                         content = data.name,
-                        onClick = { },
+                        onClick = { showConnectedDialog = true },
                     )
                 }
             }
@@ -93,10 +97,26 @@ fun SettingIntegrationsScreen() {
                 SettingSocialChip(
                     icon = nameToIcon(data.name),
                     content = data.name,
-                    onClick = { },
+                    onClick = {
+                        // TODO: 플랫폼 별 연동 로직
+                    },
                 )
             }
         }
+    }
+
+    if (showConnectedDialog) {
+        SettingAlertDialog(
+            content = R.string.alert_setting_delete_account_title,
+            subContent = R.string.alert_setting_delete_account_subtitle,
+            leftButtonText = R.string.alert_cancel_button,
+            rightButtonText = R.string.alert_delete_button,
+            onLeftButtonClick = { showConnectedDialog = false },
+            onRightButtonClick = {
+                // TODO: 삭제 로직
+                showConnectedDialog = false
+            }
+        )
     }
 }
 
@@ -104,6 +124,7 @@ fun nameToIcon(name: String): Int {
     return when (name){
         "Google Calendar" -> R.drawable.img_google
         "Notion" -> R.drawable.ic_notion
+        "Slack" -> R.drawable.ic_notion
         else -> R.drawable.img_google
     }
 }
@@ -117,7 +138,7 @@ val dummyIntegrations =
     listOf(
         IntegrationDummy(name = "Google Calendar", isConnected = true),
         IntegrationDummy(name = "Notion", isConnected = false),
-        IntegrationDummy(name = "Notion", isConnected = false),
+        IntegrationDummy(name = "Slack", isConnected = false),
     )
 
 @Preview

@@ -5,6 +5,9 @@
 
     <!--    today-->
     <string name="today">today</string>
+    <string name="today_empty_view_text">No plans yet? Add one now!</string>
+    <string name="wake_up">Wake Up</string>
+    <string name="wind_down">Wind down</string>
 
     <!--    calendar-->
     <string name="calendar">calendar</string>
@@ -88,7 +91,15 @@
     <!--    AlertDialog-->
     <string name="alert_delete">Do you really want to delete this event?</string>
     <string name="alert_cancel_button">Cancel</string>
+    <string name="alert_ok_button">OK</string>
     <string name="alert_delete_button">Delete</string>
+    <string name="alert_log_out_button">Logout</string>
+    <string name="alert_delete_account_button">Delete account</string>
+    <string name="alert_setting_delete_account_title">Would you like to delete account?</string>
+    <string name="alert_setting_delete_account_subtitle">Permanently delete the account and remove access from all workspaces.</string>
+    <string name="alert_setting_delete">Do you really want to delete?</string>
+    <string name="alert_setting_log_out">Would you like to Logout?</string>
+    <string name="alert_setting_tag_exist">Tag name already exists.</string>
 
     <!--    Toast-->
     <string name="toast_login_failed">Login failed. Please check your network and account.</string>
@@ -100,6 +111,19 @@
     <string name="toast_sign_in_is_currently_unavailable">Sign-in is currently unavailable. Please try again.</string>
     <string name="toast_network_error">Network error. Please check your internet connection.</string>
 
+    <!--    Setting-->
+    <string name="setting">Setting</string>
+    <string name="done">Done</string>
+    <string name="tag_text_field_clear">Clear Text Field</string>
+    <string name="notifications">Notifications</string>
+    <string name="tag">Tag</string>
+    <string name="time">Time</string>
+    <string name="integrations">Integrations</string>
+    <string name="feedback">Feedback</string>
+    <string name="terms">Terms</string>
+    <string name="logout">Logout</string>
+    <string name="delete_my_account">Delete my account</string>
+    <string name="untitled">Untitled</string>
 
 
 </resources>

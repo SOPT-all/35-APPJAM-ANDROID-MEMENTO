@@ -107,15 +107,10 @@ fun SettingIntegrationsScreen() {
 
     if (showConnectedDialog) {
         SettingAlertDialog(
-            content = R.string.alert_setting_delete_account_title,
-            subContent = R.string.alert_setting_delete_account_subtitle,
-            leftButtonText = R.string.alert_cancel_button,
-            rightButtonText = R.string.alert_delete_button,
+            content = R.string.alert_setting_tag_exist,
+            leftButtonText = R.string.alert_ok_button,
             onLeftButtonClick = { showConnectedDialog = false },
-            onRightButtonClick = {
-                // TODO: 삭제 로직
-                showConnectedDialog = false
-            },
+            onRightButtonClick = { },
         )
     }
 }

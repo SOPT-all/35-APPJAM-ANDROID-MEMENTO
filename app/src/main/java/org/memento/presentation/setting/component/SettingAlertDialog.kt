@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -42,9 +44,9 @@ fun SettingAlertDialog(
     @StringRes content: Int,
     @StringRes subContent: Int? = null,
     @StringRes leftButtonText: Int,
-    @StringRes rightButtonText: Int,
+    @StringRes rightButtonText: Int? = null,
     onLeftButtonClick: () -> Unit,
-    onRightButtonClick: () -> Unit,
+    onRightButtonClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     // TODO: 소셜 플랫폼 타입 정의에 따라 dialog에 인자를 전달하셔서 수정하면 될 것 같습니다.
 ) {
@@ -83,51 +85,69 @@ fun SettingAlertDialog(
             )
         },
         confirmButton = {
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+            if (rightButtonText == null) {
                 Box(
-                    modifier =
-                        Modifier
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth(0.417f)
+                            .background(
+                                color = darkModeColors.gray08,
+                                shape = RoundedCornerShape(4.dp),
+                            )
+                            .padding(vertical = 8.dp)
+                            .noRippleClickable { onLeftButtonClick() },
+                    ) {
+                        Text(
+                            text = stringResource(id = leftButtonText),
+                            color = darkModeColors.gray05,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
                             .weight(1f)
                             .background(
                                 color = darkModeColors.gray08,
-                                shape = RoundedCornerShape(size = 4.dp),
+                                shape = RoundedCornerShape(4.dp),
                             )
                             .padding(vertical = 8.dp)
-                            .noRippleClickable {
-                                onLeftButtonClick()
-                            },
-                ) {
-                    Text(
-                        text = stringResource(id = leftButtonText),
-                        color = darkModeColors.gray05,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                Box(
-                    modifier =
-                        Modifier
+                            .noRippleClickable { onLeftButtonClick() },
+                    ) {
+                        Text(
+                            text = stringResource(id = leftButtonText),
+                            color = darkModeColors.gray05,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
                             .weight(1f)
                             .background(
                                 color = mementoColors.red,
-                                shape = RoundedCornerShape(size = 4.dp),
+                                shape = RoundedCornerShape(4.dp),
                             )
                             .padding(vertical = 8.dp)
-                            .noRippleClickable {
-                                onRightButtonClick()
-                            },
-                ) {
-                    Text(
-                        text = stringResource(id = rightButtonText),
-                        color = darkModeColors.black,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
+                            .noRippleClickable { onRightButtonClick() },
+                    ) {
+                        Text(
+                            text = stringResource(id = rightButtonText),
+                            color = darkModeColors.black,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
         },
@@ -143,10 +163,8 @@ fun SettingAlertDialog(
 @Composable
 fun SettingAlertDialogPreview() {
     SettingAlertDialog(
-        content = R.string.alert_setting_delete_account_title,
-        subContent = R.string.alert_setting_delete_account_subtitle,
-        leftButtonText = R.string.alert_cancel_button,
-        rightButtonText = R.string.alert_delete_button,
+        content = R.string.alert_setting_tag_exist,
+        leftButtonText = R.string.alert_ok_button,
         onLeftButtonClick = { },
         onRightButtonClick = { },
     )

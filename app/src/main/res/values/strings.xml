@@ -112,7 +112,18 @@
     <string name="toast_network_error">Network error. Please check your internet connection.</string>
 
     <!--    Setting-->
+    <string name="setting">Setting</string>
+    <string name="done">Done</string>
     <string name="tag_text_field_clear">Clear Text Field</string>
+    <string name="notifications">Notifications</string>
+    <string name="tag">Tag</string>
+    <string name="time">Time</string>
+    <string name="integrations">Integrations</string>
+    <string name="feedback">Feedback</string>
+    <string name="terms">Terms</string>
+    <string name="logout">Logout</string>
+    <string name="delete_my_account">Delete my account</string>
+    <string name="untitled">Untitled</string>
 
 
 </resources>

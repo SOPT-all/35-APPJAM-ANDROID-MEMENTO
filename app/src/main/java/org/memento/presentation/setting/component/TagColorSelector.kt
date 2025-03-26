@@ -1,4 +1,4 @@
-package org.memento.presentation
+package org.memento.presentation.setting.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -171,7 +171,7 @@ fun TodoScreen(
                         onDateClick = {
                             viewModel.updateSelectedDate(today)
                         },
-                        onIconClick = {},
+                        onSettingClick = {},
                     )
                     MementoWeeklyCalendar(
                         selectedDate = selectedDate,

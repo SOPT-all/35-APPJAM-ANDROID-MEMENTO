@@ -79,6 +79,7 @@ fun TodayScreen(
     modifier: Modifier = Modifier,
     viewModel: TodayViewModel = hiltViewModel(),
     padding: PaddingValues,
+    navigateToSetting: () -> Unit,
 ) {
     var draggedItemIndex by remember { mutableStateOf(-1) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
@@ -189,7 +190,7 @@ fun TodayScreen(
                 date = todoFormatDate(today),
                 year = nowYear,
                 onDateClick = { selectedDate.value = today },
-                onIconClick = {},
+                onSettingClick = { navigateToSetting() },
             )
 
             MementoWeeklyCalendar(

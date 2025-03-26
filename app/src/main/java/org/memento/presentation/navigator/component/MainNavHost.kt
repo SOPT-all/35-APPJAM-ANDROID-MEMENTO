@@ -53,6 +53,7 @@ fun MainNavHost(
 
             settingNavGraph(
                 navigateBack = { navigator.navHostController.popBackStack() },
+                navigateToSettingTag = { navigator.navigateToSettingTag() },
             )
         }
     }

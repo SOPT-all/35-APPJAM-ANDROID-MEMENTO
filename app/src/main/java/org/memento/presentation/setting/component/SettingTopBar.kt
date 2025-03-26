@@ -40,25 +40,23 @@ fun SettingTopBar(
     type: SettingTopBarType,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onDoneClick: () -> Unit,
+    onDoneClick: () -> Unit = {},
     isDoneVisible: Boolean = false,
 ) {
     Column {
         Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = darkModeColors.black)
-                    .padding(end = 20.dp),
+            modifier
+                .fillMaxWidth()
+                .background(color = darkModeColors.black)
+                .padding(end = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = null,
-                modifier =
-                    Modifier
-                        .noRippleClickable { onBackClick() },
+                modifier
+                    .noRippleClickable { onBackClick() },
                 tint = Color.Unspecified,
             )
 
@@ -79,7 +77,7 @@ fun SettingTopBar(
                         color = darkModeColors.gray04,
                     ),
                 modifier =
-                    Modifier
+                    modifier
                         .noRippleClickable { onDoneClick() }
                         .alpha(if (isDoneVisible) 1f else 0f),
             )

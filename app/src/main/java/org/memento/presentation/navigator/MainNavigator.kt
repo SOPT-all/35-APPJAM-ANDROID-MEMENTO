@@ -16,6 +16,7 @@ import org.memento.presentation.onboarding.navigation.navigationOnboarding3
 import org.memento.presentation.onboarding.navigation.navigationOnboarding4
 import org.memento.presentation.reqres.navigation.navigationReqres
 import org.memento.presentation.setting.navigation.navigationSetting
+import org.memento.presentation.setting.navigation.navigationSettingTag
 import org.memento.presentation.today.navigation.navigationToday
 import org.memento.presentation.todo.navigation.navigationTodo
 
@@ -54,6 +55,10 @@ class MainNavigator(
 
     fun navigateToSetting() {
         navHostController.navigationSetting()
+    }
+
+    fun navigateToSettingTag() {
+        navHostController.navigationSettingTag()
     }
 
     fun navigateToOnboarding1() {

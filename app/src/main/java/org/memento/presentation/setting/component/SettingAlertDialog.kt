@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,19 +86,21 @@ fun SettingAlertDialog(
         confirmButton = {
             if (rightButtonText == null) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Box (
-                        modifier = Modifier
-                            .fillMaxWidth(0.417f)
-                            .background(
-                                color = darkModeColors.gray08,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .padding(vertical = 8.dp)
-                            .noRippleClickable { onLeftButtonClick() },
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(0.417f)
+                                .background(
+                                    color = darkModeColors.gray08,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                                .padding(vertical = 8.dp)
+                                .noRippleClickable { onLeftButtonClick() },
                     ) {
                         Text(
                             text = stringResource(id = leftButtonText),
@@ -115,14 +116,15 @@ fun SettingAlertDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                color = darkModeColors.gray08,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .padding(vertical = 8.dp)
-                            .noRippleClickable { onLeftButtonClick() },
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .background(
+                                    color = darkModeColors.gray08,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                                .padding(vertical = 8.dp)
+                                .noRippleClickable { onLeftButtonClick() },
                     ) {
                         Text(
                             text = stringResource(id = leftButtonText),
@@ -132,14 +134,15 @@ fun SettingAlertDialog(
                         )
                     }
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                color = mementoColors.red,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .padding(vertical = 8.dp)
-                            .noRippleClickable { onRightButtonClick() },
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .background(
+                                    color = mementoColors.red,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                                .padding(vertical = 8.dp)
+                                .noRippleClickable { onRightButtonClick() },
                     ) {
                         Text(
                             text = stringResource(id = rightButtonText),

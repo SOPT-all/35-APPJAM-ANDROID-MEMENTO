@@ -179,33 +179,33 @@ fun AddToDoScreen(
                     )
                 }
             }
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "Add to-do,",
                         style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.gray07,
-                        ),
+                            MementoTheme.typography.body_r_14.copy(
+                                color = darkModeColors.gray07,
+                            ),
                     )
 
                     Text(
                         text = selectedDateText,
                         modifier =
-                        Modifier
-                            .noRippleClickable {
-                                isCalendarVisible = true
-                            },
+                            Modifier
+                                .noRippleClickable {
+                                    isCalendarVisible = true
+                                },
                         style =
-                        MementoTheme.typography.body_r_14.copy(
-                            color = darkModeColors.white,
-                        ),
+                            MementoTheme.typography.body_r_14.copy(
+                                color = darkModeColors.white,
+                            ),
                     )
 
                     if (isCalendarVisible) {
@@ -224,19 +224,20 @@ fun AddToDoScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(11.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
                         text = "자연어로 입력",
                         style =
-                        MementoTheme.typography.detail_b_11.copy(
-                            color = darkModeColors.gray07,
-                        ),
+                            MementoTheme.typography.detail_b_11.copy(
+                                color = darkModeColors.gray07,
+                            ),
                     )
 
                     MementoSwitchButton(
-                        modifier = Modifier.width(width = 40.dp)
-                            .aspectRatio(ratio = 1.73f),
+                        modifier =
+                            Modifier.width(width = 40.dp)
+                                .aspectRatio(ratio = 1.73f),
                         isSwitchOn = isSwitchOn,
                         onSwitchChange = { isToggled ->
                             isSwitchOn = isToggled

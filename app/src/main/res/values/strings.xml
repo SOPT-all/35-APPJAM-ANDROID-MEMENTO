@@ -110,6 +110,8 @@
     <string name="toast_network_error">Network error. Please check your internet connection.</string>
 
     <!--    Setting-->
+    <string name="setting">Setting</string>
+    <string name="done">Done</string>
     <string name="tag_text_field_clear">Clear Text Field</string>
 
 

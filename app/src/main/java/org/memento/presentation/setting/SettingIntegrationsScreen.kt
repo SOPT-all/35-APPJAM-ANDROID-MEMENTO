@@ -119,7 +119,7 @@ private fun nameToIcon(name: String): Int {
     return when (name) {
         "Google Calendar" -> R.drawable.img_google
         "Notion" -> R.drawable.ic_notion
-        "Slack" -> R.drawable.ic_notion
+        "Slack" -> R.drawable.img_slack
         else -> R.drawable.img_google
     }
 }

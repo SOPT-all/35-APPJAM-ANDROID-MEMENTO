@@ -50,6 +50,7 @@ import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun AddToDoScreen(
@@ -94,6 +95,7 @@ fun AddToDoScreen(
                     lifecycleOwner = lifecycleOwner,
                 )
             }
+
             is UiState.Failure -> {
                 viewModel.setLoadingState()
                 val toast = MementoToast(context)
@@ -103,6 +105,7 @@ fun AddToDoScreen(
                     lifecycleOwner = lifecycleOwner,
                 )
             }
+
             else -> Unit
         }
     }
@@ -138,159 +141,167 @@ fun AddToDoScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 23.dp, vertical = 5.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             if (isEdit) {
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 5.dp, vertical = 7.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = "Cancel",
                         style =
-                            MementoTheme.typography.body_r_14.copy(
-                                color = darkModeColors.gray02,
-                            ),
+                        MementoTheme.typography.body_r_14.copy(
+                            color = mementoColors.red,
+                        ),
                         modifier =
-                            Modifier
-                                .noRippleClickable {
-                                    isEditCancel()
-                                },
+                        Modifier
+                            .noRippleClickable {
+                                isEditCancel()
+                            }
+                            .padding(horizontal = 18.dp, vertical = 12.dp)
                     )
 
                     Text(
                         text = "Done",
                         style =
-                            MementoTheme.typography.body_r_14.copy(
-                                color = darkModeColors.gray02,
-                            ),
+                        MementoTheme.typography.body_r_14.copy(
+                            color = darkModeColors.gray02,
+                        ),
                         modifier =
-                            Modifier
-                                .noRippleClickable {
-                                    viewModel.patchAddTodo(planId)
-                                    isEditDone()
-                                },
+                        Modifier
+                            .noRippleClickable {
+                                viewModel.patchAddTodo(planId)
+                                isEditDone()
+                            }
+                            .padding(horizontal = 18.dp, vertical = 12.dp)
                     )
                 }
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+
+            Column(
+                modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 23.dp, vertical = 10.dp),
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(
-                        text = "Add to-do,",
-                        style =
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Add to-do,",
+                            style =
                             MementoTheme.typography.body_r_14.copy(
                                 color = darkModeColors.gray07,
                             ),
-                    )
+                        )
 
-                    Text(
-                        text = selectedDateText,
-                        modifier =
+                        Text(
+                            text = selectedDateText,
+                            modifier =
                             Modifier
                                 .noRippleClickable {
                                     isCalendarVisible = true
                                 },
-                        style =
+                            style =
                             MementoTheme.typography.body_r_14.copy(
                                 color = darkModeColors.white,
                             ),
-                    )
+                        )
 
-                    if (isCalendarVisible) {
-                        DatePickerModal(
-                            onDateSelected = { selectedDate ->
-                                selectedDate?.let {
-                                    viewModel.updateSelectedDateText(formatDate(it))
+                        if (isCalendarVisible) {
+                            DatePickerModal(
+                                onDateSelected = { selectedDate ->
+                                    selectedDate?.let {
+                                        viewModel.updateSelectedDateText(formatDate(it))
+                                    }
+                                },
+                                onDismiss = {
+                                    isCalendarVisible = false
+                                },
+                            )
+                        }
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(11.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "자연어로 입력",
+                            style =
+                            MementoTheme.typography.detail_b_11.copy(
+                                color = darkModeColors.gray07,
+                            ),
+                        )
+
+                        MementoSwitchButton(
+                            modifier =
+                            Modifier
+                                .width(width = 40.dp)
+                                .aspectRatio(ratio = 1.73f),
+                            isSwitchOn = isSwitchOn,
+                            onSwitchChange = { isToggled ->
+                                isSwitchOn = isToggled
+                                if (isSwitchOn) {
+                                    // TODO(): 자연어 처리, 공지 알림 로직 구현
                                 }
-                            },
-                            onDismiss = {
-                                isCalendarVisible = false
                             },
                         )
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(11.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "자연어로 입력",
-                        style =
-                            MementoTheme.typography.detail_b_11.copy(
-                                color = darkModeColors.gray07,
-                            ),
-                    )
-
-                    MementoSwitchButton(
-                        modifier =
-                            Modifier.width(width = 40.dp)
-                                .aspectRatio(ratio = 1.73f),
-                        isSwitchOn = isSwitchOn,
-                        onSwitchChange = { isToggled ->
-                            isSwitchOn = isToggled
-                            if (isSwitchOn) {
-                                // TODO(): 자연어 처리, 공지 알림 로직 구현
-                            }
-                        },
-                    )
-                }
-            }
-
-            BasicTextField(
-                value = addToDoText,
-                onValueChange = { newText ->
-                    if (newText.replace(" ", "").length <= 30) {
-                        viewModel.updateToDoText(newText = newText)
-                    }
-                },
-                modifier =
+                BasicTextField(
+                    value = addToDoText,
+                    onValueChange = { newText ->
+                        if (newText.replace(" ", "").length <= 30) {
+                            viewModel.updateToDoText(newText = newText)
+                        }
+                    },
+                    modifier =
                     Modifier
                         .fillMaxWidth()
                         .aspectRatio(1.9f)
                         .background(color = Color.Transparent)
                         .focusRequester(focusRequester)
                         .padding(top = 16.dp),
-                textStyle =
+                    textStyle =
                     MementoTheme.typography.body_b_16.copy(
                         color = darkModeColors.white,
                     ),
-                cursorBrush = SolidColor(darkModeColors.green),
-                keyboardOptions =
+                    cursorBrush = SolidColor(darkModeColors.green),
+                    keyboardOptions =
                     KeyboardOptions.Default.copy(
                         capitalization = KeyboardCapitalization.Sentences,
                     ),
-            )
+                )
+            }
         }
 
         Row(
             modifier =
-                Modifier
-                    .padding(vertical = 16.dp, horizontal = 20.dp)
-                    .align(alignment = Alignment.BottomCenter),
+            Modifier
+                .padding(vertical = 16.dp, horizontal = 20.dp)
+                .align(alignment = Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(
                 modifier =
-                    Modifier
-                        .background(color = darkModeColors.gray09)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .noRippleClickable {
-                            onNavigateDeadLineSetting()
-                        },
+                Modifier
+                    .background(color = darkModeColors.gray09)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .noRippleClickable {
+                        onNavigateDeadLineSetting()
+                    },
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_deadline),
@@ -299,49 +310,49 @@ fun AddToDoScreen(
                 Text(
                     text = deadLineText,
                     style =
-                        MementoTheme.typography.detail_r_12.copy(
-                            color = darkModeColors.gray02,
-                        ),
+                    MementoTheme.typography.detail_r_12.copy(
+                        color = darkModeColors.gray02,
+                    ),
                 )
             }
 
             Box(
                 modifier =
-                    Modifier
-                        .background(color = darkModeColors.gray09)
-                        .align(alignment = Alignment.CenterVertically)
-                        .padding(all = 16.dp)
-                        .noRippleClickable {
-                            onNavigateTagSetting()
-                        },
+                Modifier
+                    .background(color = darkModeColors.gray09)
+                    .align(alignment = Alignment.CenterVertically)
+                    .padding(all = 16.dp)
+                    .noRippleClickable {
+                        onNavigateTagSetting()
+                    },
             ) {
                 Box(
                     modifier =
-                        Modifier
-                            .size(10.dp)
-                            .background(
-                                color = changeHexToColor(hex = addTagColor),
-                                shape = CircleShape,
-                            ),
+                    Modifier
+                        .size(10.dp)
+                        .background(
+                            color = changeHexToColor(hex = addTagColor),
+                            shape = CircleShape,
+                        ),
                 )
             }
 
             Image(
                 painter =
-                    painterResource(
-                        when (addPriorityType) {
-                            PriorityTagType.None -> R.drawable.ic_eisen_none
-                            PriorityTagType.Immediate -> R.drawable.ic_eisen_immediate
-                            PriorityTagType.High -> R.drawable.ic_eisen_high
-                            PriorityTagType.Medium -> R.drawable.ic_eisen_medium
-                            PriorityTagType.Low -> R.drawable.ic_eisen_low
-                        },
-                    ),
+                painterResource(
+                    when (addPriorityType) {
+                        PriorityTagType.None -> R.drawable.ic_eisen_none
+                        PriorityTagType.Immediate -> R.drawable.ic_eisen_immediate
+                        PriorityTagType.High -> R.drawable.ic_eisen_high
+                        PriorityTagType.Medium -> R.drawable.ic_eisen_medium
+                        PriorityTagType.Low -> R.drawable.ic_eisen_low
+                    },
+                ),
                 contentDescription = "아이젠 하워 버튼",
                 modifier =
-                    Modifier.noRippleClickable {
-                        onNavigateEisenHourSetting()
-                    },
+                Modifier.noRippleClickable {
+                    onNavigateEisenHourSetting()
+                },
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -349,21 +360,21 @@ fun AddToDoScreen(
             if (!isEdit) {
                 Box(
                     modifier =
-                        Modifier.background(
-                            shape = CircleShape,
-                            color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
-                        ),
+                    Modifier.background(
+                        shape = CircleShape,
+                        color = if (addToDoText == "") darkModeColors.green.copy(alpha = 0.3f) else darkModeColors.green,
+                    ),
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_send),
                         contentDescription = "전송 버튼",
                         modifier =
-                            Modifier
-                                .padding(horizontal = 13.dp)
-                                .padding(top = 12.dp, bottom = 10.dp)
-                                .noRippleClickable {
-                                    viewModel.postAddTodo()
-                                },
+                        Modifier
+                            .padding(horizontal = 13.dp)
+                            .padding(top = 12.dp, bottom = 10.dp)
+                            .noRippleClickable {
+                                viewModel.postAddTodo()
+                            },
                     )
                 }
             }

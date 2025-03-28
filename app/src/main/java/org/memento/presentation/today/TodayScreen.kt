@@ -428,14 +428,13 @@ fun TodayScreen(
             onEdit = {
                 if (dialogType == DialogType.TO_DO) {
                     showEditTodoBottomSheet = true
-                    viewModel.getTodoDetail(todoId = selectedPlanId)
                 } else {
                     showEditScheduleBottomSheet = true
-                    viewModel.getScheduleDetail(scheduleId = selectedPlanId)
                 }
             },
             dialogType = dialogType,
             planId = selectedPlanId,
+            refreshKey = refreshTrigger
         )
         if (showDeleteDialog) {
             MementoAlertDialog(

@@ -7,9 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel
-@Inject
-constructor(
-    private val settingRepository: SettingRepository
-) : ViewModel() {
-
-}
+    @Inject
+    constructor(
+        private val settingRepository: SettingRepository,
+    ) : ViewModel()

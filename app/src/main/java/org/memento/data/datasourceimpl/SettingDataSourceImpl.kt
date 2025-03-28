@@ -5,8 +5,7 @@ import org.memento.data.service.SettingService
 import javax.inject.Inject
 
 class SettingDataSourceImpl
-@Inject
-constructor(
-    private val settingService: SettingService
-) : SettingDataSource {
-}
+    @Inject
+    constructor(
+        private val settingService: SettingService,
+    ) : SettingDataSource

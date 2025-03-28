@@ -40,19 +40,19 @@ fun SettingScreen(
 ) {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(top = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(top = 16.dp),
     ) {
         SettingTopBar(type = SettingTopBarType.SETTING, onBackClick = { onBack() }, onDoneClick = {})
 
         Column(
             modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 26.dp),
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 26.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             SettingMailBar(usermail = userMail)

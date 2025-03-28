@@ -1,4 +1,3 @@
 package org.memento.data.datasource
 
-interface SettingDataSource {
-}
+interface SettingDataSource

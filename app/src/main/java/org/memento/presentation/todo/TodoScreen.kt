@@ -153,8 +153,8 @@ fun TodoScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         MementoAnimatedGlowBorder(
             modifier =
-                Modifier
-                    .padding(padding),
+            Modifier
+                .padding(padding),
             isShowAnimation = isShowAnimation,
             borderWidth = 4.dp,
             cornerRadius = 8.dp,
@@ -162,8 +162,8 @@ fun TodoScreen(
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                        Modifier
-                            .fillMaxSize(),
+                    Modifier
+                        .fillMaxSize(),
                 ) {
                     MementoTopBar(
                         date = todoFormatDate(today),
@@ -186,8 +186,8 @@ fun TodoScreen(
                     ) {
                         TodoBoxUp(
                             modifier =
-                                Modifier
-                                    .align(Alignment.TopCenter),
+                            Modifier
+                                .align(Alignment.TopCenter),
                         )
                         Column(modifier = Modifier.wrapContentSize()) {
                             LazyColumn(
@@ -204,8 +204,8 @@ fun TodoScreen(
                                     val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                                     Column(
                                         modifier =
-                                            Modifier
-                                                .padding(horizontal = 16.dp),
+                                        Modifier
+                                            .padding(horizontal = 16.dp),
                                     ) {
                                         sortedTodos.forEachIndexed { index, todoItem ->
                                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -242,61 +242,64 @@ fun TodoScreen(
                                 }
                             },
                             modifier =
-                                Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(bottom = 20.dp, end = 20.dp),
+                            Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 20.dp, end = 20.dp),
                         )
                         TodoBoxDown(
                             modifier =
-                                Modifier
-                                    .align(Alignment.BottomCenter),
+                            Modifier
+                                .align(Alignment.BottomCenter),
                         )
                     }
-
-                    MementoDialog(
-                        showDialog = showDetailDialog,
-                        onDismiss = { showDetailDialog = false },
-                        onDelete = { showDeleteDialog = true },
-                        onEdit = { showEditTodoBottomSheet = true },
-                        dialogType = DialogType.TO_DO,
-                        planId = selectedPlanId,
-                    )
-
-                    if (showDeleteDialog) {
-                        MementoAlertDialog(
-                            content = R.string.alert_delete,
-                            leftButtonText = R.string.alert_cancel_button,
-                            rightButtonText = R.string.alert_delete_button,
-                            onLeftButtonClick = { showDeleteDialog = false },
-                            onRightButtonClick = {
-                                viewModel.deletePlan(
-                                    planId = selectedPlanId,
-                                    dialogType = DialogType.TO_DO,
-                                )
-                                showDeleteDialog = false
-                                showDetailDialog = false
-                            },
-                        )
-                    }
-
-                    MementoEditTodoBottomSheet(
-                        isOpenBottomSheet = showEditTodoBottomSheet,
-                        sheetState = sheetEditTodoState,
-                        onConfirm = { showEditTodoBottomSheet = false },
-                        planId = selectedPlanId,
-                    )
-                }
-                if (isShowToast) {
-                    MementoToast(LocalContext.current).makeText(
-                        message = "Failed to load ToDos. Please try again.",
-                        icon = R.drawable.ic_toast,
-                        duration = Toast.LENGTH_SHORT,
-                        lifecycleOwner = LocalLifecycleOwner.current,
-                    )
-                    isShowToast = false
                 }
             }
         }
+
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { showEditTodoBottomSheet = true },
+            dialogType = DialogType.TO_DO,
+            planId = selectedPlanId,
+            refreshKey = false
+        )
+
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(
+                        planId = selectedPlanId,
+                        dialogType = DialogType.TO_DO,
+                    )
+                    showDeleteDialog = false
+                    showDetailDialog = false
+                },
+            )
+        }
+
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onCancel = { showEditTodoBottomSheet = false },
+            onConfirm = { showEditTodoBottomSheet = false },
+            planId = selectedPlanId,
+        )
+    }
+    if (isShowToast) {
+        MementoToast(LocalContext.current).makeText(
+            message = "Failed to load ToDos. Please try again.",
+            icon = R.drawable.ic_toast,
+            duration = Toast.LENGTH_SHORT,
+            lifecycleOwner = LocalLifecycleOwner.current,
+        )
+        isShowToast = false
+
     }
 }
 

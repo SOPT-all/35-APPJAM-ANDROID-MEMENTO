@@ -1,6 +1,7 @@
 package org.memento.presentation.util
 
 import android.content.Context
+import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.LifecycleOwner
@@ -32,6 +33,8 @@ class MementoToast(private val context: Context) : Toast(context) {
 
         this.duration = duration
         this.view = views
+
+        this.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 100)
         this.show()
     }
 }

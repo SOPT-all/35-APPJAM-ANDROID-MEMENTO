@@ -153,8 +153,8 @@ fun TodoScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         MementoAnimatedGlowBorder(
             modifier =
-            Modifier
-                .padding(padding),
+                Modifier
+                    .padding(padding),
             isShowAnimation = isShowAnimation,
             borderWidth = 4.dp,
             cornerRadius = 8.dp,
@@ -162,8 +162,8 @@ fun TodoScreen(
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxSize(),
+                        Modifier
+                            .fillMaxSize(),
                 ) {
                     MementoTopBar(
                         date = todoFormatDate(today),
@@ -186,8 +186,8 @@ fun TodoScreen(
                     ) {
                         TodoBoxUp(
                             modifier =
-                            Modifier
-                                .align(Alignment.TopCenter),
+                                Modifier
+                                    .align(Alignment.TopCenter),
                         )
                         Column(modifier = Modifier.wrapContentSize()) {
                             LazyColumn(
@@ -204,8 +204,8 @@ fun TodoScreen(
                                     val firstUndoneTodoId = sortedTodos.firstOrNull { !it.isCompleted }?.id
                                     Column(
                                         modifier =
-                                        Modifier
-                                            .padding(horizontal = 16.dp),
+                                            Modifier
+                                                .padding(horizontal = 16.dp),
                                     ) {
                                         sortedTodos.forEachIndexed { index, todoItem ->
                                             val deadline = if (todoItem.date == todoItem.deadline) "Today" else todoFormatDate(todoItem.date.toLocalDate())
@@ -242,14 +242,14 @@ fun TodoScreen(
                                 }
                             },
                             modifier =
-                            Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 20.dp, end = 20.dp),
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 20.dp, end = 20.dp),
                         )
                         TodoBoxDown(
                             modifier =
-                            Modifier
-                                .align(Alignment.BottomCenter),
+                                Modifier
+                                    .align(Alignment.BottomCenter),
                         )
                     }
                 }
@@ -263,7 +263,7 @@ fun TodoScreen(
             onEdit = { showEditTodoBottomSheet = true },
             dialogType = DialogType.TO_DO,
             planId = selectedPlanId,
-            refreshKey = false
+            refreshKey = false,
         )
 
         if (showDeleteDialog) {
@@ -299,7 +299,6 @@ fun TodoScreen(
             lifecycleOwner = LocalLifecycleOwner.current,
         )
         isShowToast = false
-
     }
 }
 

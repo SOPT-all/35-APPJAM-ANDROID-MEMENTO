@@ -434,7 +434,7 @@ fun TodayScreen(
             },
             dialogType = dialogType,
             planId = selectedPlanId,
-            refreshKey = refreshTrigger
+            refreshKey = refreshTrigger,
         )
         if (showDeleteDialog) {
             MementoAlertDialog(

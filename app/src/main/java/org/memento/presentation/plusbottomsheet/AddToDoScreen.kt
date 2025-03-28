@@ -1,5 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -61,7 +62,6 @@ fun AddToDoScreen(
     onCloseBottomSheet: () -> Unit,
     isEdit: Boolean = false,
     planId: Int = 0,
-    isEditDone: () -> Unit,
     isEditCancel: () -> Unit,
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
@@ -76,51 +76,23 @@ fun AddToDoScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusRequester = remember { FocusRequester() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val patchState by viewModel.patchState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         viewModel.getTagList()
     }
 
-    LaunchedEffect(patchState) {
-        when (patchState) {
-            is UiState.Success -> {
-                viewModel.setLoadingState()
-                isEditDone()
-                val toast = MementoToast(context)
-                toast.makeText(
-                    message = SuccessType.CREATE_SUCCESS.message,
-                    icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner,
-                )
-            }
-
-            is UiState.Failure -> {
-                viewModel.setLoadingState()
-                val toast = MementoToast(context)
-                toast.makeText(
-                    message = ErrorType.NETWORK_ERROR.message,
-                    icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner,
-                )
-            }
-
-            else -> Unit
-        }
-    }
-
     LaunchedEffect(uiState) {
         when (uiState) {
             is UiState.Success -> {
                 viewModel.setLoadingState()
-                onCloseBottomSheet()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
+                onCloseBottomSheet()
             }
 
             is UiState.Failure -> {
@@ -175,7 +147,6 @@ fun AddToDoScreen(
                         Modifier
                             .noRippleClickable {
                                 viewModel.patchAddTodo(planId)
-                                isEditDone()
                             }
                             .padding(horizontal = 18.dp, vertical = 12.dp)
                     )
@@ -391,6 +362,5 @@ fun AddToDoScreenPreview() {
         onNavigateEisenHourSetting = { },
         onCloseBottomSheet = { },
         isEditCancel = { },
-        isEditDone = { },
     )
 }

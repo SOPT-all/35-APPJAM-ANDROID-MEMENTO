@@ -187,6 +187,8 @@ class AddToDoViewModel
 
         fun patchAddTodo(todoId: Int) {
             viewModelScope.launch {
+                _uiState.value = UiState.Loading
+
                 val addTodo = createAddTodo()
                 val result = addPlanRepository.patchAddTodo(todoId = todoId, addTodo = addTodo)
 

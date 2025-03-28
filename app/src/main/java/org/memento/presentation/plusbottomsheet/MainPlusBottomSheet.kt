@@ -91,7 +91,6 @@ fun MainPlusBottomSheet(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
-                    isEditDone = { },
                     isEditCancel = { },
                     onCloseBottomSheet = onCloseBottomSheet,
                 )
@@ -99,7 +98,6 @@ fun MainPlusBottomSheet(
             1 ->
                 AddScheduleScreen(
                     onCloseBottomSheet = onCloseBottomSheet,
-                    isEditDone = { },
                     isEditCancel = { },
                     isEdit = false,
                 )
@@ -110,7 +108,6 @@ fun MainPlusBottomSheet(
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
                     onCloseBottomSheet = onCloseBottomSheet,
-                    isEditDone = { },
                     isEditCancel = { },
                 )
         }

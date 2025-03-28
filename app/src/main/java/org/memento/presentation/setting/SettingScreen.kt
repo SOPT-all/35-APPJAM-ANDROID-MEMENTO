@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
 import org.memento.presentation.setting.component.SettingMailBar
 import org.memento.presentation.setting.component.SettingOptions
@@ -34,23 +35,24 @@ fun SettingScreen(
     onBack: () -> Unit,
     navigateToSettingTag: () -> Unit,
     userMail: String = "memento@gmail.com",
+    viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black)
-                .padding(top = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black)
+            .padding(top = 16.dp),
     ) {
         SettingTopBar(type = SettingTopBarType.SETTING, onBackClick = { onBack() }, onDoneClick = {})
 
         Column(
             modifier =
-                modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 26.dp),
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(top = 26.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             SettingMailBar(usermail = userMail)

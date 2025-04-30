@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.memento.presentation.type.TagColorType
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 
@@ -22,7 +23,7 @@ import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun TagColorSelector(
-    color: Color,
+    color: TagColorType,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -32,7 +33,7 @@ fun TagColorSelector(
             modifier
                 .size(18.dp)
                 .clip(CircleShape)
-                .background(color)
+                .background(color.color)
                 .border(
                     width = if (isSelected) 1.dp else 0.dp,
                     color = if (isSelected) darkModeColors.gray02 else Color.Unspecified,

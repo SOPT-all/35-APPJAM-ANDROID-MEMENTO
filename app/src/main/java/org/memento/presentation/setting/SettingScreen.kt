@@ -34,6 +34,7 @@ import org.memento.ui.theme.mementoColors
 fun SettingScreen(
     onBack: () -> Unit,
     navigateToSettingTag: () -> Unit,
+    navigateToSettingTime: () -> Unit,
     userMail: String = "memento@gmail.com",
     viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
@@ -60,7 +61,7 @@ fun SettingScreen(
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.notifications))
             SettingOptions(onClick = { navigateToSettingTag() }, optionName = stringResource(R.string.tag))
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.time))
+            SettingOptions(onClick = { navigateToSettingTime() }, optionName = stringResource(R.string.time))
 
             Divider(modifier = Modifier.drawHorizontalLine())
 

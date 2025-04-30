@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.common.math.LinearTransformation.vertical
 import org.memento.R
 import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingTopBar
@@ -63,61 +64,66 @@ fun SettingEditTagScreen(
                 Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
-                    .padding(start = 20.dp, top = 26.dp, end = 20.dp, bottom = 20.dp)
-                    .background(color = darkModeColors.gray10, shape = RoundedCornerShape(4.dp)),
+                    .padding(start = 20.dp, top = 26.dp, end = 20.dp, bottom = 20.dp),
         ) {
-            Text(
-                text = stringResource(id = R.string.setting_edit_tag_name),
-                style = defaultMementoTypography.detail_r_12,
-                color = darkModeColors.gray06,
+            Column(
                 modifier =
                     Modifier
-                        .padding(start = 16.dp, top = 12.dp),
-            )
-            TagNameTextField(
-                text = text,
-                onTextValueChange = { text = it },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp, top = 9.dp, end = 12.dp),
-            )
-            Spacer(Modifier.height(30.dp))
-            Text(
-                text = stringResource(id = R.string.setting_edit_tag_color),
-                style = defaultMementoTypography.detail_r_12,
-                color = darkModeColors.gray06,
-                modifier =
-                    Modifier
-                        .padding(start = 16.dp),
-            )
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp, bottom = 24.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                        .background(color = darkModeColors.gray10, shape = RoundedCornerShape(4.dp)),
             ) {
-                TagColorType.entries.forEach { color ->
-                    TagColorSelector(
-                        color = color,
-                        isSelected = color == selectedColor,
-                        onClick = { selectedColor = color },
-                    )
+                Text(
+                    text = stringResource(id = R.string.setting_edit_tag_name),
+                    style = defaultMementoTypography.detail_r_12,
+                    color = darkModeColors.gray06,
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp, top = 12.dp),
+                )
+                TagNameTextField(
+                    text = text,
+                    onTextValueChange = { text = it },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 12.dp, top = 9.dp, end = 12.dp),
+                )
+                Spacer(Modifier.height(30.dp))
+                Text(
+                    text = stringResource(id = R.string.setting_edit_tag_color),
+                    style = defaultMementoTypography.detail_r_12,
+                    color = darkModeColors.gray06,
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp),
+                )
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 14.dp, bottom = 24.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    TagColorType.entries.forEach { color ->
+                        TagColorSelector(
+                            color = color,
+                            isSelected = color == selectedColor,
+                            onClick = { selectedColor = color },
+                        )
+                    }
                 }
             }
+            Text(
+                text = stringResource(id = R.string.setting_delete_tag),
+                style = defaultMementoTypography.body_r_14,
+                color = mementoColors.red,
+                modifier =
+                    Modifier
+                        .padding(horizontal = 11.dp, vertical = 10.dp)
+                        .noRippleClickable {
+                            showDeleteDialog = true
+                        },
+            )
         }
-        Text(
-            text = stringResource(id = R.string.setting_delete_tag),
-            style = defaultMementoTypography.body_r_14,
-            color = mementoColors.red,
-            modifier =
-                Modifier
-                    .padding(start = 31.dp, top = 20.dp)
-                    .noRippleClickable {
-                        showDeleteDialog = true
-                    },
-        )
     }
 
     if (showDeleteDialog) {

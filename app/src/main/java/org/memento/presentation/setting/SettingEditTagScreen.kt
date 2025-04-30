@@ -112,6 +112,7 @@ fun SettingEditTagScreen(
                     }
                 }
             }
+            Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(id = R.string.setting_delete_tag),
                 style = defaultMementoTypography.body_r_14,

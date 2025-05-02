@@ -31,7 +31,6 @@ import org.memento.presentation.plusbottomsheet.AddToDoDeadLineScreen
 import org.memento.presentation.plusbottomsheet.AddToDoEisenScreen
 import org.memento.presentation.plusbottomsheet.AddToDoTagScreen
 import org.memento.presentation.plusbottomsheet.AddToDoViewModel
-import org.memento.presentation.plusbottomsheet.BrainDumpViewModel
 import org.memento.presentation.plusbottomsheet.MainPlusBottomSheet
 import org.memento.presentation.type.BottomSheetType
 import org.memento.ui.theme.darkModeColors
@@ -54,7 +53,6 @@ fun MainScreenContent(
     navigator: MainNavigator,
     addToDoViewModel: AddToDoViewModel = hiltViewModel(),
     addScheduleViewModel: AddScheduleViewModel = hiltViewModel(),
-    brainDoViewModel: BrainDumpViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -65,7 +63,6 @@ fun MainScreenContent(
         currentBottomSheet = null
         addToDoViewModel.resetData()
         addScheduleViewModel.resetData()
-        brainDoViewModel.resetData()
         coroutineScope.launch {
             bottomSheetState.hide()
         }

@@ -29,10 +29,10 @@ fun MainPlusBottomSheet(
     onNavigateEisenSetting: () -> Unit,
     onCloseBottomSheet: () -> Unit,
 ) {
-    val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab, R.drawable.ic_brain_tab)
+    val pages = listOf(R.drawable.ic_check_tab, R.drawable.ic_calendar_tab)
     val pagerState =
         rememberPagerState(
-            pageCount = { 3 },
+            pageCount = { 2 },
         )
     val coroutineScope = rememberCoroutineScope()
 
@@ -91,7 +91,6 @@ fun MainPlusBottomSheet(
                     onNavigateDeadLineSetting = onNavigateDeadLineSetting,
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
-                    isEditDone = { },
                     isEditCancel = { },
                     onCloseBottomSheet = onCloseBottomSheet,
                 )
@@ -99,14 +98,8 @@ fun MainPlusBottomSheet(
             1 ->
                 AddScheduleScreen(
                     onCloseBottomSheet = onCloseBottomSheet,
-                    isEditDone = { },
                     isEditCancel = { },
                     isEdit = false,
-                )
-
-            2 ->
-                BrainDumpScreen(
-                    onCloseBottomSheet = onCloseBottomSheet,
                 )
 
             else ->
@@ -115,7 +108,6 @@ fun MainPlusBottomSheet(
                     onNavigateTagSetting = onNavigateTagSetting,
                     onNavigateEisenHourSetting = onNavigateEisenSetting,
                     onCloseBottomSheet = onCloseBottomSheet,
-                    isEditDone = { },
                     isEditCancel = { },
                 )
         }

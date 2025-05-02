@@ -59,6 +59,7 @@ fun MementoDialog(
     onEdit: () -> Unit,
     dialogType: DialogType,
     planId: Int,
+    refreshKey: Boolean,
     viewModel: TodayViewModel = hiltViewModel(),
 ) {
     val scheduleDetailState by viewModel.detailScheduleState.collectAsStateWithLifecycle()
@@ -67,7 +68,7 @@ fun MementoDialog(
     var todoData by remember { mutableStateOf<TodoDetail?>(null) }
 
     if (showDialog) {
-        LaunchedEffect(dialogType, planId) {
+        LaunchedEffect(dialogType, planId, refreshKey) {
             when (dialogType) {
                 DialogType.SCHEDULE -> {
                     viewModel.getScheduleDetail(scheduleId = planId)
@@ -581,6 +582,7 @@ fun MementoDialogPreview() {
             onDismiss = closeDialog,
             onDelete = { },
             onEdit = { },
+            refreshKey = false,
             dialogType = DialogType.SCHEDULE,
             planId = 1,
         )

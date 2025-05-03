@@ -4,6 +4,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
@@ -158,4 +159,9 @@ fun formatTextLocalDateTime(
     val dateTimeString = "$dateString $timeString"
     val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm a", Locale.ENGLISH)
     return LocalDateTime.parse(dateTimeString, formatter)
+}
+
+// localDate -> long 파싱 함수
+fun LocalDate.toMillis(): Long {
+    return this.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }

@@ -69,7 +69,7 @@ fun AddToDoScreen(
     val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
     val addPriorityType by viewModel.addPriorityType.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
-    var isSwitchOn by remember { mutableStateOf(false) }
+    val isNatSwitchOn by viewModel.isSwitchOn.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -218,12 +218,9 @@ fun AddToDoScreen(
                                 Modifier
                                     .width(width = 40.dp)
                                     .aspectRatio(ratio = 1.73f),
-                            isSwitchOn = isSwitchOn,
+                            isSwitchOn = isNatSwitchOn,
                             onSwitchChange = { isToggled ->
-                                isSwitchOn = isToggled
-                                if (isSwitchOn) {
-                                    // TODO(): 자연어 처리, 공지 알림 로직 구현
-                                }
+                                viewModel.updateSwitchState(isToggled)
                             },
                         )
                     }
@@ -232,9 +229,8 @@ fun AddToDoScreen(
                 BasicTextField(
                     value = addToDoText,
                     onValueChange = { newText ->
-                        if (newText.replace(" ", "").length <= 30) {
-                            viewModel.updateToDoText(newText = newText)
-                        }
+                        viewModel.updateToDoInputWithParsing(newText)
+
                     },
                     modifier =
                         Modifier

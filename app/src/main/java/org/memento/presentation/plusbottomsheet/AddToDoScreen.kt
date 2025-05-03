@@ -230,7 +230,6 @@ fun AddToDoScreen(
                     value = addToDoText,
                     onValueChange = { newText ->
                         viewModel.updateToDoInputWithParsing(newText)
-
                     },
                     modifier =
                         Modifier

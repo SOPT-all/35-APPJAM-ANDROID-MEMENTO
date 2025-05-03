@@ -1,7 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +23,6 @@ import org.memento.presentation.util.formatDateTime
 import org.memento.presentation.util.toMillis
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,8 +81,7 @@ class AddToDoViewModel
 
         private var parseJob: Job? = null
 
-
-    init {
+        init {
             getTagList()
         }
 
@@ -264,30 +260,30 @@ class AddToDoViewModel
             if (!_isSwitchOn.value || input.replace(" ", "").length > 30) return
 
             parseJob?.cancel()
-            parseJob = viewModelScope.launch {
-                delay(500L)
+            parseJob =
+                viewModelScope.launch {
+                    delay(500L)
 
-                val parsed = parseNaturalLanguage(input, isParseTime = false)
+                    val parsed = parseNaturalLanguage(input, isParseTime = false)
 
-                _addToDoText.value = parsed.title
+                    _addToDoText.value = parsed.title
 
-                parsed.endDate?.let { end ->
-                    val formatted = formatDate(end.toLocalDate().toMillis())
-                    _tempDeadLineText.value = formatted
-                    saveDeadLineText()
+                    parsed.endDate?.let { end ->
+                        val formatted = formatDate(end.toLocalDate().toMillis())
+                        _tempDeadLineText.value = formatted
+                        saveDeadLineText()
+                    }
+
+                    parsed.startDate?.let { start ->
+                        val formatted = formatDate(start.toLocalDate().toMillis())
+                        _selectedDateText.value = formatted
+                    }
                 }
-
-                parsed.startDate?.let { start ->
-                    val formatted = formatDate(start.toLocalDate().toMillis())
-                    _selectedDateText.value = formatted
-                }
-            }
         }
 
         fun updateSwitchState(isOn: Boolean) {
-                _isSwitchOn.value = isOn
+            _isSwitchOn.value = isOn
         }
-
 
         fun resetData() {
             _selectedDateText.value = "Today"

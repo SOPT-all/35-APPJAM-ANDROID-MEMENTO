@@ -2,15 +2,15 @@ package org.memento.presentation.plusbottomsheet
 
 import java.time.LocalDateTime
 
-data class ParsedDateResult(
-    val title: String,
-    val startDate: LocalDateTime?,
-    val endDate: LocalDateTime? = null,
-)
+/**
+ * 자연어 처리 로직 구현 함수
+ * @param input schedule 혹은 todo 에 입력한 텍스트
+ * @param isParseTime schedule 이면 true, todo 이면 false
+*/
 
 fun parseNaturalLanguage(
     input: String,
-    isParseTime: Boolean = true // schedule 만 시간 파싱
+    isParseTime: Boolean = true,
 ): ParsedDateResult {
     val now = LocalDateTime.now()
     var text = input.trim()
@@ -18,7 +18,7 @@ fun parseNaturalLanguage(
     var endDate: LocalDateTime? = null
 
     // 1. 시간 범위 파싱
-    if(isParseTime) {
+    if (isParseTime) {
         val timeRangeRegex = Regex("""(오전|오후)?\s?(\d{1,2})시(부터)?\s?(오전|오후)?\s?(\d{1,2})시까지""")
         val timeRangeMatch = timeRangeRegex.find(text)
         if (timeRangeMatch != null) {
@@ -34,11 +34,12 @@ fun parseNaturalLanguage(
     }
 
     // 2. 상대 날짜 처리
-    val relativeMap = mapOf(
-        "오늘" to 0,
-        "내일" to 1,
-        "모레" to 2
-    )
+    val relativeMap =
+        mapOf(
+            "오늘" to 0,
+            "내일" to 1,
+            "모레" to 2,
+        )
     for ((keyword, daysToAdd) in relativeMap) {
         if (text.contains(keyword)) {
             startDate = now.plusDays(daysToAdd.toLong()).withHour(startDate?.hour ?: 0).withMinute(0)
@@ -68,11 +69,12 @@ fun parseNaturalLanguage(
         val targetDay = daysOfWeek.indexOf(dayKor)
         val currentDay = now.dayOfWeek.value % 7
 
-        val plusDays = when (weekContext) {
-            "다음주" -> (7 - currentDay + targetDay + 7) % 7
-            "이번주" -> (targetDay - currentDay + 7) % 7
-            else -> if (targetDay <= currentDay) (targetDay - currentDay + 7) else (targetDay - currentDay)
-        }
+        val plusDays =
+            when (weekContext) {
+                "다음주" -> (7 - currentDay + targetDay + 7) % 7
+                "이번주" -> (targetDay - currentDay + 7) % 7
+                else -> if (targetDay <= currentDay) (targetDay - currentDay + 7) else (targetDay - currentDay)
+            }
         startDate = now.plusDays(plusDays.toLong()).withHour(startDate?.hour ?: 0).withMinute(0)
         text = text.replace(weekdayRegex, "")
     }
@@ -100,7 +102,7 @@ fun parseNaturalLanguage(
     }
 
     // 6. 단일 시간만 있을 경우
-    if(isParseTime) {
+    if (isParseTime) {
         if (startDate == null) {
             val singleTimeRegex = Regex("""(오전|오후)?\s?(\d{1,2})시""")
             val singleMatch = singleTimeRegex.find(text)
@@ -120,11 +122,14 @@ fun parseNaturalLanguage(
     return ParsedDateResult(
         title = if (cleanTitle.isNotEmpty()) cleanTitle else input,
         startDate = startDate,
-        endDate = endDate
+        endDate = endDate,
     )
 }
 
-private fun adjustHour(hour: Int, meridiem: String?): Int {
+private fun adjustHour(
+    hour: Int,
+    meridiem: String?,
+): Int {
     return when (meridiem) {
         "오전" -> if (hour == 12) 0 else hour
         "오후" -> if (hour < 12) hour + 12 else hour

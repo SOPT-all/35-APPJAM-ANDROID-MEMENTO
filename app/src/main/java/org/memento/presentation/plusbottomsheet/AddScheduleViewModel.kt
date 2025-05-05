@@ -93,6 +93,7 @@ class AddScheduleViewModel
 
         fun patchAddSchedule(scheduleId: Int) {
             viewModelScope.launch {
+                _uiState.value = UiState.Loading
                 val addSchedule =
                     AddSchedule(
                         description = _eventText.value,

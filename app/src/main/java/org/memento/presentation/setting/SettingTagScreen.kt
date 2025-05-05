@@ -28,6 +28,7 @@ import org.memento.ui.theme.darkModeColors
 fun SettingTagScreen(
     onBack: () -> Unit,
     onDone: () -> Unit,
+    navigateToSettingEditTag: () -> Unit,
     tags: List<Tag>,
 ) {
     Column(
@@ -64,7 +65,7 @@ fun SettingTagScreen(
                 )
             }
             item {
-                SettingAddTag(onClick = {})
+                SettingAddTag(onClick = { navigateToSettingEditTag() })
             }
         }
     }
@@ -89,5 +90,5 @@ val dummyTags =
 @Preview
 @Composable
 private fun SettingTagScreen() {
-    SettingTagScreen(onBack = {}, onDone = {}, tags = dummyTags)
+    SettingTagScreen(onBack = {}, onDone = {}, tags = dummyTags, navigateToSettingEditTag = {})
 }

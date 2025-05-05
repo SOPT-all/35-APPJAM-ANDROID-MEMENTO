@@ -425,9 +425,16 @@ fun TodayScreen(
             showDialog = showDetailDialog,
             onDismiss = { showDetailDialog = false },
             onDelete = { showDeleteDialog = true },
-            onEdit = { if (dialogType == DialogType.TO_DO) showEditTodoBottomSheet = true else showEditScheduleBottomSheet = true },
+            onEdit = {
+                if (dialogType == DialogType.TO_DO) {
+                    showEditTodoBottomSheet = true
+                } else {
+                    showEditScheduleBottomSheet = true
+                }
+            },
             dialogType = dialogType,
             planId = selectedPlanId,
+            refreshKey = refreshTrigger,
         )
         if (showDeleteDialog) {
             MementoAlertDialog(

@@ -48,7 +48,7 @@ fun MementoEditTodoBottomSheet(
         }
 
         ModalBottomSheet(
-            onDismissRequest = { onConfirm() },
+            onDismissRequest = { onCancel() },
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray10,
@@ -73,12 +73,11 @@ fun MementoEditTodoBottomSheet(
                             onNavigateEisenHourSetting = {
                                 currentBottomSheet = BottomSheetType.EISEN
                             },
-                            onCloseBottomSheet = { },
-                            isEdit = true,
-                            planId = planId,
-                            isEditDone = {
+                            onCloseBottomSheet = {
                                 onConfirm()
                             },
+                            isEdit = true,
+                            planId = planId,
                             isEditCancel = {
                                 onCancel()
                             },

@@ -23,11 +23,8 @@ class Interceptor
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
-            Timber.d("🔍 Original Request: ${originalRequest.url}")
-
             val authRequest =
                 if (!tokenDataStore.isNewUser) {
-                    Timber.d("🔑 Using access token: ${tokenDataStore.accessToken}")
                     originalRequest.newAuthBuilder()
                 } else {
                     Timber.d("❌ No access token found.")
@@ -36,12 +33,9 @@ class Interceptor
 
             val response = chain.proceed(authRequest)
 
-            Timber.d("📬 Response received with status code: ${response.code}")
-
             when (response.code) {
                 TOKEN_EXPIRED_CODE -> {
                     Timber.d("⏳ Token expired, trying to refresh token.")
-                    Timber.d("🔑 Current refreshToken: ${tokenDataStore.refreshToken}")
 
                     val refreshTokenRequest =
                         originalRequest.newBuilder()
@@ -50,25 +44,16 @@ class Interceptor
                             .addHeader(AUTHORIZATION, "$BEARER ${tokenDataStore.refreshToken}")
                             .build()
 
-                    Timber.d("🔄 Sending refresh token request: ${refreshTokenRequest.url}")
-                    Timber.d("🔄 Request headers: ${refreshTokenRequest.headers}")
-
                     response.close()
 
                     val refreshTokenResponse = chain.proceed(refreshTokenRequest)
 
-                    Timber.d("📬 Response from refresh token request: ${refreshTokenResponse.code}")
                     val responseBodyString = refreshTokenResponse.peekBody(Long.MAX_VALUE).string()
 
                     if (refreshTokenResponse.isSuccessful) {
                         Timber.d("✅ Token refresh successful.")
-                        Timber.d("🔑 Refresh token response: $responseBodyString")
 
                         val responseRefresh = json.decodeFromString<BaseResponse<ResponseRefreshDto>>(responseBodyString)
-                        Timber.d("🔄 Parsed response: $responseRefresh")
-
-                        Timber.d("🎉 Old accessToken: ${tokenDataStore.accessToken}")
-                        Timber.d("🎉 Old refreshToken: ${tokenDataStore.refreshToken}")
 
                         responseRefresh.data?.let {
                             with(tokenDataStore) {
@@ -77,8 +62,7 @@ class Interceptor
                             }
                         }
 
-                        Timber.d("🎉 Updated accessToken: ${tokenDataStore.accessToken}")
-                        Timber.d("🎉 Updated refreshToken: ${tokenDataStore.refreshToken}")
+                        Timber.d("🎉 Updated accessToken")
 
                         refreshTokenResponse.close()
 

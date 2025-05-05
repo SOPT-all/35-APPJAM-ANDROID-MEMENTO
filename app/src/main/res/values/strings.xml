@@ -125,5 +125,15 @@
     <string name="delete_my_account">Delete my account</string>
     <string name="untitled">Untitled</string>
 
+    <!--    Setting Tag Edit-->
+    <string name="setting_edit_tag_name">Tag name</string>
+    <string name="setting_edit_tag_color">Color</string>
+    <string name="setting_delete_tag">Delete tag</string>
+    <string name="setting_alert_delete_content">Are you sure you want to delete this tag?</string>
+    <string name="setting_alert_delete_message">If you delete it, associated items will be moved to ‘Untitled’.</string>
+    <string name="setting_alert_delete_leftButtonText">Cancel</string>
+    <string name="setting_alert_delete_rightButtonText">Delete</string>
+    <string name="setting_alert_exist_message">Tag name already exists.</string>
+    <string name="setting_alert_exist_buttonText">OK</string>
 
 </resources>

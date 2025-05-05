@@ -252,51 +252,53 @@ fun TodoScreen(
                                     .align(Alignment.BottomCenter),
                         )
                     }
-
-                    MementoDialog(
-                        showDialog = showDetailDialog,
-                        onDismiss = { showDetailDialog = false },
-                        onDelete = { showDeleteDialog = true },
-                        onEdit = { showEditTodoBottomSheet = true },
-                        dialogType = DialogType.TO_DO,
-                        planId = selectedPlanId,
-                    )
-
-                    if (showDeleteDialog) {
-                        MementoAlertDialog(
-                            content = R.string.alert_delete,
-                            leftButtonText = R.string.alert_cancel_button,
-                            rightButtonText = R.string.alert_delete_button,
-                            onLeftButtonClick = { showDeleteDialog = false },
-                            onRightButtonClick = {
-                                viewModel.deletePlan(
-                                    planId = selectedPlanId,
-                                    dialogType = DialogType.TO_DO,
-                                )
-                                showDeleteDialog = false
-                                showDetailDialog = false
-                            },
-                        )
-                    }
-
-                    MementoEditTodoBottomSheet(
-                        isOpenBottomSheet = showEditTodoBottomSheet,
-                        sheetState = sheetEditTodoState,
-                        onConfirm = { showEditTodoBottomSheet = false },
-                        planId = selectedPlanId,
-                    )
-                }
-                if (isShowToast) {
-                    MementoToast(LocalContext.current).makeText(
-                        message = "Failed to load ToDos. Please try again.",
-                        icon = R.drawable.ic_toast,
-                        duration = Toast.LENGTH_SHORT,
-                        lifecycleOwner = LocalLifecycleOwner.current,
-                    )
-                    isShowToast = false
                 }
             }
         }
+
+        MementoDialog(
+            showDialog = showDetailDialog,
+            onDismiss = { showDetailDialog = false },
+            onDelete = { showDeleteDialog = true },
+            onEdit = { showEditTodoBottomSheet = true },
+            dialogType = DialogType.TO_DO,
+            planId = selectedPlanId,
+            refreshKey = false,
+        )
+
+        if (showDeleteDialog) {
+            MementoAlertDialog(
+                content = R.string.alert_delete,
+                leftButtonText = R.string.alert_cancel_button,
+                rightButtonText = R.string.alert_delete_button,
+                onLeftButtonClick = { showDeleteDialog = false },
+                onRightButtonClick = {
+                    viewModel.deletePlan(
+                        planId = selectedPlanId,
+                        dialogType = DialogType.TO_DO,
+                    )
+                    showDeleteDialog = false
+                    showDetailDialog = false
+                },
+            )
+        }
+
+        MementoEditTodoBottomSheet(
+            isOpenBottomSheet = showEditTodoBottomSheet,
+            sheetState = sheetEditTodoState,
+            onCancel = { showEditTodoBottomSheet = false },
+            onConfirm = { showEditTodoBottomSheet = false },
+            planId = selectedPlanId,
+        )
+    }
+    if (isShowToast) {
+        MementoToast(LocalContext.current).makeText(
+            message = "Failed to load ToDos. Please try again.",
+            icon = R.drawable.ic_toast,
+            duration = Toast.LENGTH_SHORT,
+            lifecycleOwner = LocalLifecycleOwner.current,
+        )
+        isShowToast = false
     }
 }
 

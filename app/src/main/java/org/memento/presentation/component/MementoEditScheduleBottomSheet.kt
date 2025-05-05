@@ -37,7 +37,7 @@ fun MementoEditScheduleBottomSheet(
         }
 
         ModalBottomSheet(
-            onDismissRequest = { onConfirm() },
+            onDismissRequest = { onCancel() },
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp),
             containerColor = darkModeColors.gray10,
@@ -51,10 +51,9 @@ fun MementoEditScheduleBottomSheet(
                         .imePadding(),
             ) {
                 AddScheduleScreen(
-                    onCloseBottomSheet = { },
+                    onCloseBottomSheet = { onConfirm() },
                     isEdit = true,
                     isEditCancel = { onCancel() },
-                    isEditDone = { onConfirm() },
                     planId = planId,
                 )
             }

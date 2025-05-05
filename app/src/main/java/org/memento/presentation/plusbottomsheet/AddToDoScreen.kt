@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,6 +42,7 @@ import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
 import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModal
+import org.memento.presentation.component.MementoSwitchButton
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.MementoToast
 import org.memento.presentation.util.changeHexToColor
@@ -48,6 +50,7 @@ import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
+import org.memento.ui.theme.mementoColors
 
 @Composable
 fun AddToDoScreen(
@@ -58,7 +61,6 @@ fun AddToDoScreen(
     onCloseBottomSheet: () -> Unit,
     isEdit: Boolean = false,
     planId: Int = 0,
-    isEditDone: () -> Unit,
     isEditCancel: () -> Unit,
 ) {
     val selectedDateText by viewModel.selectedDateText.collectAsStateWithLifecycle()
@@ -67,54 +69,29 @@ fun AddToDoScreen(
     val deadLineText by viewModel.deadLineText.collectAsStateWithLifecycle()
     val addPriorityType by viewModel.addPriorityType.collectAsStateWithLifecycle()
     var isCalendarVisible by remember { mutableStateOf(false) }
+    var isSwitchOn by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val focusRequester = remember { FocusRequester() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val patchState by viewModel.patchState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         viewModel.getTagList()
     }
 
-    LaunchedEffect(patchState) {
-        when (patchState) {
-            is UiState.Success -> {
-                viewModel.setLoadingState()
-                isEditDone()
-                val toast = MementoToast(context)
-                toast.makeText(
-                    message = SuccessType.CREATE_SUCCESS.message,
-                    icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner,
-                )
-            }
-            is UiState.Failure -> {
-                viewModel.setLoadingState()
-                val toast = MementoToast(context)
-                toast.makeText(
-                    message = ErrorType.NETWORK_ERROR.message,
-                    icon = R.drawable.ic_toast,
-                    lifecycleOwner = lifecycleOwner,
-                )
-            }
-            else -> Unit
-        }
-    }
-
     LaunchedEffect(uiState) {
         when (uiState) {
             is UiState.Success -> {
                 viewModel.setLoadingState()
-                onCloseBottomSheet()
                 val toast = MementoToast(context)
                 toast.makeText(
                     message = SuccessType.CREATE_SUCCESS.message,
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
+                onCloseBottomSheet()
             }
 
             is UiState.Failure -> {
@@ -135,30 +112,28 @@ fun AddToDoScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 23.dp, vertical = 5.dp),
+            modifier = Modifier.fillMaxSize(),
         ) {
             if (isEdit) {
                 Row(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 5.dp, vertical = 7.dp),
+                            .padding(vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = "Cancel",
                         style =
                             MementoTheme.typography.body_r_14.copy(
-                                color = darkModeColors.gray02,
+                                color = mementoColors.red,
                             ),
                         modifier =
                             Modifier
                                 .noRippleClickable {
                                     isEditCancel()
-                                },
+                                }
+                                .padding(horizontal = 18.dp, vertical = 12.dp),
                     )
 
                     Text(
@@ -171,72 +146,114 @@ fun AddToDoScreen(
                             Modifier
                                 .noRippleClickable {
                                     viewModel.patchAddTodo(planId)
-                                    isEditDone()
-                                },
-                    )
-                }
-            }
-            Row {
-                Text(
-                    text = "Add to-do,",
-                    style =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.gray07,
-                        ),
-                )
-
-                Text(
-                    text = selectedDateText,
-                    modifier =
-                        Modifier
-                            .padding(start = 5.dp)
-                            .noRippleClickable {
-                                isCalendarVisible = true
-                            },
-                    style =
-                        MementoTheme.typography.body_b_18.copy(
-                            color = darkModeColors.white,
-                        ),
-                )
-
-                if (isCalendarVisible) {
-                    DatePickerModal(
-                        onDateSelected = { selectedDate ->
-                            selectedDate?.let {
-                                viewModel.updateSelectedDateText(formatDate(it))
-                            }
-                        },
-                        onDismiss = {
-                            isCalendarVisible = false
-                        },
+                                }
+                                .padding(horizontal = 18.dp, vertical = 12.dp),
                     )
                 }
             }
 
-            BasicTextField(
-                value = addToDoText,
-                onValueChange = { newText ->
-                    if (newText.replace(" ", "").length <= 30) {
-                        viewModel.updateToDoText(newText = newText)
-                    }
-                },
+            Column(
                 modifier =
                     Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.9f)
-                        .background(color = Color.Transparent)
-                        .focusRequester(focusRequester)
-                        .padding(top = 16.dp),
-                textStyle =
-                    MementoTheme.typography.body_b_16.copy(
-                        color = darkModeColors.white,
-                    ),
-                cursorBrush = SolidColor(darkModeColors.green),
-                keyboardOptions =
-                    KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.Sentences,
-                    ),
-            )
+                        .fillMaxSize()
+                        .padding(horizontal = 23.dp, vertical = 10.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Add to-do,",
+                            style =
+                                MementoTheme.typography.body_r_14.copy(
+                                    color = darkModeColors.gray07,
+                                ),
+                        )
+
+                        Text(
+                            text = selectedDateText,
+                            modifier =
+                                Modifier
+                                    .noRippleClickable {
+                                        isCalendarVisible = true
+                                    },
+                            style =
+                                MementoTheme.typography.body_r_14.copy(
+                                    color = darkModeColors.white,
+                                ),
+                        )
+
+                        if (isCalendarVisible) {
+                            DatePickerModal(
+                                onDateSelected = { selectedDate ->
+                                    selectedDate?.let {
+                                        viewModel.updateSelectedDateText(formatDate(it))
+                                    }
+                                },
+                                onDismiss = {
+                                    isCalendarVisible = false
+                                },
+                            )
+                        }
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(11.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "자연어로 입력",
+                            style =
+                                MementoTheme.typography.detail_b_11.copy(
+                                    color = darkModeColors.gray07,
+                                ),
+                        )
+
+                        MementoSwitchButton(
+                            modifier =
+                                Modifier
+                                    .width(width = 40.dp)
+                                    .aspectRatio(ratio = 1.73f),
+                            isSwitchOn = isSwitchOn,
+                            onSwitchChange = { isToggled ->
+                                isSwitchOn = isToggled
+                                if (isSwitchOn) {
+                                    // TODO(): 자연어 처리, 공지 알림 로직 구현
+                                }
+                            },
+                        )
+                    }
+                }
+
+                BasicTextField(
+                    value = addToDoText,
+                    onValueChange = { newText ->
+                        if (newText.replace(" ", "").length <= 30) {
+                            viewModel.updateToDoText(newText = newText)
+                        }
+                    },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1.9f)
+                            .background(color = Color.Transparent)
+                            .focusRequester(focusRequester)
+                            .padding(top = 16.dp),
+                    textStyle =
+                        MementoTheme.typography.body_b_16.copy(
+                            color = darkModeColors.white,
+                        ),
+                    cursorBrush = SolidColor(darkModeColors.green),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            capitalization = KeyboardCapitalization.Sentences,
+                        ),
+                )
+            }
         }
 
         Row(
@@ -344,6 +361,5 @@ fun AddToDoScreenPreview() {
         onNavigateEisenHourSetting = { },
         onCloseBottomSheet = { },
         isEditCancel = { },
-        isEditDone = { },
     )
 }

@@ -3,6 +3,8 @@ package org.memento.presentation.setting.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import org.memento.presentation.setting.SettingEditTagScreen
+import org.memento.presentation.setting.SettingEditTimeScreen
 import org.memento.presentation.setting.SettingScreen
 import org.memento.presentation.setting.SettingTagScreen
 import org.memento.presentation.setting.Tag
@@ -19,14 +21,29 @@ fun NavController.navigationSettingTag() {
     )
 }
 
+fun NavController.navigationSettingEditTag() {
+    navigate(
+        route = SettingRoute.SETTING_EDIT_TAG,
+    )
+}
+
+fun NavController.navigationSettingEditTime() {
+    navigate(
+        route = SettingRoute.SETTING_EDIT_TIME,
+    )
+}
+
 fun NavGraphBuilder.settingNavGraph(
     navigateBack: () -> Unit,
     navigateToSettingTag: () -> Unit,
+    navigateToSettingEditTag: () -> Unit,
+    navigateToSettingEditTime: () -> Unit,
 ) {
     composable(SettingRoute.SETTING) {
         SettingScreen(
             onBack = navigateBack,
             navigateToSettingTag = navigateToSettingTag,
+            navigateToSettingTime = navigateToSettingEditTime,
         )
     }
     composable(SettingRoute.SETTINGTAG) {
@@ -34,6 +51,18 @@ fun NavGraphBuilder.settingNavGraph(
             onBack = navigateBack,
             onDone = navigateBack,
             tags = dummyTags,
+            navigateToSettingEditTag = navigateToSettingEditTag,
+        )
+    }
+    composable(SettingRoute.SETTING_EDIT_TAG) {
+        SettingEditTagScreen(
+            onBack = navigateBack,
+            onDone = navigateToSettingTag,
+        )
+    }
+    composable(SettingRoute.SETTING_EDIT_TIME) {
+        SettingEditTimeScreen(
+            onBack = navigateBack,
         )
     }
 }
@@ -52,4 +81,6 @@ val dummyTags =
 object SettingRoute {
     const val SETTING = "Setting"
     const val SETTINGTAG = "SettingTag"
+    const val SETTING_EDIT_TAG = "SettingEditTag"
+    const val SETTING_EDIT_TIME = "SettingEditTime"
 }

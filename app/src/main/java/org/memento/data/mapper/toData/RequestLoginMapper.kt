@@ -7,4 +7,6 @@ fun Login.toData(): RequestLoginDto =
     RequestLoginDto(
         provider = provider,
         idToken = idToken,
+        timeZoneOffset = timeZoneOffset,
+        fcmToken = fcmToken,
     )

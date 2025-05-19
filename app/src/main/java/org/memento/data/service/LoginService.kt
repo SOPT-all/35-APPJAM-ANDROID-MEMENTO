@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.PUT
 
 interface LoginService {
-    @PUT("api/v1/auth/login")
+    @PUT("api/v1/members")
     suspend fun postLogin(
         @Body requestLoginDto: RequestLoginDto,
     ): BaseResponse<ResponseLoginDto>

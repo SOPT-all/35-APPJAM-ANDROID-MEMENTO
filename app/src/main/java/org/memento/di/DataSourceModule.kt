@@ -5,14 +5,14 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.memento.data.datasource.AddPlanDataSource
-import org.memento.data.datasource.LoginDataSource
+import org.memento.data.datasource.MemberDataSource
 import org.memento.data.datasource.ReqresDataSource
 import org.memento.data.datasource.ScheduleDataSource
 import org.memento.data.datasource.SettingDataSource
 import org.memento.data.datasource.TodoDataSource
 import org.memento.data.datasource.UserInfoDataSource
 import org.memento.data.datasourceimpl.AddPlanDataSourceImpl
-import org.memento.data.datasourceimpl.LoginDataSourceImpl
+import org.memento.data.datasourceimpl.MemberDataSourceImpl
 import org.memento.data.datasourceimpl.ReqresDataSourceImpl
 import org.memento.data.datasourceimpl.ScheduleDataSourceImpl
 import org.memento.data.datasourceimpl.SettingDataSourceImpl
@@ -29,7 +29,7 @@ internal abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsLoginDataSource(loginDataSourceImpl: LoginDataSourceImpl): LoginDataSource
+    abstract fun bindsLoginDataSource(loginDataSourceImpl: MemberDataSourceImpl): MemberDataSource
 
     @Binds
     @Singleton

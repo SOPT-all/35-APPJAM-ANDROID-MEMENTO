@@ -9,4 +9,8 @@ data class RequestLoginDto(
     val provider: String,
     @SerialName("idToken")
     val idToken: String,
+    @SerialName("timeZoneOffset")
+    val timeZoneOffset: String,
+    @SerialName("fcmToken")
+    val fcmToken: String,
 )

@@ -4,10 +4,10 @@ import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestLoginDto
 import org.memento.data.dto.response.ResponseLoginDto
 import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface LoginService {
-    @POST("api/v1/auth/login")
+    @PUT("api/v1/members")
     suspend fun postLogin(
         @Body requestLoginDto: RequestLoginDto,
     ): BaseResponse<ResponseLoginDto>

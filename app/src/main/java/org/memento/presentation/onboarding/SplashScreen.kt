@@ -27,7 +27,7 @@ fun SplashScreen() {
         lottieAnimatable.animate(
             composition = composition,
             clipSpec = LottieClipSpec.Frame(0, 1200),
-            initialProgress = 0f
+            initialProgress = 0f,
         )
     }
 
@@ -41,7 +41,7 @@ fun SplashScreen() {
             composition = composition,
             progress = lottieAnimatable.progress,
             contentScale = ContentScale.FillHeight,
-            modifier = Modifier.size(215.dp)
+            modifier = Modifier.size(215.dp),
         )
     }
 }

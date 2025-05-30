@@ -8,11 +8,9 @@ import timber.log.Timber
 class FirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Timber.d("New token: $token")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Timber.d("Message data: ${remoteMessage.data}")
     }
 }

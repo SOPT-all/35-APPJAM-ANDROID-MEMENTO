@@ -35,6 +35,7 @@ fun SettingScreen(
     onBack: () -> Unit,
     navigateToSettingTag: () -> Unit,
     navigateToSettingTime: () -> Unit,
+    navigateToLogin: () -> Unit,
     userMail: String = "memento@gmail.com",
     viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
@@ -74,8 +75,15 @@ fun SettingScreen(
 
             Divider(modifier = Modifier.drawHorizontalLine())
 
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.logout), textColor = mementoColors.red)
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.delete_my_account), textColor = mementoColors.red)
+            SettingOptions(onClick = {
+                navigateToLogin()
+            }, optionName = stringResource(R.string.logout), textColor = mementoColors.red)
+            SettingOptions(onClick = {
+                // 임시 테스트
+                viewmodel.deleteMember(
+                    onLogout = navigateToLogin,
+                )
+            }, optionName = stringResource(R.string.delete_my_account), textColor = mementoColors.red)
         }
     }
 }

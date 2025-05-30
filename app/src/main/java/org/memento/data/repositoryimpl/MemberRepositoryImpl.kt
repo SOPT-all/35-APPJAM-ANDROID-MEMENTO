@@ -22,4 +22,11 @@ class MemberRepositoryImpl
                     .getOrThrow()?.toUserInfo() ?: throw Exception("Throw Exception Error")
             }
         }
+
+        override suspend fun deleteMember(): Result<Unit> {
+            return runCatching {
+                memberDataSource.deleteMember().handleBaseResponse().getOrThrow()
+                Unit
+            }
+        }
     }

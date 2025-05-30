@@ -14,4 +14,7 @@ class MemberDataSourceImpl
     ) : MemberDataSource {
         override suspend fun postLogin(requestLoginDto: RequestLoginDto): BaseResponse<ResponseLoginDto> =
             memberService.postLogin(requestLoginDto = requestLoginDto)
+
+        override suspend fun deleteMember(): BaseResponse<Unit> =
+            memberService.deleteMember()
     }

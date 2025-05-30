@@ -9,12 +9,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
+import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingMailBar
 import org.memento.presentation.setting.component.SettingOptions
 import org.memento.presentation.setting.component.SettingTopBar
@@ -40,6 +45,9 @@ fun SettingScreen(
     viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier =
             Modifier
@@ -76,15 +84,41 @@ fun SettingScreen(
             Divider(modifier = Modifier.drawHorizontalLine())
 
             SettingOptions(onClick = {
-                navigateToLogin()
+                showLogoutDialog = true
             }, optionName = stringResource(R.string.logout), textColor = mementoColors.red)
             SettingOptions(onClick = {
-                // 임시 테스트
+                showDeleteAccountDialog = true
+            }, optionName = stringResource(R.string.delete_my_account), textColor = mementoColors.red)
+        }
+    }
+
+    if (showLogoutDialog) {
+        SettingAlertDialog(
+            content = R.string.alert_setting_log_out,
+            leftButtonText = R.string.setting_alert_delete_leftButtonText,
+            rightButtonText = R.string.logout,
+            onLeftButtonClick = { showLogoutDialog = false },
+            onRightButtonClick = {
+                showLogoutDialog = false
+                navigateToLogin()
+            },
+        )
+    }
+
+    if (showDeleteAccountDialog) {
+        SettingAlertDialog(
+            content = R.string.alert_setting_delete_account_title,
+            subContent = R.string.alert_setting_delete_account_subtitle,
+            leftButtonText = R.string.setting_alert_delete_leftButtonText,
+            rightButtonText = R.string.alert_delete_account_button,
+            onLeftButtonClick = { showDeleteAccountDialog = false },
+            onRightButtonClick = {
+                showDeleteAccountDialog = false
                 viewmodel.deleteMember(
                     onLogout = navigateToLogin,
                 )
-            }, optionName = stringResource(R.string.delete_my_account), textColor = mementoColors.red)
-        }
+            },
+        )
     }
 }
 

@@ -56,6 +56,9 @@ fun MainNavHost(
                 navigateToSettingTag = { navigator.navigateToSettingTag() },
                 navigateToSettingEditTag = { navigator.navigateToSettingEditTag() },
                 navigateToSettingEditTime = { navigator.navigateToSettingEditTime() },
+                navigateToLogin = {
+                    navigator.navigateToLogin()
+                },
             )
         }
     }

@@ -4,6 +4,6 @@ import java.time.LocalDateTime
 
 data class ParsedDateResult(
     val title: String,
-    val startDate: LocalDateTime?,
+    val startDate: LocalDateTime? = null,
     val endDate: LocalDateTime? = null,
 )

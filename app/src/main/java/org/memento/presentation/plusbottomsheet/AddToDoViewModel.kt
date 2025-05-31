@@ -268,15 +268,14 @@ class AddToDoViewModel
 
                     _addToDoText.value = parsed.title
 
-                    parsed.endDate?.let { end ->
-                        val formatted = formatDate(end.toLocalDate().toMillis())
-                        _tempDeadLineText.value = formatted
-                        saveDeadLineText()
-                    }
-
                     parsed.startDate?.let { start ->
                         val formatted = formatDate(start.toLocalDate().toMillis())
                         _selectedDateText.value = formatted
+                    }
+
+                    parsed.endDate?.let { end ->
+                        val formatted = formatDate(end.toLocalDate().toMillis())
+                        _deadLineText.value = formatted
                     }
                 }
         }

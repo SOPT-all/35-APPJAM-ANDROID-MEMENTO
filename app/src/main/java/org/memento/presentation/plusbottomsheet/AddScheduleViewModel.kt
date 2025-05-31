@@ -20,6 +20,9 @@ import org.memento.presentation.util.formatTextLocalDateTime
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
 import timber.log.Timber
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import org.memento.presentation.util.toMillis
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -68,7 +71,13 @@ class AddScheduleViewModel
         private val _detailState = MutableStateFlow<UiState<ScheduleDetail>>(UiState.Loading)
         val detailState: StateFlow<UiState<ScheduleDetail>> = _detailState
 
-        init {
+        private val _isSwitchOn = MutableStateFlow<Boolean>(false)
+        val isSwitchOn: StateFlow<Boolean> = _isSwitchOn
+
+        private var parseJob: Job? = null
+
+
+    init {
             getTagList()
         }
 
@@ -230,8 +239,30 @@ class AddScheduleViewModel
             _isAllDayChecked.value = difference >= 86_400_000
         }
 
-        fun updateEventText(newText: String) {
-            _eventText.value = newText
+        fun updateEventTextWithParsing(input: String) {
+            _eventText.value = input
+
+            if (!_isSwitchOn.value || input.replace(" ", "").length > 30) return
+
+            parseJob?.cancel()
+            parseJob = viewModelScope.launch {
+                delay(500L)
+
+                val parsed = parseNaturalLanguage(input, isParseTime = true)
+                _eventText.value = parsed.title
+
+                parsed.startDate?.let { start ->
+                    _selectedStartDateText.value = formatDate(start.toLocalDate().toMillis())
+                    _selectedStartTimeText.value = formatTime(start.hour, start.minute)
+                }
+
+                parsed.endDate?.let { end ->
+                    _selectedEndDateText.value = formatDate(end.toLocalDate().toMillis())
+                    _selectedEndTimeText.value = formatTime(end.hour, end.minute)
+                }
+
+                validateTimeOrder()
+            }
         }
 
         fun updateTag(
@@ -285,6 +316,10 @@ class AddScheduleViewModel
             } catch (e: Exception) {
                 _isTimeValid.value = false
             }
+        }
+
+        fun updateSwitchState(isOn: Boolean) {
+            _isSwitchOn.value = isOn
         }
 
         fun resetData() {

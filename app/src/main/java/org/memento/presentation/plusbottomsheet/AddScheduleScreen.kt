@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Checkbox
@@ -41,6 +43,7 @@ import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModalHandler
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
+import org.memento.presentation.component.MementoSwitchButton
 import org.memento.presentation.component.MementoTimePicker
 import org.memento.presentation.component.TagSelectorContent
 import org.memento.presentation.type.SelectorType
@@ -72,6 +75,7 @@ fun AddScheduleScreen(
     val isAllDayChecked by viewModel.isAllDayChecked.collectAsStateWithLifecycle()
     val isTimeValid by viewModel.isTimeValid.collectAsStateWithLifecycle()
     val tagList by viewModel.tagList.collectAsStateWithLifecycle()
+    val isNatSwitchOn by viewModel.isSwitchOn.collectAsStateWithLifecycle()
 
     val sheetTimePickerState = rememberModalBottomSheetState()
     val sheetTagState = rememberModalBottomSheetState()
@@ -196,6 +200,32 @@ fun AddScheduleScreen(
                     .padding(horizontal = 16.dp, vertical = 6.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(11.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "자연어로 입력",
+                    style =
+                    MementoTheme.typography.detail_b_11.copy(
+                        color = darkModeColors.gray07,
+                    ),
+                )
+
+                MementoSwitchButton(
+                    modifier =
+                    Modifier
+                        .width(width = 40.dp)
+                        .aspectRatio(ratio = 1.73f),
+                    isSwitchOn = isNatSwitchOn,
+                    onSwitchChange = { isToggled ->
+                        viewModel.updateSwitchState(isToggled)
+                    },
+                )
+            }
+
             Box(
                 modifier =
                     Modifier
@@ -205,7 +235,7 @@ fun AddScheduleScreen(
                 BasicTextField(
                     value = eventText,
                     onValueChange = { newText ->
-                        viewModel.updateEventText(newText)
+                        viewModel.updateEventTextWithParsing(newText)
                     },
                     modifier =
                         Modifier

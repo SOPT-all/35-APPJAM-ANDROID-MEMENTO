@@ -10,27 +10,27 @@ import org.memento.domain.repository.ScheduleRepository
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl
-    @Inject
-    constructor(
-        private val scheduleDataSource: ScheduleDataSource,
-    ) : ScheduleRepository {
-        override suspend fun getScheduleList(date: String): Result<List<ScheduleList.ScheduleWithOrderInfo>> =
-            runCatching {
-                val response = scheduleDataSource.getScheduleList(date).data
-                response?.toScheduleListModel() ?: throw Exception("null")
-            }
-
-        override suspend fun deleteSchedule(scheduleId: Int): Result<Unit> {
-            return runCatching {
-                scheduleDataSource.deleteSchedule(
-                    scheduleId = scheduleId,
-                ).handleBaseResponse().getOrThrow()
-            }
+@Inject
+constructor(
+    private val scheduleDataSource: ScheduleDataSource,
+) : ScheduleRepository {
+    override suspend fun getScheduleList(date: String): Result<List<ScheduleList.ScheduleWithOrderInfo>> =
+        runCatching {
+            val response = scheduleDataSource.getScheduleList(date).data
+            response?.toScheduleListModel() ?: throw Exception("null")
         }
 
-        override suspend fun getUpTime(): Result<UpTime> =
-            runCatching {
-                val response = scheduleDataSource.getUpTime().data
-                response?.toUpTime() ?: throw Exception("null")
-            }
+    override suspend fun deleteSchedule(scheduleId: Int): Result<Unit> {
+        return runCatching {
+            scheduleDataSource.deleteSchedule(
+                scheduleId = scheduleId,
+            ).handleBaseResponse().getOrThrow()
+        }
     }
+
+    override suspend fun getUpTime(): Result<UpTime> =
+        runCatching {
+            val response = scheduleDataSource.getUpTime().data
+            response?.toUpTime() ?: throw Exception("null")
+        }
+}

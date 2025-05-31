@@ -21,8 +21,8 @@ fun MainNavHost(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxSize(),
+        modifier
+            .fillMaxSize(),
     ) {
         NavHost(
             navController = navigator.navHostController,
@@ -54,7 +54,9 @@ fun MainNavHost(
             settingNavGraph(
                 navigateBack = { navigator.navHostController.popBackStack() },
                 navigateToSettingTag = { navigator.navigateToSettingTag() },
-                navigateToSettingEditTag = { navigator.navigateToSettingEditTag() },
+                navigateToSettingEditTag = { id, color, name ->
+                    navigator.navigateToSettingEditTag(id, color, name)
+                },
                 navigateToSettingEditTime = { navigator.navigateToSettingEditTime() },
             )
         }

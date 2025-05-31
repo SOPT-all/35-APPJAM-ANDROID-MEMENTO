@@ -1,5 +1,6 @@
 package org.memento.presentation.navigator
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
@@ -16,7 +17,6 @@ import org.memento.presentation.onboarding.navigation.navigationOnboarding3
 import org.memento.presentation.onboarding.navigation.navigationOnboarding4
 import org.memento.presentation.reqres.navigation.navigationReqres
 import org.memento.presentation.setting.navigation.navigationSetting
-import org.memento.presentation.setting.navigation.navigationSettingEditTag
 import org.memento.presentation.setting.navigation.navigationSettingEditTime
 import org.memento.presentation.setting.navigation.navigationSettingTag
 import org.memento.presentation.today.navigation.navigationToday
@@ -63,9 +63,11 @@ class MainNavigator(
         navHostController.navigationSettingTag()
     }
 
-    fun navigateToSettingEditTag() {
-        navHostController.navigationSettingEditTag()
+    fun navigateToSettingEditTag(tagId: Int, tagColor: String, tagName: String) {
+        val encodedName = Uri.encode(tagName)
+        navHostController.navigate("SettingEditTag/$tagId/$tagColor/$encodedName")
     }
+
 
     fun navigateToSettingEditTime() {
         navHostController.navigationSettingEditTime()

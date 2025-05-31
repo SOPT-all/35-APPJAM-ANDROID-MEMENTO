@@ -25,9 +25,9 @@ fun parseNaturalLanguage(
         timeRangeRegex.find(text)?.let { m ->
             val (sm, sh, em, eh) = m.destructured
             val startH = adjustHour(sh.toInt(), sm)
-            val endH   = adjustHour(eh.toInt(), em)
+            val endH = adjustHour(eh.toInt(), em)
             startDate = now.withHour(startH).truncatedToDays()
-            endDate   = now.withHour(endH).truncatedToDays()
+            endDate = now.withHour(endH).truncatedToDays()
             text = text.replace(m.value, "")
         }
     }
@@ -37,7 +37,7 @@ fun parseNaturalLanguage(
         Regex("""(.+?)까지""")
             .find(text)?.let { m ->
                 startDate = now.truncatedToDays()
-                endDate   = parseDateOnly(m.groupValues[1].trim(), now)
+                endDate = parseDateOnly(m.groupValues[1].trim(), now)
                 text = text.replace(m.value, "")
             }
     }
@@ -49,7 +49,7 @@ fun parseNaturalLanguage(
             .find(text)?.let { m ->
                 val expr = m.value.trim()
                 startDate = parseDateOnly(expr, now)
-                endDate   = startDate
+                endDate = startDate
                 text = text.replace(m.value, "")
             }
     }
@@ -59,32 +59,33 @@ fun parseNaturalLanguage(
             .find(text)?.let { m ->
                 val expr = m.value.trim()
                 startDate = parseDateOnly(expr, now)
-                endDate   = startDate
+                endDate = startDate
                 text = text.replace(m.value, "")
             }
     }
     if (startDate == null) {
         // 3-3) 영어 상대/절대 날짜: “tomorrow”, “2 days after”, “May 1st” 등
         Regex(
-            """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)"""
+            """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)""",
         ).find(text)?.let { m ->
             val expr = m.value.trim()
             startDate = parseDateOnly(expr, now)
-            endDate   = startDate
+            endDate = startDate
             text = text.replace(m.value, "")
         }
     }
 
     // 4) 나머지 불필요 키워드 제거 후 title 생성
-    val cleanTitle = text
-        .replace(Regex("""(부터|까지|\s+)"""), "")
-        .trim()
-        .ifEmpty { input.trim() }
+    val cleanTitle =
+        text
+            .replace(Regex("""(부터|까지|\s+)"""), "")
+            .trim()
+            .ifEmpty { input.trim() }
 
     return ParsedDateResult(
-        title     = cleanTitle,
+        title = cleanTitle,
         startDate = startDate,
-        endDate   = endDate
+        endDate = endDate,
     )
 }
 
@@ -92,7 +93,10 @@ fun parseNaturalLanguage(
  * 다양한 표현들을 (한국어/영어, 상대/절대, 요일 등)을
  * 모두 LocalDateTime(0시)으로 변환해 주는 유틸 함수
  */
-private fun parseDateOnly(expr: String, now: LocalDateTime): LocalDateTime {
+private fun parseDateOnly(
+    expr: String,
+    now: LocalDateTime,
+): LocalDateTime {
     val e = expr.trim().toLowerCase()
 
     // Korean week
@@ -142,11 +146,12 @@ private fun parseDateOnly(expr: String, now: LocalDateTime): LocalDateTime {
         return LocalDateTime.of(year, m.toInt(), d.toInt(), 0, 0)
     }
     // “May 1st”, “Jan 2” 등
-    val months = mapOf(
-        "january" to 1, "february" to 2, "march" to 3, "april" to 4,
-        "may" to 5, "june" to 6, "july" to 7, "august" to 8,
-        "september" to 9, "october" to 10, "november" to 11, "december" to 12
-    )
+    val months =
+        mapOf(
+            "january" to 1, "february" to 2, "march" to 3, "april" to 4,
+            "may" to 5, "june" to 6, "july" to 7, "august" to 8,
+            "september" to 9, "october" to 10, "november" to 11, "december" to 12,
+        )
     Regex("""([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?""").find(expr)?.let {
         val (mon, day, yearStr) = it.destructured
         val m = months[mon.toLowerCase()] ?: now.monthValue
@@ -157,14 +162,16 @@ private fun parseDateOnly(expr: String, now: LocalDateTime): LocalDateTime {
     // 한국어 요일: “(이번주|다음주)? 수요일”
     Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""").find(expr)?.let {
         val (ctx, dayKor) = it.destructured
-        val idx = listOf("일","월","화","수","목","금","토").indexOf(dayKor)
+        val idx = listOf("일", "월", "화", "수", "목", "금", "토").indexOf(dayKor)
         val weeks = if (ctx == "다음주") 1 else 0
         // 이번주 요일 == 오늘 요일 기준, 다음주 == 오늘 요일+7
         val todayIdx = now.dayOfWeek.value % 7
-        val diff = if (idx >= todayIdx)
-            idx - todayIdx + weeks*7
-        else
-            7 - (todayIdx - idx) + weeks*7
+        val diff =
+            if (idx >= todayIdx) {
+                idx - todayIdx + weeks * 7
+            } else {
+                7 - (todayIdx - idx) + weeks * 7
+            }
         return now.plusDays(diff.toLong()).truncatedToDays()
     }
 
@@ -172,7 +179,7 @@ private fun parseDateOnly(expr: String, now: LocalDateTime): LocalDateTime {
     Regex("""(?i)(this week|next week)?\s*(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)""")
         .find(expr)?.let {
             val (ctx, dayEn) = it.destructured
-            val dow  = DayOfWeek.valueOf(dayEn.toUpperCase())
+            val dow = DayOfWeek.valueOf(dayEn.toUpperCase())
             val base = if (ctx.equals("next week", true)) now.plusWeeks(1) else now
             return base.`with`(TemporalAdjusters.nextOrSame(dow)).truncatedToDays()
         }
@@ -186,8 +193,12 @@ private fun LocalDateTime.truncatedToDays() =
     this.withHour(0).withMinute(0).withSecond(0).withNano(0)
 
 // 오전 오후 파싱
-private fun adjustHour(hour: Int, meridiem: String?): Int = when (meridiem) {
-    "오전" -> if (hour == 12) 0 else hour
-    "오후" -> if (hour < 12) hour + 12 else hour
-    else   -> hour
-}
+private fun adjustHour(
+    hour: Int,
+    meridiem: String?,
+): Int =
+    when (meridiem) {
+        "오전" -> if (hour == 12) 0 else hour
+        "오후" -> if (hour < 12) hour + 12 else hour
+        else -> hour
+    }

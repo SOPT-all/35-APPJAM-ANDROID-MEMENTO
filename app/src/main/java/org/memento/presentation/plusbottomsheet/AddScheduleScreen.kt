@@ -209,16 +209,16 @@ fun AddScheduleScreen(
                 Text(
                     text = "자연어로 입력",
                     style =
-                    MementoTheme.typography.detail_b_11.copy(
-                        color = darkModeColors.gray07,
-                    ),
+                        MementoTheme.typography.detail_b_11.copy(
+                            color = darkModeColors.gray07,
+                        ),
                 )
 
                 MementoSwitchButton(
                     modifier =
-                    Modifier
-                        .width(width = 40.dp)
-                        .aspectRatio(ratio = 1.73f),
+                        Modifier
+                            .width(width = 40.dp)
+                            .aspectRatio(ratio = 1.73f),
                     isSwitchOn = isNatSwitchOn,
                     onSwitchChange = { isToggled ->
                         viewModel.updateSwitchState(isToggled)

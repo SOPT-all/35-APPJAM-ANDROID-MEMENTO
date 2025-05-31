@@ -3,6 +3,8 @@ package org.memento.presentation.plusbottomsheet
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +21,8 @@ import org.memento.presentation.util.formatEditTime
 import org.memento.presentation.util.formatTextLocalDateTime
 import org.memento.presentation.util.formatTime
 import org.memento.presentation.util.parseDateTime
-import timber.log.Timber
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import org.memento.presentation.util.toMillis
+import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -76,8 +76,7 @@ class AddScheduleViewModel
 
         private var parseJob: Job? = null
 
-
-    init {
+        init {
             getTagList()
         }
 
@@ -245,24 +244,25 @@ class AddScheduleViewModel
             if (!_isSwitchOn.value || input.replace(" ", "").length > 30) return
 
             parseJob?.cancel()
-            parseJob = viewModelScope.launch {
-                delay(500L)
+            parseJob =
+                viewModelScope.launch {
+                    delay(500L)
 
-                val parsed = parseNaturalLanguage(input, isParseTime = true)
-                _eventText.value = parsed.title
+                    val parsed = parseNaturalLanguage(input, isParseTime = true)
+                    _eventText.value = parsed.title
 
-                parsed.startDate?.let { start ->
-                    _selectedStartDateText.value = formatDate(start.toLocalDate().toMillis())
-                    _selectedStartTimeText.value = formatTime(start.hour, start.minute)
+                    parsed.startDate?.let { start ->
+                        _selectedStartDateText.value = formatDate(start.toLocalDate().toMillis())
+                        _selectedStartTimeText.value = formatTime(start.hour, start.minute)
+                    }
+
+                    parsed.endDate?.let { end ->
+                        _selectedEndDateText.value = formatDate(end.toLocalDate().toMillis())
+                        _selectedEndTimeText.value = formatTime(end.hour, end.minute)
+                    }
+
+                    validateTimeOrder()
                 }
-
-                parsed.endDate?.let { end ->
-                    _selectedEndDateText.value = formatDate(end.toLocalDate().toMillis())
-                    _selectedEndTimeText.value = formatTime(end.hour, end.minute)
-                }
-
-                validateTimeOrder()
-            }
         }
 
         fun updateTag(

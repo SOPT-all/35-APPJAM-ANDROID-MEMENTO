@@ -10,18 +10,19 @@ private val DATE_RANGE_REGEX = Regex("""(.+?)부터\s*(.+?)까지""")
 private val TIL_REGEX = Regex("""(.+?)까지""")
 private val KOR_WEEKDAY_REGEX = Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""")
 private val KOR_DATE_REGEX = Regex("""(어제|그제|오늘|내일|모레|\d+일\s*(?:전|후)|\d{1,2}월\s*\d{1,2}일)""")
-private val ENG_DATE_REGEX = Regex(
-    """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)"""
-)
+private val ENG_DATE_REGEX =
+    Regex(
+        """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)""",
+    )
 
 private val RELATIVE_KOR_REGEX = Regex("""(\d{1,2})일\s*(전|후)""")
-private val RELATIVE_ENG_REGEX  = Regex("""(\d{1,2})\s+days?\s+(after|before)""")
+private val RELATIVE_ENG_REGEX = Regex("""(\d{1,2})\s+days?\s+(after|before)""")
 private val MD_KOR_REGEX = Regex("""(\d{1,2})월\s*(\d{1,2})일""")
 private val MD_SLASH_REGEX = Regex("""(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?""")
 private val ENG_MONTH_DAY_REGEX = Regex("""([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?""")
 private val ENG_WEEKDAY_REGEX = Regex("""(?i)(this week|next week)?\s*(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)""")
 
-private val DAY_OF_MONTH_ONLY  = Regex("""^\s*(\d{1,2})일\s*$""")
+private val DAY_OF_MONTH_ONLY = Regex("""^\s*(\d{1,2})일\s*$""")
 
 fun parseNaturalLanguage(
     input: String,
@@ -55,65 +56,67 @@ fun parseNaturalLanguage(
         DATE_RANGE_REGEX.find(text)?.let { m ->
             val (fromExprRaw, toExprRaw) = m.destructured
             val fromExpr = fromExprRaw.trim()
-            val toExpr   = toExprRaw.trim()
+            val toExpr = toExprRaw.trim()
 
             // 2-1-1) 둘 다 “숫자+일”만 있는 케이스 (‘\d+일’) ———
             val fromMatch = DAY_OF_MONTH_ONLY.matchEntire(fromExpr)
-            val toMatch   = DAY_OF_MONTH_ONLY.matchEntire(toExpr)
+            val toMatch = DAY_OF_MONTH_ONLY.matchEntire(toExpr)
 
             if (fromMatch != null && toMatch != null) {
                 // “4일부터 9일까지”, “5일부터 20일까지”, “18일부터 5일까지” 등
                 val fromDayInt = fromMatch.groupValues[1].toInt()
-                val toDayInt   = toMatch.groupValues[1].toInt()
+                val toDayInt = toMatch.groupValues[1].toInt()
 
                 // startDate 계산: “X일”이 오늘 날짜(currentDay)보다 크거나 같으면 이번달, 아니면 다음달
-                val startLocalDate = if (fromDayInt >= currentDay) {
-                    try {
-                        todayDate.withDayOfMonth(fromDayInt)
-                    } catch (e: Exception) {
-                        // 만약 이번 달에 해당 일이 존재하지 않으면 다음 달로 넘김
-                        todayDate.plusMonths(1).withDayOfMonth(fromDayInt)
+                val startLocalDate =
+                    if (fromDayInt >= currentDay) {
+                        try {
+                            todayDate.withDayOfMonth(fromDayInt)
+                        } catch (e: Exception) {
+                            // 만약 이번 달에 해당 일이 존재하지 않으면 다음 달로 넘김
+                            todayDate.plusMonths(1).withDayOfMonth(fromDayInt)
+                        }
+                    } else {
+                        // 다음 달 X일
+                        val nextMonth = todayDate.plusMonths(1)
+                        try {
+                            nextMonth.withDayOfMonth(fromDayInt)
+                        } catch (e: Exception) {
+                            // 다음 달에도 해당 날짜가 없으면 계속 다음달
+                            nextMonth.plusMonths(1).withDayOfMonth(fromDayInt)
+                        }
                     }
-                } else {
-                    // 다음 달 X일
-                    val nextMonth = todayDate.plusMonths(1)
-                    try {
-                        nextMonth.withDayOfMonth(fromDayInt)
-                    } catch (e: Exception) {
-                        // 다음 달에도 해당 날짜가 없으면 계속 다음달
-                        nextMonth.plusMonths(1).withDayOfMonth(fromDayInt)
-                    }
-                }
 
                 // endDate 계산:
                 // toDayInt >= fromDayInt : end도 startLocalDate가 포함된 달에서 toDayInt
                 // toDayInt < fromDayInt : end는 startLocalDate의 다음 달에서 toDayInt
-                val endLocalDate = if (toDayInt >= fromDayInt) {
-                    try {
-                        startLocalDate.withDayOfMonth(toDayInt)
-                    } catch (e: Exception) {
-                        // 같은 달에 toDayInt가 없으면 다음 달에 처리
-                        startLocalDate.plusMonths(1).withDayOfMonth(toDayInt)
+                val endLocalDate =
+                    if (toDayInt >= fromDayInt) {
+                        try {
+                            startLocalDate.withDayOfMonth(toDayInt)
+                        } catch (e: Exception) {
+                            // 같은 달에 toDayInt가 없으면 다음 달에 처리
+                            startLocalDate.plusMonths(1).withDayOfMonth(toDayInt)
+                        }
+                    } else {
+                        // 다음 달 toDayInt
+                        val nextOfStart = startLocalDate.plusMonths(1)
+                        try {
+                            nextOfStart.withDayOfMonth(toDayInt)
+                        } catch (e: Exception) {
+                            // 다음 달에도 없으면 그 다음 달로 밀어서 처리
+                            nextOfStart.plusMonths(1).withDayOfMonth(toDayInt)
+                        }
                     }
-                } else {
-                    // 다음 달 toDayInt
-                    val nextOfStart = startLocalDate.plusMonths(1)
-                    try {
-                        nextOfStart.withDayOfMonth(toDayInt)
-                    } catch (e: Exception) {
-                        // 다음 달에도 없으면 그 다음 달로 밀어서 처리
-                        nextOfStart.plusMonths(1).withDayOfMonth(toDayInt)
-                    }
-                }
 
                 startDate = startLocalDate.atStartOfDay()
-                endDate   = endLocalDate.atStartOfDay()
+                endDate = endLocalDate.atStartOfDay()
 
                 text = text.replace(m.value, "")
             } else {
                 // 2-1-2) 범위지만 숫자 + 일이 아닌 경우
                 startDate = parseDateOnly(fromExpr, now)
-                endDate   = parseDateOnly(toExpr, now)
+                endDate = parseDateOnly(toExpr, now)
                 text = text.replace(m.value, "")
             }
         }
@@ -134,29 +137,30 @@ fun parseNaturalLanguage(
 
                 // endDate 계산:
                 // dayInt ≥ 오늘 이면 이번 달 dayInt, 아니면 다음 달 dayInt
-                val endLocal = if (dayInt >= currentDay) {
-                    try {
-                        todayLocal.withDayOfMonth(dayInt)
-                    } catch (_: Exception) {
-                        // 해당 일이 이번 달에 없으면 다음달로 넘김
-                        todayLocal.plusMonths(1).withDayOfMonth(dayInt)
+                val endLocal =
+                    if (dayInt >= currentDay) {
+                        try {
+                            todayLocal.withDayOfMonth(dayInt)
+                        } catch (_: Exception) {
+                            // 해당 일이 이번 달에 없으면 다음달로 넘김
+                            todayLocal.plusMonths(1).withDayOfMonth(dayInt)
+                        }
+                    } else {
+                        // 다음 달 dayInt
+                        val nextMon = todayLocal.plusMonths(1)
+                        try {
+                            nextMon.withDayOfMonth(dayInt)
+                        } catch (e: Exception) {
+                            nextMon.plusMonths(1).withDayOfMonth(dayInt)
+                        }
                     }
-                } else {
-                    // 다음 달 dayInt
-                    val nextMon = todayLocal.plusMonths(1)
-                    try {
-                        nextMon.withDayOfMonth(dayInt)
-                    } catch (e: Exception) {
-                        nextMon.plusMonths(1).withDayOfMonth(dayInt)
-                    }
-                }
 
                 startDate = todayLocal.atStartOfDay()
-                endDate   = endLocal.atStartOfDay()
+                endDate = endLocal.atStartOfDay()
             } else {
                 // 2-2-2) 일반 “~까지” ("내일까지")
                 startDate = now.truncatedToDays()
-                endDate   = parseDateOnly(expr, now).truncatedToDays()
+                endDate = parseDateOnly(expr, now).truncatedToDays()
             }
 
             text = text.replace(m.value, "")
@@ -264,11 +268,12 @@ private fun parseDateOnly(
         return LocalDateTime.of(year, m.toInt(), d.toInt(), 0, 0)
     }
     // “May 1st”, “Jan 2” 등
-    val months = mapOf(
-        "january" to 1, "february" to 2, "march" to 3, "april" to 4,
-        "may" to 5, "june" to 6, "july" to 7, "august" to 8,
-        "september" to 9, "october" to 10, "november" to 11, "december" to 12,
-    )
+    val months =
+        mapOf(
+            "january" to 1, "february" to 2, "march" to 3, "april" to 4,
+            "may" to 5, "june" to 6, "july" to 7, "august" to 8,
+            "september" to 9, "october" to 10, "november" to 11, "december" to 12,
+        )
     ENG_MONTH_DAY_REGEX.find(expr)?.let {
         val (mon, day, yearStr) = it.destructured
         val m = months[mon.toLowerCase()] ?: now.monthValue
@@ -282,18 +287,19 @@ private fun parseDateOnly(
         val idx = listOf("일", "월", "화", "수", "목", "금", "토").indexOf(dayKor)
         val weeks = if (ctx == "다음주") 1 else 0
         val todayIdx = now.dayOfWeek.value % 7
-        val diff = if (idx >= todayIdx) {
-            idx - todayIdx + weeks * 7
-        } else {
-            7 - (todayIdx - idx) + weeks * 7
-        }
+        val diff =
+            if (idx >= todayIdx) {
+                idx - todayIdx + weeks * 7
+            } else {
+                7 - (todayIdx - idx) + weeks * 7
+            }
         return now.plusDays(diff.toLong()).truncatedToDays()
     }
 
     // 영어 요일: “this week Wednesday” / “next week Friday”
     ENG_WEEKDAY_REGEX.find(expr)?.let {
         val (ctx, dayEn) = it.destructured
-        val dow  = DayOfWeek.valueOf(dayEn.toUpperCase())
+        val dow = DayOfWeek.valueOf(dayEn.toUpperCase())
         val base = if (ctx.equals("next week", true)) now.plusWeeks(1) else now
         return base.`with`(TemporalAdjusters.nextOrSame(dow)).truncatedToDays()
     }
@@ -314,5 +320,5 @@ private fun adjustHour(
     when (meridiem) {
         "오전" -> if (hour == 12) 0 else hour
         "오후" -> if (hour < 12) hour + 12 else hour
-        else   -> hour
+        else -> hour
     }

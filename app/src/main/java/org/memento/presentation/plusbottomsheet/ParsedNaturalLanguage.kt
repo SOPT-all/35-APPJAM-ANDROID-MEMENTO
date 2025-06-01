@@ -46,9 +46,8 @@ fun parseNaturalLanguage(
     if (startDate == null) {
         DATE_RANGE_REGEX.find(text)?.let { m ->
             val (fromExpr, toExpr) = m.destructured
-            // 그룹1: "X", 그룹2: "Y"를 각각 파싱
             startDate = parseDateOnly(fromExpr.trim(), now)
-            endDate   = parseDateOnly(toExpr.trim(), now)
+            endDate = parseDateOnly(toExpr.trim(), now)
             text = text.replace(m.value, "")
         }
     }

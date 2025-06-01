@@ -231,7 +231,6 @@ class AddToDoViewModel
         }
 
         fun saveDeadLineText() {
-            Log.d("ToDo", "SAVE 실행됨: ${_tempDeadLineText.value}")
             _deadLineText.value = _tempDeadLineText.value
         }
 
@@ -251,7 +250,6 @@ class AddToDoViewModel
             _tempTagId.value = tempTagId
             _tempTagColor.value = tempTagColor
             _tempTagText.value = tempTagText
-            Log.e("AddToDoViewModel", _tempTagId.value.toString())
         }
 
         fun updateToDoInputWithParsing(input: String) {

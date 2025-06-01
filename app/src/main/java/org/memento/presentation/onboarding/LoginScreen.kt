@@ -102,8 +102,10 @@ fun LoginScreen(
                 try {
                     val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
                     credential.googleIdToken?.let { idToken ->
+                        val email = credential.id
                         viewModel.signInWithGoogle(idToken)
                         viewModel.postLogin(idToken)
+                        viewModel.saveEmail(email)
                     }
                 } catch (e: ApiException) {
                     showErrorToast = true

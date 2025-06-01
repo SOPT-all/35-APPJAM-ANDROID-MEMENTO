@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,10 +42,11 @@ fun SettingScreen(
     navigateToSettingTag: () -> Unit,
     navigateToSettingTime: () -> Unit,
     navigateToLogin: () -> Unit,
-    userMail: String = "memento@gmail.com",
     viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
+    val userEmail by viewmodel.userEmail.collectAsState()
+
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDeleteAccountDialog by remember { mutableStateOf(false) }
 
@@ -65,7 +67,7 @@ fun SettingScreen(
                     .padding(top = 26.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            SettingMailBar(usermail = userMail)
+            SettingMailBar(usermail = userEmail ?: "")
             Spacer(modifier = modifier.padding(top = 12.dp))
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.notifications))

@@ -42,6 +42,14 @@ class LoginViewModel
             loadToken()
         }
 
+        fun saveEmail(
+            email: String,
+        ) {
+            viewModelScope.launch {
+                tokenDataStore.userEmail = email
+            }
+        }
+
         fun loadToken() {
             viewModelScope.launch {
                 _token.value = tokenDataStore.accessToken

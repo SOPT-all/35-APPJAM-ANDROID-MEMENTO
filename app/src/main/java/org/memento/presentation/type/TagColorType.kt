@@ -14,6 +14,5 @@ enum class TagColorType(val color: Color) {
     Cyan(color = mementoColors.cyan),
     Blue(color = mementoColors.blue),
     Purple(color = mementoColors.purple),
-    Gray(color = darkModeColors.gray05);
-
+    Gray(color = darkModeColors.gray05),
 }

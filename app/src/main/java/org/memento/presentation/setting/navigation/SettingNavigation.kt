@@ -50,11 +50,12 @@ fun NavGraphBuilder.settingNavGraph(
     }
     composable(
         route = SettingRoute.SETTING_EDIT_TAG_ARGS,
-        arguments = listOf(
-            navArgument("tagId") { type = NavType.IntType },
-            navArgument("tagColor") { type = NavType.StringType },
-            navArgument("tagName") { type = NavType.StringType }
-        )
+        arguments =
+            listOf(
+                navArgument("tagId") { type = NavType.IntType },
+                navArgument("tagColor") { type = NavType.StringType },
+                navArgument("tagName") { type = NavType.StringType },
+            ),
     ) { backStackEntry ->
         val tagId = backStackEntry.arguments?.getInt("tagId") ?: 0
         val tagColor = backStackEntry.arguments?.getString("tagColor") ?: ""

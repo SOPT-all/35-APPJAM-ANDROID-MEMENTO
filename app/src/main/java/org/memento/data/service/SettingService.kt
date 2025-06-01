@@ -13,7 +13,7 @@ interface SettingService {
     @PATCH("/api/v1/tags/{tagId}")
     suspend fun patchTag(
         @Path("tagId") tagId: Int,
-        @Body requestEditTagDto: RequestEditTagDto
+        @Body requestEditTagDto: RequestEditTagDto,
     ): BaseResponse<Unit>
 
     @DELETE("/api/v1/tags/{tagId}")
@@ -23,6 +23,6 @@ interface SettingService {
 
     @POST("/api/v1/tags")
     suspend fun postTag(
-        @Body requestAddTagDto: RequestAddTagDto
+        @Body requestAddTagDto: RequestAddTagDto,
     ): BaseResponse<Unit>
 }

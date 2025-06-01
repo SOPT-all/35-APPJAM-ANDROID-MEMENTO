@@ -34,17 +34,15 @@ fun SettingTagScreen(
     onBack: () -> Unit,
     onDone: () -> Unit,
     navigateToSettingEditTag: (tagId: Int, tagColor: String, tagName: String) -> Unit,
-
-    ) {
-
+) {
     val tagList by viewModel.tagList.collectAsStateWithLifecycle()
 
-
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(top = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(top = 16.dp),
     ) {
         SettingTopBar(
             type = SettingTopBarType.TAG,
@@ -56,9 +54,10 @@ fun SettingTagScreen(
         Spacer(modifier = Modifier.padding(top = 26.dp))
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             items(tagList) { tag ->
@@ -72,7 +71,7 @@ fun SettingTagScreen(
                         navigateToSettingEditTag(
                             tag.id,
                             tag.colorCode,
-                            tag.name
+                            tag.name,
                         )
                     },
                 )
@@ -81,7 +80,6 @@ fun SettingTagScreen(
                 SettingAddTag(onClick = { navigateToSettingEditTag(0, "", "") })
             }
         }
-
     }
 }
 

@@ -8,17 +8,19 @@ import org.memento.data.service.SettingService
 import javax.inject.Inject
 
 class SettingDataSourceImpl
-@Inject
-constructor(
-    private val settingService: SettingService,
-) : SettingDataSource {
-    override suspend fun patchTag(tagId: Int, requestEditTagDto: RequestEditTagDto): BaseResponse<Unit> =
-        settingService.patchTag(tagId, requestEditTagDto)
+    @Inject
+    constructor(
+        private val settingService: SettingService,
+    ) : SettingDataSource {
+        override suspend fun patchTag(
+            tagId: Int,
+            requestEditTagDto: RequestEditTagDto,
+        ): BaseResponse<Unit> =
+            settingService.patchTag(tagId, requestEditTagDto)
 
-    override suspend fun deleteTag(tagId: Int): BaseResponse<Unit> =
-        settingService.deleteTag(tagId)
+        override suspend fun deleteTag(tagId: Int): BaseResponse<Unit> =
+            settingService.deleteTag(tagId)
 
-    override suspend fun postTag(requestAddTagDto: RequestAddTagDto): BaseResponse<Unit> =
-        settingService.postTag(requestAddTagDto)
-
-}
+        override suspend fun postTag(requestAddTagDto: RequestAddTagDto): BaseResponse<Unit> =
+            settingService.postTag(requestAddTagDto)
+    }

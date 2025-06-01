@@ -63,11 +63,14 @@ class MainNavigator(
         navHostController.navigationSettingTag()
     }
 
-    fun navigateToSettingEditTag(tagId: Int, tagColor: String, tagName: String) {
+    fun navigateToSettingEditTag(
+        tagId: Int,
+        tagColor: String,
+        tagName: String,
+    ) {
         val encodedName = Uri.encode(tagName)
         navHostController.navigate("SettingEditTag/$tagId/$tagColor/$encodedName")
     }
-
 
     fun navigateToSettingEditTime() {
         navHostController.navigationSettingEditTime()

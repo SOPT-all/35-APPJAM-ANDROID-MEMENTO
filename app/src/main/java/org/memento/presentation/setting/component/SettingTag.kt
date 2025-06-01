@@ -48,46 +48,46 @@ fun SettingTag(
 ) {
     Row(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .background(
-                color = darkModeColors.gray10,
-                shape = RoundedCornerShape(size = 4.dp),
-            )
-            .noRippleClickable {
-                if (isEditable) onClick()
-            },
+            Modifier
+                .then(modifier)
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(size = 4.dp),
+                )
+                .noRippleClickable {
+                    if (isEditable) onClick()
+                },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth(0.025f)
-                .fillMaxHeight()
-                .background(
-                    color = changeHexToColor(tagColor),
-                    shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
-                ),
+                Modifier
+                    .fillMaxWidth(0.025f)
+                    .fillMaxHeight()
+                    .background(
+                        color = changeHexToColor(tagColor),
+                        shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp),
+                    ),
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         Row(
             modifier =
-            Modifier
-                .padding(vertical = 8.dp)
-                .weight(1f),
+                Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = tagName,
                 style =
-                MementoTheme.typography.body_r_14.copy(
-                    color = darkModeColors.gray05,
-                ),
+                    MementoTheme.typography.body_r_14.copy(
+                        color = darkModeColors.gray05,
+                    ),
             )
 
             Icon(
@@ -95,9 +95,9 @@ fun SettingTag(
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier =
-                Modifier
-                    .padding(end = 4.dp)
-                    .alpha(if (isEditable) 1f else 0f),
+                    Modifier
+                        .padding(end = 4.dp)
+                        .alpha(if (isEditable) 1f else 0f),
             )
         }
     }
@@ -108,11 +108,11 @@ fun SettingTag(
 private fun SettingTagPreview() {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(horizontal = 20.dp)
-            .padding(top = 20.dp),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp),
     ) {
         SettingTag(
             tagName = "Family",

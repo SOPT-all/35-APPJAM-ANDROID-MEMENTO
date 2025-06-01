@@ -45,8 +45,7 @@ fun SettingEditTagScreen(
     settingViewModel: SettingViewModel = hiltViewModel(),
     onBack: () -> Unit,
     onDone: () -> Unit,
-
-    ) {
+) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showExistDialog by remember { mutableStateOf(false) }
 
@@ -59,21 +58,23 @@ fun SettingEditTagScreen(
 //    }
     var selectedColorName by remember {
         mutableStateOf<TagColorType?>(
-            if (tagColor.isBlank()) TagColorType.Red
-            else TagColor.fromHexCode(tagColor)
+            if (tagColor.isBlank()) {
+                TagColorType.Red
+            } else {
+                TagColor.fromHexCode(tagColor)
+            },
         )
     }
-
 
     val selectedColorCode = selectedColorName?.let { toHexCode(it) }
     var text by remember { mutableStateOf(tagName) }
 
     Column(
         modifier =
-        Modifier
-            .then(modifier)
-            .fillMaxHeight()
-            .padding(top = 16.dp),
+            Modifier
+                .then(modifier)
+                .fillMaxHeight()
+                .padding(top = 16.dp),
     ) {
         SettingTopBar(
             type = SettingTopBarType.TAG,
@@ -83,13 +84,13 @@ fun SettingEditTagScreen(
                 if (tagId == 0) {
                     settingViewModel.postTag(
                         name = text,
-                        colorHex = selectedColorCode.toString()
+                        colorHex = selectedColorCode.toString(),
                     )
                 } else {
                     settingViewModel.patchEditTag(
                         tagId = tagId,
                         name = text,
-                        colorHex = selectedColorName.toString().uppercase()
+                        colorHex = selectedColorName.toString().uppercase(),
                     )
                 }
             },
@@ -97,31 +98,31 @@ fun SettingEditTagScreen(
         )
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(start = 20.dp, top = 26.dp, end = 20.dp, bottom = 20.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+                    .padding(start = 20.dp, top = 26.dp, end = 20.dp, bottom = 20.dp),
         ) {
             Column(
                 modifier =
-                Modifier
-                    .background(color = darkModeColors.gray10, shape = RoundedCornerShape(4.dp)),
+                    Modifier
+                        .background(color = darkModeColors.gray10, shape = RoundedCornerShape(4.dp)),
             ) {
                 Text(
                     text = stringResource(id = R.string.setting_edit_tag_name),
                     style = defaultMementoTypography.detail_r_12,
                     color = darkModeColors.gray06,
                     modifier =
-                    Modifier
-                        .padding(start = 16.dp, top = 12.dp),
+                        Modifier
+                            .padding(start = 16.dp, top = 12.dp),
                 )
                 TagNameTextField(
                     text = text,
                     onTextValueChange = { text = it },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp, top = 9.dp, end = 12.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 12.dp, top = 9.dp, end = 12.dp),
                 )
                 Spacer(Modifier.height(30.dp))
                 Text(
@@ -129,14 +130,14 @@ fun SettingEditTagScreen(
                     style = defaultMementoTypography.detail_r_12,
                     color = darkModeColors.gray06,
                     modifier =
-                    Modifier
-                        .padding(start = 16.dp),
+                        Modifier
+                            .padding(start = 16.dp),
                 )
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp, bottom = 24.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 14.dp, bottom = 24.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     TagColorType.entries.forEach { color ->
@@ -154,11 +155,11 @@ fun SettingEditTagScreen(
                 style = defaultMementoTypography.body_r_14,
                 color = mementoColors.red,
                 modifier =
-                Modifier
-                    .padding(horizontal = 11.dp, vertical = 10.dp)
-                    .noRippleClickable {
-                        showDeleteDialog = true
-                    },
+                    Modifier
+                        .padding(horizontal = 11.dp, vertical = 10.dp)
+                        .noRippleClickable {
+                            showDeleteDialog = true
+                        },
             )
         }
     }

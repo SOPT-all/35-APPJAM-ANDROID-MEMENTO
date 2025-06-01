@@ -10,32 +10,35 @@ import org.memento.domain.repository.SettingRepository
 import javax.inject.Inject
 
 class SettingRepositoryImpl
-@Inject
-constructor(
-    private val settingDataSource: SettingDataSource,
-) : SettingRepository {
-    override suspend fun patchTag(tagId: Int, editTag: EditTag): Result<Unit> {
-        return runCatching {
-            settingDataSource.patchTag(
-                tagId = tagId,
-                requestEditTagDto = editTag.toData(),
-            ).handleBaseResponse().getOrThrow()
+    @Inject
+    constructor(
+        private val settingDataSource: SettingDataSource,
+    ) : SettingRepository {
+        override suspend fun patchTag(
+            tagId: Int,
+            editTag: EditTag,
+        ): Result<Unit> {
+            return runCatching {
+                settingDataSource.patchTag(
+                    tagId = tagId,
+                    requestEditTagDto = editTag.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun deleteTag(tagId: Int): Result<Unit> {
-        return runCatching {
-            settingDataSource.deleteTag(
-                tagId = tagId,
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun deleteTag(tagId: Int): Result<Unit> {
+            return runCatching {
+                settingDataSource.deleteTag(
+                    tagId = tagId,
+                ).handleBaseResponse().getOrThrow()
+            }
         }
-    }
 
-    override suspend fun postTag(createTag: CreateTag): Result<Unit> {
-        return runCatching {
-            settingDataSource.postTag(
-                requestAddTagDto = createTag.toTagData(),
-            ).handleBaseResponse().getOrThrow()
+        override suspend fun postTag(createTag: CreateTag): Result<Unit> {
+            return runCatching {
+                settingDataSource.postTag(
+                    requestAddTagDto = createTag.toTagData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
     }
-}

@@ -4,11 +4,22 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.temporal.TemporalAdjusters
 
-/**
- * 자연어 처리 로직 구현 함수
- * @param input schedule 혹은 todo 에 입력한 텍스트
- * @param isParseTime schedule 이면 true, todo 이면 false
-*/
+// 재사용할 정규표현식 선언
+private val TIME_RANGE_REGEX = Regex("""(오전|오후)?\s?(\d{1,2})시부터\s?(오전|오후)?\s?(\d{1,2})시까지""")
+private val DATE_RANGE_REGEX = Regex("""(.+?)부터\s*(.+?)까지""")
+private val TIL_REGEX = Regex("""(.+?)까지""")
+private val KOR_WEEKDAY_REGEX = Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""")
+private val KOR_DATE_REGEX = Regex("""(어제|그제|오늘|내일|모레|\d+일\s*(?:전|후)|\d{1,2}월\s*\d{1,2}일)""")
+private val ENG_DATE_REGEX = Regex(
+    """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)"""
+)
+
+private val RELATIVE_KOR_REGEX = Regex("""(\d{1,2})일\s*(전|후)""")
+private val RELATIVE_ENG_REGEX  = Regex("""(\d{1,2})\s+days?\s+(after|before)""")
+private val MD_KOR_REGEX = Regex("""(\d{1,2})월\s*(\d{1,2})일""")
+private val MD_SLASH_REGEX = Regex("""(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?""")
+private val ENG_MONTH_DAY_REGEX = Regex("""([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?""")
+private val ENG_WEEKDAY_REGEX = Regex("""(?i)(this week|next week)?\s*(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)""")
 
 fun parseNaturalLanguage(
     input: String,
@@ -21,8 +32,7 @@ fun parseNaturalLanguage(
 
     // 1) 시간 범위 파싱 (isParseTime == true 일 때만)
     if (isParseTime) {
-        val timeRangeRegex = Regex("""(오전|오후)?\s?(\d{1,2})시부터\s?(오전|오후)?\s?(\d{1,2})시까지""")
-        timeRangeRegex.find(text)?.let { m ->
+        TIME_RANGE_REGEX.find(text)?.let { m ->
             val (sm, sh, em, eh) = m.destructured
             val startH = adjustHour(sh.toInt(), sm)
             val endH = adjustHour(eh.toInt(), em)
@@ -32,42 +42,49 @@ fun parseNaturalLanguage(
         }
     }
 
-    // 2) “~까지” 처리: start = 오늘, end = parseDateOnly(그 앞 표현)
+    // 2-1) “~까지” 처리: start = 오늘, end = parseDateOnly(그 앞 표현)
     if (startDate == null) {
-        Regex("""(.+?)까지""")
-            .find(text)?.let { m ->
-                startDate = now.truncatedToDays()
-                endDate = parseDateOnly(m.groupValues[1].trim(), now)
-                text = text.replace(m.value, "")
-            }
+        DATE_RANGE_REGEX.find(text)?.let { m ->
+            val (fromExpr, toExpr) = m.destructured
+            // 그룹1: "X", 그룹2: "Y"를 각각 파싱
+            startDate = parseDateOnly(fromExpr.trim(), now)
+            endDate   = parseDateOnly(toExpr.trim(), now)
+            text = text.replace(m.value, "")
+        }
     }
 
-    // 3) 단일 날짜/요일 파싱 (start=end)
+    // 2-2) “~까지” 처리: start = 오늘, end = parseDateOnly(그 앞 표현)
     if (startDate == null) {
-        // 3-1) 한국어 요일: “(이번주|다음주)? 수요일”
-        Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""")
-            .find(text)?.let { m ->
-                val expr = m.value.trim()
-                startDate = parseDateOnly(expr, now)
-                endDate = startDate
-                text = text.replace(m.value, "")
-            }
+        TIL_REGEX.find(text)?.let { m ->
+            startDate = now.truncatedToDays()
+            endDate = parseDateOnly(m.groupValues[1].trim(), now)
+            text = text.replace(m.value, "")
+        }
     }
+
+    // 3-1) 한국어 요일: “(이번주|다음주)? 수요일”
     if (startDate == null) {
-        // 3-2) 한국어 상대/절대 날짜: “오늘”, “3일 후”, “5월 1일” 등
-        Regex("""(어제|그제|오늘|내일|모레|\d+일\s*(?:전|후)|\d{1,2}월\s*\d{1,2}일)""")
-            .find(text)?.let { m ->
-                val expr = m.value.trim()
-                startDate = parseDateOnly(expr, now)
-                endDate = startDate
-                text = text.replace(m.value, "")
-            }
+        KOR_WEEKDAY_REGEX.find(text)?.let { m ->
+            val expr = m.value.trim()
+            startDate = parseDateOnly(expr, now)
+            endDate = startDate
+            text = text.replace(m.value, "")
+        }
     }
+
+    // 3-2) 한국어 상대/절대 날짜: “오늘”, “3일 후”, “5월 1일” 등
     if (startDate == null) {
-        // 3-3) 영어 상대/절대 날짜: “tomorrow”, “2 days after”, “May 1st” 등
-        Regex(
-            """(?i)(the day before yesterday|yesterday|today|tomorrow|day after tomorrow|\d+\s+days?\s+(?:after|before)|\d{1,2}[/-]\d{1,2}|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?)""",
-        ).find(text)?.let { m ->
+        KOR_DATE_REGEX.find(text)?.let { m ->
+            val expr = m.value.trim()
+            startDate = parseDateOnly(expr, now)
+            endDate = startDate
+            text = text.replace(m.value, "")
+        }
+    }
+
+    // 3-3) 영어 상대/절대 날짜: “tomorrow”, “2 days after”, “May 1st” 등
+    if (startDate == null) {
+        ENG_DATE_REGEX.find(text)?.let { m ->
             val expr = m.value.trim()
             startDate = parseDateOnly(expr, now)
             endDate = startDate
@@ -122,37 +139,36 @@ private fun parseDateOnly(
     }
 
     // “n일 전/후”
-    Regex("""(\d{1,2})일\s*(전|후)""").find(expr)?.let {
+    RELATIVE_KOR_REGEX.find(expr)?.let {
         val (n, dir) = it.destructured
         val d = n.toLong() * if (dir == "후") 1 else -1
         return now.plusDays(d).truncatedToDays()
     }
     // “n days after/before”
-    Regex("""(\d{1,2})\s+days?\s+(after|before)""").find(e)?.let {
+    RELATIVE_ENG_REGEX.find(e)?.let {
         val (n, dir) = it.destructured
         val d = n.toLong() * if (dir == "after") 1 else -1
         return now.plusDays(d).truncatedToDays()
     }
 
     // “M월 D일”
-    Regex("""(\d{1,2})월\s*(\d{1,2})일""").find(expr)?.let {
+    MD_KOR_REGEX.find(expr)?.let {
         val (m, d) = it.destructured
         return now.withMonth(m.toInt()).withDayOfMonth(d.toInt()).truncatedToDays()
     }
     // “MM/DD” or “M/D” (opt. YYYY)
-    Regex("""(\d{1,2})[/-](\d{1,2})(?:[/-](\d{4}))?""").find(e)?.let {
+    MD_SLASH_REGEX.find(e)?.let {
         val (m, d, y) = it.destructured
         val year = if (y.isBlank()) now.year else y.toInt()
         return LocalDateTime.of(year, m.toInt(), d.toInt(), 0, 0)
     }
     // “May 1st”, “Jan 2” 등
-    val months =
-        mapOf(
-            "january" to 1, "february" to 2, "march" to 3, "april" to 4,
-            "may" to 5, "june" to 6, "july" to 7, "august" to 8,
-            "september" to 9, "october" to 10, "november" to 11, "december" to 12,
-        )
-    Regex("""([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?""").find(expr)?.let {
+    val months = mapOf(
+        "january" to 1, "february" to 2, "march" to 3, "april" to 4,
+        "may" to 5, "june" to 6, "july" to 7, "august" to 8,
+        "september" to 9, "october" to 10, "november" to 11, "december" to 12,
+    )
+    ENG_MONTH_DAY_REGEX.find(expr)?.let {
         val (mon, day, yearStr) = it.destructured
         val m = months[mon.toLowerCase()] ?: now.monthValue
         val y = if (yearStr.isBlank()) now.year else yearStr.toInt()
@@ -160,29 +176,26 @@ private fun parseDateOnly(
     }
 
     // 한국어 요일: “(이번주|다음주)? 수요일”
-    Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""").find(expr)?.let {
+    KOR_WEEKDAY_REGEX.find(expr)?.let {
         val (ctx, dayKor) = it.destructured
         val idx = listOf("일", "월", "화", "수", "목", "금", "토").indexOf(dayKor)
         val weeks = if (ctx == "다음주") 1 else 0
-        // 이번주 요일 == 오늘 요일 기준, 다음주 == 오늘 요일+7
         val todayIdx = now.dayOfWeek.value % 7
-        val diff =
-            if (idx >= todayIdx) {
-                idx - todayIdx + weeks * 7
-            } else {
-                7 - (todayIdx - idx) + weeks * 7
-            }
+        val diff = if (idx >= todayIdx) {
+            idx - todayIdx + weeks * 7
+        } else {
+            7 - (todayIdx - idx) + weeks * 7
+        }
         return now.plusDays(diff.toLong()).truncatedToDays()
     }
 
     // 영어 요일: “this week Wednesday” / “next week Friday”
-    Regex("""(?i)(this week|next week)?\s*(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)""")
-        .find(expr)?.let {
-            val (ctx, dayEn) = it.destructured
-            val dow = DayOfWeek.valueOf(dayEn.toUpperCase())
-            val base = if (ctx.equals("next week", true)) now.plusWeeks(1) else now
-            return base.`with`(TemporalAdjusters.nextOrSame(dow)).truncatedToDays()
-        }
+    ENG_WEEKDAY_REGEX.find(expr)?.let {
+        val (ctx, dayEn) = it.destructured
+        val dow  = DayOfWeek.valueOf(dayEn.toUpperCase())
+        val base = if (ctx.equals("next week", true)) now.plusWeeks(1) else now
+        return base.`with`(TemporalAdjusters.nextOrSame(dow)).truncatedToDays()
+    }
 
     // 기본: 오늘
     return now.truncatedToDays()
@@ -192,7 +205,7 @@ private fun parseDateOnly(
 private fun LocalDateTime.truncatedToDays() =
     this.withHour(0).withMinute(0).withSecond(0).withNano(0)
 
-// 오전 오후 파싱
+// 오전/오후 파싱
 private fun adjustHour(
     hour: Int,
     meridiem: String?,
@@ -200,5 +213,5 @@ private fun adjustHour(
     when (meridiem) {
         "오전" -> if (hour == 12) 0 else hour
         "오후" -> if (hour < 12) hour + 12 else hour
-        else -> hour
+        else   -> hour
     }

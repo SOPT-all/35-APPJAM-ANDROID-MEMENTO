@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,12 +38,16 @@ fun SettingTagScreen(
 ) {
     val tagList by viewModel.tagList.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.getTagList()
+    }
+
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black)
-                .padding(top = 16.dp),
+        Modifier
+            .fillMaxSize()
+            .background(color = darkModeColors.black)
+            .padding(top = 16.dp),
     ) {
         SettingTopBar(
             type = SettingTopBarType.TAG,
@@ -55,9 +60,9 @@ fun SettingTagScreen(
 
         LazyColumn(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             items(tagList) { tag ->

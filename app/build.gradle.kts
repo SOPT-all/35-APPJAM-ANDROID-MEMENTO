@@ -135,6 +135,10 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.play.services.auth)
+    // FCM
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.inappmessaging.display) // 인앱 메시지 배너 및 팝업 표시에 사용됨
+    implementation(libs.kotlinx.coroutines.play.services)
 
     // Web View
     implementation(libs.accompanist.webview)

@@ -10,6 +10,16 @@ import org.memento.presentation.onboarding.OnboardingScreen2
 import org.memento.presentation.onboarding.OnboardingScreen3
 import org.memento.presentation.onboarding.OnboardingScreen4
 
+fun NavController.navigationLogin(navOptions: NavOptions? = null) {
+    this.navigate(
+        OnboardingRoute.ROUTE,
+        navOptions ?: NavOptions.Builder()
+            .setPopUpTo(0, inclusive = true)
+            .setLaunchSingleTop(true)
+            .build(),
+    )
+}
+
 fun NavController.navigationOnboarding1(navOptions: NavOptions? = null) {
     navigate("OnboardingScreen1", navOptions)
 }

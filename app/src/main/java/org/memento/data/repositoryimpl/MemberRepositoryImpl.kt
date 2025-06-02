@@ -1,25 +1,32 @@
 package org.memento.data.repositoryimpl
 
-import org.memento.data.datasource.LoginDataSource
+import org.memento.data.datasource.MemberDataSource
 import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toDomain.toUserInfo
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.Login
 import org.memento.domain.entity.LoginInfo
-import org.memento.domain.repository.LoginRepository
+import org.memento.domain.repository.MemberRepository
 import javax.inject.Inject
 
-class LoginRepositoryImpl
+class MemberRepositoryImpl
     @Inject
     constructor(
-        private val loginDataSource: LoginDataSource,
-    ) : LoginRepository {
+        private val memberDataSource: MemberDataSource,
+    ) : MemberRepository {
         override suspend fun postLogin(login: Login): Result<LoginInfo> {
             return runCatching {
-                loginDataSource.postLogin(
+                memberDataSource.postLogin(
                     requestLoginDto = login.toData(),
                 ).handleBaseResponse()
                     .getOrThrow()?.toUserInfo() ?: throw Exception("Throw Exception Error")
+            }
+        }
+
+        override suspend fun deleteMember(): Result<Unit> {
+            return runCatching {
+                memberDataSource.deleteMember().handleBaseResponse().getOrThrow()
+                Unit
             }
         }
     }

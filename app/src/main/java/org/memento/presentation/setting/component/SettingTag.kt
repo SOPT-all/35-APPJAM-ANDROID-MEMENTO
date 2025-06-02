@@ -57,7 +57,7 @@ fun SettingTag(
                     shape = RoundedCornerShape(size = 4.dp),
                 )
                 .noRippleClickable {
-                    onClick()
+                    if (isEditable) onClick()
                 },
         verticalAlignment = Alignment.CenterVertically,
     ) {

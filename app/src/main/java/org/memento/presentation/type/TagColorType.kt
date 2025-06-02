@@ -4,9 +4,7 @@ import androidx.compose.ui.graphics.Color
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.mementoColors
 
-enum class TagColorType(
-    val color: Color,
-) {
+enum class TagColorType(val color: Color) {
     Red(color = mementoColors.red),
     Pink(color = mementoColors.pink),
     Orange(color = mementoColors.orange),

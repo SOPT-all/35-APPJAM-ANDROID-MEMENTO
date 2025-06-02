@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.common.math.LinearTransformation.vertical
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
 import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingTopBar
@@ -29,6 +29,8 @@ import org.memento.presentation.setting.component.TagColorSelector
 import org.memento.presentation.setting.component.TagNameTextField
 import org.memento.presentation.type.SettingTopBarType
 import org.memento.presentation.type.TagColorType
+import org.memento.presentation.util.TagColor
+import org.memento.presentation.util.TagColor.toHexCode
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
@@ -37,14 +39,28 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun SettingEditTagScreen(
     modifier: Modifier = Modifier,
+    tagId: Int,
+    tagColor: String,
+    tagName: String,
+    settingViewModel: SettingViewModel = hiltViewModel(),
     onBack: () -> Unit,
     onDone: () -> Unit,
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showExistDialog by remember { mutableStateOf(false) }
 
-    var text by remember { mutableStateOf("") }
-    var selectedColor by remember { mutableStateOf<TagColorType?>(null) }
+    var selectedColorName by remember {
+        mutableStateOf(
+            if (tagColor.isBlank()) {
+                TagColorType.Red
+            } else {
+                TagColor.fromHexCode(tagColor)
+            },
+        )
+    }
+
+    val selectedColorCode = selectedColorName?.let { toHexCode(it) }
+    var text by remember { mutableStateOf(tagName) }
 
     Column(
         modifier =
@@ -56,7 +72,21 @@ fun SettingEditTagScreen(
         SettingTopBar(
             type = SettingTopBarType.TAG,
             onBackClick = { onBack() },
-            onDoneClick = { onDone() },
+            onDoneClick = {
+                onDone()
+                if (tagId == 0) {
+                    settingViewModel.postTag(
+                        name = text,
+                        colorHex = selectedColorCode.toString(),
+                    )
+                } else {
+                    settingViewModel.patchEditTag(
+                        tagId = tagId,
+                        name = text,
+                        colorHex = selectedColorName.toString().uppercase(),
+                    )
+                }
+            },
             isDoneVisible = true,
         )
         Column(
@@ -106,8 +136,8 @@ fun SettingEditTagScreen(
                     TagColorType.entries.forEach { color ->
                         TagColorSelector(
                             color = color,
-                            isSelected = color == selectedColor,
-                            onClick = { selectedColor = color },
+                            isSelected = color == selectedColorName,
+                            onClick = { selectedColorName = color },
                         )
                     }
                 }
@@ -137,6 +167,7 @@ fun SettingEditTagScreen(
             onRightButtonClick = {
                 showDeleteDialog = false
                 // Todo : Delete API
+                settingViewModel.deleteTag(tagId)
                 // Todo : Exist 분기 처리 ->
                 showExistDialog = true
                 // Todo : 해당 뷰에서 나가지기
@@ -157,5 +188,5 @@ fun SettingEditTagScreen(
 @Preview
 @Composable
 private fun SettingEditTagScreenPrev() {
-    SettingEditTagScreen(onBack = {}, onDone = {})
+//    SettingEditTagScreen(onBack = {}, onDone = {})
 }

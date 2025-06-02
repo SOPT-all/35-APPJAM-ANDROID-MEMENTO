@@ -9,9 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.memento.presentation.plusbottomsheet.AddToDoViewModel
 import org.memento.presentation.setting.component.SettingAddTag
 import org.memento.presentation.setting.component.SettingTag
 import org.memento.presentation.setting.component.SettingTopBar
@@ -23,14 +28,20 @@ import org.memento.ui.theme.darkModeColors
  *  @param onDone modifier 수정 사항
  *  @param tags 서버로부터 받아오는 tag리스트
  */
-
 @Composable
 fun SettingTagScreen(
+    viewModel: AddToDoViewModel = hiltViewModel(),
+    settingViewModel: SettingViewModel = hiltViewModel(),
     onBack: () -> Unit,
     onDone: () -> Unit,
-    navigateToSettingEditTag: () -> Unit,
-    tags: List<Tag>,
+    navigateToSettingEditTag: (tagId: Int, tagColor: String, tagName: String) -> Unit,
 ) {
+    val tagList by viewModel.tagList.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getTagList()
+    }
+
     Column(
         modifier =
             Modifier
@@ -54,41 +65,31 @@ fun SettingTagScreen(
                     .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            items(tags) { tag ->
+            items(tagList) { tag ->
                 val isEditable = tag.name != "Untitled"
 
                 SettingTag(
                     tagColor = tag.colorCode,
                     tagName = tag.name,
                     isEditable = isEditable,
-                    onClick = { },
+                    onClick = {
+                        navigateToSettingEditTag(
+                            tag.id,
+                            tag.colorCode,
+                            tag.name,
+                        )
+                    },
                 )
             }
             item {
-                SettingAddTag(onClick = { navigateToSettingEditTag() })
+                SettingAddTag(onClick = { navigateToSettingEditTag(0, "", "") })
             }
         }
     }
 }
 
-data class Tag(
-    val id: Int,
-    val name: String,
-    val colorCode: String,
-)
-
-val dummyTags =
-    listOf(
-        Tag(id = 163, name = "Untitled", colorCode = "#A9ADBB"),
-        Tag(id = 164, name = "Family", colorCode = "#FF426E"),
-        Tag(id = 165, name = "Hobby", colorCode = "#FF8162"),
-        Tag(id = 166, name = "Self-Development", colorCode = "#149C95"),
-        Tag(id = 167, name = "Work", colorCode = "#6CA9E1"),
-        Tag(id = 168, name = "Personal", colorCode = "#3867FF"),
-    )
-
 @Preview
 @Composable
 private fun SettingTagScreen() {
-    SettingTagScreen(onBack = {}, onDone = {}, tags = dummyTags, navigateToSettingEditTag = {})
+//    SettingTagScreen(onBack = {}, onDone = {}, tags = dummyTags, navigateToSettingEditTag = {})
 }

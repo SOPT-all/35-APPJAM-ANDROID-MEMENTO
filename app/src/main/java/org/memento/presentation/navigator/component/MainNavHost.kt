@@ -54,7 +54,9 @@ fun MainNavHost(
             settingNavGraph(
                 navigateBack = { navigator.navHostController.popBackStack() },
                 navigateToSettingTag = { navigator.navigateToSettingTag() },
-                navigateToSettingEditTag = { navigator.navigateToSettingEditTag() },
+                navigateToSettingEditTag = { id, color, name ->
+                    navigator.navigateToSettingEditTag(id, color, name)
+                },
                 navigateToSettingEditTime = { navigator.navigateToSettingEditTime() },
                 navigateToLogin = {
                     navigator.navigateToLogin()

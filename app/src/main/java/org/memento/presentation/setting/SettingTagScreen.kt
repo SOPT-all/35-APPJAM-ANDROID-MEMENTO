@@ -44,10 +44,10 @@ fun SettingTagScreen(
 
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = darkModeColors.black)
-            .padding(top = 16.dp),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black)
+                .padding(top = 16.dp),
     ) {
         SettingTopBar(
             type = SettingTopBarType.TAG,
@@ -60,9 +60,9 @@ fun SettingTagScreen(
 
         LazyColumn(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             items(tagList) { tag ->

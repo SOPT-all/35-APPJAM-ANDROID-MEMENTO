@@ -17,7 +17,7 @@ import org.memento.data.util.getTimeZoneOffsetString
 import org.memento.domain.entity.Login
 import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.AuthRepository
-import org.memento.domain.repository.LoginRepository
+import org.memento.domain.repository.MemberRepository
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class LoginViewModel
     @Inject
     constructor(
         private val authRepository: AuthRepository,
-        private val loginRepository: LoginRepository,
+        private val loginRepository: MemberRepository,
         private val tokenDataStore: TokenDataStore,
     ) : ViewModel() {
         private val _user = MutableStateFlow<FirebaseUser?>(null)
@@ -40,6 +40,14 @@ class LoginViewModel
 
         init {
             loadToken()
+        }
+
+        fun saveEmail(
+            email: String,
+        ) {
+            viewModelScope.launch {
+                tokenDataStore.userEmail = email
+            }
         }
 
         fun loadToken() {

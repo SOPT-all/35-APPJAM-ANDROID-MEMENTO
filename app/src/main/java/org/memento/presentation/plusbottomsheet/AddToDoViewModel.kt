@@ -1,9 +1,10 @@
 package org.memento.presentation.plusbottomsheet
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,8 +16,10 @@ import org.memento.domain.entity.TodoDetail
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.createLocalDate
+import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatDateString
 import org.memento.presentation.util.formatDateTime
+import org.memento.presentation.util.toMillis
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -71,6 +74,11 @@ class AddToDoViewModel
 
         private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
         val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
+
+        private val _isSwitchOn = MutableStateFlow<Boolean>(false)
+        val isSwitchOn: StateFlow<Boolean> = _isSwitchOn
+
+        private var parseJob: Job? = null
 
         init {
             getTagList()
@@ -205,10 +213,6 @@ class AddToDoViewModel
             }
         }
 
-        fun updateToDoText(newText: String) {
-            _addToDoText.value = newText
-        }
-
         fun updateSelectedDateText(newDate: String) {
             _selectedDateText.value = newDate
         }
@@ -245,7 +249,36 @@ class AddToDoViewModel
             _tempTagId.value = tempTagId
             _tempTagColor.value = tempTagColor
             _tempTagText.value = tempTagText
-            Log.e("AddToDoViewModel", _tempTagId.value.toString())
+        }
+
+        fun updateToDoInputWithParsing(input: String) {
+            _addToDoText.value = input
+
+            if (!_isSwitchOn.value || input.replace(" ", "").length > 30) return
+
+            parseJob?.cancel()
+            parseJob =
+                viewModelScope.launch {
+                    delay(500L)
+
+                    val parsed = parseNaturalLanguage(input, isParseTime = false)
+
+                    _addToDoText.value = parsed.title
+
+                    parsed.startDate?.let { start ->
+                        val formatted = formatDate(start.toLocalDate().toMillis())
+                        _selectedDateText.value = formatted
+                    }
+
+                    parsed.endDate?.let { end ->
+                        val formatted = formatDate(end.toLocalDate().toMillis())
+                        _deadLineText.value = formatted
+                    }
+                }
+        }
+
+        fun updateSwitchState(isOn: Boolean) {
+            _isSwitchOn.value = isOn
         }
 
         fun resetData() {

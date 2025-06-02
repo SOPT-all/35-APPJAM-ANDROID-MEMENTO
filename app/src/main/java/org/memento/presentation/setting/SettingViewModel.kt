@@ -12,6 +12,12 @@ import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
 import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import org.memento.core.util.UiState
+import org.memento.data.datastore.TokenDataStore
+import org.memento.domain.repository.MemberRepository
 import org.memento.domain.repository.SettingRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -119,6 +125,34 @@ class SettingViewModel
                             UiState.Failure
                         },
                     )
+            }
+        }
+    }
+        private val memberRepository: MemberRepository,
+        private val tokenDataStore: TokenDataStore,
+    ) : ViewModel() {
+        private val _userEmail = MutableStateFlow<String?>(null)
+        val userEmail: StateFlow<String?> = _userEmail
+
+        init {
+            viewModelScope.launch {
+                _userEmail.value = tokenDataStore.userEmail
+            }
+        }
+
+        fun deleteMember(
+            onLogout: () -> Unit,
+        ) {
+            viewModelScope.launch {
+                tokenDataStore.clearInfo()
+                onLogout()
+                val result = memberRepository.deleteMember()
+                result.onSuccess {
+                    tokenDataStore.clearInfo()
+                    onLogout()
+                }.onFailure { throwable ->
+                    UiState.Failure
+                }
             }
         }
     }

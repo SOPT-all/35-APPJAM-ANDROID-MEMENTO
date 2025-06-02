@@ -39,12 +39,14 @@ fun NavGraphBuilder.settingNavGraph(
     navigateToSettingTag: () -> Unit,
     navigateToSettingEditTag: (Int, String, String) -> Unit,
     navigateToSettingEditTime: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     composable(SettingRoute.SETTING) {
         SettingScreen(
             onBack = navigateBack,
             navigateToSettingTag = navigateToSettingTag,
             navigateToSettingTime = navigateToSettingEditTime,
+            navigateToLogin = navigateToLogin,
         )
     }
     composable(SettingRoute.SETTINGTAG) {

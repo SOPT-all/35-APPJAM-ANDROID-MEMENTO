@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,7 @@ import org.memento.domain.entity.LoginInfo
 import org.memento.presentation.onboarding.component.SocialLoginButton
 import org.memento.presentation.onboarding.viewmodel.LoginViewModel
 import org.memento.presentation.util.MementoToast
+import org.memento.presentation.util.ThrottleFirst
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
@@ -55,6 +57,9 @@ fun LoginScreen(
     navigationToMainScreen: () -> Unit,
 ) {
     val token by viewModel.token.collectAsState()
+
+    val throttle = remember { ThrottleFirst() }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(token) {
         if (!token.isNullOrEmpty()) {
@@ -102,8 +107,10 @@ fun LoginScreen(
                 try {
                     val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
                     credential.googleIdToken?.let { idToken ->
+                        val email = credential.id
                         viewModel.signInWithGoogle(idToken)
                         viewModel.postLogin(idToken)
+                        viewModel.saveEmail(email)
                     }
                 } catch (e: ApiException) {
                     showErrorToast = true
@@ -154,14 +161,16 @@ fun LoginScreen(
             icon = R.drawable.img_google,
             content = stringResource(id = R.string.onboarding_google_login),
             onClick = {
-                oneTapClient.beginSignIn(signInRequest)
-                    .addOnSuccessListener { result ->
-                        val intentSenderRequest = IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
-                        launcher.launch(intentSenderRequest)
-                    }
-                    .addOnFailureListener { e ->
-                        showErrorToast = true
-                    }
+                throttle.run(scope = coroutineScope) {
+                    oneTapClient.beginSignIn(signInRequest)
+                        .addOnSuccessListener { result ->
+                            val intentSenderRequest = IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
+                            launcher.launch(intentSenderRequest)
+                        }
+                        .addOnFailureListener { e ->
+                            showErrorToast = true
+                        }
+                }
             },
             modifier = Modifier.padding(horizontal = 16.dp),
         )

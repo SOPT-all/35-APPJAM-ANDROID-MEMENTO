@@ -19,6 +19,12 @@ fun NavController.navigationSetting() {
 fun NavController.navigationSettingTag() {
     navigate(
         route = SettingRoute.SETTINGTAG,
+        builder = {
+            popUpTo(SettingRoute.SETTINGTAG) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        },
     )
 }
 

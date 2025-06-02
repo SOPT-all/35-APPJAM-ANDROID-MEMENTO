@@ -3,18 +3,21 @@ package org.memento.presentation.onboarding.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.memento.core.util.UiState
 import org.memento.data.datastore.TokenDataStore
+import org.memento.data.util.getTimeZoneOffsetString
 import org.memento.domain.entity.Login
 import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.AuthRepository
-import org.memento.domain.repository.LoginRepository
+import org.memento.domain.repository.MemberRepository
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +26,7 @@ class LoginViewModel
     @Inject
     constructor(
         private val authRepository: AuthRepository,
-        private val loginRepository: LoginRepository,
+        private val loginRepository: MemberRepository,
         private val tokenDataStore: TokenDataStore,
     ) : ViewModel() {
         private val _user = MutableStateFlow<FirebaseUser?>(null)
@@ -37,6 +40,14 @@ class LoginViewModel
 
         init {
             loadToken()
+        }
+
+        fun saveEmail(
+            email: String,
+        ) {
+            viewModelScope.launch {
+                tokenDataStore.userEmail = email
+            }
         }
 
         fun loadToken() {
@@ -63,7 +74,24 @@ class LoginViewModel
         ) {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
-                val result = loginRepository.postLogin(Login(idToken = idToken, provider = provider))
+
+                val fcmToken =
+                    try {
+                        FirebaseMessaging.getInstance().token.await()
+                    } catch (e: Exception) {
+                        Timber.d("FCM token 가져오기 실패 : ${e.message}")
+                        ""
+                    }
+
+                val result =
+                    loginRepository.postLogin(
+                        Login(
+                            idToken = idToken,
+                            provider = provider,
+                            timeZoneOffset = getTimeZoneOffsetString(),
+                            fcmToken = fcmToken,
+                        ),
+                    )
                 _uiState.value =
                     result.fold(
                         onSuccess = { data -> UiState.Success(data) },

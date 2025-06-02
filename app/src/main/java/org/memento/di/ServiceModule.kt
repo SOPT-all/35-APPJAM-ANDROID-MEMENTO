@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.memento.data.service.AddPlanService
-import org.memento.data.service.LoginService
+import org.memento.data.service.MemberService
 import org.memento.data.service.ReqresService
 import org.memento.data.service.ScheduleService
 import org.memento.data.service.SettingService
@@ -23,7 +23,7 @@ internal object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService = retrofit.create(LoginService::class.java)
+    fun provideMemberService(retrofit: Retrofit): MemberService = retrofit.create(MemberService::class.java)
 
     @Provides
     @Singleton

@@ -36,6 +36,15 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putBoolean(IS_NEW_USER, value).apply()
             }
 
+        override var userEmail: String
+            get() {
+                val userEmail = sharedPreferences.getString(USER_EMAIL, "") ?: ""
+                return userEmail
+            }
+            set(value) {
+                sharedPreferences.edit().putString(USER_EMAIL, value).apply()
+            }
+
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
         }
@@ -44,5 +53,6 @@ class TokenDataStoreImpl
             private const val ACCESS_TOKEN = "ACCESS_TOKEN"
             private const val REFRESH_TOKEN = "REFRESH_TOKEN"
             private const val IS_NEW_USER = "IS_NEW_USER"
+            private const val USER_EMAIL = "USER_EMAIL"
         }
     }

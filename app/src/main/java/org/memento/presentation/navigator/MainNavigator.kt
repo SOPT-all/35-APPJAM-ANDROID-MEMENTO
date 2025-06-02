@@ -10,6 +10,7 @@ import androidx.navigation.navOptions
 import org.memento.presentation.navigator.component.BottomNavigationType
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
+import org.memento.presentation.onboarding.navigation.navigationLogin
 import org.memento.presentation.onboarding.navigation.navigationOnboarding1
 import org.memento.presentation.onboarding.navigation.navigationOnboarding2
 import org.memento.presentation.onboarding.navigation.navigationOnboarding3
@@ -89,6 +90,10 @@ class MainNavigator(
 
     fun popBackStack() {
         navHostController.popBackStack()
+    }
+
+    fun navigateToLogin() {
+        navHostController.navigationLogin()
     }
 
     @Composable

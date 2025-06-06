@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.presentation.component.MementoBottomSheet
 import org.memento.presentation.component.MementoChipSelector
@@ -35,12 +37,11 @@ import org.memento.ui.theme.defaultMementoTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingEditTimeScreen(
-    modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    settingViewModel: SettingViewModel = hiltViewModel(),
 ) {
-    // Todo : 뷰모델 생성시, 아래와 같이 selectedStartTimeText 을 수정합니다.
-    // val selectedStartTimeText by viewModel.selectedStartTimeText.collectAsStateWithLifecycle()
-    val selectedStartTimeText = "00:00 AM" // dummy 입니다.
+    val selectedStartTimeText by settingViewModel.selectedStartTimeText.collectAsStateWithLifecycle()
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
 
@@ -88,8 +89,7 @@ fun SettingEditTimeScreen(
                 MementoTimePicker(
                     selectedTime = selectedStartTimeText,
                     onTimeSelected = { newStartTime ->
-                        // Todo : 바뀐 기상 시간을 서버 통신 합니다.
-                        // viewModel.updateStartTime(newTime = newStartTime)
+                        settingViewModel.updateStartTime(newTime = newStartTime)
                     },
                 )
             },

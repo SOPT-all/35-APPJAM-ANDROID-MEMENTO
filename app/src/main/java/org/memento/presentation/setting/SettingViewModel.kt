@@ -54,6 +54,9 @@ class SettingViewModel
         private val _userEmail = MutableStateFlow<String?>(null)
         val userEmail: StateFlow<String?> = _userEmail
 
+        private val _selectedStartTimeText = MutableStateFlow<String>("00:00 AM")
+        val selectedStartTimeText: StateFlow<String> = _selectedStartTimeText
+
         init {
             viewModelScope.launch {
                 _userEmail.value = tokenDataStore.userEmail
@@ -149,5 +152,10 @@ class SettingViewModel
                     UiState.Failure
                 }
             }
+        }
+
+        fun updateStartTime(newTime: String) {
+            _selectedStartTimeText.value = newTime
+            Timber.d("$newTime update 완료")
         }
     }

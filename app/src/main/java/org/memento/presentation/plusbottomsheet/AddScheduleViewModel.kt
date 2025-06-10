@@ -183,37 +183,40 @@ class AddScheduleViewModel
             }
         }
 
-        fun initialTimeValue() {
-            val currentTime = System.currentTimeMillis()
-            val startDate = formatDate(currentTime)
+    fun initialTimeValue() {
+        // calendar 에도 적용시켜 시간 증가 적용
+        val calendar = Calendar.getInstance()
 
-            val calendar = Calendar.getInstance().apply { timeInMillis = currentTime }
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val minute = calendar.get(Calendar.MINUTE)
-
-            val roundedMinute =
-                when (minute) {
-                    in 0..15 -> 0
-                    in 16..45 -> 30
-                    else -> 0
+        val minute = calendar.get(Calendar.MINUTE)
+        val roundedMinute =
+            when (minute) {
+                in 0..15 -> 0
+                in 16..45 -> 30
+                else -> {
+                    calendar.add(Calendar.HOUR_OF_DAY, 1)
+                    0
                 }
+            }
 
-            val adjustedHour = if (minute in 46..59) (hour + 1) % 24 else hour
+        val adjustedHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val adjustedTime = formatTime(adjustedHour, roundedMinute)
+        val adjustedDate = formatDate(calendar.timeInMillis)
 
-            val startTime = formatTime(adjustedHour, roundedMinute)
+        // start
+        _selectedStartDateText.value = adjustedDate
+        _selectedStartTimeText.value = adjustedTime
 
-            calendar.add(Calendar.HOUR_OF_DAY, 2)
-            val endDate = formatDate(calendar.timeInMillis)
-            val endHour = calendar.get(Calendar.HOUR_OF_DAY)
-            val endTime = formatTime(endHour, roundedMinute)
+        // end
+        calendar.add(Calendar.HOUR_OF_DAY, 2)
+        val endDate = formatDate(calendar.timeInMillis)
+        val endTime = formatTime(calendar.get(Calendar.HOUR_OF_DAY), roundedMinute)
 
-            _selectedStartDateText.value = startDate
-            _selectedEndDateText.value = endDate
-            _selectedStartTimeText.value = startTime
-            _selectedEndTimeText.value = endTime
-        }
+        _selectedEndDateText.value = endDate
+        _selectedEndTimeText.value = endTime
+    }
 
-        private fun calculateEndTime(
+
+    private fun calculateEndTime(
             startDate: String,
             startTime: String,
             hoursToAdd: Int = 2,

@@ -203,11 +203,12 @@ class AddScheduleViewModel
             val startTime = formatTime(adjustedHour, roundedMinute)
 
             calendar.add(Calendar.HOUR_OF_DAY, 2)
+            val endDate = formatDate(calendar.timeInMillis)
             val endHour = calendar.get(Calendar.HOUR_OF_DAY)
             val endTime = formatTime(endHour, roundedMinute)
 
             _selectedStartDateText.value = startDate
-            _selectedEndDateText.value = startDate
+            _selectedEndDateText.value = endDate
             _selectedStartTimeText.value = startTime
             _selectedEndTimeText.value = endTime
         }

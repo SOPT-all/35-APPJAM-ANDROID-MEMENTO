@@ -156,14 +156,17 @@ fun TodayScreen(
     }
 
     // 다이얼로그 출력, 출력 전 데이터 초기화
-    fun showDetailDialog(planId: Int, type: DialogType) {
+    fun showDetailDialog(
+        planId: Int,
+        type: DialogType,
+    ) {
         selectedPlanId = planId
         dialogType = type
         isDataReady = false
         scheduleDetail = null
         todoDetail = null
         showDetailDialog = true
-        
+
         when (type) {
             DialogType.TO_DO -> viewModel.getTodoDetail(planId)
             DialogType.SCHEDULE -> viewModel.getScheduleDetail(planId)

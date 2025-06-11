@@ -33,11 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.TodoDetail
-import org.memento.presentation.today.TodayViewModel
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.changeHexToColor
@@ -62,17 +60,17 @@ fun MementoDialog(
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(
-                    color = darkModeColors.gray10,
-                    shape = RoundedCornerShape(2.dp),
-                ),
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = darkModeColors.gray10,
+                        shape = RoundedCornerShape(2.dp),
+                    ),
         ) {
             Column(
                 modifier =
-                Modifier
-                    .padding(horizontal = 16.dp, vertical = 20.dp),
+                    Modifier
+                        .padding(horizontal = 16.dp, vertical = 20.dp),
             ) {
                 when (dialogType) {
                     DialogType.SCHEDULE -> {
@@ -97,14 +95,14 @@ fun MementoDialog(
                                 tagColor = it.tagColor,
                                 tagText = it.tagName,
                                 urgentType =
-                                when (it.priorityType) {
-                                    "IMMEDIATE" -> PriorityTagType.Immediate
-                                    "NONE" -> PriorityTagType.None
-                                    "HIGH" -> PriorityTagType.High
-                                    "MEDIUM" -> PriorityTagType.Medium
-                                    "LOW" -> PriorityTagType.Low
-                                    else -> PriorityTagType.None
-                                },
+                                    when (it.priorityType) {
+                                        "IMMEDIATE" -> PriorityTagType.Immediate
+                                        "NONE" -> PriorityTagType.None
+                                        "HIGH" -> PriorityTagType.High
+                                        "MEDIUM" -> PriorityTagType.Medium
+                                        "LOW" -> PriorityTagType.Low
+                                        else -> PriorityTagType.None
+                                    },
                             )
                         }
                     }
@@ -116,16 +114,16 @@ fun MementoDialog(
                 ) {
                     Column(
                         modifier =
-                        Modifier
-                            .weight(1f)
-                            .background(
-                                color = mementoColors.red.copy(alpha = 0.15f),
-                                shape = RoundedCornerShape(2.dp),
-                            )
-                            .padding(vertical = 11.dp)
-                            .noRippleClickable {
-                                onDelete()
-                            },
+                            Modifier
+                                .weight(1f)
+                                .background(
+                                    color = mementoColors.red.copy(alpha = 0.15f),
+                                    shape = RoundedCornerShape(2.dp),
+                                )
+                                .padding(vertical = 11.dp)
+                                .noRippleClickable {
+                                    onDelete()
+                                },
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
@@ -137,24 +135,24 @@ fun MementoDialog(
                         Text(
                             text = "Delete",
                             style =
-                            MementoTheme.typography.body_r_16.copy(
-                                color = mementoColors.red,
-                            ),
+                                MementoTheme.typography.body_r_16.copy(
+                                    color = mementoColors.red,
+                                ),
                         )
                     }
 
                     Column(
                         modifier =
-                        Modifier
-                            .weight(1f)
-                            .background(
-                                color = darkModeColors.gray09,
-                                shape = RoundedCornerShape(2.dp),
-                            )
-                            .padding(vertical = 11.dp)
-                            .noRippleClickable {
-                                onEdit()
-                            },
+                            Modifier
+                                .weight(1f)
+                                .background(
+                                    color = darkModeColors.gray09,
+                                    shape = RoundedCornerShape(2.dp),
+                                )
+                                .padding(vertical = 11.dp)
+                                .noRippleClickable {
+                                    onEdit()
+                                },
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
@@ -166,9 +164,9 @@ fun MementoDialog(
                         Text(
                             text = "Edit",
                             style =
-                            MementoTheme.typography.body_r_16.copy(
-                                color = darkModeColors.gray05,
-                            ),
+                                MementoTheme.typography.body_r_16.copy(
+                                    color = darkModeColors.gray05,
+                                ),
                         )
                     }
                 }
@@ -176,7 +174,6 @@ fun MementoDialog(
         }
     }
 }
-
 
 @Composable
 fun ToDoDialogComponent(

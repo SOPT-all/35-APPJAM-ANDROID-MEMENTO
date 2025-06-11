@@ -171,4 +171,10 @@ class SettingViewModel
                 }
             }
         }
+
+        fun logout() {
+            viewModelScope.launch {
+                tokenDataStore.loginSuccess
+            }
+        }
     }

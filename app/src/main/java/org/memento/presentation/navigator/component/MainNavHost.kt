@@ -15,9 +15,10 @@ import org.memento.presentation.todo.navigation.todoGraph
 
 @Composable
 fun MainNavHost(
-    modifier: Modifier = Modifier,
     navigator: MainNavigator,
     padding: PaddingValues,
+    startDestination: String,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier =
@@ -26,7 +27,7 @@ fun MainNavHost(
     ) {
         NavHost(
             navController = navigator.navHostController,
-            startDestination = navigator.startDestination,
+            startDestination = startDestination,
         ) {
             onboardingNavGraph(
                 navigateToOnboardingScreen1 = { navigator.navigateToOnboarding1() },

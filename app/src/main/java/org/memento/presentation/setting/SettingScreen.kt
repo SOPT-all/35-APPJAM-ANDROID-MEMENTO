@@ -102,6 +102,7 @@ fun SettingScreen(
             onLeftButtonClick = { showLogoutDialog = false },
             onRightButtonClick = {
                 showLogoutDialog = false
+                viewmodel.logout()
                 navigateToLogin()
             },
         )

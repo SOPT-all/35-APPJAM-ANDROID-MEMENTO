@@ -54,18 +54,10 @@ import org.memento.ui.theme.defaultMementoTypography
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navigationToOnboardingScreen1: () -> Unit,
-    navigationToMainScreen: () -> Unit,
 ) {
-    val token by viewModel.token.collectAsState()
-
     val throttle = remember { ThrottleFirst() }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(token) {
-        if (!token.isNullOrEmpty()) {
-            navigationToMainScreen()
-        }
-    }
     var webViewVisible by remember { mutableStateOf(false) }
 
     val user by viewModel.user.collectAsState()

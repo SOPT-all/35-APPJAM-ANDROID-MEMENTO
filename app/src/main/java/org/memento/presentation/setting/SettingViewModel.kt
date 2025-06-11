@@ -143,8 +143,6 @@ class SettingViewModel
             onLogout: () -> Unit,
         ) {
             viewModelScope.launch {
-                tokenDataStore.clearInfo()
-                onLogout()
                 val result = memberRepository.deleteMember()
                 result.onSuccess {
                     tokenDataStore.clearInfo()

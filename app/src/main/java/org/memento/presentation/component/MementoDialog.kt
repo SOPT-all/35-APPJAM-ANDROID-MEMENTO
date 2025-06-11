@@ -51,6 +51,7 @@ fun MementoDialog(
     onDismiss: () -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
     todoDetailData: TodoDetail? = null,
     scheduleDetailData: ScheduleDetail? = null,
     dialogType: DialogType,
@@ -103,6 +104,7 @@ fun MementoDialog(
                                         "LOW" -> PriorityTagType.Low
                                         else -> PriorityTagType.None
                                     },
+                                onCheckedChange = onCheckedChange,
                             )
                         }
                     }
@@ -183,6 +185,7 @@ fun ToDoDialogComponent(
     tagColor: String = "0xFF0000FF",
     tagText: String = "NULL TAG",
     urgentType: PriorityTagType = PriorityTagType.None,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
     var checkedChange by remember { mutableStateOf(isChecked) }
 
@@ -197,6 +200,7 @@ fun ToDoDialogComponent(
                     checked = checkedChange,
                     onCheckedChange = { newCheckedChange ->
                         checkedChange = newCheckedChange
+                        onCheckedChange?.invoke(newCheckedChange)
                     },
                     colors =
                         CheckboxDefaults.colors(

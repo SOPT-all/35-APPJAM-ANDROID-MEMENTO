@@ -486,11 +486,18 @@ fun TodayScreen(
                         showEditScheduleBottomSheet = true
                     }
                 },
+                onCheckedChange = { newChecked ->
+                    todoDetail?.let { detail ->
+                        // 체크 되면 viewmodel 업데이트 및 today screen 반영
+                        viewModel.updateTodoCompletion(detail.id, newChecked)
+                    }
+                },
                 dialogType = dialogType,
                 todoDetailData = todoDetail,
                 scheduleDetailData = scheduleDetail,
             )
         }
+
         if (showDeleteDialog) {
             MementoAlertDialog(
                 content = R.string.alert_delete,

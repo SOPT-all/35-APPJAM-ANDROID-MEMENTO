@@ -257,13 +257,10 @@ fun TodoScreen(
         }
 
         MementoDialog(
-            showDialog = showDetailDialog,
             onDismiss = { showDetailDialog = false },
             onDelete = { showDeleteDialog = true },
             onEdit = { showEditTodoBottomSheet = true },
             dialogType = DialogType.TO_DO,
-            planId = selectedPlanId,
-            refreshKey = false,
         )
 
         if (showDeleteDialog) {

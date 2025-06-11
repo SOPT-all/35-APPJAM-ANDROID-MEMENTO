@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,10 @@ fun SettingEditTimeScreen(
     val selectedStartTimeText by settingViewModel.selectedStartTimeText.collectAsStateWithLifecycle()
     val sheetTimePickerState = rememberModalBottomSheetState()
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        settingViewModel.getUpTime()
+    }
 
     Column(
         modifier =

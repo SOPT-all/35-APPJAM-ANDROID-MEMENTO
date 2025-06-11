@@ -3,9 +3,11 @@ package org.memento.data.repositoryimpl
 import org.memento.data.datasource.SettingDataSource
 import org.memento.data.mapper.toData.toData
 import org.memento.data.mapper.toData.toTagData
+import org.memento.data.mapper.toDomain.toUpTime
 import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
+import org.memento.domain.entity.UpTime
 import org.memento.domain.repository.SettingRepository
 import javax.inject.Inject
 
@@ -39,6 +41,13 @@ class SettingRepositoryImpl
                 settingDataSource.postTag(
                     requestAddTagDto = createTag.toTagData(),
                 ).handleBaseResponse().getOrThrow()
+            }
+        }
+
+        override suspend fun getUptime(): Result<UpTime> {
+            return runCatching {
+                val response = settingDataSource.getUptime().data
+                response?.toUpTime() ?: throw Exception("null")
             }
         }
     }

@@ -15,6 +15,7 @@ import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.MemberRepository
 import org.memento.domain.repository.SettingRepository
+import org.memento.presentation.util.to12HourFormat
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -157,5 +158,17 @@ class SettingViewModel
         fun updateStartTime(newTime: String) {
             _selectedStartTimeText.value = newTime
             Timber.d("$newTime update 완료")
+        }
+
+        fun getUpTime() {
+            viewModelScope.launch {
+                val response = settingRepository.getUptime()
+                response.onSuccess { data ->
+                    _selectedStartTimeText.value = data.wakeUpTime.to12HourFormat()
+                    UiState.Success(Unit)
+                }.onFailure { throwable ->
+                    UiState.Failure
+                }
+            }
         }
     }

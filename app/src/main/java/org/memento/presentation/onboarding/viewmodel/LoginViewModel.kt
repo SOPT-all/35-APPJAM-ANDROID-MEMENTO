@@ -94,8 +94,13 @@ class LoginViewModel
                     )
                 _uiState.value =
                     result.fold(
-                        onSuccess = { data -> UiState.Success(data) },
+                        onSuccess = { data ->
+                            tokenDataStore.loginSuccess = true
+                            UiState.Success(data)
+                        },
                         onFailure = { data ->
+                            tokenDataStore.loginSuccess = false
+                            tokenDataStore.clearInfo()
                             Timber.tag("data").d(data.message.toString())
                             UiState.Failure
                         },

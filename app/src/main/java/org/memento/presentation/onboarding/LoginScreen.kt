@@ -54,6 +54,7 @@ import org.memento.ui.theme.defaultMementoTypography
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navigationToOnboardingScreen1: () -> Unit,
+    navigationToMainScreen: () -> Unit,
 ) {
     val throttle = remember { ThrottleFirst() }
     val coroutineScope = rememberCoroutineScope()
@@ -84,6 +85,12 @@ fun LoginScreen(
                 refreshToken = data.refreshToken,
                 isNewUser = data.isNewUser,
             )
+
+            if (data.isNewUser) {
+                navigationToOnboardingScreen1()
+            } else {
+                navigationToMainScreen()
+            }
         }
 
         is UiState.Failure -> {
@@ -122,12 +129,6 @@ fun LoginScreen(
                 )
                 .build()
         }
-
-    LaunchedEffect(user) {
-        user?.let {
-            navigationToOnboardingScreen1()
-        }
-    }
 
     Column(
         modifier =

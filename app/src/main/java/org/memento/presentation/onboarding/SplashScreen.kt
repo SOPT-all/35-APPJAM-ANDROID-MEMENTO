@@ -24,25 +24,28 @@ fun SplashScreen() {
     val lottieAnimatable = rememberLottieAnimatable()
 
     LaunchedEffect(composition) {
-        lottieAnimatable.animate(
-            composition = composition,
-            clipSpec = LottieClipSpec.Frame(0, 1200),
-            initialProgress = 0f,
-        )
+        if (composition != null) {
+            lottieAnimatable.animate(
+                composition = composition,
+                clipSpec = LottieClipSpec.Frame(0, composition!!.endFrame.toInt()),
+                initialProgress = 0f,
+                iterations = 1,
+            )
+        }
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize(),
-        Alignment.Center,
-    ) {
-        LottieAnimation(
-            composition = composition,
-            progress = lottieAnimatable.progress,
-            contentScale = ContentScale.FillHeight,
-            modifier = Modifier.size(215.dp),
-        )
+    if (composition != null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = lottieAnimatable.progress,
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier.size(215.dp),
+            )
+        }
     }
 }
 

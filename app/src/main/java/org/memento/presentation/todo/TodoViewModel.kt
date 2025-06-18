@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
 import org.memento.domain.entity.TargetDate
+import org.memento.domain.entity.TodoDetail
+import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.today.MementoItem
@@ -23,6 +25,7 @@ class TodoViewModel
     constructor(
         private val todoRepository: TodoRepository,
         private val scheduleRepository: ScheduleRepository,
+        private val addPlanRepository: AddPlanRepository,
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
@@ -38,6 +41,9 @@ class TodoViewModel
 
         private val _uiAIState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiAIState: StateFlow<UiState<Unit>> = _uiAIState
+
+        private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
+        val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
 
         init {
             getTodoList()
@@ -176,5 +182,22 @@ class TodoViewModel
             selectedDate: LocalDate,
         ) {
             _selectedDate.value = selectedDate
+        }
+
+        fun getTodoDetail(todoId: Int) {
+            viewModelScope.launch {
+                _detailTodoState.value = UiState.Loading
+                val result = addPlanRepository.getTodoDetail(todoId = todoId)
+                _detailTodoState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(it)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to get todo detail")
+                            UiState.Failure
+                        },
+                    )
+            }
         }
     }

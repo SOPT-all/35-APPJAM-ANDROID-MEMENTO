@@ -33,9 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.memento.R
 import org.memento.core.util.UiState
+import org.memento.domain.entity.TodoDetail
 import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.component.MementoAlertDialog
 import org.memento.presentation.component.MementoAnimatedGlowBorder
@@ -97,7 +99,24 @@ fun TodoScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     val sheetEditTodoState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(3) }
+    var selectedPlanId by remember { mutableIntStateOf(0) }
+    var todoDetail by remember { mutableStateOf<TodoDetail?>(null) }
+    var isDataReady by remember { mutableStateOf(false) }
+    val todoDetailState by viewModel.detailTodoState.collectAsStateWithLifecycle()
+
+    fun showDetailDialog(planId: Int) {
+        selectedPlanId = planId
+        isDataReady = false
+        todoDetail = null
+        showDetailDialog = true
+        viewModel.getTodoDetail(planId)
+    }
+
+    fun resetDialogState() {
+        showDetailDialog = false
+        isDataReady = false
+        todoDetail = null
+    }
 
     when (uiState) {
         is UiState.Loading -> {
@@ -148,6 +167,22 @@ fun TodoScreen(
 
     LaunchedEffect(selectedDate) {
         scrollToDate(selectedDate)
+    }
+
+    LaunchedEffect(selectedPlanId) {
+        if (showDetailDialog) {
+            viewModel.getTodoDetail(selectedPlanId)
+        }
+    }
+
+    LaunchedEffect(todoDetailState) {
+        when (val state = todoDetailState) {
+            is UiState.Success -> {
+                todoDetail = state.data
+                isDataReady = true
+            }
+            else -> todoDetail = null
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -222,8 +257,7 @@ fun TodoScreen(
                                                 isFirstUndone = (todoItem.id == firstUndoneTodoId),
                                                 deadline = deadline,
                                                 onClick = {
-                                                    selectedPlanId = todoItem.id
-                                                    showDetailDialog = true
+                                                    showDetailDialog(todoItem.id)
                                                 },
                                             )
                                             Spacer(Modifier.height(10.dp))
@@ -256,12 +290,20 @@ fun TodoScreen(
             }
         }
 
-        MementoDialog(
-            onDismiss = { showDetailDialog = false },
-            onDelete = { showDeleteDialog = true },
-            onEdit = { showEditTodoBottomSheet = true },
-            dialogType = DialogType.TO_DO,
-        )
+        if (showDetailDialog && isDataReady) {
+            MementoDialog(
+                onDismiss = { resetDialogState() },
+                onDelete = { showDeleteDialog = true },
+                onEdit = { showEditTodoBottomSheet = true },
+                onCheckedChange = { newChecked ->
+                    todoDetail?.let { detail ->
+                        viewModel.updateTodoCompletion(detail.id, newChecked)
+                    }
+                },
+                dialogType = DialogType.TO_DO,
+                todoDetailData = todoDetail,
+            )
+        }
 
         if (showDeleteDialog) {
             MementoAlertDialog(
@@ -275,7 +317,7 @@ fun TodoScreen(
                         dialogType = DialogType.TO_DO,
                     )
                     showDeleteDialog = false
-                    showDetailDialog = false
+                    resetDialogState()
                 },
             )
         }

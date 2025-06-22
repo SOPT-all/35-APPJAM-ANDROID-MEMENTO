@@ -16,4 +16,4 @@ class EventBus
         suspend fun emit(event: EventType) {
             _events.emit(event)
         }
-    } 
+    }

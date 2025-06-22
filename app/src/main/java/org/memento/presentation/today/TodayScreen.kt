@@ -223,15 +223,15 @@ fun TodayScreen(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(padding),
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
     ) {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black),
+                Modifier
+                    .fillMaxSize()
+                    .background(color = darkModeColors.black),
         ) {
             MementoTopBar(
                 date = todoFormatDate(today),
@@ -249,9 +249,9 @@ fun TodayScreen(
             )
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = (5 * 30).dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = (5 * 30).dp),
             ) {
                 val state = rememberLazyListState()
                 LazyColumn(
@@ -293,12 +293,12 @@ fun TodayScreen(
                 } else {
                     LazyColumn(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .onGloballyPositioned { it ->
-                                listHeight = it.size.height
-                            },
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .onGloballyPositioned { it ->
+                                    listHeight = it.size.height
+                                },
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         userScrollEnabled = !isDraggingEnabled,
                     ) {
@@ -309,11 +309,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                        Modifier
+                                            .padding(top = 16.dp)
+                                            .onGloballyPositioned { it ->
+                                                itemHeight = it.size.height
+                                            },
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -321,11 +321,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                    Modifier
-                                        .padding(top = 16.dp)
-                                        .onGloballyPositioned { it ->
-                                            itemHeight = it.size.height
-                                        },
+                                        Modifier
+                                            .padding(top = 16.dp)
+                                            .onGloballyPositioned { it ->
+                                                itemHeight = it.size.height
+                                            },
                                 )
                             }
                         }

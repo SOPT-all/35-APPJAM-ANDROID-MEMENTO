@@ -90,12 +90,12 @@ class TodayViewModel
                         is EventType.TodoDeleted,
                         is EventType.ScheduleAdded,
                         is EventType.ScheduleUpdated,
-                        is EventType.ScheduleDeleted -> {
+                        is EventType.ScheduleDeleted,
+                        -> {
                             _refreshTrigger.emit(Unit)
                         }
                     }
                 }
-
             }
         }
 

@@ -85,16 +85,17 @@ class TodayViewModel
             viewModelScope.launch {
                 eventBus.events.collect { event ->
                     when (event) {
-                        EventType.TodoAdded, EventType.TodoUpdated, EventType.TodoDeleted -> {
-                            // Todo 관련 이벤트 발생 시 Today 데이터 갱신
-                            _refreshTrigger.emit(Unit)
-                        }
-                        EventType.ScheduleAdded, EventType.ScheduleUpdated, EventType.ScheduleDeleted -> {
-                            // Schedule 관련 이벤트 발생 시 Today 데이터 갱신
+                        is EventType.TodoAdded,
+                        is EventType.TodoUpdated,
+                        is EventType.TodoDeleted,
+                        is EventType.ScheduleAdded,
+                        is EventType.ScheduleUpdated,
+                        is EventType.ScheduleDeleted -> {
                             _refreshTrigger.emit(Unit)
                         }
                     }
                 }
+
             }
         }
 

@@ -97,7 +97,6 @@ fun TodayScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
-    var refreshTrigger by remember { mutableStateOf(false) }
 
     // schedule, todo state 정의
     val scheduleDetailState by viewModel.detailScheduleState.collectAsStateWithLifecycle()
@@ -198,10 +197,13 @@ fun TodayScreen(
         }
     }
 
-    LaunchedEffect(refreshTrigger) {
-        viewModel.getScheduleList(selectedDate.value.toString())
-        viewModel.getTodoDateList(selectedDate.value.toString())
-        viewModel.getAllDay()
+    // TodayViewModel의 refreshTrigger를 구독하여 데이터 갱신
+    LaunchedEffect(Unit) {
+        viewModel.refreshTrigger.collect {
+            viewModel.getScheduleList(selectedDate.value.toString())
+            viewModel.getTodoDateList(selectedDate.value.toString())
+            viewModel.getAllDay()
+        }
     }
 
     val combinedItems by viewModel.combinedItems.collectAsState()
@@ -226,10 +228,6 @@ fun TodayScreen(
             delay(2000)
             isRefreshing = false
         }
-    }
-
-    fun triggerRefresh() {
-        refreshTrigger = !refreshTrigger
     }
 
     Box(
@@ -508,7 +506,6 @@ fun TodayScreen(
                     viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
                     showDeleteDialog = false
                     resetDialogState()
-                    triggerRefresh()
                 },
             )
         }
@@ -518,7 +515,6 @@ fun TodayScreen(
             sheetState = sheetEditTodoState,
             onCancel = { closeTodoBottomSheet() },
             onConfirm = {
-                triggerRefresh()
                 closeTodoBottomSheet()
             },
             planId = selectedPlanId,
@@ -529,7 +525,6 @@ fun TodayScreen(
             sheetState = sheetEditScheduleState,
             onCancel = { closeScheduleBottomSheet() },
             onConfirm = {
-                triggerRefresh()
                 closeScheduleBottomSheet()
             },
             planId = selectedPlanId,

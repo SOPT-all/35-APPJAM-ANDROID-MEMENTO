@@ -1,5 +1,6 @@
 package org.memento.presentation.onboarding
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -17,6 +18,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.memento.R
+import org.memento.ui.theme.MementoTheme
+import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun SplashScreen() {
@@ -36,7 +39,9 @@ fun SplashScreen() {
 
     if (composition != null) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
             contentAlignment = Alignment.Center,
         ) {
             LottieAnimation(

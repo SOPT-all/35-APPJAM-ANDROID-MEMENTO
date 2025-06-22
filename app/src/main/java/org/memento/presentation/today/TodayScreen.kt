@@ -106,8 +106,7 @@ fun TodayScreen(
     var scheduleDetail by remember { mutableStateOf<ScheduleDetail?>(null) }
     var todoDetail by remember { mutableStateOf<TodoDetail?>(null) }
 
-    // detail 데이터가 완료 되었는지 판단하는 변수
-    var isDataReady by remember { mutableStateOf(false) }
+    // 선택된 todo, schedule id와 dialog type
     var selectedPlanId by remember { mutableIntStateOf(0) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
 
@@ -161,10 +160,6 @@ fun TodayScreen(
     ) {
         selectedPlanId = planId
         dialogType = type
-        isDataReady = false
-        scheduleDetail = null
-        todoDetail = null
-        showDetailDialog = true
 
         when (type) {
             DialogType.TO_DO -> viewModel.getTodoDetail(planId)
@@ -172,32 +167,28 @@ fun TodayScreen(
         }
     }
 
-    // 다이얼로그 데이터 초기화
-    fun resetDialogState() {
-        showDetailDialog = false
-        isDataReady = false
-        scheduleDetail = null
-        todoDetail = null
-    }
-
-    LaunchedEffect(todoDetailState, scheduleDetailState) {
+    LaunchedEffect(todoDetailState) {
         when (val state = todoDetailState) {
             is UiState.Success -> {
                 todoDetail = state.data
-                isDataReady = true
+                showDetailDialog = true
             }
-            else -> todoDetail = null
-        }
-        when (val state = scheduleDetailState) {
-            is UiState.Success -> {
-                scheduleDetail = state.data
-                isDataReady = true
-            }
-            else -> scheduleDetail = null
+            else -> {}
         }
     }
 
-    // TodayViewModel의 refreshTrigger를 구독하여 데이터 갱신
+    LaunchedEffect(scheduleDetailState) {
+        when (val state = scheduleDetailState) {
+            is UiState.Success -> {
+                scheduleDetail = state.data
+                showDetailDialog = true
+            }
+            else -> {
+            }
+        }
+    }
+
+    // viewmodel의 refreshtrigger를 감지하여 변경
     LaunchedEffect(Unit) {
         viewModel.refreshTrigger.collect {
             viewModel.getScheduleList(selectedDate.value.toString())
@@ -232,15 +223,15 @@ fun TodayScreen(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = darkModeColors.black),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
         ) {
             MementoTopBar(
                 date = todoFormatDate(today),
@@ -258,9 +249,9 @@ fun TodayScreen(
             )
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = (5 * 30).dp),
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = (5 * 30).dp),
             ) {
                 val state = rememberLazyListState()
                 LazyColumn(
@@ -278,10 +269,10 @@ fun TodayScreen(
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
-                    refreshData()
-                    viewModel.getScheduleList(selectedDate.value.toString())
-                    viewModel.getTodoDateList(selectedDate.value.toString())
-                    viewModel.getAllDay()
+                    coroutineScope.launch {
+                        delay(2000)
+                        viewModel.refreshTodayData()
+                    }
                 },
             ) {
                 if (combinedItems.isEmpty()) {
@@ -302,12 +293,12 @@ fun TodayScreen(
                 } else {
                     LazyColumn(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .onGloballyPositioned { it ->
-                                    listHeight = it.size.height
-                                },
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .onGloballyPositioned { it ->
+                                listHeight = it.size.height
+                            },
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         userScrollEnabled = !isDraggingEnabled,
                     ) {
@@ -318,11 +309,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -330,11 +321,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                             }
                         }
@@ -473,9 +464,9 @@ fun TodayScreen(
             }
         }
 
-        if (showDetailDialog && isDataReady) {
+        if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { resetDialogState() },
+                onDismiss = { showDetailDialog = false },
                 onDelete = { showDeleteDialog = true },
                 onEdit = {
                     if (dialogType == DialogType.TO_DO) {
@@ -505,7 +496,7 @@ fun TodayScreen(
                 onRightButtonClick = {
                     viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
                     showDeleteDialog = false
-                    resetDialogState()
+                    showDetailDialog = false
                 },
             )
         }
@@ -515,6 +506,7 @@ fun TodayScreen(
             sheetState = sheetEditTodoState,
             onCancel = { closeTodoBottomSheet() },
             onConfirm = {
+                viewModel.getTodoDetail(selectedPlanId)
                 closeTodoBottomSheet()
             },
             planId = selectedPlanId,
@@ -525,6 +517,7 @@ fun TodayScreen(
             sheetState = sheetEditScheduleState,
             onCancel = { closeScheduleBottomSheet() },
             onConfirm = {
+                viewModel.getScheduleDetail(selectedPlanId)
                 closeScheduleBottomSheet()
             },
             planId = selectedPlanId,

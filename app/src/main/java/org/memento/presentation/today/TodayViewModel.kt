@@ -80,15 +80,8 @@ class TodayViewModel
                 }
             }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-        // TodayScreen 데이터 갱신 함수
-        fun refreshTodayData() {
-            viewModelScope.launch {
-                _refreshTrigger.emit(Unit)
-            }
-        }
-
         init {
-            // EventBus 구독하여 이벤트 발생 시 데이터 갱신
+            // eventbus의 이벤트를 감지하여 변경
             viewModelScope.launch {
                 eventBus.events.collect { event ->
                     when (event) {
@@ -102,6 +95,13 @@ class TodayViewModel
                         }
                     }
                 }
+            }
+        }
+
+        // 데이터 새로고침 로직
+        fun refreshTodayData() {
+            viewModelScope.launch {
+                _refreshTrigger.emit(Unit)
             }
         }
 

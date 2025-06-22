@@ -101,6 +101,7 @@ fun SettingEditTimeScreen(
             sheetState = sheetTimePickerState,
             onConfirm = {
                 showStartTimePickerBottomSheet = false
+                settingViewModel.fetchStartTime(newTime = selectedStartTimeText)
             },
         )
     }

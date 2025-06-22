@@ -8,6 +8,7 @@ import org.memento.data.util.handleBaseResponse
 import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
 import org.memento.domain.entity.UpTime
+import org.memento.domain.entity.WakeUpTime
 import org.memento.domain.repository.SettingRepository
 import javax.inject.Inject
 
@@ -48,6 +49,14 @@ class SettingRepositoryImpl
             return runCatching {
                 val response = settingDataSource.getUptime().data
                 response?.toUpTime() ?: throw Exception("null")
+            }
+        }
+
+        override suspend fun fetchUptime(wakeUpTime: WakeUpTime): Result<Unit> {
+            return runCatching {
+                settingDataSource.patchUptime(
+                    requestWakeUpTimeDto = wakeUpTime.toData(),
+                ).handleBaseResponse().getOrThrow()
             }
         }
     }

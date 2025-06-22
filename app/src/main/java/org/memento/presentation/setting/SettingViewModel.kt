@@ -2,6 +2,7 @@ package org.memento.presentation.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.util.CoilUtils.result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,10 +13,12 @@ import org.memento.data.datastore.TokenDataStore
 import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
 import org.memento.domain.entity.Tag
+import org.memento.domain.entity.WakeUpTime
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.MemberRepository
 import org.memento.domain.repository.SettingRepository
 import org.memento.presentation.util.to12HourFormat
+import org.memento.presentation.util.to24HourFormat
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -155,7 +158,20 @@ class SettingViewModel
 
         fun updateStartTime(newTime: String) {
             _selectedStartTimeText.value = newTime
-            Timber.d("$newTime update 완료")
+        }
+
+        fun fetchStartTime(newTime: String) {
+            viewModelScope.launch {
+                _selectedStartTimeText.value = newTime
+                val wakeUpTime = WakeUpTime(wakeUpTime = newTime.to24HourFormat())
+                val result = settingRepository.fetchUptime(wakeUpTime = wakeUpTime)
+
+                result.onSuccess {
+                    UiState.Success(Unit)
+                }.onFailure { throwable ->
+                    UiState.Failure
+                }
+            }
         }
 
         fun getUpTime() {

@@ -3,6 +3,7 @@ package org.memento.domain.repository
 import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
 import org.memento.domain.entity.UpTime
+import org.memento.domain.entity.WakeUpTime
 
 interface SettingRepository {
     suspend fun patchTag(
@@ -15,4 +16,6 @@ interface SettingRepository {
     suspend fun postTag(createTag: CreateTag): Result<Unit>
 
     suspend fun getUptime(): Result<UpTime>
+
+    suspend fun fetchUptime(wakeUpTime: WakeUpTime): Result<Unit>
 }

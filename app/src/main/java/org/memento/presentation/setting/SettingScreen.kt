@@ -67,7 +67,7 @@ fun SettingScreen(
                     .padding(top = 26.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            SettingMailBar(usermail = userEmail ?: "")
+            SettingMailBar(userMail = userEmail ?: "")
             Spacer(modifier = modifier.padding(top = 12.dp))
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.notifications))

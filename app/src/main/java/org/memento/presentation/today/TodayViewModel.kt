@@ -236,11 +236,11 @@ class TodayViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { 
+                                onSuccess = {
                                     viewModelScope.launch {
                                         eventBus.emit(EventType.ScheduleDeleted)
                                     }
-                                    UiState.Success(Unit) 
+                                    UiState.Success(Unit)
                                 },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")
@@ -257,11 +257,11 @@ class TodayViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { 
+                                onSuccess = {
                                     viewModelScope.launch {
                                         eventBus.emit(EventType.TodoDeleted)
                                     }
-                                    UiState.Success(Unit) 
+                                    UiState.Success(Unit)
                                 },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")

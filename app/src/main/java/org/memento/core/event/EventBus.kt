@@ -7,11 +7,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventBus @Inject constructor() {
-    private val _events = MutableSharedFlow<EventType>()
-    val events = _events.asSharedFlow()
+class EventBus
+    @Inject
+    constructor() {
+        private val _events = MutableSharedFlow<EventType>()
+        val events = _events.asSharedFlow()
 
-    suspend fun emit(event: EventType) {
-        _events.emit(event)
-    }
-} 
+        suspend fun emit(event: EventType) {
+            _events.emit(event)
+        }
+    } 

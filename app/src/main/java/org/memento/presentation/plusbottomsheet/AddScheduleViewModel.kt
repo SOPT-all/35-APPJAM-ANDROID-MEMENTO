@@ -9,11 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
+import org.memento.presentation.type.EventType
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatEditString
@@ -31,6 +33,7 @@ class AddScheduleViewModel
     @Inject
     constructor(
         val addPlanRepository: AddPlanRepository,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _eventText = MutableStateFlow("")
         val eventText: StateFlow<String> = _eventText
@@ -120,6 +123,9 @@ class AddScheduleViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = {
+                            viewModelScope.launch {
+                                eventBus.emit(EventType.ScheduleUpdated)
+                            }
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->
@@ -173,6 +179,9 @@ class AddScheduleViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = {
+                            viewModelScope.launch {
+                                eventBus.emit(EventType.ScheduleAdded)
+                            }
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->

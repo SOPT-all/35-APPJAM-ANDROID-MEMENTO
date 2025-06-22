@@ -18,7 +18,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.memento.R
-import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
 @Composable
@@ -39,9 +38,10 @@ fun SplashScreen() {
 
     if (composition != null) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = darkModeColors.black),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = darkModeColors.black),
             contentAlignment = Alignment.Center,
         ) {
             LottieAnimation(

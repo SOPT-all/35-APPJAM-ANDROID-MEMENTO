@@ -29,7 +29,7 @@ class TodoViewModel
         private val todoRepository: TodoRepository,
         private val scheduleRepository: ScheduleRepository,
         private val addPlanRepository: AddPlanRepository,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
@@ -65,7 +65,7 @@ class TodoViewModel
                         is EventType.ScheduleAdded,
                         is EventType.ScheduleUpdated,
                         is EventType.ScheduleDeleted,
-                            -> {
+                        -> {
                             _refreshTrigger.emit(Unit)
                         }
                     }

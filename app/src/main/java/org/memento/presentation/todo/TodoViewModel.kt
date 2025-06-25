@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.domain.entity.TargetDate
 import org.memento.domain.entity.TodoDetail
@@ -15,6 +17,7 @@ import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.today.MementoItem
 import org.memento.presentation.type.DialogType
+import org.memento.presentation.type.EventType
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -26,6 +29,7 @@ class TodoViewModel
         private val todoRepository: TodoRepository,
         private val scheduleRepository: ScheduleRepository,
         private val addPlanRepository: AddPlanRepository,
+        private val eventBus: EventBus
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
@@ -45,8 +49,28 @@ class TodoViewModel
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
 
+        private val _refreshTrigger = MutableSharedFlow<Unit>()
+        val refreshTrigger = _refreshTrigger
+
         init {
             getTodoList()
+
+            // eventbus의 이벤트를 감지하여 변경
+            viewModelScope.launch {
+                eventBus.events.collect { event ->
+                    when (event) {
+                        is EventType.TodoAdded,
+                        is EventType.TodoUpdated,
+                        is EventType.TodoDeleted,
+                        is EventType.ScheduleAdded,
+                        is EventType.ScheduleUpdated,
+                        is EventType.ScheduleDeleted,
+                            -> {
+                            _refreshTrigger.emit(Unit)
+                        }
+                    }
+                }
+            }
         }
 
         fun deletePlan(
@@ -61,7 +85,12 @@ class TodoViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { UiState.Success(Unit) },
+                                onSuccess = {
+                                    viewModelScope.launch {
+                                        eventBus.emit(EventType.ScheduleDeleted)
+                                    }
+                                    UiState.Success(Unit)
+                                },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")
                                     UiState.Failure
@@ -77,7 +106,12 @@ class TodoViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { UiState.Success(Unit) },
+                                onSuccess = {
+                                    viewModelScope.launch {
+                                        eventBus.emit(EventType.TodoDeleted)
+                                    }
+                                    UiState.Success(Unit)
+                                },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")
                                     UiState.Failure
@@ -167,6 +201,9 @@ class TodoViewModel
                 _uiState.value = UiState.Loading
                 val result = todoRepository.patchTodoComplete(id.toInt())
                 result.onSuccess {
+                    viewModelScope.launch {
+                        eventBus.emit(EventType.TodoUpdated)
+                    }
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
                     _todoItems.value =

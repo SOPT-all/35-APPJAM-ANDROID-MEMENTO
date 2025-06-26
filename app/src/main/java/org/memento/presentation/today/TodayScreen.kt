@@ -213,14 +213,6 @@ fun TodayScreen(
         draggedOffsetY = 0f
     }
 
-    fun refreshData() {
-        coroutineScope.launch {
-            isRefreshing = true
-            delay(2000)
-            isRefreshing = false
-        }
-    }
-
     Box(
         modifier =
             Modifier

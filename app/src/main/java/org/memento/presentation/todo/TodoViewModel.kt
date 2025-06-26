@@ -60,12 +60,12 @@ class TodoViewModel
                 eventBus.events.collect { event ->
                     if (event == EventType.TodoDeleted ||
                         event == EventType.TodoUpdated ||
-                        event == EventType.TodoAdded) {
+                        event == EventType.TodoAdded
+                    ) {
                         _refreshTrigger.emit(Unit)
                     }
                 }
             }
-
         }
 
         fun deletePlan(

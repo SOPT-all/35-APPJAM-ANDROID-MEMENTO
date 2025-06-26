@@ -55,22 +55,17 @@ class TodoViewModel
         init {
             getTodoList()
 
-            // eventbus의 이벤트를 감지하여 변경
+            // eventbus의 투두 관련 이벤트를 감지하여 변경
             viewModelScope.launch {
                 eventBus.events.collect { event ->
-                    when (event) {
-                        is EventType.TodoAdded,
-                        is EventType.TodoUpdated,
-                        is EventType.TodoDeleted,
-                        is EventType.ScheduleAdded,
-                        is EventType.ScheduleUpdated,
-                        is EventType.ScheduleDeleted,
-                        -> {
-                            _refreshTrigger.emit(Unit)
-                        }
+                    if (event == EventType.TodoDeleted ||
+                        event == EventType.TodoUpdated ||
+                        event == EventType.TodoAdded) {
+                        _refreshTrigger.emit(Unit)
                     }
                 }
             }
+
         }
 
         fun deletePlan(

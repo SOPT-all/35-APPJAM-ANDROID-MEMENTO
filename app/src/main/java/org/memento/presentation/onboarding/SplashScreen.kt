@@ -25,18 +25,16 @@ fun SplashScreen() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.memento_lottie))
     val lottieAnimatable = rememberLottieAnimatable()
 
-    LaunchedEffect(composition) {
-        if (composition != null) {
+    composition?.let { nonNullComposition ->
+        LaunchedEffect(nonNullComposition) {
             lottieAnimatable.animate(
                 composition = composition,
-                clipSpec = LottieClipSpec.Frame(0, composition!!.endFrame.toInt()),
+                clipSpec = LottieClipSpec.Frame(0, nonNullComposition.endFrame.toInt()),
                 initialProgress = 0f,
                 iterations = 1,
             )
         }
-    }
 
-    if (composition != null) {
         Box(
             modifier =
                 Modifier
@@ -45,7 +43,7 @@ fun SplashScreen() {
             contentAlignment = Alignment.Center,
         ) {
             LottieAnimation(
-                composition = composition,
+                composition = nonNullComposition,
                 progress = lottieAnimatable.progress,
                 contentScale = ContentScale.FillHeight,
                 modifier = Modifier.size(215.dp),

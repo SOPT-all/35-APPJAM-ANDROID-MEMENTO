@@ -26,7 +26,6 @@ import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.SplashScreen
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
 import org.memento.ui.theme.MEMENTOTheme
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,9 +35,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val viewModel: AppEntryViewModel = hiltViewModel()
-            val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+            val entryState by viewModel.entryState.collectAsState()
 
-            val isDarkMode by remember { mutableStateOf(true) }
+            val isDarkMode = true
             var showSplash by remember { mutableStateOf(true) }
 
             LaunchedEffect(Unit) {
@@ -46,16 +45,15 @@ class MainActivity : ComponentActivity() {
                 showSplash = false
             }
             MEMENTOTheme(darkTheme = isDarkMode) {
-                if (showSplash || isLoggedIn == null) {
+                if (showSplash || entryState is AppEntryState.Loading) {
                     SplashScreen()
                 } else {
                     val startDestination =
-                        if (isLoggedIn == true) {
-                            MainNavigationBarRoute.Today::class.simpleName!!
-                        } else {
-                            OnboardingRoute.ROUTE
+                        when (entryState) {
+                            is AppEntryState.LoggedIn -> MainNavigationBarRoute.Today::class.simpleName!!
+                            is AppEntryState.LoggedOut -> OnboardingRoute.ROUTE
+                            else -> OnboardingRoute.ROUTE
                         }
-
                     val navController = rememberNavController()
                     val navigator = rememberMainNavigator(navController)
 
@@ -79,13 +77,26 @@ class AppEntryViewModel
     constructor(
         private val tokenDataStore: TokenDataStore,
     ) : ViewModel() {
-        private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
-        val isLoggedIn: StateFlow<Boolean?> = _isLoggedIn
+        private val _entryState = MutableStateFlow<AppEntryState>(AppEntryState.Loading)
+        val entryState: StateFlow<AppEntryState> = _entryState
 
         init {
             viewModelScope.launch {
-                _isLoggedIn.value = tokenDataStore.loginSuccess
-                Timber.d("${_isLoggedIn.value}")
+                val isLoggedIn = tokenDataStore.loginSuccess
+                _entryState.value =
+                    if (isLoggedIn) {
+                        AppEntryState.LoggedIn
+                    } else {
+                        AppEntryState.LoggedOut
+                    }
             }
         }
     }
+
+sealed class AppEntryState {
+    object Loading : AppEntryState()
+
+    object LoggedIn : AppEntryState()
+
+    object LoggedOut : AppEntryState()
+}

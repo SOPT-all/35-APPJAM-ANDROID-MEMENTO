@@ -52,7 +52,7 @@ class SettingRepositoryImpl
             }
         }
 
-        override suspend fun fetchUptime(wakeUpTime: WakeUpTime): Result<Unit> {
+        override suspend fun patchUptime(wakeUpTime: WakeUpTime): Result<Unit> {
             return runCatching {
                 settingDataSource.patchUptime(
                     requestWakeUpTimeDto = wakeUpTime.toData(),

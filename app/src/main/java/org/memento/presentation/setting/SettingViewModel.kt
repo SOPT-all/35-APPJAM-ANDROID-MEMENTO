@@ -2,7 +2,6 @@ package org.memento.presentation.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.util.CoilUtils.result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -164,7 +163,7 @@ class SettingViewModel
             viewModelScope.launch {
                 _selectedStartTimeText.value = newTime
                 val wakeUpTime = WakeUpTime(wakeUpTime = newTime.to24HourFormat())
-                val result = settingRepository.fetchUptime(wakeUpTime = wakeUpTime)
+                val result = settingRepository.patchUptime(wakeUpTime = wakeUpTime)
 
                 result.onSuccess {
                     UiState.Success(Unit)

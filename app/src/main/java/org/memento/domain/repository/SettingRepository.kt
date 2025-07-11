@@ -17,5 +17,5 @@ interface SettingRepository {
 
     suspend fun getUptime(): Result<UpTime>
 
-    suspend fun fetchUptime(wakeUpTime: WakeUpTime): Result<Unit>
+    suspend fun patchUptime(wakeUpTime: WakeUpTime): Result<Unit>
 }

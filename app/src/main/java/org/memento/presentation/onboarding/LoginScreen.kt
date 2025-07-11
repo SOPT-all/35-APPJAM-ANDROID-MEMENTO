@@ -56,16 +56,9 @@ fun LoginScreen(
     navigationToOnboardingScreen1: () -> Unit,
     navigationToMainScreen: () -> Unit,
 ) {
-    val token by viewModel.token.collectAsState()
-
     val throttle = remember { ThrottleFirst() }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(token) {
-        if (!token.isNullOrEmpty()) {
-            navigationToMainScreen()
-        }
-    }
     var webViewVisible by remember { mutableStateOf(false) }
 
     val user by viewModel.user.collectAsState()
@@ -92,6 +85,12 @@ fun LoginScreen(
                 refreshToken = data.refreshToken,
                 isNewUser = data.isNewUser,
             )
+
+            if (data.isNewUser) {
+                navigationToOnboardingScreen1()
+            } else {
+                navigationToMainScreen()
+            }
         }
 
         is UiState.Failure -> {
@@ -130,12 +129,6 @@ fun LoginScreen(
                 )
                 .build()
         }
-
-    LaunchedEffect(user) {
-        user?.let {
-            navigationToOnboardingScreen1()
-        }
-    }
 
     Column(
         modifier =

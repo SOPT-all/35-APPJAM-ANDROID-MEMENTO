@@ -5,6 +5,7 @@ interface TokenDataStore {
     var refreshToken: String
     var isNewUser: Boolean
     var userEmail: String
+    var loginSuccess: Boolean
 
     fun clearInfo()
 }

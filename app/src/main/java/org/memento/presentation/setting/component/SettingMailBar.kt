@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,14 +22,14 @@ import org.memento.ui.theme.MementoTheme
 import org.memento.ui.theme.darkModeColors
 
 /**
- *  @param usermail  사용자 mail 입력
+ *  @param userMail  사용자 mail 입력
  *  @param modifier modifier 수정 사항
  */
 
 @Composable
 fun SettingMailBar(
-    usermail: String,
     modifier: Modifier = Modifier,
+    userMail: String,
 ) {
     Row(
         modifier =
@@ -41,6 +42,7 @@ fun SettingMailBar(
                     shape = RoundedCornerShape(size = 4.dp),
                 )
                 .padding(vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier.padding(start = 18.dp, end = 16.dp),
@@ -49,7 +51,7 @@ fun SettingMailBar(
             tint = darkModeColors.gray05,
         )
         Text(
-            text = usermail,
+            text = userMail,
             style =
                 MementoTheme.typography.body_b_14.copy(
                     color = darkModeColors.gray04,
@@ -70,7 +72,7 @@ private fun SettingTagPreview() {
                 .padding(top = 20.dp),
     ) {
         SettingMailBar(
-            usermail = "memento@gmail.com",
+            userMail = "memento@gmail.com",
         )
     }
 }

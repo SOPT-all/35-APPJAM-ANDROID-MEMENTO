@@ -165,3 +165,15 @@ fun formatTextLocalDateTime(
 fun LocalDate.toMillis(): Long {
     return this.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }
+
+// 08:00 -> 08:00 AM
+fun String.to12HourFormat(): String {
+    return try {
+        val inputFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        val date = inputFormat.parse(this)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        this
+    }
+}

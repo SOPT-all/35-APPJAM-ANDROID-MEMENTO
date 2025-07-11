@@ -1,5 +1,6 @@
 package org.memento.presentation.onboarding
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -17,32 +18,37 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.memento.R
+import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun SplashScreen() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.memento_lottie))
     val lottieAnimatable = rememberLottieAnimatable()
 
-    LaunchedEffect(composition) {
-        lottieAnimatable.animate(
-            composition = composition,
-            clipSpec = LottieClipSpec.Frame(0, 1200),
-            initialProgress = 0f,
-        )
-    }
+    composition?.let { nonNullComposition ->
+        LaunchedEffect(nonNullComposition) {
+            lottieAnimatable.animate(
+                composition = composition,
+                clipSpec = LottieClipSpec.Frame(0, nonNullComposition.endFrame.toInt()),
+                initialProgress = 0f,
+                iterations = 1,
+            )
+        }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize(),
-        Alignment.Center,
-    ) {
-        LottieAnimation(
-            composition = composition,
-            progress = lottieAnimatable.progress,
-            contentScale = ContentScale.FillHeight,
-            modifier = Modifier.size(215.dp),
-        )
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = darkModeColors.black),
+            contentAlignment = Alignment.Center,
+        ) {
+            LottieAnimation(
+                composition = nonNullComposition,
+                progress = lottieAnimatable.progress,
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier.size(215.dp),
+            )
+        }
     }
 }
 

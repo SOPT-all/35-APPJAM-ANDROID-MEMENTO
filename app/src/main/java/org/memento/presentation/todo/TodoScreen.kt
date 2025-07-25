@@ -101,22 +101,7 @@ fun TodoScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     var selectedPlanId by remember { mutableIntStateOf(0) }
     var todoDetail by remember { mutableStateOf<TodoDetail?>(null) }
-    var isDataReady by remember { mutableStateOf(false) }
     val todoDetailState by viewModel.detailTodoState.collectAsStateWithLifecycle()
-
-    fun showDetailDialog(planId: Int) {
-        selectedPlanId = planId
-        isDataReady = false
-        todoDetail = null
-        showDetailDialog = true
-        viewModel.getTodoDetail(planId)
-    }
-
-    fun resetDialogState() {
-        showDetailDialog = false
-        isDataReady = false
-        todoDetail = null
-    }
 
     when (uiState) {
         is UiState.Loading -> {
@@ -130,6 +115,13 @@ fun TodoScreen(
         }
 
         is UiState.Success -> {}
+    }
+
+    // viewmodel의 refreshtrigger를 감지하여 변경
+    LaunchedEffect(Unit) {
+        viewModel.refreshTrigger.collect {
+            viewModel.getTodoList()
+        }
     }
 
     val todoList =
@@ -169,17 +161,11 @@ fun TodoScreen(
         scrollToDate(selectedDate)
     }
 
-    LaunchedEffect(selectedPlanId) {
-        if (showDetailDialog) {
-            viewModel.getTodoDetail(selectedPlanId)
-        }
-    }
-
     LaunchedEffect(todoDetailState) {
         when (val state = todoDetailState) {
             is UiState.Success -> {
                 todoDetail = state.data
-                isDataReady = true
+                showDetailDialog = true
             }
             else -> todoDetail = null
         }
@@ -257,7 +243,8 @@ fun TodoScreen(
                                                 isFirstUndone = (todoItem.id == firstUndoneTodoId),
                                                 deadline = deadline,
                                                 onClick = {
-                                                    showDetailDialog(todoItem.id)
+                                                    selectedPlanId = todoItem.id
+                                                    viewModel.getTodoDetail(selectedPlanId)
                                                 },
                                             )
                                             Spacer(Modifier.height(10.dp))
@@ -290,9 +277,9 @@ fun TodoScreen(
             }
         }
 
-        if (showDetailDialog && isDataReady) {
+        if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { resetDialogState() },
+                onDismiss = { showDetailDialog = false },
                 onDelete = { showDeleteDialog = true },
                 onEdit = { showEditTodoBottomSheet = true },
                 onCheckedChange = { newChecked ->
@@ -314,10 +301,9 @@ fun TodoScreen(
                 onRightButtonClick = {
                     viewModel.deletePlan(
                         planId = selectedPlanId,
-                        dialogType = DialogType.TO_DO,
                     )
                     showDeleteDialog = false
-                    resetDialogState()
+                    showDetailDialog = false
                 },
             )
         }
@@ -326,7 +312,10 @@ fun TodoScreen(
             isOpenBottomSheet = showEditTodoBottomSheet,
             sheetState = sheetEditTodoState,
             onCancel = { showEditTodoBottomSheet = false },
-            onConfirm = { showEditTodoBottomSheet = false },
+            onConfirm = {
+                viewModel.getTodoDetail(selectedPlanId)
+                showEditTodoBottomSheet = false
+            },
             planId = selectedPlanId,
         )
     }

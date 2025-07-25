@@ -70,50 +70,24 @@ class TodoViewModel
 
         fun deletePlan(
             planId: Int,
-            dialogType: DialogType,
         ) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = scheduleRepository.deleteSchedule(scheduleId = planId)
+            viewModelScope.launch {
+                _deleteState.value = UiState.Loading
+                val result = todoRepository.deleteTodo(toDoId = planId)
 
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = {
-                                    viewModelScope.launch {
-                                        eventBus.emit(EventType.ScheduleDeleted)
-                                    }
-                                    UiState.Success(Unit)
-                                },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
-                }
-
-                else -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = todoRepository.deleteTodo(toDoId = planId)
-
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = {
-                                    viewModelScope.launch {
-                                        eventBus.emit(EventType.TodoDeleted)
-                                    }
-                                    UiState.Success(Unit)
-                                },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
-                }
+                _deleteState.value =
+                    result.fold(
+                        onSuccess = {
+                            viewModelScope.launch {
+                                eventBus.emit(EventType.TodoDeleted)
+                            }
+                            UiState.Success(Unit)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to delete Todo")
+                            UiState.Failure
+                        },
+                    )
             }
         }
 
@@ -153,7 +127,7 @@ class TodoViewModel
             }
         }
 
-        private fun getTodoList() {
+        fun getTodoList() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
                 val response = todoRepository.getTodoList()

@@ -458,7 +458,11 @@ fun TodayScreen(
 
         if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { showDetailDialog = false },
+                onDismiss = { 
+                    showDetailDialog = false
+                    viewModel.resetScheduleDetailState()
+                    viewModel.resetTodoDetailState()
+                },
                 onDelete = { showDeleteDialog = true },
                 onEdit = {
                     if (dialogType == DialogType.TO_DO) {
@@ -489,6 +493,8 @@ fun TodayScreen(
                     viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
                     showDeleteDialog = false
                     showDetailDialog = false
+                    viewModel.resetScheduleDetailState()
+                    viewModel.resetTodoDetailState()
                 },
             )
         }

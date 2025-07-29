@@ -279,7 +279,10 @@ fun TodoScreen(
 
         if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { showDetailDialog = false },
+                onDismiss = { 
+                    showDetailDialog = false
+                    viewModel.resetTodoDetailState()
+                },
                 onDelete = { showDeleteDialog = true },
                 onEdit = { showEditTodoBottomSheet = true },
                 onCheckedChange = { newChecked ->
@@ -304,6 +307,7 @@ fun TodoScreen(
                     )
                     showDeleteDialog = false
                     showDetailDialog = false
+                    viewModel.resetTodoDetailState()
                 },
             )
         }

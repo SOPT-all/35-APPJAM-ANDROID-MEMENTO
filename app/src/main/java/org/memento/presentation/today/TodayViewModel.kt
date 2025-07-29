@@ -64,7 +64,7 @@ class TodayViewModel
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
         // TodayScreen refresh를 위한 SharedFlow
-        private val _refreshTrigger = MutableSharedFlow<Unit>()
+        private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
         val refreshTrigger = _refreshTrigger
 
         val combinedItems: StateFlow<List<MementoItem>> =
@@ -346,5 +346,13 @@ class TodayViewModel
                     _uiState.value = UiState.Failure
                 }
             }
+        }
+
+        fun resetScheduleDetailState() {
+            _detailScheduleState.value = UiState.Loading
+        }
+
+        fun resetTodoDetailState() {
+            _detailTodoState.value = UiState.Loading
         }
     }

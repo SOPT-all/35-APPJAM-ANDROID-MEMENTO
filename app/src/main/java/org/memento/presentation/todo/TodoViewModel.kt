@@ -49,7 +49,7 @@ class TodoViewModel
         private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
         val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
 
-        private val _refreshTrigger = MutableSharedFlow<Unit>()
+        private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
         val refreshTrigger = _refreshTrigger
 
         init {
@@ -205,5 +205,9 @@ class TodoViewModel
                         },
                     )
             }
+        }
+
+        fun resetTodoDetailState() {
+            _detailTodoState.value = UiState.Loading
         }
     }

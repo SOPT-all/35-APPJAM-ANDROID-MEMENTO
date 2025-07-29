@@ -16,7 +16,6 @@ import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.today.MementoItem
-import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.EventType
 import timber.log.Timber
 import java.time.LocalDate

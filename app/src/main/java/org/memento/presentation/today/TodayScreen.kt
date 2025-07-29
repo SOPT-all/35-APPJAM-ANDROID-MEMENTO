@@ -458,7 +458,7 @@ fun TodayScreen(
 
         if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { 
+                onDismiss = {
                     showDetailDialog = false
                     viewModel.resetScheduleDetailState()
                     viewModel.resetTodoDetailState()

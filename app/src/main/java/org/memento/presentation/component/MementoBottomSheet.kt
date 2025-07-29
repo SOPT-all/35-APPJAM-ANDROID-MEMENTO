@@ -69,7 +69,7 @@ fun MementoBottomSheet(
                             detectDragGestures(
                                 onDragStart = {},
                                 onDrag = { _, _ ->
-                                }
+                                },
                             )
                         },
             ) {

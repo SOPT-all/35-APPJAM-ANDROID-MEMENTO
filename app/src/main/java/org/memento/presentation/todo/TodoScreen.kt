@@ -279,7 +279,7 @@ fun TodoScreen(
 
         if (showDetailDialog) {
             MementoDialog(
-                onDismiss = { 
+                onDismiss = {
                     showDetailDialog = false
                     viewModel.resetTodoDetailState()
                 },

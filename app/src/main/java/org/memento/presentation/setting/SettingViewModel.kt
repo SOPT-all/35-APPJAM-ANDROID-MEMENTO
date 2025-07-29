@@ -12,9 +12,12 @@ import org.memento.data.datastore.TokenDataStore
 import org.memento.domain.entity.CreateTag
 import org.memento.domain.entity.EditTag
 import org.memento.domain.entity.Tag
+import org.memento.domain.entity.WakeUpTime
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.MemberRepository
 import org.memento.domain.repository.SettingRepository
+import org.memento.presentation.util.to12HourFormat
+import org.memento.presentation.util.to24HourFormat
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,6 +56,9 @@ class SettingViewModel
 
         private val _userEmail = MutableStateFlow<String?>(null)
         val userEmail: StateFlow<String?> = _userEmail
+
+        private val _selectedStartTimeText = MutableStateFlow<String>("00:00 AM")
+        val selectedStartTimeText: StateFlow<String> = _selectedStartTimeText
 
         init {
             viewModelScope.launch {
@@ -139,8 +145,6 @@ class SettingViewModel
             onLogout: () -> Unit,
         ) {
             viewModelScope.launch {
-                tokenDataStore.clearInfo()
-                onLogout()
                 val result = memberRepository.deleteMember()
                 result.onSuccess {
                     tokenDataStore.clearInfo()
@@ -148,6 +152,42 @@ class SettingViewModel
                 }.onFailure { throwable ->
                     UiState.Failure
                 }
+            }
+        }
+
+        fun updateStartTime(newTime: String) {
+            _selectedStartTimeText.value = newTime
+        }
+
+        fun fetchStartTime(newTime: String) {
+            viewModelScope.launch {
+                _selectedStartTimeText.value = newTime
+                val wakeUpTime = WakeUpTime(wakeUpTime = newTime.to24HourFormat())
+                val result = settingRepository.patchUptime(wakeUpTime = wakeUpTime)
+
+                result.onSuccess {
+                    UiState.Success(Unit)
+                }.onFailure { throwable ->
+                    UiState.Failure
+                }
+            }
+        }
+
+        fun getUpTime() {
+            viewModelScope.launch {
+                val response = settingRepository.getUptime()
+                response.onSuccess { data ->
+                    _selectedStartTimeText.value = data.wakeUpTime.to12HourFormat()
+                    UiState.Success(Unit)
+                }.onFailure { throwable ->
+                    UiState.Failure
+                }
+            }
+        }
+
+        fun logout() {
+            viewModelScope.launch {
+                tokenDataStore.loginSuccess
             }
         }
     }

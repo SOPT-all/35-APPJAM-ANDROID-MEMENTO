@@ -45,6 +45,12 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putString(USER_EMAIL, value).apply()
             }
 
+        override var loginSuccess: Boolean
+            get() = sharedPreferences.getBoolean(LOGIN_SUCCESS, false)
+            set(value) {
+                sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, value).apply()
+            }
+
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
         }
@@ -54,5 +60,6 @@ class TokenDataStoreImpl
             private const val REFRESH_TOKEN = "REFRESH_TOKEN"
             private const val IS_NEW_USER = "IS_NEW_USER"
             private const val USER_EMAIL = "USER_EMAIL"
+            private const val LOGIN_SUCCESS = "LOGIN_SUCCESS"
         }
     }

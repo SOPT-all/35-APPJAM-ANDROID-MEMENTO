@@ -3,8 +3,11 @@ package org.memento.data.service
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.request.RequestAddTagDto
 import org.memento.data.dto.request.RequestEditTagDto
+import org.memento.data.dto.request.RequestUpTimeDto
+import org.memento.data.dto.response.ResponseUpTimeDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -24,5 +27,13 @@ interface SettingService {
     @POST("/api/v1/tags")
     suspend fun postTag(
         @Body requestAddTagDto: RequestAddTagDto,
+    ): BaseResponse<Unit>
+
+    @GET("/api/v1/members/personal-info/uptime")
+    suspend fun getUptime(): BaseResponse<ResponseUpTimeDto>
+
+    @PATCH("/api/v1/members/personal-info/uptime")
+    suspend fun patchUptime(
+        @Body requestUpTimeDto: RequestUpTimeDto,
     ): BaseResponse<Unit>
 }

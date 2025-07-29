@@ -1,6 +1,5 @@
 package org.memento.presentation.component
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +44,6 @@ fun MementoTimePicker(
     }
 
     LaunchedEffect(hourState.currentIndex, minuteState.currentIndex, periodState.currentIndex) {
-        Log.d("selectedTime", selectedTime)
         delay(200)
         onTimeSelected(getFormattedTime())
     }

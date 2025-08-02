@@ -53,6 +53,7 @@ class TokenDataStoreImpl
 
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
+            sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, false).apply()
         }
 
         companion object {

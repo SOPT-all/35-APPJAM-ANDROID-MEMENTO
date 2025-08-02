@@ -1,5 +1,7 @@
 package org.memento.data.util
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -8,6 +10,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okio.IOException
 import org.memento.BuildConfig
+import org.memento.core.event.GlobalLogoutEvent
 import org.memento.data.datastore.TokenDataStore
 import org.memento.data.dto.BaseResponse
 import org.memento.data.dto.response.ResponseRefreshDto
@@ -74,6 +77,11 @@ class Interceptor
                         Timber.d("❌ Failed to refresh token, response: ${refreshTokenResponse.code}")
                         Timber.d("❌ Error body: $responseBodyString")
                         refreshTokenResponse.close()
+                        clearUserInfo()
+                        tokenDataStore.loginSuccess = false
+                        GlobalScope.launch {
+                            GlobalLogoutEvent.trigger.emit(Unit)
+                        }
                         throw IOException("Failed to refresh token")
                     }
                 }

@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.GlobalLogoutEvent
 import org.memento.data.datastore.TokenDataStore
 import org.memento.presentation.main.MainScreen
 import org.memento.presentation.navigator.rememberMainNavigator
@@ -26,6 +27,7 @@ import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.SplashScreen
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
 import org.memento.ui.theme.MEMENTOTheme
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,6 +46,14 @@ class MainActivity : ComponentActivity() {
                 delay(SPLASH_SCREEN_DELAY)
                 showSplash = false
             }
+
+            LaunchedEffect(Unit) {
+                GlobalLogoutEvent.trigger.collect {
+                    Timber.d("Logout trigger")
+                    viewModel.setLoggedOut()
+                }
+            }
+
             MEMENTOTheme(darkTheme = isDarkMode) {
                 if (showSplash || entryState is AppEntryState.Loading) {
                     SplashScreen()
@@ -90,6 +100,10 @@ class AppEntryViewModel
                         AppEntryState.LoggedOut
                     }
             }
+        }
+
+        fun setLoggedOut() {
+            _entryState.value = AppEntryState.LoggedOut
         }
     }
 

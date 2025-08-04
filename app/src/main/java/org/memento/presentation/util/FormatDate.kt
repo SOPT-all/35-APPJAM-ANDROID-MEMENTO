@@ -140,13 +140,18 @@ fun formatEditTime(dateString: String): String {
     }
 }
 
-fun formatTimeTo12Hour(timeString: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
-    val outputFormat = SimpleDateFormat("h a", Locale.ENGLISH)
+private val isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+private val hourOnlyFormatter = DateTimeFormatter.ofPattern("h a", Locale.ENGLISH)
+private val fullTimeFormatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
 
+fun formatTimeTo12Hour(timeString: String): String {
     return try {
-        val date = inputFormat.parse(timeString)
-        outputFormat.format(date ?: Date())
+        val time = LocalDateTime.parse(timeString, isoFormatter)
+        if (time.minute == 0) {
+            time.format(hourOnlyFormatter)
+        } else {
+            time.format(fullTimeFormatter)
+        }
     } catch (e: Exception) {
         timeString
     }

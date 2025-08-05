@@ -2,6 +2,7 @@ package org.memento.presentation.util
 
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -154,6 +155,45 @@ fun formatTimeTo12Hour(timeString: String): String {
         }
     } catch (e: Exception) {
         timeString
+    }
+}
+
+fun formatTimeRangeWithDuration(
+    start: String,
+    end: String,
+): String {
+    return try {
+        val startTime = LocalDateTime.parse(start, isoFormatter)
+        val endTime = LocalDateTime.parse(end, isoFormatter)
+        val duration = Duration.between(startTime, endTime)
+
+        val formattedStart =
+            if (startTime.minute == 0) {
+                startTime.format(DateTimeFormatter.ofPattern("h a", Locale.ENGLISH))
+            } else {
+                startTime.format(DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH))
+            }
+
+        val formattedEnd =
+            if (endTime.minute == 0) {
+                endTime.format(DateTimeFormatter.ofPattern("h a", Locale.ENGLISH))
+            } else {
+                endTime.format(DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH))
+            }
+
+        val durationString =
+            buildString {
+                val hours = duration.toHours()
+                val minutes = duration.toMinutes() % 60
+                if (hours > 0) append("${hours}h")
+                if (minutes > 0) {
+                    if (isNotEmpty()) append(" ")
+                    append("${minutes}m")
+                }
+            }
+        "$formattedStart - $formattedEnd${if (durationString.isNotEmpty()) " ($durationString)" else ""}"
+    } catch (e: Exception) {
+        "$start - $end"
     }
 }
 

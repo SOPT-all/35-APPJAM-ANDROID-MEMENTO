@@ -2,11 +2,15 @@ package org.memento.data.datastore
 
 import android.content.SharedPreferences
 import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.memento.core.event.GlobalLogoutEvent
 import javax.inject.Inject
 
 class TokenDataStoreImpl
     @Inject
     constructor(
+        private val applicationScope: CoroutineScope,
         private val sharedPreferences: SharedPreferences,
     ) : TokenDataStore {
         override var accessToken: String
@@ -54,6 +58,9 @@ class TokenDataStoreImpl
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
             sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, false).apply()
+            applicationScope.launch {
+                GlobalLogoutEvent.trigger.emit(Unit)
+            }
         }
 
         companion object {

@@ -27,7 +27,6 @@ import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.SplashScreen
 import org.memento.presentation.onboarding.navigation.OnboardingRoute
 import org.memento.ui.theme.MEMENTOTheme
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,7 +48,6 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 GlobalLogoutEvent.trigger.collect {
-                    Timber.d("Logout trigger")
                     viewModel.setLoggedOut()
                 }
             }

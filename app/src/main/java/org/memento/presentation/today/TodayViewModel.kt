@@ -238,9 +238,7 @@ class TodayViewModel
                         _deleteState.value =
                             result.fold(
                                 onSuccess = {
-                                    viewModelScope.launch {
-                                        eventBus.emit(EventType.ScheduleDeleted)
-                                    }
+                                    eventBus.emit(EventType.ScheduleDeleted)
                                     UiState.Success(Unit)
                                 },
                                 onFailure = { throwable ->
@@ -259,9 +257,7 @@ class TodayViewModel
                         _deleteState.value =
                             result.fold(
                                 onSuccess = {
-                                    viewModelScope.launch {
-                                        eventBus.emit(EventType.TodoDeleted)
-                                    }
+                                    eventBus.emit(EventType.TodoDeleted)
                                     UiState.Success(Unit)
                                 },
                                 onFailure = { throwable ->
@@ -317,9 +313,7 @@ class TodayViewModel
                 _uiState.value = UiState.Loading
                 val result = todoRepository.patchTodoComplete(id.toInt())
                 result.onSuccess {
-                    viewModelScope.launch {
-                        eventBus.emit(EventType.TodoUpdated)
-                    }
+                    eventBus.emit(EventType.TodoUpdated)
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
                     _todoItems.value =

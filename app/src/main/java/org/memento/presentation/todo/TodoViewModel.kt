@@ -77,9 +77,7 @@ class TodoViewModel
                 _deleteState.value =
                     result.fold(
                         onSuccess = {
-                            viewModelScope.launch {
-                                eventBus.emit(EventType.TodoDeleted)
-                            }
+                            eventBus.emit(EventType.TodoDeleted)
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->
@@ -169,9 +167,7 @@ class TodoViewModel
                 _uiState.value = UiState.Loading
                 val result = todoRepository.patchTodoComplete(id.toInt())
                 result.onSuccess {
-                    viewModelScope.launch {
-                        eventBus.emit(EventType.TodoUpdated)
-                    }
+                    eventBus.emit(EventType.TodoUpdated)
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
                     _todoItems.value =

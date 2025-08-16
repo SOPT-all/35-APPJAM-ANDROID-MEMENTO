@@ -1,8 +1,6 @@
 package org.memento.presentation.plusbottomsheet
 
-import android.app.Activity
 import android.content.Context
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +40,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
 import org.memento.core.util.UiState
+import org.memento.core.util.KeyboardUtil
 import org.memento.domain.type.ErrorType
 import org.memento.domain.type.SuccessType
 import org.memento.presentation.component.DatePickerModalHandler
@@ -98,10 +97,7 @@ fun AddScheduleScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getTagList()
-        focusManager.clearFocus(force = true)
-
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow((context as? Activity)?.currentFocus?.windowToken, 0)
+        KeyboardUtil.hideKeyboard(context, focusManager)
     }
 
     LaunchedEffect(isEdit) {

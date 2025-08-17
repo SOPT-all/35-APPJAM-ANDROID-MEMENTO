@@ -4,15 +4,19 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.domain.entity.TargetDate
+import org.memento.domain.entity.TodoDetail
+import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.today.MementoItem
-import org.memento.presentation.type.DialogType
+import org.memento.presentation.type.EventType
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -23,6 +27,8 @@ class TodoViewModel
     constructor(
         private val todoRepository: TodoRepository,
         private val scheduleRepository: ScheduleRepository,
+        private val addPlanRepository: AddPlanRepository,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _todoItems = MutableStateFlow<List<MementoItem.TodoItem>>(emptyList())
         val todoItems: StateFlow<List<MementoItem.TodoItem>> = _todoItems
@@ -39,46 +45,46 @@ class TodoViewModel
         private val _uiAIState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiAIState: StateFlow<UiState<Unit>> = _uiAIState
 
+        private val _detailTodoState = MutableStateFlow<UiState<TodoDetail>>(UiState.Loading)
+        val detailTodoState: StateFlow<UiState<TodoDetail>> = _detailTodoState
+
+        private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+        val refreshTrigger = _refreshTrigger
+
         init {
             getTodoList()
+
+            // eventbus의 투두 관련 이벤트를 감지하여 변경
+            viewModelScope.launch {
+                eventBus.events.collect { event ->
+                    if (event == EventType.TodoDeleted ||
+                        event == EventType.TodoUpdated ||
+                        event == EventType.TodoAdded
+                    ) {
+                        _refreshTrigger.emit(Unit)
+                    }
+                }
+            }
         }
 
         fun deletePlan(
             planId: Int,
-            dialogType: DialogType,
         ) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = scheduleRepository.deleteSchedule(scheduleId = planId)
+            viewModelScope.launch {
+                _deleteState.value = UiState.Loading
+                val result = todoRepository.deleteTodo(toDoId = planId)
 
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
-                }
-
-                else -> {
-                    viewModelScope.launch {
-                        _deleteState.value = UiState.Loading
-                        val result = todoRepository.deleteTodo(toDoId = planId)
-
-                        _deleteState.value =
-                            result.fold(
-                                onSuccess = { UiState.Success(Unit) },
-                                onFailure = { throwable ->
-                                    Timber.e(throwable, "Failed to delete schedule")
-                                    UiState.Failure
-                                },
-                            )
-                    }
-                }
+                _deleteState.value =
+                    result.fold(
+                        onSuccess = {
+                            eventBus.emit(EventType.TodoDeleted)
+                            UiState.Success(Unit)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to delete Todo")
+                            UiState.Failure
+                        },
+                    )
             }
         }
 
@@ -118,7 +124,7 @@ class TodoViewModel
             }
         }
 
-        private fun getTodoList() {
+        fun getTodoList() {
             viewModelScope.launch {
                 _uiState.value = UiState.Loading
                 val response = todoRepository.getTodoList()
@@ -161,6 +167,7 @@ class TodoViewModel
                 _uiState.value = UiState.Loading
                 val result = todoRepository.patchTodoComplete(id.toInt())
                 result.onSuccess {
+                    eventBus.emit(EventType.TodoUpdated)
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
                     _todoItems.value =
@@ -176,5 +183,26 @@ class TodoViewModel
             selectedDate: LocalDate,
         ) {
             _selectedDate.value = selectedDate
+        }
+
+        fun getTodoDetail(todoId: Int) {
+            viewModelScope.launch {
+                _detailTodoState.value = UiState.Loading
+                val result = addPlanRepository.getTodoDetail(todoId = todoId)
+                _detailTodoState.value =
+                    result.fold(
+                        onSuccess = {
+                            UiState.Success(it)
+                        },
+                        onFailure = { throwable ->
+                            Timber.e(throwable, "Failed to get todo detail")
+                            UiState.Failure
+                        },
+                    )
+            }
+        }
+
+        fun resetTodoDetailState() {
+            _detailTodoState.value = UiState.Loading
         }
     }

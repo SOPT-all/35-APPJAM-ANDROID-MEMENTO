@@ -2,6 +2,7 @@ package org.memento.presentation.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,10 +23,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.MementoTheme
@@ -63,7 +64,14 @@ fun MementoBottomSheet(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 16.dp)
-                        .background(darkModeColors.gray09),
+                        .background(darkModeColors.gray09)
+                        .pointerInput(Unit) {
+                            detectDragGestures(
+                                onDragStart = {},
+                                onDrag = { _, _ ->
+                                },
+                            )
+                        },
             ) {
                 Row(
                     modifier =

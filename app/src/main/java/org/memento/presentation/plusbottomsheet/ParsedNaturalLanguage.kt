@@ -31,7 +31,8 @@ fun parseNaturalLanguage(
     val now = LocalDateTime.now()
     val todayDate = now.toLocalDate()
     val currentDay = todayDate.dayOfMonth
-    var text = input.trim()
+    val originalInput = input.trim() // title 보존 확인을 위한 변수
+    var text = originalInput
 
     var startDate: LocalDateTime? = null
     var endDate: LocalDateTime? = null
@@ -197,15 +198,19 @@ fun parseNaturalLanguage(
         }
     }
 
-    // 4) 나머지 불필요 키워드 제거 후 title 생성
-    val cleanTitle =
-        text
-            .replace(Regex("""(부터|까지|\s+)"""), "")
-            .trim()
-            .ifEmpty { input.trim() }
+    // 4) 나머지 남은 문장은 title로 생성
+    val remainTitle =
+        if (text != originalInput) {
+            text
+                .replace(Regex("""(부터|까지)"""), "") // 공백은 보존
+                .trim()
+                .ifEmpty { originalInput }
+        } else {
+            originalInput
+        }
 
     return ParsedDateResult(
-        title = cleanTitle,
+        title = remainTitle,
         startDate = startDate,
         endDate = endDate,
     )

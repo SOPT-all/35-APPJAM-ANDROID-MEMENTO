@@ -3,12 +3,14 @@ package org.memento.presentation.today
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AllDay
 import org.memento.domain.entity.ScheduleDetail
@@ -18,6 +20,7 @@ import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.type.DialogType
+import org.memento.presentation.type.EventType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,6 +31,7 @@ class TodayViewModel
         private val scheduleRepository: ScheduleRepository,
         private val todoRepository: TodoRepository,
         private val addPlanRepository: AddPlanRepository,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _scheduleItems = MutableStateFlow<List<MementoItem.ScheduleItem>>(emptyList())
         val scheduleItems: StateFlow<List<MementoItem.ScheduleItem>> = _scheduleItems
@@ -59,6 +63,10 @@ class TodayViewModel
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
 
+        // TodayScreen refresh를 위한 SharedFlow
+        private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+        val refreshTrigger = _refreshTrigger
+
         val combinedItems: StateFlow<List<MementoItem>> =
             combine(
                 _scheduleItems,
@@ -71,6 +79,32 @@ class TodayViewModel
                     }
                 }
             }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+        init {
+            // eventbus의 이벤트를 감지하여 변경
+            viewModelScope.launch {
+                eventBus.events.collect { event ->
+                    when (event) {
+                        is EventType.TodoAdded,
+                        is EventType.TodoUpdated,
+                        is EventType.TodoDeleted,
+                        is EventType.ScheduleAdded,
+                        is EventType.ScheduleUpdated,
+                        is EventType.ScheduleDeleted,
+                        -> {
+                            _refreshTrigger.emit(Unit)
+                        }
+                    }
+                }
+            }
+        }
+
+        // 데이터 새로고침 로직
+        fun refreshTodayData() {
+            viewModelScope.launch {
+                _refreshTrigger.emit(Unit)
+            }
+        }
 
         fun reorderItems(
             fromIndex: Int,
@@ -203,7 +237,10 @@ class TodayViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { UiState.Success(Unit) },
+                                onSuccess = {
+                                    eventBus.emit(EventType.ScheduleDeleted)
+                                    UiState.Success(Unit)
+                                },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")
                                     UiState.Failure
@@ -219,7 +256,10 @@ class TodayViewModel
 
                         _deleteState.value =
                             result.fold(
-                                onSuccess = { UiState.Success(Unit) },
+                                onSuccess = {
+                                    eventBus.emit(EventType.TodoDeleted)
+                                    UiState.Success(Unit)
+                                },
                                 onFailure = { throwable ->
                                     Timber.e(throwable, "Failed to delete schedule")
                                     UiState.Failure
@@ -273,6 +313,7 @@ class TodayViewModel
                 _uiState.value = UiState.Loading
                 val result = todoRepository.patchTodoComplete(id.toInt())
                 result.onSuccess {
+                    eventBus.emit(EventType.TodoUpdated)
                     _uiState.value = UiState.Success(Unit)
                 }.onFailure {
                     _todoItems.value =
@@ -299,5 +340,13 @@ class TodayViewModel
                     _uiState.value = UiState.Failure
                 }
             }
+        }
+
+        fun resetScheduleDetailState() {
+            _detailScheduleState.value = UiState.Loading
+        }
+
+        fun resetTodoDetailState() {
+            _detailTodoState.value = UiState.Loading
         }
     }

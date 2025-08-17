@@ -49,11 +49,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.memento.R
+import org.memento.core.util.UiState
+import org.memento.domain.entity.ScheduleDetail
+import org.memento.domain.entity.TodoDetail
 import org.memento.presentation.component.MementoAiFloatingButton
 import org.memento.presentation.component.MementoAlertDialog
 import org.memento.presentation.component.MementoDialog
@@ -93,9 +97,18 @@ fun TodayScreen(
     var showEditTodoBottomSheet by remember { mutableStateOf(false) }
     val sheetEditScheduleState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showEditScheduleBottomSheet by remember { mutableStateOf(false) }
-    var selectedPlanId by remember { mutableIntStateOf(3) }
+
+    // schedule, todo state 정의
+    val scheduleDetailState by viewModel.detailScheduleState.collectAsStateWithLifecycle()
+    val todoDetailState by viewModel.detailTodoState.collectAsStateWithLifecycle()
+
+    // schedule, todo detail 데이터 정의
+    var scheduleDetail by remember { mutableStateOf<ScheduleDetail?>(null) }
+    var todoDetail by remember { mutableStateOf<TodoDetail?>(null) }
+
+    // 선택된 todo, schedule id와 dialog type
+    var selectedPlanId by remember { mutableIntStateOf(0) }
     var dialogType by remember { mutableStateOf(DialogType.TO_DO) }
-    var refreshTrigger by remember { mutableStateOf(false) }
 
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
@@ -140,10 +153,48 @@ fun TodayScreen(
         viewModel.getUpTime()
     }
 
-    LaunchedEffect(refreshTrigger) {
-        viewModel.getScheduleList(selectedDate.value.toString())
-        viewModel.getTodoDateList(selectedDate.value.toString())
-        viewModel.getAllDay()
+    // 다이얼로그 출력, 출력 전 데이터 초기화
+    fun showDetailDialog(
+        planId: Int,
+        type: DialogType,
+    ) {
+        selectedPlanId = planId
+        dialogType = type
+
+        when (type) {
+            DialogType.TO_DO -> viewModel.getTodoDetail(planId)
+            DialogType.SCHEDULE -> viewModel.getScheduleDetail(planId)
+        }
+    }
+
+    LaunchedEffect(todoDetailState) {
+        when (val state = todoDetailState) {
+            is UiState.Success -> {
+                todoDetail = state.data
+                showDetailDialog = true
+            }
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(scheduleDetailState) {
+        when (val state = scheduleDetailState) {
+            is UiState.Success -> {
+                scheduleDetail = state.data
+                showDetailDialog = true
+            }
+            else -> {
+            }
+        }
+    }
+
+    // viewmodel의 refreshtrigger를 감지하여 변경
+    LaunchedEffect(Unit) {
+        viewModel.refreshTrigger.collect {
+            viewModel.getScheduleList(selectedDate.value.toString())
+            viewModel.getTodoDateList(selectedDate.value.toString())
+            viewModel.getAllDay()
+        }
     }
 
     val combinedItems by viewModel.combinedItems.collectAsState()
@@ -160,18 +211,6 @@ fun TodayScreen(
     fun resetDraggingState() {
         draggedItemIndex = -1
         draggedOffsetY = 0f
-    }
-
-    fun refreshData() {
-        coroutineScope.launch {
-            isRefreshing = true
-            delay(2000)
-            isRefreshing = false
-        }
-    }
-
-    fun triggerRefresh() {
-        refreshTrigger = !refreshTrigger
     }
 
     Box(
@@ -222,10 +261,10 @@ fun TodayScreen(
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
-                    refreshData()
-                    viewModel.getScheduleList(selectedDate.value.toString())
-                    viewModel.getTodoDateList(selectedDate.value.toString())
-                    viewModel.getAllDay()
+                    coroutineScope.launch {
+                        delay(2000)
+                        viewModel.refreshTodayData()
+                    }
                 },
             ) {
                 if (combinedItems.isEmpty()) {
@@ -351,9 +390,7 @@ fun TodayScreen(
                                             priorityTagType = item.priorityType.toPriorityTagType(),
                                             isConnected = item.toDoType.toBoolean(),
                                             onClick = {
-                                                selectedPlanId = item.id
-                                                dialogType = DialogType.TO_DO
-                                                showDetailDialog = true
+                                                showDetailDialog(item.id, DialogType.TO_DO)
                                             },
                                         )
                                     }
@@ -364,9 +401,7 @@ fun TodayScreen(
                                             scheduleTitleText = item.description,
                                             timeRange = item.timeDuration,
                                             onClick = {
-                                                selectedPlanId = item.id
-                                                dialogType = DialogType.SCHEDULE
-                                                showDetailDialog = true
+                                                showDetailDialog(item.id, DialogType.SCHEDULE)
                                             },
                                         )
                                     }
@@ -421,21 +456,33 @@ fun TodayScreen(
             }
         }
 
-        MementoDialog(
-            showDialog = showDetailDialog,
-            onDismiss = { showDetailDialog = false },
-            onDelete = { showDeleteDialog = true },
-            onEdit = {
-                if (dialogType == DialogType.TO_DO) {
-                    showEditTodoBottomSheet = true
-                } else {
-                    showEditScheduleBottomSheet = true
-                }
-            },
-            dialogType = dialogType,
-            planId = selectedPlanId,
-            refreshKey = refreshTrigger,
-        )
+        if (showDetailDialog) {
+            MementoDialog(
+                onDismiss = {
+                    showDetailDialog = false
+                    viewModel.resetScheduleDetailState()
+                    viewModel.resetTodoDetailState()
+                },
+                onDelete = { showDeleteDialog = true },
+                onEdit = {
+                    if (dialogType == DialogType.TO_DO) {
+                        showEditTodoBottomSheet = true
+                    } else {
+                        showEditScheduleBottomSheet = true
+                    }
+                },
+                onCheckedChange = { newChecked ->
+                    todoDetail?.let { detail ->
+                        // 체크 되면 viewmodel 업데이트 및 today screen 반영
+                        viewModel.updateTodoCompletion(detail.id, newChecked)
+                    }
+                },
+                dialogType = dialogType,
+                todoDetailData = todoDetail,
+                scheduleDetailData = scheduleDetail,
+            )
+        }
+
         if (showDeleteDialog) {
             MementoAlertDialog(
                 content = R.string.alert_delete,
@@ -446,7 +493,8 @@ fun TodayScreen(
                     viewModel.deletePlan(planId = selectedPlanId, dialogType = dialogType)
                     showDeleteDialog = false
                     showDetailDialog = false
-                    triggerRefresh()
+                    viewModel.resetScheduleDetailState()
+                    viewModel.resetTodoDetailState()
                 },
             )
         }
@@ -456,7 +504,7 @@ fun TodayScreen(
             sheetState = sheetEditTodoState,
             onCancel = { closeTodoBottomSheet() },
             onConfirm = {
-                triggerRefresh()
+                viewModel.getTodoDetail(selectedPlanId)
                 closeTodoBottomSheet()
             },
             planId = selectedPlanId,
@@ -467,7 +515,7 @@ fun TodayScreen(
             sheetState = sheetEditScheduleState,
             onCancel = { closeScheduleBottomSheet() },
             onConfirm = {
-                triggerRefresh()
+                viewModel.getScheduleDetail(selectedPlanId)
                 closeScheduleBottomSheet()
             },
             planId = selectedPlanId,

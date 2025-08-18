@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
+import org.memento.core.util.KeyboardUtil
 import org.memento.core.util.UiState
 import org.memento.domain.type.ErrorType
 import org.memento.domain.type.SuccessType
@@ -82,6 +84,7 @@ fun AddScheduleScreen(
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val focusManager = LocalFocusManager.current
 
     var isShowToast by remember { mutableStateOf(false) }
     var showStartTimePickerBottomSheet by remember { mutableStateOf(false) }
@@ -93,6 +96,7 @@ fun AddScheduleScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getTagList()
+        KeyboardUtil.hideKeyboard(context, focusManager)
     }
 
     LaunchedEffect(isEdit) {

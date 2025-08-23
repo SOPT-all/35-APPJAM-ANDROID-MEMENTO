@@ -188,7 +188,6 @@ class SettingViewModel
 
         fun logout() {
             viewModelScope.launch {
-                tokenDataStore.loginSuccess = false
                 tokenDataStore.clearInfo()
                 eventBus.emit(EventType.UserLogout)
             }

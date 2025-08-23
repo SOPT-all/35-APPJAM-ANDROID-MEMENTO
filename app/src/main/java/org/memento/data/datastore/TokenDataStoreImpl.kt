@@ -1,7 +1,6 @@
 package org.memento.data.datastore
 
 import android.content.SharedPreferences
-import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -54,20 +53,7 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, value).apply()
             }
 
-        override val loginSuccessFlow: Flow<Boolean> =
-            callbackFlow {
-                val listener =
-                    SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                        if (key == LOGIN_SUCCESS) {
-                            trySend(loginSuccess)
-                        }
-                    }
-                sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-                trySend(loginSuccess)
-                awaitClose {
-                    sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-                }
-            }
+        override val loginSuccessFlow: Flow<Boolean> = getBooleanFlow(LOGIN_SUCCESS, false)
 
         override var onboardingCompleted: Boolean
             get() = sharedPreferences.getBoolean(ONBOARDING_COMPLETED, false)
@@ -75,23 +61,27 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putBoolean(ONBOARDING_COMPLETED, value).apply()
             }
 
-        override val onboardingCompletedFlow: Flow<Boolean> =
-            callbackFlow {
-                val listener =
-                    SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                        if (key == ONBOARDING_COMPLETED) {
-                            trySend(onboardingCompleted)
-                        }
-                    }
-                sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-                trySend(onboardingCompleted)
-                awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
-            }
+        override val onboardingCompletedFlow: Flow<Boolean> = getBooleanFlow(ONBOARDING_COMPLETED, false)
 
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
-            sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, false).apply()
         }
+
+        private fun getBooleanFlow(
+            key: String,
+            defaultValue: Boolean,
+        ): Flow<Boolean> =
+            callbackFlow {
+                val listener =
+                    SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
+                        if (changedKey == key) {
+                            trySend(sharedPreferences.getBoolean(key, defaultValue))
+                        }
+                    }
+                sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+                trySend(sharedPreferences.getBoolean(key, defaultValue))
+                awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+            }
 
         companion object {
             private const val ACCESS_TOKEN = "ACCESS_TOKEN"

@@ -95,7 +95,9 @@ class LoginViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = { data ->
+                            saveToken(data.accessToken, data.refreshToken, data.isNewUser)
                             tokenDataStore.loginSuccess = true
+                            tokenDataStore.onboardingCompleted = !data.isNewUser
                             UiState.Success(data)
                         },
                         onFailure = { data ->

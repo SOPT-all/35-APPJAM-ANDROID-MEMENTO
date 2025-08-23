@@ -18,19 +18,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import org.memento.core.event.GlobalLogoutEvent
+import org.memento.core.event.EventBus
 import org.memento.data.datastore.TokenDataStore
 import org.memento.presentation.main.MainScreen
+import org.memento.presentation.navigator.component.OnboardingNavHost
 import org.memento.presentation.navigator.rememberMainNavigator
 import org.memento.presentation.navigator.route.MainNavigationBarRoute
 import org.memento.presentation.onboarding.SplashScreen
-import org.memento.presentation.onboarding.navigation.OnboardingRoute
+import org.memento.presentation.type.EventType
 import org.memento.ui.theme.MEMENTOTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var eventBus: EventBus
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,28 +53,31 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
-                GlobalLogoutEvent.trigger.collect {
-                    viewModel.setLoggedOut()
+                eventBus.events.collect { event ->
+                    when (event) {
+                        is EventType.UserLogout,
+                        is EventType.AccountDeleted,
+                        is EventType.TokenExpired,
+                        -> {
+                            viewModel.setLoggedOut()
+                        }
+                        else -> Unit
+                    }
                 }
             }
 
             MEMENTOTheme(darkTheme = isDarkMode) {
-                if (showSplash || entryState is AppEntryState.Loading) {
-                    SplashScreen()
-                } else {
-                    val startDestination =
-                        when (entryState) {
-                            is AppEntryState.LoggedIn -> MainNavigationBarRoute.Today::class.simpleName!!
-                            is AppEntryState.LoggedOut -> OnboardingRoute.ROUTE
-                            else -> OnboardingRoute.ROUTE
-                        }
-                    val navController = rememberNavController()
-                    val navigator = rememberMainNavigator(navController)
-
-                    MainScreen(
-                        navigator = navigator,
-                        startDestination = startDestination,
-                    )
+                when (entryState) {
+                    is AppEntryState.Loading -> SplashScreen()
+                    is AppEntryState.LoggedIn -> {
+                        MainScreen(
+                            navigator = rememberMainNavigator(rememberNavController()),
+                            startDestination = MainNavigationBarRoute.Today::class.simpleName!!,
+                        )
+                    }
+                    is AppEntryState.LoggedOut, is AppEntryState.Onboarding -> {
+                        OnboardingNavHost()
+                    }
                 }
             }
         }
@@ -90,13 +99,19 @@ class AppEntryViewModel
 
         init {
             viewModelScope.launch {
-                val isLoggedIn = tokenDataStore.loginSuccess
-                _entryState.value =
-                    if (isLoggedIn) {
-                        AppEntryState.LoggedIn
-                    } else {
+                tokenDataStore.loginSuccessFlow.combine(tokenDataStore.onboardingCompletedFlow) { isLoggedIn, isOnboardingCompleted ->
+                    if (!isLoggedIn) {
                         AppEntryState.LoggedOut
+                    } else {
+                        if (isOnboardingCompleted) {
+                            AppEntryState.LoggedIn
+                        } else {
+                            AppEntryState.Onboarding
+                        }
                     }
+                }.collect { state ->
+                    _entryState.value = state
+                }
             }
         }
 
@@ -109,6 +124,8 @@ sealed class AppEntryState {
     object Loading : AppEntryState()
 
     object LoggedIn : AppEntryState()
+
+    object Onboarding : AppEntryState()
 
     object LoggedOut : AppEntryState()
 }

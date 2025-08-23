@@ -95,6 +95,7 @@ class TodayViewModel
                         -> {
                             _refreshTrigger.emit(Unit)
                         }
+                        else -> Unit
                     }
                 }
             }

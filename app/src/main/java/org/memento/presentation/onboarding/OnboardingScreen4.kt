@@ -19,7 +19,6 @@ import org.memento.presentation.type.OnboardingTopType
 @Composable
 fun OnboardingScreen4(
     viewModel: OnboardingViewModel = hiltViewModel(),
-    navigateToMainScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {
     Column(
@@ -43,7 +42,7 @@ fun OnboardingScreen4(
             content = R.string.onboarding_start,
             isSelected = true,
             onSelected = {
-                navigateToMainScreen()
+                viewModel.completeOnboarding()
             },
             modifier =
                 Modifier

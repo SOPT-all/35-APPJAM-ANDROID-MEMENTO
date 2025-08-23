@@ -2,15 +2,14 @@ package org.memento.data.datastore
 
 import android.content.SharedPreferences
 import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.memento.core.event.GlobalLogoutEvent
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class TokenDataStoreImpl
     @Inject
     constructor(
-        private val applicationScope: CoroutineScope,
         private val sharedPreferences: SharedPreferences,
     ) : TokenDataStore {
         override var accessToken: String
@@ -55,12 +54,43 @@ class TokenDataStoreImpl
                 sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, value).apply()
             }
 
+        override val loginSuccessFlow: Flow<Boolean> =
+            callbackFlow {
+                val listener =
+                    SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                        if (key == LOGIN_SUCCESS) {
+                            trySend(loginSuccess)
+                        }
+                    }
+                sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+                trySend(loginSuccess)
+                awaitClose {
+                    sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+                }
+            }
+
+        override var onboardingCompleted: Boolean
+            get() = sharedPreferences.getBoolean(ONBOARDING_COMPLETED, false)
+            set(value) {
+                sharedPreferences.edit().putBoolean(ONBOARDING_COMPLETED, value).apply()
+            }
+
+        override val onboardingCompletedFlow: Flow<Boolean> =
+            callbackFlow {
+                val listener =
+                    SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                        if (key == ONBOARDING_COMPLETED) {
+                            trySend(onboardingCompleted)
+                        }
+                    }
+                sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+                trySend(onboardingCompleted)
+                awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
+            }
+
         override fun clearInfo() {
             sharedPreferences.edit().clear().apply()
             sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, false).apply()
-            applicationScope.launch {
-                GlobalLogoutEvent.trigger.emit(Unit)
-            }
         }
 
         companion object {
@@ -69,5 +99,6 @@ class TokenDataStoreImpl
             private const val IS_NEW_USER = "IS_NEW_USER"
             private const val USER_EMAIL = "USER_EMAIL"
             private const val LOGIN_SUCCESS = "LOGIN_SUCCESS"
+            private const val ONBOARDING_COMPLETED = "ONBOARDING_COMPLETED"
         }
     }

@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.memento.BuildConfig
+import org.memento.core.event.EventBus
 import org.memento.data.datastore.TokenDataStore
 import org.memento.data.util.Interceptor
 import retrofit2.Retrofit
@@ -36,9 +37,10 @@ object NetworkModule {
     @Singleton
     fun provideInterceptor(
         json: Json,
+        eventBus: EventBus,
         tokenDataStore: TokenDataStore,
     ): Interceptor {
-        return Interceptor(json, tokenDataStore)
+        return Interceptor(json, eventBus, tokenDataStore)
     }
 
     @Singleton

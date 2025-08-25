@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -15,7 +13,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -45,12 +42,6 @@ class MainActivity : ComponentActivity() {
             val entryState by viewModel.entryState.collectAsState()
 
             val isDarkMode = true
-            var showSplash by remember { mutableStateOf(true) }
-
-            LaunchedEffect(Unit) {
-                delay(SPLASH_SCREEN_DELAY)
-                showSplash = false
-            }
 
             LaunchedEffect(Unit) {
                 eventBus.events.collect { event ->
@@ -59,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         is EventType.AccountDeleted,
                         is EventType.TokenExpired,
                         -> {
-                            viewModel.setLoggedOut()
+                            viewModel.handleLogoutEvent(event)
                         }
                         else -> Unit
                     }
@@ -81,10 +72,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        const val SPLASH_SCREEN_DELAY = 3000L
     }
 }
 
@@ -115,8 +102,14 @@ class AppEntryViewModel
             }
         }
 
-        fun setLoggedOut() {
-            _entryState.value = AppEntryState.LoggedOut
+        fun handleLogoutEvent(eventType: EventType) {
+            viewModelScope.launch {
+                when (eventType) {
+                    EventType.AccountDeleted -> tokenDataStore.clearAllInfo()
+                    EventType.UserLogout, EventType.TokenExpired -> tokenDataStore.clearSession()
+                    else -> Unit
+                }
+            }
         }
     }
 

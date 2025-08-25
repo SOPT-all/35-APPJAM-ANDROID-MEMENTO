@@ -64,7 +64,15 @@ class TokenDataStoreImpl
 
         override val onboardingCompletedFlow: Flow<Boolean> = getBooleanFlow(ONBOARDING_COMPLETED, false)
 
-        override fun clearInfo() {
+        override fun clearSession() {
+            sharedPreferences.edit {
+                remove(ACCESS_TOKEN)
+                remove(REFRESH_TOKEN)
+                putBoolean(LOGIN_SUCCESS, false)
+            }
+        }
+
+        override fun clearAllInfo() {
             sharedPreferences.edit { clear() }
         }
 
@@ -75,7 +83,7 @@ class TokenDataStoreImpl
             callbackFlow {
                 val listener =
                     SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
-                        if (changedKey == key) {
+                        if (changedKey == key || changedKey == null) {
                             trySend(sharedPreferences.getBoolean(key, defaultValue))
                         }
                     }

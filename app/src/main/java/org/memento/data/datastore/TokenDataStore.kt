@@ -12,5 +12,7 @@ interface TokenDataStore {
     var onboardingCompleted: Boolean
     val onboardingCompletedFlow: Flow<Boolean>
 
-    fun clearInfo()
+    fun clearSession()
+
+    fun clearAllInfo()
 }

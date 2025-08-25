@@ -1,6 +1,7 @@
 package org.memento.data.datastore
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -17,7 +18,7 @@ class TokenDataStoreImpl
                 return token
             }
             set(value) {
-                sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
+                sharedPreferences.edit { putString(ACCESS_TOKEN, value) }
             }
 
         override var refreshToken: String
@@ -26,7 +27,7 @@ class TokenDataStoreImpl
                 return refreshToken
             }
             set(value) {
-                sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
+                sharedPreferences.edit { putString(REFRESH_TOKEN, value) }
             }
 
         override var isNewUser: Boolean
@@ -35,7 +36,7 @@ class TokenDataStoreImpl
                 return isNewUser
             }
             set(value) {
-                sharedPreferences.edit().putBoolean(IS_NEW_USER, value).apply()
+                sharedPreferences.edit { putBoolean(IS_NEW_USER, value) }
             }
 
         override var userEmail: String
@@ -44,13 +45,13 @@ class TokenDataStoreImpl
                 return userEmail
             }
             set(value) {
-                sharedPreferences.edit().putString(USER_EMAIL, value).apply()
+                sharedPreferences.edit { putString(USER_EMAIL, value) }
             }
 
         override var loginSuccess: Boolean
             get() = sharedPreferences.getBoolean(LOGIN_SUCCESS, false)
             set(value) {
-                sharedPreferences.edit().putBoolean(LOGIN_SUCCESS, value).apply()
+                sharedPreferences.edit { putBoolean(LOGIN_SUCCESS, value) }
             }
 
         override val loginSuccessFlow: Flow<Boolean> = getBooleanFlow(LOGIN_SUCCESS, false)
@@ -58,13 +59,13 @@ class TokenDataStoreImpl
         override var onboardingCompleted: Boolean
             get() = sharedPreferences.getBoolean(ONBOARDING_COMPLETED, false)
             set(value) {
-                sharedPreferences.edit().putBoolean(ONBOARDING_COMPLETED, value).apply()
+                sharedPreferences.edit { putBoolean(ONBOARDING_COMPLETED, value) }
             }
 
         override val onboardingCompletedFlow: Flow<Boolean> = getBooleanFlow(ONBOARDING_COMPLETED, false)
 
         override fun clearInfo() {
-            sharedPreferences.edit().clear().apply()
+            sharedPreferences.edit { clear() }
         }
 
         private fun getBooleanFlow(

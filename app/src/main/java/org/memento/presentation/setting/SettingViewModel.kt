@@ -148,7 +148,6 @@ class SettingViewModel
             viewModelScope.launch {
                 val result = memberRepository.deleteMember()
                 result.onSuccess {
-                    tokenDataStore.clearInfo()
                     eventBus.emit(EventType.AccountDeleted)
                 }.onFailure { throwable ->
                     UiState.Failure
@@ -188,7 +187,6 @@ class SettingViewModel
 
         fun logout() {
             viewModelScope.launch {
-                tokenDataStore.clearInfo()
                 eventBus.emit(EventType.UserLogout)
             }
         }

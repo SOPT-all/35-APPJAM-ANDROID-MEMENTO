@@ -56,7 +56,7 @@ class Interceptor
 
             val currentRefreshToken = tokenDataStore.refreshToken
             if (currentRefreshToken.isBlank()) {
-                handleLogout()
+                handleSessionExpired()
                 return false
             }
 
@@ -87,14 +87,12 @@ class Interceptor
             } else {
                 Timber.d("❌ Failed to refresh token, response: ${refreshTokenResponse.code}")
                 refreshTokenResponse.close()
-                handleLogout()
+                handleSessionExpired()
                 return false
             }
         }
 
-        private fun handleLogout() {
-            tokenDataStore.clearInfo()
-            tokenDataStore.loginSuccess = false
+        private fun handleSessionExpired() {
             runBlocking {
                 eventBus.emit(EventType.TokenExpired)
             }

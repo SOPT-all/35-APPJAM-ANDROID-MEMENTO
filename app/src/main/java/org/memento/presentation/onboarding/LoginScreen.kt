@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,21 +53,12 @@ import org.memento.ui.theme.defaultMementoTypography
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navigationToOnboardingScreen1: () -> Unit,
-    navigationToMainScreen: () -> Unit,
 ) {
-    val token by viewModel.token.collectAsState()
-
     val throttle = remember { ThrottleFirst() }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(token) {
-        if (!token.isNullOrEmpty()) {
-            navigationToMainScreen()
-        }
-    }
     var webViewVisible by remember { mutableStateOf(false) }
 
-    val user by viewModel.user.collectAsState()
     val context = LocalContext.current
     val oneTapClient = remember { Identity.getSignInClient(context) }
 
@@ -83,18 +73,13 @@ fun LoginScreen(
         }
     }
 
-    when (uiState) {
-        is UiState.Loading -> {}
-        is UiState.Success -> {
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) {
             val data = (uiState as UiState.Success<LoginInfo>).data
-            viewModel.saveToken(
-                accessToken = data.accessToken,
-                refreshToken = data.refreshToken,
-                isNewUser = data.isNewUser,
-            )
-        }
-
-        is UiState.Failure -> {
+            if (data.isNewUser) {
+                navigationToOnboardingScreen1()
+            }
+        } else if (uiState is UiState.Failure) {
             showErrorToast = true
         }
     }
@@ -130,12 +115,6 @@ fun LoginScreen(
                 )
                 .build()
         }
-
-    LaunchedEffect(user) {
-        user?.let {
-            navigationToOnboardingScreen1()
-        }
-    }
 
     Column(
         modifier =

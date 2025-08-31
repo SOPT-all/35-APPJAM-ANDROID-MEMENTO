@@ -1,6 +1,5 @@
 package org.memento.presentation.onboarding.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.memento.core.util.UiState
+import org.memento.data.datastore.TokenDataStore
 import org.memento.domain.entity.UserInfo
 import org.memento.domain.repository.UserInfoUpdateRepository
 import org.memento.presentation.type.YesNoButtonType
@@ -19,6 +19,7 @@ class OnboardingViewModel
     @Inject
     constructor(
         private val userInfoUpdateRepository: UserInfoUpdateRepository,
+        private val tokenDataStore: TokenDataStore,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
         val uiState: StateFlow<UiState<Unit>> = _uiState
@@ -47,9 +48,14 @@ class OnboardingViewModel
         private val _isImportantBreaks = MutableStateFlow<Boolean?>(null)
         val isImportantBreaks: StateFlow<Boolean?> = _isImportantBreaks
 
+        fun completeOnboarding() {
+            viewModelScope.launch {
+                tokenDataStore.onboardingCompleted = true
+            }
+        }
+
         fun fetchUserInfoUpdate() {
             viewModelScope.launch {
-                Log.d("onboarding viewmodel", "enter to fetch user info")
                 _uiState.value = UiState.Loading
                 val result =
                     userInfoUpdateRepository.fetchUserInfo(
@@ -67,11 +73,9 @@ class OnboardingViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = {
-                            Log.e("onboarding success", "success to fetch user info")
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->
-                            Log.e("onboarding", "Failed to fetch user info")
                             UiState.Failure
                         },
                     )

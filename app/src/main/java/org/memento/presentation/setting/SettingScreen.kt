@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
@@ -41,7 +40,6 @@ fun SettingScreen(
     onBack: () -> Unit,
     navigateToSettingTag: () -> Unit,
     navigateToSettingTime: () -> Unit,
-    navigateToLogin: () -> Unit,
     viewmodel: SettingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
@@ -67,7 +65,7 @@ fun SettingScreen(
                     .padding(top = 26.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            SettingMailBar(usermail = userEmail ?: "")
+            SettingMailBar(userMail = userEmail ?: "")
             Spacer(modifier = modifier.padding(top = 12.dp))
 
             SettingOptions(onClick = {}, optionName = stringResource(R.string.notifications))
@@ -102,7 +100,7 @@ fun SettingScreen(
             onLeftButtonClick = { showLogoutDialog = false },
             onRightButtonClick = {
                 showLogoutDialog = false
-                navigateToLogin()
+                viewmodel.logout()
             },
         )
     }
@@ -116,16 +114,8 @@ fun SettingScreen(
             onLeftButtonClick = { showDeleteAccountDialog = false },
             onRightButtonClick = {
                 showDeleteAccountDialog = false
-                viewmodel.deleteMember(
-                    onLogout = navigateToLogin,
-                )
+                viewmodel.deleteMember()
             },
         )
     }
-}
-
-@Preview
-@Composable
-fun SettingScreenPreview() {
-//    SettingScreen(onBack = {}, userMail = "memento@gmail.com")
 }

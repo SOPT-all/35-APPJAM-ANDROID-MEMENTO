@@ -9,11 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.domain.entity.AddSchedule
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.Tag
 import org.memento.domain.repository.AddPlanRepository
+import org.memento.presentation.type.EventType
 import org.memento.presentation.util.createLocalDateTime
 import org.memento.presentation.util.formatDate
 import org.memento.presentation.util.formatEditString
@@ -31,6 +33,7 @@ class AddScheduleViewModel
     @Inject
     constructor(
         val addPlanRepository: AddPlanRepository,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _eventText = MutableStateFlow("")
         val eventText: StateFlow<String> = _eventText
@@ -120,6 +123,9 @@ class AddScheduleViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = {
+                            viewModelScope.launch {
+                                eventBus.emit(EventType.ScheduleUpdated)
+                            }
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->
@@ -173,6 +179,9 @@ class AddScheduleViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = {
+                            viewModelScope.launch {
+                                eventBus.emit(EventType.ScheduleAdded)
+                            }
                             UiState.Success(Unit)
                         },
                         onFailure = { throwable ->
@@ -184,31 +193,34 @@ class AddScheduleViewModel
         }
 
         fun initialTimeValue() {
-            val currentTime = System.currentTimeMillis()
-            val startDate = formatDate(currentTime)
+            // calendar 에도 적용시켜 시간 증가 적용
+            val calendar = Calendar.getInstance()
 
-            val calendar = Calendar.getInstance().apply { timeInMillis = currentTime }
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
             val minute = calendar.get(Calendar.MINUTE)
-
             val roundedMinute =
                 when (minute) {
                     in 0..15 -> 0
                     in 16..45 -> 30
-                    else -> 0
+                    else -> {
+                        calendar.add(Calendar.HOUR_OF_DAY, 1)
+                        0
+                    }
                 }
 
-            val adjustedHour = if (minute in 46..59) (hour + 1) % 24 else hour
+            val adjustedHour = calendar.get(Calendar.HOUR_OF_DAY)
+            val adjustedTime = formatTime(adjustedHour, roundedMinute)
+            val adjustedDate = formatDate(calendar.timeInMillis)
 
-            val startTime = formatTime(adjustedHour, roundedMinute)
+            // start
+            _selectedStartDateText.value = adjustedDate
+            _selectedStartTimeText.value = adjustedTime
 
+            // end
             calendar.add(Calendar.HOUR_OF_DAY, 2)
-            val endHour = calendar.get(Calendar.HOUR_OF_DAY)
-            val endTime = formatTime(endHour, roundedMinute)
+            val endDate = formatDate(calendar.timeInMillis)
+            val endTime = formatTime(calendar.get(Calendar.HOUR_OF_DAY), roundedMinute)
 
-            _selectedStartDateText.value = startDate
-            _selectedEndDateText.value = startDate
-            _selectedStartTimeText.value = startTime
+            _selectedEndDateText.value = endDate
             _selectedEndTimeText.value = endTime
         }
 

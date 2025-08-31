@@ -20,8 +20,6 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,10 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.memento.R
-import org.memento.core.util.UiState
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.TodoDetail
 import org.memento.presentation.plusbottomsheet.AddToDoViewModel
@@ -55,197 +50,128 @@ import org.memento.ui.theme.mementoColors
 
 @Composable
 fun MementoDialog(
-    showDialog: Boolean,
     onDismiss: () -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
+    todoDetailData: TodoDetail? = null,
+    scheduleDetailData: ScheduleDetail? = null,
     dialogType: DialogType,
-    planId: Int,
-    refreshKey: Boolean,
-    viewModel: TodayViewModel = hiltViewModel(),
-    tagViewModel: AddToDoViewModel = hiltViewModel()
 ) {
-    val scheduleDetailState by viewModel.detailScheduleState.collectAsStateWithLifecycle()
-    val todoDetailState by viewModel.detailTodoState.collectAsStateWithLifecycle()
-    var scheduleData by remember { mutableStateOf<ScheduleDetail?>(null) }
-    var scheduleTag by remember { mutableStateOf("") }
-    var scheduleTagColor by remember { mutableStateOf("#FFFFFF") }
-
-    var todoData by remember { mutableStateOf<TodoDetail?>(null) }
-
-    LaunchedEffect(scheduleDetailState, todoDetailState, tagViewModel.tagList.collectAsState().value) {
-        when (val state = scheduleDetailState) {
-            is UiState.Loading -> {}
-            is UiState.Success -> {
-                scheduleData = state.data
-                val tagId = state.data.tagId
-
-                tagViewModel.tagList.value.find { it.id == tagId }?.let { matchedTag ->
-                    scheduleTag = matchedTag.name
-                    scheduleTagColor = matchedTag.colorCode
-                }
-            }
-
-            else -> {
-                scheduleData = null
-            }
-        }
-    }
-    if (showDialog) {
-        LaunchedEffect(dialogType, planId, refreshKey) {
-            when (dialogType) {
-                DialogType.SCHEDULE -> {
-                    viewModel.getScheduleDetail(scheduleId = planId)
-                    tagViewModel.getTagList()
-                }
-
-                DialogType.TO_DO -> {
-                    viewModel.getTodoDetail(todoId = planId)
-                }
-            }
-        }
-
-        LaunchedEffect(scheduleDetailState, todoDetailState) {
-            when (val state = scheduleDetailState) {
-                is UiState.Loading -> {}
-
-                is UiState.Success -> {
-                    scheduleData = state.data
-                }
-
-                else -> {
-                    scheduleData = null
-                }
-            }
-            when (val state = todoDetailState) {
-                is UiState.Loading -> {}
-
-                is UiState.Success -> {
-                    todoData = state.data
-                }
-
-                else -> {
-                    todoData = null
-                }
-            }
-        }
-
-        Dialog(
-            onDismissRequest = onDismiss,
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Box(
+            modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = darkModeColors.gray10,
+                    shape = RoundedCornerShape(2.dp),
+                ),
         ) {
-            Box(
+            Column(
                 modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = darkModeColors.gray10,
-                        shape = RoundedCornerShape(2.dp),
-                    ),
+                    .padding(horizontal = 16.dp, vertical = 20.dp),
             ) {
-                Column(
-                    modifier =
-                    Modifier
-                        .padding(horizontal = 16.dp, vertical = 20.dp),
-                ) {
-                    when (dialogType) {
-                        DialogType.SCHEDULE -> {
-                            scheduleData?.let {
-                                AddScheduleDialogComponent(
-                                    id = it.id,
-                                    description = it.description,
-                                    startDate = it.startDate,
-                                    endDate = it.endDate,
-                                    scheduleType = it.scheduleType,
-                                    tagId = it.tagId,
-                                    tagName = scheduleTag,
-                                    tagColor = scheduleTagColor
-                                )
-                            }
-                        }
-
-                        DialogType.TO_DO -> {
-                            todoData?.let {
-                                ToDoDialogComponent(
-                                    isChecked = it.isCompleted,
-                                    title = it.description,
-                                    endDate = it.endDate,
-                                    tagColor = it.tagColor,
-                                    tagText = it.tagName,
-                                    urgentType =
-                                    when (it.priorityType) {
-                                        "IMMEDIATE" -> PriorityTagType.Immediate
-                                        "NONE" -> PriorityTagType.None
-                                        "HIGH" -> PriorityTagType.High
-                                        "MEDIUM" -> PriorityTagType.Medium
-                                        "LOW" -> PriorityTagType.Low
-                                        else -> PriorityTagType.None
-                                    },
-                                )
-                            }
+                when (dialogType) {
+                    DialogType.SCHEDULE -> {
+                        scheduleDetailData?.let {
+                            AddScheduleDialogComponent(
+                                id = it.id,
+                                description = it.description,
+                                startDate = it.startDate,
+                                endDate = it.endDate,
+                                scheduleType = it.scheduleType,
+                                tagId = it.tagId,
+                            )
                         }
                     }
 
-                    Row(
-                        modifier = Modifier.padding(top = 53.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    ) {
-                        Column(
-                            modifier =
-                            Modifier
-                                .weight(1f)
-                                .background(
-                                    color = mementoColors.red.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(2.dp),
-                                )
-                                .padding(vertical = 11.dp)
-                                .noRippleClickable {
-                                    onDelete()
+                    DialogType.TO_DO -> {
+                        todoDetailData?.let {
+                            ToDoDialogComponent(
+                                isChecked = it.isCompleted,
+                                title = it.description,
+                                endDate = it.endDate,
+                                tagColor = it.tagColor,
+                                tagText = it.tagName,
+                                urgentType =
+                                when (it.priorityType) {
+                                    "IMMEDIATE" -> PriorityTagType.Immediate
+                                    "NONE" -> PriorityTagType.None
+                                    "HIGH" -> PriorityTagType.High
+                                    "MEDIUM" -> PriorityTagType.Medium
+                                    "LOW" -> PriorityTagType.Low
+                                    else -> PriorityTagType.None
                                 },
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_delete),
-                                contentDescription = "삭제 버튼",
-                                tint = mementoColors.red,
-                            )
-                            Text(
-                                text = "Delete",
-                                style =
-                                MementoTheme.typography.body_r_16.copy(
-                                    color = mementoColors.red,
-                                ),
+                                onCheckedChange = onCheckedChange,
                             )
                         }
+                    }
+                }
 
-                        Column(
-                            modifier =
-                            Modifier
-                                .weight(1f)
-                                .background(
-                                    color = darkModeColors.gray09,
-                                    shape = RoundedCornerShape(2.dp),
-                                )
-                                .padding(vertical = 11.dp)
-                                .noRippleClickable {
-                                    onEdit()
-                                },
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_edit),
-                                contentDescription = "수정 버튼",
-                                tint = darkModeColors.gray05,
+                Row(
+                    modifier = Modifier.padding(top = 53.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Column(
+                        modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = mementoColors.red.copy(alpha = 0.15f),
+                                shape = RoundedCornerShape(2.dp),
                             )
-                            Text(
-                                text = "Edit",
-                                style =
-                                MementoTheme.typography.body_r_16.copy(
-                                    color = darkModeColors.gray05,
-                                ),
+                            .padding(vertical = 11.dp)
+                            .noRippleClickable {
+                                onDelete()
+                            },
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete),
+                            contentDescription = "삭제 버튼",
+                            tint = mementoColors.red,
+                        )
+                        Text(
+                            text = "Delete",
+                            style =
+                            MementoTheme.typography.body_r_16.copy(
+                                color = mementoColors.red,
+                            ),
+                        )
+                    }
+
+                    Column(
+                        modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = darkModeColors.gray09,
+                                shape = RoundedCornerShape(2.dp),
                             )
-                        }
+                            .padding(vertical = 11.dp)
+                            .noRippleClickable {
+                                onEdit()
+                            },
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit),
+                            contentDescription = "수정 버튼",
+                            tint = darkModeColors.gray05,
+                        )
+                        Text(
+                            text = "Edit",
+                            style =
+                            MementoTheme.typography.body_r_16.copy(
+                                color = darkModeColors.gray05,
+                            ),
+                        )
                     }
                 }
             }
@@ -261,6 +187,7 @@ fun ToDoDialogComponent(
     tagColor: String = "0xFF0000FF",
     tagText: String = "NULL TAG",
     urgentType: PriorityTagType = PriorityTagType.None,
+    onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
     var checkedChange by remember { mutableStateOf(isChecked) }
 
@@ -275,6 +202,7 @@ fun ToDoDialogComponent(
                     checked = checkedChange,
                     onCheckedChange = { newCheckedChange ->
                         checkedChange = newCheckedChange
+                        onCheckedChange?.invoke(newCheckedChange)
                     },
                     colors =
                     CheckboxDefaults.colors(
@@ -607,13 +535,10 @@ fun MementoDialogPreview() {
         }
 
         MementoDialog(
-            showDialog = showDialog.value,
             onDismiss = closeDialog,
             onDelete = { },
             onEdit = { },
-            refreshKey = false,
             dialogType = DialogType.SCHEDULE,
-            planId = 1,
         )
     }
 }

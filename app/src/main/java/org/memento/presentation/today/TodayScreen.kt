@@ -38,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -228,9 +229,11 @@ fun TodayScreen(
                 state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
                     refreshData()
+                    viewModel.updateCurrentTime()
                     viewModel.getScheduleList(selectedDate.value.toString())
                     viewModel.getTodoDateList(selectedDate.value.toString())
                     viewModel.getAllDay()
+
                 },
             ) {
                 if (combinedItems.isEmpty()) {
@@ -435,9 +438,12 @@ fun TodayScreen(
                                         MementoTodoItemWithLine(
                                             tagColor = changeHexToColor(item.tagColor),
                                             isDone = item.isCompleted,
+                                            isNow = item.isNow,
                                             onCheckedChange = { newChecked ->
                                                 viewModel.updateTodoCompletion(item.id, newChecked)
                                             },
+                                            modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
+
                                             todoTitleText = item.description,
                                             priorityTagType = item.priorityType.toPriorityTagType(),
                                             isConnected = item.toDoType.toBoolean(),
@@ -453,12 +459,17 @@ fun TodayScreen(
                                         MementoScheduleItemWithLine(
                                             tagColor = changeHexToColor(item.tagColorCode),
                                             scheduleTitleText = item.description,
+                                            isNow = item.isNow,
+                                            modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
                                             timeRange = item.timeDuration,
+                                            isChecked = item.isDimmed,
+
                                             onClick = {
                                                 selectedPlanId = item.id
                                                 dialogType = DialogType.SCHEDULE
                                                 showDetailDialog = true
                                             },
+
                                         )
                                     }
                                 }
@@ -588,6 +599,8 @@ sealed class MementoItem {
         val tagColor: String,
         val toDoType: String,
         val order: Double,
+        val isDimmed: Boolean = false,
+        val isNow: Boolean = false
     ) : MementoItem()
 
     data class ScheduleItem(
@@ -601,6 +614,8 @@ sealed class MementoItem {
         val tagColorCode: String,
         val tagName: String,
         val timeDuration: String,
+        val isDimmed: Boolean = false,
+        val isNow: Boolean = false
     ) : MementoItem()
 }
 

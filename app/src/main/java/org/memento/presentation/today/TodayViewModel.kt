@@ -22,8 +22,8 @@ import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.type.DialogType
 import retrofit2.HttpException
 import timber.log.Timber
+import java.time.LocalDateTime
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class TodayViewModel
@@ -66,28 +66,107 @@ constructor(
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val uiState: StateFlow<UiState<Unit>> = _uiState
 
+    private val _currentTime = MutableStateFlow(LocalDateTime.now())
+    val currentTime: StateFlow<LocalDateTime> = _currentTime
+
+    fun updateCurrentTime() {
+        _currentTime.value = LocalDateTime.now()
+    }
+
     val combinedItems: StateFlow<List<MementoItem>> =
         combine(
             _scheduleItems,
             _todoItems,
         ) { schedules, todos ->
-            val sortedTodos = todos
-                .sortedWith(
-                    compareByDescending<MementoItem.TodoItem> { it.isCompleted }
-                        .thenBy { it.order }
-                )
+            val currentTime = LocalDateTime.now()
 
-            val sortedSchedules = schedules.sortedBy { it.order }
+            // 모든 아이템을 처리된 상태로 변환
+            val allItems = mutableListOf<MementoItem>()
 
-            (sortedTodos + sortedSchedules)
+            // 스케줄 처리
+            schedules.forEach { schedule ->
+                val endTime = LocalDateTime.parse(schedule.endDate.substring(0, 19))
+                val isDimmed = currentTime.isAfter(endTime)
+                allItems.add(schedule.copy(isDimmed = isDimmed))
+            }
+
+            // 투두 처리 (완료된 것은 dim)
+            todos.forEach { todo ->
+                allItems.add(todo.copy(isDimmed = todo.isCompleted))
+            }
+
+            // 정렬: dim된 것들이 위로, 그 다음 order 순
+            val sortedItems = allItems.sortedWith(
+                compareByDescending<MementoItem> {
+                    when (it) {
+                        is MementoItem.ScheduleItem -> it.isDimmed
+                        is MementoItem.TodoItem -> it.isDimmed
+                    }
+                }.thenBy {
+                    when (it) {
+                        is MementoItem.ScheduleItem -> it.order
+                        is MementoItem.TodoItem -> it.order
+                    }
+                }
+            )
+
+            // 먼저 현재 진행 중인 스케줄이 있는지 확인
+            val activeScheduleIndex = sortedItems.indexOfFirst { item ->
+                if (item is MementoItem.ScheduleItem && !item.isDimmed) {
+                    val startTime = LocalDateTime.parse(item.startDate.substring(0, 19))
+                    val endTime = LocalDateTime.parse(item.endDate.substring(0, 19))
+                    currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+                } else {
+                    false
+                }
+            }
+
+            // 화살표 표시
+            var nowAssigned = false
+            val finalItems = sortedItems.mapIndexed { index, item ->
+                when {
+                    // 1순위: 현재 진행 중인 스케줄
+                    activeScheduleIndex != -1 && index == activeScheduleIndex -> {
+                        when (item) {
+                            is MementoItem.ScheduleItem -> item.copy(isNow = true)
+                            is MementoItem.TodoItem -> item.copy(isNow = true)
+                        }
+                    }
+                    // 2순위: 진행 중인 스케줄이 없을 때, dim되지 않은 첫 번째 아이템
+                    activeScheduleIndex == -1 && !nowAssigned -> {
+                        when (item) {
+                            is MementoItem.ScheduleItem -> {
+                                if (!item.isDimmed) {
+                                    nowAssigned = true
+                                    item.copy(isNow = true)
+                                } else {
+                                    item.copy(isNow = false)
+                                }
+                            }
+                            is MementoItem.TodoItem -> {
+                                if (!item.isDimmed) {
+                                    nowAssigned = true
+                                    item.copy(isNow = true)
+                                } else {
+                                    item.copy(isNow = false)
+                                }
+                            }
+                        }
+                    }
+                    else -> {
+                        when (item) {
+                            is MementoItem.ScheduleItem -> item.copy(isNow = false)
+                            is MementoItem.TodoItem -> item.copy(isNow = false)
+                        }
+                    }
+                }
+            }
+
+            finalItems
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-
-
 
     fun reorderItems(fromIndex: Int, toIndex: Int) {
         if (fromIndex == toIndex) return
-
-        Log.d("DragDebug", "reorderItems: from=$fromIndex to=$toIndex")
 
         val currentList = combinedItems.value.toMutableList()
         val movedItem = currentList[fromIndex]

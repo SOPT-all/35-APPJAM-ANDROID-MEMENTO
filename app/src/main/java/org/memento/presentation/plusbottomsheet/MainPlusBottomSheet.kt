@@ -12,9 +12,12 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -35,6 +38,16 @@ fun MainPlusBottomSheet(
             pageCount = { 2 },
         )
     val coroutineScope = rememberCoroutineScope()
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusControl = LocalFocusManager.current
+
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage == 1) {
+            focusControl.clearFocus(force = true)
+            keyboardController?.hide()
+        }
+    }
 
     Box(
         modifier =

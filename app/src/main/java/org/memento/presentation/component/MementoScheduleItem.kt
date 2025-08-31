@@ -42,29 +42,29 @@ fun MementoScheduleItem(
     Box {
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = darkModeColors.navy)
-                .clip(RoundedCornerShape(2.dp)),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.navy)
+                    .clip(RoundedCornerShape(2.dp)),
         ) {
             Row(
                 modifier =
-                Modifier
-                    .fillMaxWidth(),
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 Box(
                     modifier =
-                    Modifier
-                        .fillMaxWidth(fraction = fraction)
-                        .aspectRatio(3f / 68f)
-                        .background(color = tagColor),
+                        Modifier
+                            .fillMaxWidth(fraction = fraction)
+                            .aspectRatio(3f / 68f)
+                            .background(color = tagColor),
                 )
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .padding(top = 12.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                            .padding(top = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -89,9 +89,9 @@ fun MementoScheduleItem(
 
                     Row(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.padding(start = 46.dp))
@@ -117,11 +117,11 @@ fun MementoScheduleItem(
         if (isChecked) {
             Box(
                 modifier =
-                Modifier
-                    .matchParentSize()
-                    .background(darkModeColors.black.copy(alpha = 0.5f))
-                    .clip(RoundedCornerShape(2.dp))
-                    .zIndex(0f),
+                    Modifier
+                        .matchParentSize()
+                        .background(darkModeColors.black.copy(alpha = 0.5f))
+                        .clip(RoundedCornerShape(2.dp))
+                        .zIndex(0f),
             )
         }
     }
@@ -136,7 +136,7 @@ fun MementoScheduleItemWithLine(
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
     onClick: () -> Unit,
-    modifier: Modifier=Modifier,
+    modifier: Modifier = Modifier,
     isChecked: Boolean = false,
 ) {
     Row(

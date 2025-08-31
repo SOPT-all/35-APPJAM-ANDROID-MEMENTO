@@ -43,19 +43,22 @@ class TodoRepositoryImpl
                 todoDataSource.patchTodoComplete(toDoId)
             }
 
-    override suspend fun postPriorityTodo(targetDate: TargetDate): Result<PriorityTodoList> =
-        runCatching {
-            todoDataSource.postTodoPriority(targetDate.toData()).data?.toDomain() ?: throw Exception("null")
-        }
+        override suspend fun postPriorityTodo(targetDate: TargetDate): Result<PriorityTodoList> =
+            runCatching {
+                todoDataSource.postTodoPriority(targetDate.toData()).data?.toDomain() ?: throw Exception("null")
+            }
 
-    override suspend fun patchDragAndDrop(toDoId: Int, dragAndDrop: DragAndDrop): Result<Unit> {
-        return runCatching {
-            Log.d("drag", "📡 Sending PATCH to /todo/$toDoId/reorder with body = $dragAndDrop")
+        override suspend fun patchDragAndDrop(
+            toDoId: Int,
+            dragAndDrop: DragAndDrop,
+        ): Result<Unit> {
+            return runCatching {
+                Log.d("drag", "📡 Sending PATCH to /todo/$toDoId/reorder with body = $dragAndDrop")
 
-            todoDataSource.patchDragAndDrop(
-                toDoId = toDoId,
-                requestDragAndDropDto = dragAndDrop.toData()
-            ).handleBaseResponse().getOrThrow()
+                todoDataSource.patchDragAndDrop(
+                    toDoId = toDoId,
+                    requestDragAndDropDto = dragAndDrop.toData(),
+                ).handleBaseResponse().getOrThrow()
+            }
         }
     }
-}

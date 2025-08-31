@@ -16,5 +16,8 @@ interface TodoRepository {
 
     suspend fun postPriorityTodo(targetDate: TargetDate): Result<PriorityTodoList>
 
-    suspend fun patchDragAndDrop(toDoId: Int, dragAndDrop: DragAndDrop): Result<Unit>
+    suspend fun patchDragAndDrop(
+        toDoId: Int,
+        dragAndDrop: DragAndDrop,
+    ): Result<Unit>
 }

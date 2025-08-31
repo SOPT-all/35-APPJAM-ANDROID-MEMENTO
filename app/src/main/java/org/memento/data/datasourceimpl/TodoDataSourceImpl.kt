@@ -11,26 +11,28 @@ import org.memento.data.service.TodoService
 import javax.inject.Inject
 
 class TodoDataSourceImpl
-@Inject
-constructor(
-    private val todoService: TodoService,
-) : TodoDataSource {
-    override suspend fun getTodoList(): BaseResponse<ResponseTodoDto> =
-        todoService.getTodoList()
+    @Inject
+    constructor(
+        private val todoService: TodoService,
+    ) : TodoDataSource {
+        override suspend fun getTodoList(): BaseResponse<ResponseTodoDto> =
+            todoService.getTodoList()
 
-    override suspend fun getTodoDateList(date: String): BaseResponse<ResponseTodoDto> =
-        todoService.getTodoDateList(date)
+        override suspend fun getTodoDateList(date: String): BaseResponse<ResponseTodoDto> =
+            todoService.getTodoDateList(date)
 
-    override suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto> =
-        todoService.patchTodoCompleted(toDoId)
+        override suspend fun patchTodoComplete(toDoId: Int): BaseResponse<ResponseTodoCompleteDto> =
+            todoService.patchTodoCompleted(toDoId)
 
-    override suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit> =
-        todoService.deleteTodo(toDoId)
+        override suspend fun deleteTodo(toDoId: Int): BaseResponse<Unit> =
+            todoService.deleteTodo(toDoId)
 
-    override suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto> =
-        todoService.postPriorityTodo(requestPriorityDto)
+        override suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto> =
+            todoService.postPriorityTodo(requestPriorityDto)
 
-    override suspend fun patchDragAndDrop(toDoId: Int, requestDragAndDropDto: RequestDragAndDropDto): BaseResponse<Unit> =
-        todoService.patchDragAndDrop(toDoId, requestDragAndDropDto)
-
-}
+        override suspend fun patchDragAndDrop(
+            toDoId: Int,
+            requestDragAndDropDto: RequestDragAndDropDto,
+        ): BaseResponse<Unit> =
+            todoService.patchDragAndDrop(toDoId, requestDragAndDropDto)
+    }

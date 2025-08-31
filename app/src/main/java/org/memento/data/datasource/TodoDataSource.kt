@@ -18,5 +18,8 @@ interface TodoDataSource {
 
     suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto>
 
-    suspend fun patchDragAndDrop(toDoId: Int, requestDragAndDropDto: RequestDragAndDropDto): BaseResponse<Unit>
+    suspend fun patchDragAndDrop(
+        toDoId: Int,
+        requestDragAndDropDto: RequestDragAndDropDto,
+    ): BaseResponse<Unit>
 }

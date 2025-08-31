@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.data.datastore.TokenDataStore
 import org.memento.domain.entity.CreateTag
@@ -16,6 +17,7 @@ import org.memento.domain.entity.WakeUpTime
 import org.memento.domain.repository.AddPlanRepository
 import org.memento.domain.repository.MemberRepository
 import org.memento.domain.repository.SettingRepository
+import org.memento.presentation.type.EventType
 import org.memento.presentation.util.to12HourFormat
 import org.memento.presentation.util.to24HourFormat
 import timber.log.Timber
@@ -29,6 +31,7 @@ class SettingViewModel
         private val addPlanRepository: AddPlanRepository,
         private val memberRepository: MemberRepository,
         private val tokenDataStore: TokenDataStore,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
         val tagList: StateFlow<List<Tag>> = _tagList.asStateFlow()
@@ -141,14 +144,11 @@ class SettingViewModel
             }
         }
 
-        fun deleteMember(
-            onLogout: () -> Unit,
-        ) {
+        fun deleteMember() {
             viewModelScope.launch {
                 val result = memberRepository.deleteMember()
                 result.onSuccess {
-                    tokenDataStore.clearInfo()
-                    onLogout()
+                    eventBus.emit(EventType.AccountDeleted)
                 }.onFailure { throwable ->
                     UiState.Failure
                 }
@@ -187,7 +187,7 @@ class SettingViewModel
 
         fun logout() {
             viewModelScope.launch {
-                tokenDataStore.loginSuccess
+                eventBus.emit(EventType.UserLogout)
             }
         }
     }

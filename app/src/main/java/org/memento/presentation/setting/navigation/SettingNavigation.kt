@@ -46,7 +46,6 @@ fun NavGraphBuilder.settingNavGraph(
             onBack = navigateBack,
             navigateToSettingTag = navigateToSettingTag,
             navigateToSettingTime = navigateToSettingEditTime,
-            navigateToLogin = navigateToLogin,
         )
     }
     composable(SettingRoute.SETTINGTAG) {

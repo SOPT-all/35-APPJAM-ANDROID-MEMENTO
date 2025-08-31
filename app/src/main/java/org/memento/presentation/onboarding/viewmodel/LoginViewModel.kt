@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
 import org.memento.data.datastore.TokenDataStore
 import org.memento.data.util.getTimeZoneOffsetString
@@ -18,6 +19,7 @@ import org.memento.domain.entity.Login
 import org.memento.domain.entity.LoginInfo
 import org.memento.domain.repository.AuthRepository
 import org.memento.domain.repository.MemberRepository
+import org.memento.presentation.type.EventType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,6 +30,7 @@ class LoginViewModel
         private val authRepository: AuthRepository,
         private val loginRepository: MemberRepository,
         private val tokenDataStore: TokenDataStore,
+        private val eventBus: EventBus,
     ) : ViewModel() {
         private val _user = MutableStateFlow<FirebaseUser?>(null)
         val user = _user.asStateFlow()
@@ -95,12 +98,13 @@ class LoginViewModel
                 _uiState.value =
                     result.fold(
                         onSuccess = { data ->
+                            saveToken(data.accessToken, data.refreshToken, data.isNewUser)
                             tokenDataStore.loginSuccess = true
+                            tokenDataStore.onboardingCompleted = !data.isNewUser
                             UiState.Success(data)
                         },
                         onFailure = { data ->
-                            tokenDataStore.loginSuccess = false
-                            tokenDataStore.clearInfo()
+                            eventBus.emit(EventType.UserLogout)
                             Timber.tag("data").d(data.message.toString())
                             UiState.Failure
                         },

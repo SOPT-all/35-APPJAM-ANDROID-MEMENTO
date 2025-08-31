@@ -14,4 +14,11 @@ sealed class EventType {
     data object ScheduleUpdated : EventType()
 
     data object ScheduleDeleted : EventType()
+
+    // Logout 이벤트 타입
+    data object UserLogout : EventType()
+
+    data object AccountDeleted : EventType()
+
+    data object TokenExpired : EventType()
 }

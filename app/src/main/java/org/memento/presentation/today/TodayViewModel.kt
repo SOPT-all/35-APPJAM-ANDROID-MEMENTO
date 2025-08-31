@@ -21,6 +21,7 @@ import org.memento.domain.repository.ScheduleRepository
 import org.memento.domain.repository.TodoRepository
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.EventType
+import org.memento.presentation.util.formatTimeRangeWithDuration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -94,6 +95,7 @@ class TodayViewModel
                         -> {
                             _refreshTrigger.emit(Unit)
                         }
+                        else -> Unit
                     }
                 }
             }
@@ -153,7 +155,11 @@ class TodayViewModel
                                 startDate = response.startDate,
                                 tagColorCode = response.tagColorCode,
                                 tagName = response.tagName,
-                                timeDuration = response.timeDuration,
+                                timeDuration =
+                                    formatTimeRangeWithDuration(
+                                        start = response.startDate,
+                                        end = response.endDate,
+                                    ),
                             )
                         }
                     _scheduleItems.value = mappedData

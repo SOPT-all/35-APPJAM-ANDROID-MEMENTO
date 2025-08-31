@@ -150,4 +150,9 @@ class SettingViewModel
                 }
             }
         }
+
+    fun resetTagUiState() {
+        _editTagUiState.value = UiState.Loading
     }
+
+}

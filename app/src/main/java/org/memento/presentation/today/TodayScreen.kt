@@ -1,7 +1,6 @@
 package org.memento.presentation.today
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -178,6 +177,7 @@ fun TodayScreen(
                 todoDetail = state.data
                 showDetailDialog = true
             }
+
             else -> {}
         }
     }
@@ -188,6 +188,7 @@ fun TodayScreen(
                 scheduleDetail = state.data
                 showDetailDialog = true
             }
+
             else -> {
             }
         }
@@ -221,15 +222,15 @@ fun TodayScreen(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = darkModeColors.black),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
         ) {
             MementoTopBar(
                 date = todoFormatDate(today),
@@ -247,9 +248,9 @@ fun TodayScreen(
             )
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = (5 * 30).dp),
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = (5 * 30).dp),
             ) {
                 val state = rememberLazyListState()
                 LazyColumn(
@@ -293,12 +294,12 @@ fun TodayScreen(
                 } else {
                     LazyColumn(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .onGloballyPositioned { it ->
-                                    listHeight = it.size.height
-                                },
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .onGloballyPositioned { it ->
+                                listHeight = it.size.height
+                            },
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         userScrollEnabled = !isDraggingEnabled,
                     ) {
@@ -309,11 +310,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -321,11 +322,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                             }
                         }
@@ -360,7 +361,7 @@ fun TodayScreen(
                                     )
                                     .zIndex(if (isDragging) 1f else 0f)
                                     .then(
-                                        if (canDrag){
+                                        if (canDrag) {
                                             // 캐스팅
                                             val todoItem = item as MementoItem.TodoItem
 
@@ -423,8 +424,7 @@ fun TodayScreen(
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                    ,
+                                                    },
                                                     onDragEnd = {
                                                         if (draggedItemIndex != -1) {
                                                             val item = combinedItems.getOrNull(draggedItemIndex)
@@ -467,11 +467,10 @@ fun TodayScreen(
                                                     }
                                                 )
                                             }
-                        }
-                                        else Modifier
+                                        } else Modifier
                                     )
                             )
-                           {
+                            {
                                 when (item) {
                                     is MementoItem.TodoItem -> {
                                         MementoTodoItemWithLine(
@@ -517,8 +516,8 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(bottom = 16.dp),
+                                    Modifier
+                                        .padding(bottom = 16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -526,32 +525,32 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(bottom = 16.dp),
+                                    Modifier
+                                        .padding(bottom = 16.dp),
                                 )
                             }
                         }
                     }
                     Column(
                         modifier =
-                            Modifier
-                                .offset(x = 28.dp)
-                                .width(1.dp)
-                                .height(with(density) { listHeight.toDp() })
-                                .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
-                                .background(
-                                    brush =
-                                        Brush.linearGradient(
-                                            colors =
-                                                listOf(
-                                                    Color.Transparent,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    Color.Transparent,
-                                                ),
-                                        ),
+                        Modifier
+                            .offset(x = 28.dp)
+                            .width(1.dp)
+                            .height(with(density) { listHeight.toDp() })
+                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                            .background(
+                                brush =
+                                Brush.linearGradient(
+                                    colors =
+                                    listOf(
+                                        Color.Transparent,
+                                        mementoColors.progressBar,
+                                        mementoColors.progressBar,
+                                        mementoColors.progressBar,
+                                        Color.Transparent,
+                                    ),
                                 ),
+                            ),
                     ) {}
                 }
             }
@@ -625,9 +624,9 @@ fun TodayScreen(
             onClick = {
             },
             modifier =
-                Modifier
-                    .padding(20.dp)
-                    .align(Alignment.BottomEnd),
+            Modifier
+                .padding(20.dp)
+                .align(Alignment.BottomEnd),
         )
     }
 }

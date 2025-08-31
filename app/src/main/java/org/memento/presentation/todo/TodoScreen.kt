@@ -169,6 +169,7 @@ fun TodoScreen(
                 todoDetail = state.data
                 showDetailDialog = true
             }
+
             else -> todoDetail = null
         }
     }

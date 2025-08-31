@@ -36,8 +36,6 @@ import androidx.compose.ui.window.Dialog
 import org.memento.R
 import org.memento.domain.entity.ScheduleDetail
 import org.memento.domain.entity.TodoDetail
-import org.memento.presentation.plusbottomsheet.AddToDoViewModel
-import org.memento.presentation.today.TodayViewModel
 import org.memento.presentation.type.DialogType
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.changeHexToColor

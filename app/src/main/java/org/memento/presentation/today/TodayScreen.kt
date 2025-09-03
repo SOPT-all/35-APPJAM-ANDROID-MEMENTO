@@ -126,6 +126,7 @@ fun TodayScreen(
     var draggedItemId by remember { mutableStateOf<Int?>(null) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
 
+
     BackHandler {
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime <= backPressThreshold) {
@@ -207,6 +208,9 @@ fun TodayScreen(
     val allDayItems by viewModel.allDayItems.collectAsState()
     val upTimeState by viewModel.upTimeState.collectAsState()
 
+    var tempCombinedItems by remember { mutableStateOf<List<MementoItem>?>(null) }
+    val displayItems = tempCombinedItems ?: combinedItems
+
     val filteredAllDayItems =
         allDayItems.filter { item ->
             val startDate = LocalDate.parse(item.startDate.substring(0, 10))
@@ -221,15 +225,15 @@ fun TodayScreen(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = darkModeColors.black),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
         ) {
             MementoTopBar(
                 date = todoFormatDate(today),
@@ -247,9 +251,9 @@ fun TodayScreen(
             )
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = (5 * 30).dp),
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = (5 * 30).dp),
             ) {
                 val state = rememberLazyListState()
                 LazyColumn(
@@ -292,12 +296,12 @@ fun TodayScreen(
                 } else {
                     LazyColumn(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .onGloballyPositioned { it ->
-                                    listHeight = it.size.height
-                                },
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .onGloballyPositioned { it ->
+                                listHeight = it.size.height
+                            },
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         userScrollEnabled = !isDraggingEnabled,
                     ) {
@@ -308,11 +312,11 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -320,16 +324,16 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(top = 16.dp)
-                                            .onGloballyPositioned { it ->
-                                                itemHeight = it.size.height
-                                            },
+                                    Modifier
+                                        .padding(top = 16.dp)
+                                        .onGloballyPositioned { it ->
+                                            itemHeight = it.size.height
+                                        },
                                 )
                             }
                         }
 
-                        itemsIndexed(combinedItems, key = { _, item ->
+                        itemsIndexed(displayItems, key = { _, item ->
                             when (item) {
                                 is MementoItem.TodoItem -> "todo_${item.id}"
                                 is MementoItem.ScheduleItem -> "schedule_${item.id}"
@@ -347,86 +351,103 @@ fun TodayScreen(
 
                             Box(
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .onGloballyPositioned { coordinates ->
-                                            if (index == 0 && actualItemHeight == 0f) {
-                                                actualItemHeight = coordinates.size.height.toFloat()
-                                            }
+                                Modifier
+                                    .fillMaxWidth()
+                                    .onGloballyPositioned { coordinates ->
+                                        if (index == 0 && actualItemHeight == 0f) {
+                                            actualItemHeight = coordinates.size.height.toFloat()
                                         }
-                                        .graphicsLayer(
-                                            scaleX = scale,
-                                            scaleY = scale,
-                                            translationY = if (isDragging) draggedOffsetY else 0f,
-                                        )
-                                        .zIndex(if (isDragging) 1f else 0f)
-                                        .then(
-                                            if (canDrag) {
-                                                // 캐스팅
-                                                val todoItem = item as MementoItem.TodoItem
+                                    }
+                                    .graphicsLayer(
+                                        scaleX = scale,
+                                        scaleY = scale,
+                                        translationY = if (isDragging) draggedOffsetY else 0f,
+                                    )
+                                    .zIndex(if (isDragging) 1f else 0f)
+                                    .then(
+                                        if (canDrag) {
+                                            // 캐스팅
+                                            val todoItem = item as MementoItem.TodoItem
 
-                                                Modifier.pointerInput(item.id) {
-                                                    detectDragGesturesAfterLongPress(
-                                                        onDragStart = {
-                                                            // ID로 추적 추가
-                                                            draggedItemId = (item as? MementoItem.TodoItem)?.id ?: -1
-                                                            draggedItemIndex = index
-                                                            isDraggingEnabled = true
-                                                        },
-                                                        onDrag = { change, dragAmount ->
-                                                            if (isDraggingEnabled && draggedItemId != null) {
-                                                                change.consume()
-                                                                draggedOffsetY += dragAmount.y
+                                            Modifier.pointerInput(item.id) {
+                                                detectDragGesturesAfterLongPress(
+                                                    onDragStart = {
+                                                        draggedItemId = (item as? MementoItem.TodoItem)?.id ?: -1
+                                                        draggedItemIndex = index
+                                                        isDraggingEnabled = true
+                                                        tempCombinedItems = combinedItems.toList()
+                                                    },
 
-                                                                val itemSpacing = with(density) { 8.dp.toPx() }
-                                                                val totalItemHeight = actualItemHeight + itemSpacing
+                                                    onDrag = { change, dragAmount ->
+                                                        if (isDraggingEnabled && draggedItemId != null && tempCombinedItems != null) {
+                                                            change.consume()
+                                                            draggedOffsetY += dragAmount.y
 
-                                                                // 드래그 거리가 아이템 높이를 넘으면 위치 변경
-                                                                while (kotlin.math.abs(draggedOffsetY) >= totalItemHeight) {
-                                                                    val direction = if (draggedOffsetY > 0) 1 else -1
+                                                            val itemSpacing = with(density) { 8.dp.toPx() }
+                                                            val totalItemHeight = actualItemHeight + itemSpacing
 
-                                                                    // 현재 드래그 중인 아이템의 실제 인덱스 찾기
-                                                                    var currentDraggedIndex = -1
-                                                                    combinedItems.forEachIndexed { idx, item ->
-                                                                        if (item is MementoItem.TodoItem && item.id == draggedItemId) {
-                                                                            currentDraggedIndex = idx
-                                                                        }
-                                                                    }
+                                                            while (kotlin.math.abs(draggedOffsetY) >= totalItemHeight) {
+                                                                val direction = if (draggedOffsetY > 0) 1 else -1
 
-                                                                    if (currentDraggedIndex == -1) {
-                                                                        break
-                                                                    }
-
-                                                                    val targetIndex = (currentDraggedIndex + direction).coerceIn(0, combinedItems.size - 1)
-
-                                                                    if (targetIndex != currentDraggedIndex) {
-                                                                        val targetItem = combinedItems[targetIndex]
-
-                                                                        if (targetItem is MementoItem.ScheduleItem) {
-                                                                            // 일정 건너뛰기
-                                                                            val nextIndex = (targetIndex + direction).coerceIn(0, combinedItems.size - 1)
-                                                                            if (nextIndex != targetIndex && combinedItems[nextIndex] is MementoItem.TodoItem) {
-                                                                                viewModel.reorderItems(currentDraggedIndex, nextIndex)
-                                                                                draggedOffsetY -= direction * totalItemHeight * 2
-                                                                            } else {
-                                                                                draggedOffsetY = 0f
-                                                                                break
-                                                                            }
-                                                                        } else {
-                                                                            // TodoItem으로 이동
-                                                                            viewModel.reorderItems(currentDraggedIndex, targetIndex)
-                                                                            draggedOffsetY -= direction * totalItemHeight
-                                                                        }
-                                                                    } else {
-                                                                        draggedOffsetY = 0f
-                                                                        break
+                                                                // tempCombinedItems에서 현재 인덱스 찾기
+                                                                var currentDraggedIndex = -1
+                                                                tempCombinedItems?.forEachIndexed { idx, item ->
+                                                                    if (item is MementoItem.TodoItem && item.id == draggedItemId) {
+                                                                        currentDraggedIndex = idx
                                                                     }
                                                                 }
+
+                                                                if (currentDraggedIndex == -1) break
+
+                                                                val targetIndex = (currentDraggedIndex + direction).coerceIn(0, tempCombinedItems!!.size - 1)
+
+                                                                if (targetIndex != currentDraggedIndex) {
+                                                                    val targetItem = tempCombinedItems!![targetIndex]
+
+                                                                    if (targetItem is MementoItem.ScheduleItem) {
+                                                                        val nextIndex = (targetIndex + direction).coerceIn(0, tempCombinedItems!!.size - 1)
+                                                                        if (nextIndex != targetIndex && tempCombinedItems!![nextIndex] is MementoItem.TodoItem) {
+                                                                            // 임시 리스트만 수정
+                                                                            val currentList = tempCombinedItems!!.toMutableList()
+                                                                            val movedItem = currentList.removeAt(currentDraggedIndex)
+                                                                            currentList.add(nextIndex, movedItem)
+                                                                            tempCombinedItems = currentList
+                                                                            draggedOffsetY -= direction * totalItemHeight * 2
+                                                                        } else {
+                                                                            draggedOffsetY = 0f
+                                                                            break
+                                                                        }
+                                                                    } else {
+                                                                        // 임시 리스트만 수정
+                                                                        val currentList = tempCombinedItems!!.toMutableList()
+                                                                        val movedItem = currentList.removeAt(currentDraggedIndex)
+                                                                        currentList.add(targetIndex, movedItem)
+                                                                        tempCombinedItems = currentList
+                                                                        draggedOffsetY -= direction * totalItemHeight
+                                                                    }
+                                                                } else {
+                                                                    draggedOffsetY = 0f
+                                                                    break
+                                                                }
                                                             }
-                                                        },
-                                                        onDragEnd = {
-                                                            if (draggedItemIndex != -1) {
-                                                                val item = combinedItems.getOrNull(draggedItemIndex)
+                                                        }
+                                                    },
+                                                    // onDragEnd - 실제 변경 적용
+                                                    onDragEnd = {
+                                                        if (draggedItemId != null && tempCombinedItems != null) {
+                                                            // 최종 위치 찾기
+                                                            val finalIndex = tempCombinedItems!!.indexOfFirst {
+                                                                it is MementoItem.TodoItem && it.id == draggedItemId
+                                                            }
+                                                            val originalIndex = combinedItems.indexOfFirst {
+                                                                it is MementoItem.TodoItem && it.id == draggedItemId
+                                                            }
+
+                                                            // 실제로 위치가 변경되었을 때만 ViewModel 업데이트
+                                                            if (originalIndex != -1 && finalIndex != -1 && originalIndex != finalIndex) {
+                                                                viewModel.reorderItems(originalIndex, finalIndex)
+
+                                                                val item = combinedItems.getOrNull(originalIndex)
                                                                 if (item is MementoItem.TodoItem) {
                                                                     var prevTodoId: Int? = null
                                                                     var nextTodoId: Int? = null
@@ -452,24 +473,24 @@ fun TodayScreen(
                                                                     )
                                                                 }
                                                             }
-
-                                                            // 리셋 시 ID도 null로
-                                                            draggedItemId = null
-                                                            resetDraggingState()
-                                                            isDraggingEnabled = false
-                                                        },
-                                                        onDragCancel = {
-                                                            // 드래그 취소 시 상태 초기화
-                                                            draggedItemId = null
-                                                            resetDraggingState()
-                                                            isDraggingEnabled = false
-                                                        },
-                                                    )
-                                                }
-                                            } else {
-                                                Modifier
-                                            },
-                                        ),
+                                                        }
+                                                        tempCombinedItems = null
+                                                        draggedItemId = null
+                                                        resetDraggingState()
+                                                        isDraggingEnabled = false
+                                                    },
+                                                    onDragCancel = {
+                                                        // 드래그 취소 시 상태 초기화
+                                                        draggedItemId = null
+                                                        resetDraggingState()
+                                                        isDraggingEnabled = false
+                                                    },
+                                                )
+                                            }
+                                        } else {
+                                            Modifier
+                                        },
+                                    ),
                             ) {
                                 when (item) {
                                     is MementoItem.TodoItem -> {
@@ -514,8 +535,8 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(bottom = 16.dp),
+                                    Modifier
+                                        .padding(bottom = 16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
@@ -523,32 +544,32 @@ fun TodayScreen(
                                     style = MementoTheme.typography.detail_b_12,
                                     color = darkModeColors.gray07,
                                     modifier =
-                                        Modifier
-                                            .padding(bottom = 16.dp),
+                                    Modifier
+                                        .padding(bottom = 16.dp),
                                 )
                             }
                         }
                     }
                     Column(
                         modifier =
-                            Modifier
-                                .offset(x = 28.dp)
-                                .width(1.dp)
-                                .height(with(density) { listHeight.toDp() })
-                                .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
-                                .background(
-                                    brush =
-                                        Brush.linearGradient(
-                                            colors =
-                                                listOf(
-                                                    Color.Transparent,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    Color.Transparent,
-                                                ),
-                                        ),
+                        Modifier
+                            .offset(x = 28.dp)
+                            .width(1.dp)
+                            .height(with(density) { listHeight.toDp() })
+                            .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
+                            .background(
+                                brush =
+                                Brush.linearGradient(
+                                    colors =
+                                    listOf(
+                                        Color.Transparent,
+                                        mementoColors.progressBar,
+                                        mementoColors.progressBar,
+                                        mementoColors.progressBar,
+                                        Color.Transparent,
+                                    ),
                                 ),
+                            ),
                     ) {}
                 }
             }
@@ -622,9 +643,9 @@ fun TodayScreen(
             onClick = {
             },
             modifier =
-                Modifier
-                    .padding(20.dp)
-                    .align(Alignment.BottomEnd),
+            Modifier
+                .padding(20.dp)
+                .align(Alignment.BottomEnd),
         )
     }
 }

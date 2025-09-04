@@ -2,6 +2,7 @@ package org.memento.data.datasourceimpl
 
 import org.memento.data.datasource.TodoDataSource
 import org.memento.data.dto.BaseResponse
+import org.memento.data.dto.request.RequestDragAndDropDto
 import org.memento.data.dto.request.RequestPriorityDto
 import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
@@ -28,4 +29,10 @@ class TodoDataSourceImpl
 
         override suspend fun postTodoPriority(requestPriorityDto: RequestPriorityDto): BaseResponse<ResponsePriorityTodoDto> =
             todoService.postPriorityTodo(requestPriorityDto)
+
+        override suspend fun patchDragAndDrop(
+            toDoId: Int,
+            requestDragAndDropDto: RequestDragAndDropDto,
+        ): BaseResponse<Unit> =
+            todoService.patchDragAndDrop(toDoId, requestDragAndDropDto)
     }

@@ -16,11 +16,11 @@ fun NavController.navigationTodo(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.todoGraph(
-    navigateToReqres: () -> Unit,
+    navigateToSetting: () -> Unit,
     padding: PaddingValues,
 ) {
     composable(TodoRoute.TODO) {
-        TodoScreen(padding = padding)
+        TodoScreen(padding = padding, navigateToSetting = navigateToSetting)
     }
 }
 

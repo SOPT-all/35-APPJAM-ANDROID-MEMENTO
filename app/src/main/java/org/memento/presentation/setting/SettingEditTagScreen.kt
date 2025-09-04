@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.memento.R
+import org.memento.core.util.UiState
 import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingTopBar
 import org.memento.presentation.setting.component.TagColorSelector
@@ -35,6 +39,7 @@ import org.memento.presentation.util.noRippleClickable
 import org.memento.ui.theme.darkModeColors
 import org.memento.ui.theme.defaultMementoTypography
 import org.memento.ui.theme.mementoColors
+import timber.log.Timber
 
 @Composable
 fun SettingEditTagScreen(
@@ -49,6 +54,39 @@ fun SettingEditTagScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showExistDialog by remember { mutableStateOf(false) }
 
+    val deleteState by settingViewModel.deleteState.collectAsState()
+    LaunchedEffect(Unit) {
+        settingViewModel.resetTagUiState()
+    }
+    var text by rememberSaveable { mutableStateOf(tagName) }
+
+    LaunchedEffect(tagName) {
+        text = tagName
+    }
+
+    val editTagUiState by settingViewModel.editTagUiState.collectAsState()
+    var hasHandledResult by remember { mutableStateOf(false) }
+
+    LaunchedEffect(editTagUiState) {
+        if (!hasHandledResult) {
+            when (editTagUiState) {
+                is UiState.Success -> {
+                    hasHandledResult = true
+                    onDone()
+                    settingViewModel.resetTagUiState()
+                }
+
+                is UiState.Failure -> {
+                    showExistDialog = false
+                    showExistDialog = true
+                    settingViewModel.resetTagUiState()
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
     var selectedColorName by remember {
         mutableStateOf(
             if (tagColor.isBlank()) {
@@ -59,8 +97,13 @@ fun SettingEditTagScreen(
         )
     }
 
+    LaunchedEffect(deleteState) {
+        if (deleteState is UiState.Success) {
+            onBack()
+        }
+    }
+
     val selectedColorCode = selectedColorName?.let { toHexCode(it) }
-    var text by remember { mutableStateOf(tagName) }
 
     Column(
         modifier =
@@ -73,17 +116,20 @@ fun SettingEditTagScreen(
             type = SettingTopBarType.TAG,
             onBackClick = { onBack() },
             onDoneClick = {
-                onDone()
                 if (tagId == 0) {
                     settingViewModel.postTag(
                         name = text,
                         colorHex = selectedColorCode.toString(),
                     )
                 } else {
+                    Timber.tag("D").d(text)
                     settingViewModel.patchEditTag(
                         tagId = tagId,
-                        name = text,
-                        colorHex = selectedColorName.toString().uppercase(),
+                        // 현재 이 부분 서버 연결 X
+                        // 명세서 형식 불일치
+                        name = tagName,
+                        colorHex = selectedColorName.toString(),
+//                        colorHex = TagColor.toHexCode(selectedColorName!!) ?: "#FF426E"
                     )
                 }
             },
@@ -168,9 +214,6 @@ fun SettingEditTagScreen(
                 showDeleteDialog = false
                 // Todo : Delete API
                 settingViewModel.deleteTag(tagId)
-                // Todo : Exist 분기 처리 ->
-                showExistDialog = true
-                // Todo : 해당 뷰에서 나가지기
             },
         )
     }

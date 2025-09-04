@@ -62,6 +62,7 @@ import java.time.LocalDate
 fun TodoScreen(
     viewModel: TodoViewModel = hiltViewModel(),
     padding: PaddingValues,
+    navigateToSetting: () -> Unit,
 ) {
     val today = LocalDate.now()
     val nowYear = LocalDate.now().year.toString()
@@ -167,6 +168,7 @@ fun TodoScreen(
                 todoDetail = state.data
                 showDetailDialog = true
             }
+
             else -> todoDetail = null
         }
     }
@@ -192,7 +194,7 @@ fun TodoScreen(
                         onDateClick = {
                             viewModel.updateSelectedDate(today)
                         },
-                        onSettingClick = {},
+                        onSettingClick = { navigateToSetting() },
                     )
                     MementoWeeklyCalendar(
                         selectedDate = selectedDate,

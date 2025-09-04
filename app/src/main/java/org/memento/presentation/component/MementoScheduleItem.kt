@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import org.memento.R
 import org.memento.presentation.type.PriorityTagType
 import org.memento.presentation.util.noRippleClickable
@@ -38,77 +39,90 @@ fun MementoScheduleItem(
     isChecked: Boolean = false,
 ) {
     val fraction = 3f / 300f
-    Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = darkModeColors.navy)
-                .clip(RoundedCornerShape(2.dp)),
-    ) {
-        Row(
+    Box {
+        Column(
             modifier =
                 Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(color = darkModeColors.navy)
+                    .clip(RoundedCornerShape(2.dp)),
         ) {
-            Box(
+            Row(
                 modifier =
                     Modifier
-                        .fillMaxWidth(fraction = fraction)
-                        .aspectRatio(3f / 68f)
-                        .background(color = tagColor),
-            )
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .padding(top = 12.dp),
+                        .fillMaxWidth(),
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_event),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp),
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = scheduleTitleText,
-                        style = MementoTheme.typography.body_b_16,
-                        color = darkModeColors.white,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-
-                Row(
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(fraction = fraction)
+                            .aspectRatio(3f / 68f)
+                            .background(color = tagColor),
+                )
+                Column(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(top = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                            .padding(horizontal = 8.dp)
+                            .padding(top = 12.dp),
                 ) {
-                    Spacer(modifier = Modifier.padding(start = 46.dp))
-                    if (isConnected) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Spacer(modifier = Modifier.width(12.dp))
+
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_notion),
+                            painter = painterResource(id = R.drawable.ic_event),
                             contentDescription = null,
                             tint = Color.Unspecified,
-                            modifier = Modifier.padding(end = 10.dp),
+                            modifier = Modifier.size(24.dp),
                         )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = scheduleTitleText,
+                            style = MementoTheme.typography.body_b_16,
+                            color = darkModeColors.white,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
 
-                    Text(
-                        text = timeRange,
-                        style = MementoTheme.typography.detail_r_12,
-                        color = darkModeColors.gray05,
-                    )
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Spacer(modifier = Modifier.padding(start = 46.dp))
+                        if (isConnected) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_notion),
+                                contentDescription = null,
+                                tint = Color.Unspecified,
+                                modifier = Modifier.padding(end = 10.dp),
+                            )
+                        }
+
+                        Text(
+                            text = timeRange,
+                            style = MementoTheme.typography.detail_r_12,
+                            color = darkModeColors.gray05,
+                        )
+                    }
                 }
             }
+        }
+
+        if (isChecked) {
+            Box(
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .background(darkModeColors.black.copy(alpha = 0.5f))
+                        .clip(RoundedCornerShape(2.dp))
+                        .zIndex(0f),
+            )
         }
     }
 }
@@ -122,6 +136,7 @@ fun MementoScheduleItemWithLine(
     isFirstUndone: Boolean = false,
     isNow: Boolean = false,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     isChecked: Boolean = false,
 ) {
     Row(

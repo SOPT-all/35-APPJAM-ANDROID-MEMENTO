@@ -35,7 +35,7 @@ fun MainNavHost(
 
             todoGraph(
                 padding = padding,
-                navigateToReqres = { navigator.navigateToReqres() },
+                navigateToSetting = { navigator.navigateToSetting() },
             )
 
             reqresNavGraph(

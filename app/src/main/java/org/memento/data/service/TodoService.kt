@@ -1,6 +1,7 @@
 package org.memento.data.service
 
 import org.memento.data.dto.BaseResponse
+import org.memento.data.dto.request.RequestDragAndDropDto
 import org.memento.data.dto.request.RequestPriorityDto
 import org.memento.data.dto.response.ResponsePriorityTodoDto
 import org.memento.data.dto.response.ResponseTodoCompleteDto
@@ -36,4 +37,10 @@ interface TodoService {
     suspend fun postPriorityTodo(
         @Body requestPriorityDto: RequestPriorityDto,
     ): BaseResponse<ResponsePriorityTodoDto>
+
+    @PATCH("/api/v1/order-info/todo/{toDoId}/order")
+    suspend fun patchDragAndDrop(
+        @Path("toDoId") toDoId: Int,
+        @Body requestDragAndDropDto: RequestDragAndDropDto,
+    ): BaseResponse<Unit>
 }

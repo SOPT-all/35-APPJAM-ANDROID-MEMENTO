@@ -190,4 +190,8 @@ class SettingViewModel
                 eventBus.emit(EventType.UserLogout)
             }
         }
+
+        fun resetTagUiState() {
+            _editTagUiState.value = UiState.Loading
+        }
     }

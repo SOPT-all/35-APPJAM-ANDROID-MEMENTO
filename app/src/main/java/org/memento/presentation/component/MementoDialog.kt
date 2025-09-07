@@ -324,6 +324,8 @@ fun AddScheduleDialogComponent(
     endDate: String = "2030-01-01",
     scheduleType: String = "NORMAL",
     tagId: Int,
+    tagName: String = "TAG",
+    tagColor: String = "#FFFFFF",
 ) {
     var isChecked by remember { mutableStateOf(false) }
 
@@ -452,13 +454,13 @@ fun AddScheduleDialogComponent(
                     Icon(
                         painter = painterResource(R.drawable.ic_tag),
                         contentDescription = "태그 색 표시",
-                        tint = changeHexToColor("#FFFFFF"),
+                        tint = changeHexToColor(tagColor),
                     )
 
                     Spacer(modifier = Modifier.width(2.dp))
 
                     Text(
-                        text = "SOPT",
+                        text = tagName,
                         style =
                             MementoTheme.typography.detail_r_12.copy(
                                 color = darkModeColors.gray05,

@@ -293,11 +293,13 @@ class AddToDoViewModel
         fun resetData() {
             _selectedDateText.value = "Today"
             _addToDoText.value = ""
+            _addTagId.value = 0
             _addTagColor.value = "#F0F0F3"
             _deadLineText.value = "Add DeadLine"
             _addPriorityType.value = PriorityTagType.None
 
             _tempDeadLineText.value = "Today"
+            _tempTagId.value = 0
             _tempTagColor.value = "#F0F0F3"
             _tempTagText.value = "Untitled"
             _tempPriorityType.value = PriorityTagType.None

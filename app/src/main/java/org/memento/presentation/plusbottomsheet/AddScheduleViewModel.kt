@@ -337,6 +337,7 @@ class AddScheduleViewModel
         fun resetData() {
             initialTimeValue()
             _eventText.value = ""
+            _selectedTagId.value = 0
             _selectedTagText.value = "Untitled"
             _selectedTagColor.value = "#F0F0F3"
             _isAllDayChecked.value = false

@@ -341,6 +341,7 @@ class AddScheduleViewModel
             _selectedTagText.value = "Untitled"
             _selectedTagColor.value = "#F0F0F3"
             _isAllDayChecked.value = false
+            _isSwitchOn.value = false
         }
 
         init {

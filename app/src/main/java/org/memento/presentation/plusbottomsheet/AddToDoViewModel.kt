@@ -297,6 +297,7 @@ class AddToDoViewModel
             _addTagColor.value = "#F0F0F3"
             _deadLineText.value = "Add DeadLine"
             _addPriorityType.value = PriorityTagType.None
+            _isSwitchOn.value = false
 
             _tempDeadLineText.value = "Today"
             _tempTagId.value = 0

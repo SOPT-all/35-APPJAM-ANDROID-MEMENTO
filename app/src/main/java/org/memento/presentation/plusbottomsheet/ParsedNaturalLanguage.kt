@@ -8,6 +8,7 @@ import java.time.temporal.TemporalAdjusters
 private val TIME_RANGE_REGEX = Regex("""(오전|오후)?\s?(\d{1,2})시부터\s?(오전|오후)?\s?(\d{1,2})시까지""")
 private val DATE_RANGE_REGEX = Regex("""(.+?)부터\s*(.+?)까지""")
 private val TIL_REGEX = Regex("""(.+?)까지""")
+private val ALL_DAY_REGEX = Regex("""(?i)(하루\s*종일|종일|all\s*-?\s*day)""")
 private val KOR_WEEKDAY_REGEX = Regex("""(?:(이번주|다음주)?\s*(일|월|화|수|목|금|토)요일)""")
 private val KOR_DATE_REGEX = Regex("""(어제|그제|오늘|내일|모레|\d+일\s*(?:전|후)|\d{1,2}월\s*\d{1,2}일)""")
 private val ENG_DATE_REGEX =
@@ -36,6 +37,7 @@ fun parseNaturalLanguage(
 
     var startDate: LocalDateTime? = null
     var endDate: LocalDateTime? = null
+    var isAllDay = false
 
     // 1) 시간 범위 파싱 (isParseTime == true 일 때만)
     if (isParseTime) {
@@ -168,6 +170,12 @@ fun parseNaturalLanguage(
         }
     }
 
+    // 3-0) 먼저 all-day 의미 표현 감지 및 제거
+    ALL_DAY_REGEX.find(text)?.let { m ->
+        isAllDay = true
+        text = text.replace(m.value, "")
+    }
+
     // 3-1) 한국어 요일: “(이번주|다음주)? 수요일”
     if (startDate == null) {
         KOR_WEEKDAY_REGEX.find(text)?.let { m ->
@@ -213,6 +221,7 @@ fun parseNaturalLanguage(
         title = remainTitle,
         startDate = startDate,
         endDate = endDate,
+        isAllDay = isAllDay,
     )
 }
 

@@ -273,6 +273,11 @@ class AddScheduleViewModel
                         _selectedEndTimeText.value = formatTime(end.hour, end.minute)
                     }
 
+                    // all-day 키워드가 포함된 경우 자동 체크
+                    if (parsed.isAllDay) {
+                        _isAllDayChecked.value = true
+                    }
+
                     validateTimeOrder()
                 }
         }

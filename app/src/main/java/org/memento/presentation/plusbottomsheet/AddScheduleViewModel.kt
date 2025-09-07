@@ -258,9 +258,20 @@ class AddScheduleViewModel
             parseJob?.cancel()
             parseJob =
                 viewModelScope.launch {
+                    val source = input
                     delay(500L)
 
-                    val parsed = parseNaturalLanguage(input, isParseTime = true)
+                    // 입력이 변경되었으면 중단
+                    if (_eventText.value != source) return@launch
+
+                    // 빈 입력이면 초기화
+                    if (_isSwitchOn.value && _eventText.value.isBlank()) {
+                        initialTimeValue()
+                        _isAllDayChecked.value = false
+                        return@launch
+                    }
+
+                    val parsed = parseNaturalLanguage(_eventText.value, isParseTime = true)
                     _eventText.value = parsed.title
 
                     parsed.startDate?.let { start ->

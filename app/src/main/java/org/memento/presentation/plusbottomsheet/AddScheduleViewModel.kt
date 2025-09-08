@@ -258,9 +258,20 @@ class AddScheduleViewModel
             parseJob?.cancel()
             parseJob =
                 viewModelScope.launch {
+                    val source = input
                     delay(500L)
 
-                    val parsed = parseNaturalLanguage(input, isParseTime = true)
+                    // 입력이 변경되었으면 중단
+                    if (_eventText.value != source) return@launch
+
+                    // 빈 입력이면 초기화
+                    if (_isSwitchOn.value && _eventText.value.isBlank()) {
+                        initialTimeValue()
+                        _isAllDayChecked.value = false
+                        return@launch
+                    }
+
+                    val parsed = parseNaturalLanguage(_eventText.value, isParseTime = true)
                     _eventText.value = parsed.title
 
                     parsed.startDate?.let { start ->
@@ -271,6 +282,11 @@ class AddScheduleViewModel
                     parsed.endDate?.let { end ->
                         _selectedEndDateText.value = formatDate(end.toLocalDate().toMillis())
                         _selectedEndTimeText.value = formatTime(end.hour, end.minute)
+                    }
+
+                    // all-day 키워드가 포함된 경우 자동 체크
+                    if (parsed.isAllDay) {
+                        _isAllDayChecked.value = true
                     }
 
                     validateTimeOrder()
@@ -337,9 +353,11 @@ class AddScheduleViewModel
         fun resetData() {
             initialTimeValue()
             _eventText.value = ""
+            _selectedTagId.value = 0
             _selectedTagText.value = "Untitled"
             _selectedTagColor.value = "#F0F0F3"
             _isAllDayChecked.value = false
+            _isSwitchOn.value = false
         }
 
         init {

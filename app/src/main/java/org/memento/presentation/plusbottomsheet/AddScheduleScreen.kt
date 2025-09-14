@@ -61,8 +61,9 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = hiltViewModel(),
-    onCloseBottomSheet: () -> Unit,
+    onCloseBottomSheet: (tagName: String, tagColor: String) -> Unit,
     isEdit: Boolean = false,
+    preTagId: Int? = null,
     isEditCancel: () -> Unit,
     planId: Int = 0,
 ) {
@@ -99,10 +100,13 @@ fun AddScheduleScreen(
         KeyboardUtil.hideKeyboard(context, focusManager)
     }
 
-    LaunchedEffect(isEdit) {
+    LaunchedEffect(isEdit, preTagId) {
         if (isEdit) {
             planId.let {
                 viewModel.getScheduleDetail(it)
+            }
+            preTagId?.let { tagId ->
+                viewModel.setPreTagId(tagId)
             }
         } else {
             viewModel.initialTimeValue()
@@ -139,7 +143,7 @@ fun AddScheduleScreen(
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
-                onCloseBottomSheet()
+                onCloseBottomSheet(selectedTagText, selectedTagColor)
             }
 
             is UiState.Failure -> {
@@ -516,14 +520,4 @@ fun AddPlanSelectComponent(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun AddScheduleScreenPreview() {
-    AddScheduleScreen(
-        onCloseBottomSheet = { },
-        isEditCancel = { },
-        isEdit = false,
-    )
 }

@@ -303,6 +303,15 @@ class AddScheduleViewModel
             _selectedTagColor.value = color
         }
 
+        fun setPreTagId(tagId: Int) {
+            val tag = _tagList.value.find { it.id == tagId }
+            tag?.let {
+                _selectedTagId.value = it.id
+                _selectedTagText.value = it.name
+                _selectedTagColor.value = it.colorCode
+            }
+        }
+
         fun updateStartDate(newDate: String) {
             _selectedStartDateText.value = newDate
         }

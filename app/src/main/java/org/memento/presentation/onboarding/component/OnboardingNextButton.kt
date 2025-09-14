@@ -26,6 +26,7 @@ import org.memento.ui.theme.defaultMementoTypography
 fun OnboardingBottomButton(
     @StringRes content: Int,
     isSelected: Boolean = false,
+    isOnBoardingFinish: Boolean = false,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -38,7 +39,11 @@ fun OnboardingBottomButton(
                 .background(
                     color =
                         if (isSelected) {
-                            darkModeColors.green
+                            if (isOnBoardingFinish){
+                                darkModeColors.black
+                            } else {
+                                darkModeColors.green
+                            }
                         } else {
                             darkModeColors.gray10
                         },
@@ -54,7 +59,11 @@ fun OnboardingBottomButton(
             style = defaultMementoTypography.body_b_16,
             color =
                 if (isSelected) {
-                    darkModeColors.black
+                    if (isOnBoardingFinish){
+                        darkModeColors.white
+                    } else {
+                        darkModeColors.black
+                    }
                 } else {
                     darkModeColors.gray08
                 },

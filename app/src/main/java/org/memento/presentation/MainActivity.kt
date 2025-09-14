@@ -12,10 +12,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import org.memento.core.event.EventBus
 import org.memento.data.datastore.TokenDataStore
@@ -115,7 +118,20 @@ class MainActivity : ComponentActivity() {
 
             fun startSplashTimer() {
                 viewModelScope.launch {
-                    delay(SPLASH_SCREEN_DELAY)
+                    coroutineScope {
+                        val job =
+                            launch {
+                                _entryState.first { it !is AppEntryState.Loading }
+                            }
+
+                        val delayJob =
+                            launch {
+                                delay(SPLASH_SCREEN_DELAY)
+                            }
+
+                        joinAll(job, delayJob)
+                    }
+
                     _showSplash.value = false
                 }
             }

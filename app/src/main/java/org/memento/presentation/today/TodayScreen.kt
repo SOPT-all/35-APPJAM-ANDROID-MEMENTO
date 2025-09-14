@@ -2,7 +2,10 @@ package org.memento.presentation.today
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -126,6 +130,19 @@ fun TodayScreen(
     var draggedItemId by remember { mutableStateOf<Int?>(null) }
     var draggedOffsetY by remember { mutableStateOf(0f) }
 
+    // 날짜 데이터 로딩 상태
+    val isDataReady by viewModel.isDataReady.collectAsState()
+
+    val contentAlpha by animateFloatAsState(
+        targetValue = if (isDataReady) 1f else 0f,
+        animationSpec = if (isDataReady) {
+            // 나타날 때만 애니메이션
+            tween(durationMillis = 300, easing = FastOutSlowInEasing)
+        } else {
+            // 사라질 때는 즉시
+            snap()
+        }
+    )
     BackHandler {
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime <= backPressThreshold) {
@@ -150,11 +167,7 @@ fun TodayScreen(
     }
 
     LaunchedEffect(selectedDate.value) {
-        val selectedDate = selectedDate.value.toString()
-        viewModel.getTodoDateList(selectedDate)
-        viewModel.getScheduleList(selectedDate)
-        viewModel.getAllDay()
-        viewModel.getUpTime()
+        viewModel.loadDateData(selectedDate.value.toString())
     }
 
     // 다이얼로그 출력, 출력 전 데이터 초기화
@@ -224,15 +237,15 @@ fun TodayScreen(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
+        Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = darkModeColors.black),
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
         ) {
             MementoTopBar(
                 date = todoFormatDate(today),
@@ -250,9 +263,9 @@ fun TodayScreen(
             )
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = (5 * 30).dp),
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = (5 * 30).dp),
             ) {
                 val state = rememberLazyListState()
                 LazyColumn(
@@ -267,89 +280,95 @@ fun TodayScreen(
                 }
             }
 
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
-                onRefresh = {
-                    coroutineScope.launch {
-                        delay(2000)
-                        viewModel.refreshTodayData()
-                        viewModel.updateCurrentTime()
-                    }
-                },
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(contentAlpha) // 애니메이션 적용
+
             ) {
-                if (combinedItems.isEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        item {
-                            Spacer(modifier = Modifier.height(150.dp))
-                            Text(
-                                text = stringResource(R.string.today_empty_view_text),
-                                style = MementoTheme.typography.title_b_22,
-                                color = darkModeColors.gray08,
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                            )
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = {
+                        coroutineScope.launch {
+                            delay(2000)
+                            viewModel.refreshTodayData()
+                            viewModel.updateCurrentTime()
                         }
-                    }
-                } else {
-                    LazyColumn(
-                        modifier =
+                    },
+                ) {
+                    if (combinedItems.isEmpty() && isDataReady) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            item {
+                                Spacer(modifier = Modifier.height(150.dp))
+                                Text(
+                                    text = stringResource(R.string.today_empty_view_text),
+                                    style = MementoTheme.typography.title_b_22,
+                                    color = darkModeColors.gray08,
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                )
+                            }
+                        }
+                    }  else if (combinedItems.isNotEmpty() && isDataReady)  {
+                        LazyColumn(
+                            modifier =
                             Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                                 .onGloballyPositioned { it ->
                                     listHeight = it.size.height
                                 },
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        userScrollEnabled = !isDraggingEnabled,
-                    ) {
-                        item {
-                            Row {
-                                Text(
-                                    text = upTimeState?.wakeUpTime ?: "8:00",
-                                    style = MementoTheme.typography.detail_b_12,
-                                    color = darkModeColors.gray07,
-                                    modifier =
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            userScrollEnabled = !isDraggingEnabled,
+                        ) {
+                            item {
+                                Row {
+                                    Text(
+                                        text = upTimeState?.wakeUpTime ?: "8:00",
+                                        style = MementoTheme.typography.detail_b_12,
+                                        color = darkModeColors.gray07,
+                                        modifier =
                                         Modifier
                                             .padding(top = 16.dp)
                                             .onGloballyPositioned { it ->
                                                 itemHeight = it.size.height
                                             },
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(
-                                    text = stringResource(R.string.wake_up),
-                                    style = MementoTheme.typography.detail_b_12,
-                                    color = darkModeColors.gray07,
-                                    modifier =
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = stringResource(R.string.wake_up),
+                                        style = MementoTheme.typography.detail_b_12,
+                                        color = darkModeColors.gray07,
+                                        modifier =
                                         Modifier
                                             .padding(top = 16.dp)
                                             .onGloballyPositioned { it ->
                                                 itemHeight = it.size.height
                                             },
-                                )
-                            }
-                        }
-
-                        itemsIndexed(displayItems, key = { _, item ->
-                            when (item) {
-                                is MementoItem.TodoItem -> "todo_${item.id}"
-                                is MementoItem.ScheduleItem -> "schedule_${item.id}"
-                            }
-                        }) { index, item ->
-
-                            val isDragging =
-                                when (item) {
-                                    is MementoItem.TodoItem -> draggedItemId == item.id
-                                    is MementoItem.ScheduleItem -> false
+                                    )
                                 }
-                            val scale by animateFloatAsState(if (isDragging) 1.1f else 1f)
+                            }
 
-                            val canDrag = item is MementoItem.TodoItem
+                            itemsIndexed(displayItems, key = { _, item ->
+                                when (item) {
+                                    is MementoItem.TodoItem -> "todo_${item.id}"
+                                    is MementoItem.ScheduleItem -> "schedule_${item.id}"
+                                }
+                            }) { index, item ->
 
-                            Box(
-                                modifier =
+                                val isDragging =
+                                    when (item) {
+                                        is MementoItem.TodoItem -> draggedItemId == item.id
+                                        is MementoItem.ScheduleItem -> false
+                                    }
+                                val scale by animateFloatAsState(if (isDragging) 1.1f else 1f)
+
+                                val canDrag = item is MementoItem.TodoItem
+
+                                Box(
+                                    modifier =
                                     Modifier
                                         .fillMaxWidth()
                                         .onGloballyPositioned { coordinates ->
@@ -491,67 +510,70 @@ fun TodayScreen(
                                                 Modifier
                                             },
                                         ),
-                            ) {
-                                when (item) {
-                                    is MementoItem.TodoItem -> {
-                                        MementoTodoItemWithLine(
-                                            tagColor = changeHexToColor(item.tagColor),
-                                            isDone = item.isCompleted,
-                                            isNow = item.isNow,
-                                            onCheckedChange = { newChecked ->
-                                                viewModel.updateTodoCompletion(item.id, newChecked)
-                                            },
-                                            modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
-                                            todoTitleText = item.description,
-                                            priorityTagType = item.priorityType.toPriorityTagType(),
-                                            isConnected = item.toDoType.toBoolean(),
-                                            onClick = {
-                                                showDetailDialog(item.id, DialogType.TO_DO)
-                                            },
-                                        )
-                                    }
+                                ) {
+                                    when (item) {
+                                        is MementoItem.TodoItem -> {
+                                            MementoTodoItemWithLine(
+                                                tagColor = changeHexToColor(item.tagColor),
+                                                isDone = item.isCompleted,
+                                                isNow = item.isNow,
+                                                onCheckedChange = { newChecked ->
+                                                    viewModel.updateTodoCompletion(item.id, newChecked)
+                                                },
+                                                modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
+                                                todoTitleText = item.description,
+                                                priorityTagType = item.priorityType.toPriorityTagType(),
+                                                isConnected = item.toDoType.toBoolean(),
+                                                onClick = {
+                                                    showDetailDialog(item.id, DialogType.TO_DO)
+                                                },
+                                            )
+                                        }
 
-                                    is MementoItem.ScheduleItem -> {
-                                        MementoScheduleItemWithLine(
-                                            tagColor = changeHexToColor(item.tagColorCode),
-                                            scheduleTitleText = item.description,
-                                            isNow = item.isNow,
-                                            modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
-                                            timeRange = item.timeDuration,
-                                            isChecked = item.isDimmed,
-                                            onClick = {
-                                                showDetailDialog(item.id, DialogType.SCHEDULE)
-                                            },
-                                        )
+                                        is MementoItem.ScheduleItem -> {
+                                            MementoScheduleItemWithLine(
+                                                tagColor = changeHexToColor(item.tagColorCode),
+                                                scheduleTitleText = item.description,
+                                                isNow = item.isNow,
+                                                modifier = if (item.isDimmed) Modifier.alpha(0.5f) else Modifier,
+                                                timeRange = item.timeDuration,
+                                                isChecked = item.isDimmed,
+                                                onClick = {
+                                                    showDetailDialog(item.id, DialogType.SCHEDULE)
+                                                },
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        item {
-                            Row {
-                                Text(
-                                    text = upTimeState?.windDownTime ?: "22:00",
-                                    style = MementoTheme.typography.detail_b_12,
-                                    color = darkModeColors.gray07,
-                                    modifier =
+                            item {
+                                Row {
+                                    Text(
+                                        text = upTimeState?.windDownTime ?: "22:00",
+                                        style = MementoTheme.typography.detail_b_12,
+                                        color = darkModeColors.gray07,
+                                        modifier =
                                         Modifier
                                             .padding(bottom = 16.dp),
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(
-                                    text = stringResource(R.string.wind_down),
-                                    style = MementoTheme.typography.detail_b_12,
-                                    color = darkModeColors.gray07,
-                                    modifier =
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = stringResource(R.string.wind_down),
+                                        style = MementoTheme.typography.detail_b_12,
+                                        color = darkModeColors.gray07,
+                                        modifier =
                                         Modifier
                                             .padding(bottom = 16.dp),
-                                )
+                                    )
+                                }
                             }
                         }
                     }
-                    Column(
-                        modifier =
+                    if (combinedItems.isNotEmpty()) {
+
+                            Column(
+                            modifier =
                             Modifier
                                 .offset(x = 28.dp)
                                 .width(1.dp)
@@ -559,23 +581,25 @@ fun TodayScreen(
                                 .padding(vertical = with(density) { itemHeight.toDp() + 16.dp })
                                 .background(
                                     brush =
-                                        Brush.linearGradient(
-                                            colors =
-                                                listOf(
-                                                    Color.Transparent,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    mementoColors.progressBar,
-                                                    Color.Transparent,
-                                                ),
+                                    Brush.linearGradient(
+                                        colors =
+                                        listOf(
+                                            Color.Transparent,
+                                            mementoColors.progressBar,
+                                            mementoColors.progressBar,
+                                            mementoColors.progressBar,
+                                            Color.Transparent,
                                         ),
+                                    ),
                                 ),
-                    ) {}
-                }
+                        ) {}}
+                    }
+
             }
         }
 
         if (showDetailDialog) {
+
             MementoDialog(
                 onDismiss = {
                     showDetailDialog = false
@@ -599,7 +623,8 @@ fun TodayScreen(
                 dialogType = dialogType,
                 todoDetailData = todoDetail,
                 scheduleDetailData = scheduleDetail,
-            )
+
+                )
         }
 
         if (showDeleteDialog) {
@@ -643,9 +668,9 @@ fun TodayScreen(
             onClick = {
             },
             modifier =
-                Modifier
-                    .padding(20.dp)
-                    .align(Alignment.BottomEnd),
+            Modifier
+                .padding(20.dp)
+                .align(Alignment.BottomEnd),
         )
     }
 }

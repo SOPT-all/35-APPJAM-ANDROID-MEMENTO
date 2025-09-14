@@ -12,12 +12,12 @@ import org.memento.R
 @Composable
 fun OnboardingScreen5() {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.img_onboarding_background),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }

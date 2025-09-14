@@ -119,8 +119,9 @@ fun OnboardingScreen2(
                 onSelected = {
                     if (selectedIndex != null || isCheckedTextField) navigateToOnboardingScreen3()
                 },
-                modifier = Modifier
-                    .padding(bottom = 10.dp),
+                modifier =
+                    Modifier
+                        .padding(bottom = 10.dp),
             )
         }
     }

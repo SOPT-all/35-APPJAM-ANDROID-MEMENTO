@@ -316,10 +316,11 @@ class TodayViewModel
                         onSuccess = { scheduleDetail ->
                             // 현재 scheduleItems에서 해당 스케줄의 태그 정보 찾기
                             val scheduleItem = _scheduleItems.value.find { it.id == scheduleId }
-                            val isParsedDetail = scheduleDetail.copy(
-                                tagName = scheduleItem?.tagName ?: "",
-                                tagColor = scheduleItem?.tagColorCode ?: "#FFFFFF"
-                            )
+                            val isParsedDetail =
+                                scheduleDetail.copy(
+                                    tagName = scheduleItem?.tagName ?: "",
+                                    tagColor = scheduleItem?.tagColorCode ?: "#FFFFFF",
+                                )
                             UiState.Success(isParsedDetail)
                         },
                         onFailure = { throwable ->

@@ -39,10 +39,9 @@ fun OnboardingBottomButton(
                 .background(
                     color =
                         if (isSelected) {
-                            if (isOnBoardingFinish)
-                                {
-                                    darkModeColors.black
-                                } else {
+                            if (isOnBoardingFinish) {
+                                darkModeColors.black
+                            } else {
                                 darkModeColors.green
                             }
                         } else {
@@ -60,10 +59,9 @@ fun OnboardingBottomButton(
             style = defaultMementoTypography.body_b_16,
             color =
                 if (isSelected) {
-                    if (isOnBoardingFinish)
-                        {
-                            darkModeColors.white
-                        } else {
+                    if (isOnBoardingFinish) {
+                        darkModeColors.white
+                    } else {
                         darkModeColors.black
                     }
                 } else {

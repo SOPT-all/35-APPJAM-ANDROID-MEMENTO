@@ -26,7 +26,8 @@ fun MementoEditScheduleBottomSheet(
     isOpenBottomSheet: Boolean,
     sheetState: SheetState,
     onCancel: () -> Unit = {},
-    onConfirm: () -> Unit = {},
+    onConfirm: (tagName: String, tagColor: String) -> Unit = { _, _ -> },
+    preTagId: Int? = null,
     planId: Int,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -51,8 +52,9 @@ fun MementoEditScheduleBottomSheet(
                         .imePadding(),
             ) {
                 AddScheduleScreen(
-                    onCloseBottomSheet = { onConfirm() },
+                    onCloseBottomSheet = { tagName, tagColor -> onConfirm(tagName, tagColor) },
                     isEdit = true,
+                    preTagId = preTagId,
                     isEditCancel = { onCancel() },
                     planId = planId,
                 )

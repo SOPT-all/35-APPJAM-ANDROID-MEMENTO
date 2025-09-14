@@ -100,14 +100,6 @@ fun OnboardingTopAppBar(
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.img_calendar),
-                    contentDescription = null,
-                    modifier =
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .offset(y = 34.dp),
-                )
                 Text(
                     text = stringResource(id = type.title),
                     style = defaultMementoTypography.title_b_24,

@@ -118,12 +118,12 @@ class MainActivity : ComponentActivity() {
 
             fun startSplashTimer() {
                 viewModelScope.launch {
+                    if (!_showSplash.value) return@launch
                     coroutineScope {
                         val job =
                             launch {
                                 _entryState.first { it !is AppEntryState.Loading }
                             }
-
                         val delayJob =
                             launch {
                                 delay(SPLASH_SCREEN_DELAY)
@@ -131,7 +131,6 @@ class MainActivity : ComponentActivity() {
 
                         joinAll(job, delayJob)
                     }
-
                     _showSplash.value = false
                 }
             }

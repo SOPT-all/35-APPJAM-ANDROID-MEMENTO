@@ -100,9 +100,6 @@ class TodayViewModel
                     launch { getUpTime() }
                 }
 
-                // combinedItems가 완전히 업데이트될 때까지 대기
-                delay(200)
-
                 _isLoadingDateData.value = false
                 _isDataReady.value = true
             }

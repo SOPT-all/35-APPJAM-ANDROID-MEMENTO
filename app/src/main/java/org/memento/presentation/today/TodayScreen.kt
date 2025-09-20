@@ -364,9 +364,9 @@ fun TodayScreen(
                                         is MementoItem.TodoItem -> draggedItemId == item.id
                                         is MementoItem.ScheduleItem -> false
                                     }
-                                val scale by animateFloatAsState(if (isDragging) 1.1f else 1f)
+                                val scale by  animateFloatAsState(if (isDragging) 1.1f else 1f)
 
-                                val canDrag = item is MementoItem.TodoItem
+                                val canDrag = item is MementoItem.TodoItem && !item.isCompleted
 
                                 Box(
                                     modifier =

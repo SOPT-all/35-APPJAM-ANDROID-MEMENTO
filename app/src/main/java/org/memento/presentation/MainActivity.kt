@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
                         -> {
                             viewModel.handleLogoutEvent(event)
                         }
+
                         else -> Unit
                     }
                 }
@@ -79,6 +80,7 @@ class MainActivity : ComponentActivity() {
                         is AppEntryState.LoggedOut, is AppEntryState.Onboarding -> {
                             OnboardingNavHost()
                         }
+
                         else -> Unit
                     }
                 }

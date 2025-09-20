@@ -31,7 +31,7 @@ fun SplashScreen() {
                 durationMillis = 3000,
             ),
     )
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         startAnimation = true
     }
     Box(

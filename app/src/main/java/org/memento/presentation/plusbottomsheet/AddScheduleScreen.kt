@@ -60,7 +60,7 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = hiltViewModel(),
-    onCloseBottomSheet: (tagName: String, tagColor: String) -> Unit,
+    onCloseBottomSheet: (tagId: Int, tagName: String, tagColor: String) -> Unit,
     isEdit: Boolean = false,
     preTagId: Int? = null,
     isEditCancel: () -> Unit,
@@ -142,7 +142,7 @@ fun AddScheduleScreen(
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
-                onCloseBottomSheet(selectedTagText, selectedTagColor)
+                onCloseBottomSheet(selectedTagId, selectedTagText, selectedTagColor)
             }
 
             is UiState.Failure -> {

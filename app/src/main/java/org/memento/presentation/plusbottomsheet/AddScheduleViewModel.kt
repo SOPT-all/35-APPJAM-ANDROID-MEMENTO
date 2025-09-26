@@ -79,6 +79,8 @@ class AddScheduleViewModel
 
         private var parseJob: Job? = null
 
+        private var pendingPreTagId: Int? = null
+
         init {
             getTagList()
         }
@@ -93,8 +95,18 @@ class AddScheduleViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
-                        if (_selectedTagId.value == 0) {
-                            _selectedTagId.value = tags[0].id
+                        // 사전 지정된 태그 우선 적용
+                        pendingPreTagId?.let { wanted ->
+                            tags.find { it.id == wanted }?.let {
+                                updateTag(it.id, it.name, it.colorCode)
+                                pendingPreTagId = null
+                                return@onSuccess
+                            }
+                        }
+                        // 선택값이 없는 경우 첫 항목 설정
+                        if (_selectedTagId.value == 0 && tags.isNotEmpty()) {
+                            val first = tags.first()
+                            updateTag(first.id, first.name, first.colorCode)
                         }
                     }
                     .onFailure { throwable ->
@@ -304,11 +316,10 @@ class AddScheduleViewModel
         }
 
         fun setPreTagId(tagId: Int) {
-            val tag = _tagList.value.find { it.id == tagId }
-            tag?.let {
-                _selectedTagId.value = it.id
-                _selectedTagText.value = it.name
-                _selectedTagColor.value = it.colorCode
+            pendingPreTagId = tagId
+            _tagList.value.find { it.id == tagId }?.let {
+                updateTag(it.id, it.name, it.colorCode)
+                pendingPreTagId = null
             }
         }
 

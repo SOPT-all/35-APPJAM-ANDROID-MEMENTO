@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -61,8 +60,9 @@ import org.memento.ui.theme.mementoColors
 @Composable
 fun AddScheduleScreen(
     viewModel: AddScheduleViewModel = hiltViewModel(),
-    onCloseBottomSheet: () -> Unit,
+    onCloseBottomSheet: (tagId: Int, tagName: String, tagColor: String) -> Unit,
     isEdit: Boolean = false,
+    preTagId: Int? = null,
     isEditCancel: () -> Unit,
     planId: Int = 0,
 ) {
@@ -99,10 +99,13 @@ fun AddScheduleScreen(
         KeyboardUtil.hideKeyboard(context, focusManager)
     }
 
-    LaunchedEffect(isEdit) {
+    LaunchedEffect(isEdit, preTagId) {
         if (isEdit) {
             planId.let {
                 viewModel.getScheduleDetail(it)
+            }
+            preTagId?.let { tagId ->
+                viewModel.setPreTagId(tagId)
             }
         } else {
             viewModel.initialTimeValue()
@@ -139,7 +142,7 @@ fun AddScheduleScreen(
                     icon = R.drawable.ic_toast,
                     lifecycleOwner = lifecycleOwner,
                 )
-                onCloseBottomSheet()
+                onCloseBottomSheet(selectedTagId, selectedTagText, selectedTagColor)
             }
 
             is UiState.Failure -> {
@@ -516,14 +519,4 @@ fun AddPlanSelectComponent(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun AddScheduleScreenPreview() {
-    AddScheduleScreen(
-        onCloseBottomSheet = { },
-        isEditCancel = { },
-        isEdit = false,
-    )
 }

@@ -83,6 +83,8 @@ fun MementoDialog(
                                 endDate = it.endDate,
                                 scheduleType = it.scheduleType,
                                 tagId = it.tagId,
+                                tagName = it.tagName,
+                                tagColor = it.tagColor,
                             )
                         }
                     }

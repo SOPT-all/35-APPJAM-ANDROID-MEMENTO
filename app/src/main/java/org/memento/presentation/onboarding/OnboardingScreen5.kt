@@ -19,7 +19,7 @@ fun OnboardingScreen5() {
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.img_onboarding_background),
             contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
     }
 }

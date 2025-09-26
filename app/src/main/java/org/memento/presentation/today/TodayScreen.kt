@@ -636,11 +636,12 @@ fun TodayScreen(
             onConfirm = { tagId, tagName, tagColor ->
                 // 편집 완료 시 변경된 태그 정보로 ScheduleDetail 업데이트
                 scheduleDetail?.let { currentDetail ->
-                    scheduleDetail = currentDetail.copy(
-                        tagId = tagId,
-                        tagName = tagName,
-                        tagColor = tagColor,
-                    )
+                    scheduleDetail =
+                        currentDetail.copy(
+                            tagId = tagId,
+                            tagName = tagName,
+                            tagColor = tagColor,
+                        )
                 }
                 closeScheduleBottomSheet()
             },

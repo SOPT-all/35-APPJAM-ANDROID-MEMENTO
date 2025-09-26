@@ -26,7 +26,7 @@ fun MementoEditScheduleBottomSheet(
     isOpenBottomSheet: Boolean,
     sheetState: SheetState,
     onCancel: () -> Unit = {},
-    onConfirm: (tagName: String, tagColor: String) -> Unit = { _, _ -> },
+    onConfirm: (tagId: Int, tagName: String, tagColor: String) -> Unit = { _, _, _ -> },
     preTagId: Int? = null,
     planId: Int,
 ) {
@@ -52,7 +52,7 @@ fun MementoEditScheduleBottomSheet(
                         .imePadding(),
             ) {
                 AddScheduleScreen(
-                    onCloseBottomSheet = { tagName, tagColor -> onConfirm(tagName, tagColor) },
+                    onCloseBottomSheet = { tagId, tagName, tagColor -> onConfirm(tagId, tagName, tagColor) },
                     isEdit = true,
                     preTagId = preTagId,
                     isEditCancel = { onCancel() },

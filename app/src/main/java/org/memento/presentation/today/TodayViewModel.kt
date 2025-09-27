@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import org.memento.core.event.EventBus
 import org.memento.core.util.UiState
@@ -73,6 +74,38 @@ class TodayViewModel
 
         private val _currentTime = MutableStateFlow(LocalDateTime.now())
         val currentTime: StateFlow<LocalDateTime> = _currentTime
+
+        private val _isLoadingDateData = MutableStateFlow(false)
+        val isLoadingDateData: StateFlow<Boolean> = _isLoadingDateData
+
+        private val _isDataReady = MutableStateFlow(false)
+        val isDataReady: StateFlow<Boolean> = _isDataReady
+
+        fun loadDateData(date: String) {
+            viewModelScope.launch {
+                // 즉시 화면 숨기고 데이터 비우기
+                _isDataReady.value = false
+                _isLoadingDateData.value = true
+
+                // 기존 데이터 클리어
+                _scheduleItems.value = emptyList()
+                _todoItems.value = emptyList()
+
+                // 새 데이터 로드
+                val jobs =
+                    listOf(
+                        launch { getTodoDateList(date) },
+                        launch { getScheduleList(date) },
+                        launch { getAllDay() },
+                        launch { getUpTime() },
+                    )
+
+                jobs.joinAll()
+
+                _isLoadingDateData.value = false
+                _isDataReady.value = true
+            }
+        }
 
         // TodayScreen refresh를 위한 SharedFlow
         private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 1)

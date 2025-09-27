@@ -18,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import org.memento.BuildConfig
 import org.memento.R
+import org.memento.presentation.onboarding.MementoWebView
 import org.memento.presentation.setting.component.SettingAlertDialog
 import org.memento.presentation.setting.component.SettingMailBar
 import org.memento.presentation.setting.component.SettingOptions
@@ -47,6 +49,9 @@ fun SettingScreen(
 
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDeleteAccountDialog by remember { mutableStateOf(false) }
+
+    var termsWebViewVisible by remember { mutableStateOf(false) }
+    var feedbackWebViewVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier =
@@ -78,8 +83,9 @@ fun SettingScreen(
 
             Divider(modifier = Modifier.drawHorizontalLine())
 
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.feedback))
-            SettingOptions(onClick = {}, optionName = stringResource(R.string.terms))
+            SettingOptions(onClick = { feedbackWebViewVisible = true }, optionName = stringResource(R.string.feedback))
+
+            SettingOptions(onClick = { termsWebViewVisible = true }, optionName = stringResource(R.string.terms))
 
             Divider(modifier = Modifier.drawHorizontalLine())
 
@@ -116,6 +122,20 @@ fun SettingScreen(
                 showDeleteAccountDialog = false
                 viewmodel.deleteMember()
             },
+        )
+    }
+
+    if (termsWebViewVisible) {
+        MementoWebView(
+            url = BuildConfig.WEBVIEW_URL,
+            onClose = { termsWebViewVisible = false },
+        )
+    }
+
+    if (feedbackWebViewVisible) {
+        MementoWebView(
+            url = BuildConfig.FEEDBACK_URL,
+            onClose = { feedbackWebViewVisible = false },
         )
     }
 }

@@ -73,7 +73,11 @@ class TokenDataStoreImpl
         }
 
         override fun clearAllInfo() {
-            sharedPreferences.edit { clear() }
+            sharedPreferences.edit {
+                clear()
+                putBoolean(LOGIN_SUCCESS, false)
+                putBoolean(ONBOARDING_COMPLETED, false)
+            }
         }
 
         private fun getBooleanFlow(

@@ -186,7 +186,7 @@ fun LoginScreen(
 
     if (webViewVisible) {
         MementoWebView(
-            url = BuildConfig.WebView_URL,
+            url = BuildConfig.WEBVIEW_URL,
             onClose = { webViewVisible = false },
         )
     }

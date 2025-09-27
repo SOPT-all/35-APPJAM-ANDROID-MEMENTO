@@ -79,6 +79,8 @@ class AddScheduleViewModel
 
         private var parseJob: Job? = null
 
+        private var pendingPreTagId: Int? = null
+
         init {
             getTagList()
         }
@@ -93,8 +95,18 @@ class AddScheduleViewModel
                 addPlanRepository.getTagList()
                     .onSuccess { tags ->
                         _tagList.value = tags
-                        if (_selectedTagId.value == 0) {
-                            _selectedTagId.value = tags[0].id
+                        // 사전 지정된 태그 우선 적용
+                        pendingPreTagId?.let { wanted ->
+                            tags.find { it.id == wanted }?.let {
+                                updateTag(it.id, it.name, it.colorCode)
+                                pendingPreTagId = null
+                                return@onSuccess
+                            }
+                        }
+                        // 선택값이 없는 경우 첫 항목 설정
+                        if (_selectedTagId.value == 0 && tags.isNotEmpty()) {
+                            val first = tags.first()
+                            updateTag(first.id, first.name, first.colorCode)
                         }
                     }
                     .onFailure { throwable ->
@@ -258,9 +270,20 @@ class AddScheduleViewModel
             parseJob?.cancel()
             parseJob =
                 viewModelScope.launch {
+                    val source = input
                     delay(500L)
 
-                    val parsed = parseNaturalLanguage(input, isParseTime = true)
+                    // 입력이 변경되었으면 중단
+                    if (_eventText.value != source) return@launch
+
+                    // 빈 입력이면 초기화
+                    if (_isSwitchOn.value && _eventText.value.isBlank()) {
+                        initialTimeValue()
+                        _isAllDayChecked.value = false
+                        return@launch
+                    }
+
+                    val parsed = parseNaturalLanguage(_eventText.value, isParseTime = true)
                     _eventText.value = parsed.title
 
                     parsed.startDate?.let { start ->
@@ -271,6 +294,11 @@ class AddScheduleViewModel
                     parsed.endDate?.let { end ->
                         _selectedEndDateText.value = formatDate(end.toLocalDate().toMillis())
                         _selectedEndTimeText.value = formatTime(end.hour, end.minute)
+                    }
+
+                    // all-day 키워드가 포함된 경우 자동 체크
+                    if (parsed.isAllDay) {
+                        _isAllDayChecked.value = true
                     }
 
                     validateTimeOrder()
@@ -285,6 +313,14 @@ class AddScheduleViewModel
             _selectedTagId.value = id
             _selectedTagText.value = tag
             _selectedTagColor.value = color
+        }
+
+        fun setPreTagId(tagId: Int) {
+            pendingPreTagId = tagId
+            _tagList.value.find { it.id == tagId }?.let {
+                updateTag(it.id, it.name, it.colorCode)
+                pendingPreTagId = null
+            }
         }
 
         fun updateStartDate(newDate: String) {
@@ -337,9 +373,11 @@ class AddScheduleViewModel
         fun resetData() {
             initialTimeValue()
             _eventText.value = ""
+            _selectedTagId.value = 0
             _selectedTagText.value = "Untitled"
             _selectedTagColor.value = "#F0F0F3"
             _isAllDayChecked.value = false
+            _isSwitchOn.value = false
         }
 
         init {

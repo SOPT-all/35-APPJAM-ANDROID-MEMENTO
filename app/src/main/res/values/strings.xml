@@ -52,7 +52,7 @@
     <string name="onboarding_next">Next</string>
     <string name="onboarding_yes">Yes</string>
     <string name="onboarding_no">No</string>
-    <string name="onboarding_start">Start MEMENTO</string>
+    <string name="onboarding_start">START MEMENTO</string>
     <string name="onboarding_back">back</string>
     <string name="onboarding_logo">logo</string>
 
@@ -86,7 +86,7 @@
     <string name="onboarding3_q3">Do you prefer reminders to help you stay on track with your tasks?</string>
     <string name="onboarding3_q4">How important is it for you to take breaks during work or study?</string>
     <!--    Onboarding4-->
-    <string name="onboarding4_title">Connect your calendar\nfor seamless scheduling.</string>
+    <string name="onboarding4_title">Sync your life with\nMEMENTO.</string>
 
     <!--    AlertDialog-->
     <string name="alert_delete">Do you really want to delete this event?</string>

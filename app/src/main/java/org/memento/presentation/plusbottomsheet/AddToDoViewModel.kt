@@ -268,9 +268,20 @@ class AddToDoViewModel
             parseJob?.cancel()
             parseJob =
                 viewModelScope.launch {
+                    val source = input
                     delay(500L)
 
-                    val parsed = parseNaturalLanguage(input, isParseTime = false)
+                    // 입력이 변경되었으면 중단
+                    if (_addToDoText.value != source) return@launch
+
+                    // 빈 입력이면 초기화
+                    if (_isSwitchOn.value && _addToDoText.value.isBlank()) {
+                        _selectedDateText.value = "Today"
+                        _deadLineText.value = "Add DeadLine"
+                        return@launch
+                    }
+
+                    val parsed = parseNaturalLanguage(_addToDoText.value, isParseTime = false)
 
                     _addToDoText.value = parsed.title
 
@@ -293,11 +304,14 @@ class AddToDoViewModel
         fun resetData() {
             _selectedDateText.value = "Today"
             _addToDoText.value = ""
+            _addTagId.value = 0
             _addTagColor.value = "#F0F0F3"
             _deadLineText.value = "Add DeadLine"
             _addPriorityType.value = PriorityTagType.None
+            _isSwitchOn.value = false
 
             _tempDeadLineText.value = "Today"
+            _tempTagId.value = 0
             _tempTagColor.value = "#F0F0F3"
             _tempTagText.value = "Untitled"
             _tempPriorityType.value = PriorityTagType.None

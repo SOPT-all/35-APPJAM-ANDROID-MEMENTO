@@ -110,7 +110,7 @@ fun MainPlusBottomSheet(
 
             1 ->
                 AddScheduleScreen(
-                    onCloseBottomSheet = onCloseBottomSheet,
+                    onCloseBottomSheet = { _, _, _ -> onCloseBottomSheet() },
                     isEditCancel = { },
                     isEdit = false,
                 )

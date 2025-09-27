@@ -1,54 +1,51 @@
 package org.memento.presentation.onboarding
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieClipSpec
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieAnimatable
-import com.airbnb.lottie.compose.rememberLottieComposition
 import org.memento.R
 import org.memento.ui.theme.darkModeColors
 
 @Composable
 fun SplashScreen() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.memento_lottie))
-    val lottieAnimatable = rememberLottieAnimatable()
-
-    composition?.let { nonNullComposition ->
-        LaunchedEffect(nonNullComposition) {
-            lottieAnimatable.animate(
-                composition = composition,
-                clipSpec = LottieClipSpec.Frame(0, nonNullComposition.endFrame.toInt()),
-                initialProgress = 0f,
-                iterations = 1,
-            )
-        }
-
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = darkModeColors.black),
-            contentAlignment = Alignment.Center,
-        ) {
-            LottieAnimation(
-                composition = nonNullComposition,
-                progress = lottieAnimatable.progress,
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier.size(215.dp),
-            )
-        }
+    var startAnimation by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (startAnimation) 1.5f else 1f,
+        animationSpec =
+            tween(
+                durationMillis = 3000,
+            ),
+    )
+    LaunchedEffect(Unit) {
+        startAnimation = true
+    }
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = darkModeColors.black),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            modifier = Modifier.scale(scale),
+            imageVector = ImageVector.vectorResource(id = R.drawable.logo_memento_white),
+            contentDescription = null,
+        )
     }
 }
 

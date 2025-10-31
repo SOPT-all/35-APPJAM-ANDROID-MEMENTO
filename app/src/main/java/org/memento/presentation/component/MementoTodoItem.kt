@@ -114,7 +114,7 @@ fun MementoTodoItem(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = todoTitleText,
+                            text = todoTitleText.replace("\n", " "),
                             style = MementoTheme.typography.body_b_16,
                             color = darkModeColors.white,
                             modifier =

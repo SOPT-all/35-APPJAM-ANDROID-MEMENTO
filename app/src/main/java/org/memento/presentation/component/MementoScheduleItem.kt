@@ -80,7 +80,7 @@ fun MementoScheduleItem(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = scheduleTitleText,
+                            text = scheduleTitleText.replace("\n", " "),
                             style = MementoTheme.typography.body_b_16,
                             color = darkModeColors.white,
                         )

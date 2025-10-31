@@ -255,20 +255,6 @@ fun TodoScreen(
                                 }
                             }
                         }
-                        MementoAiFloatingButton(
-                            isClicked = isClickedAiButton,
-                            onClick = {
-                                isClickedAiButton = !isClickedAiButton
-                                if (isClickedAiButton) {
-                                    isShowAnimation = true
-                                    viewModel.postPriorityTodo()
-                                }
-                            },
-                            modifier =
-                                Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(bottom = 20.dp, end = 20.dp),
-                        )
                         TodoBoxDown(
                             modifier =
                                 Modifier

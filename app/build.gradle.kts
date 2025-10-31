@@ -54,6 +54,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+
+            buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+            buildConfigField("String", "CLIENT_ID", properties["client.id"].toString())
+            buildConfigField("String", "WEBVIEW_URL", properties["webview.url"].toString())
+            buildConfigField("String", "FEEDBACK_URL", properties["feedback.url"].toString())
+            buildConfigField("String", "ACCESS_TOKEN", properties["access.token"].toString())
+            buildConfigField("String", "REFRESH_TOKEN", properties["refresh.token"].toString())
         }
     }
     compileOptions {
